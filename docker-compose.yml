@@ -22,6 +22,10 @@ services:
       - .:/code
       - django-qltd_media:/code/media
       - django-qltd_volume:/code/staticfiles
+    depends_on:
+      - db-postgres-qltd
+    networks:
+      - django-qltd
 
   postgres:
     container_name: db-postgres-qltd
@@ -35,6 +39,8 @@ services:
       - '5437:5432'
     volumes:
      - postgres_data_qltd:/var/lib/postgresql/data/
+    networks:
+      - django-qltd
 
 volumes:
   django-qltd_media:
