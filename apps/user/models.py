@@ -44,7 +44,6 @@ class User(models.Model):
 
     objects = UserManager()
 
-    id=models.IntegerField(primary_key=True)
     username = models.CharField(max_length=255, unique=True)
     password = models.CharField(max_length=255)
     role = models.CharField(max_length=127, choices=ROLE_CHOICES)
