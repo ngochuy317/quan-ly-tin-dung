@@ -25,7 +25,7 @@ services:
     depends_on:
       - db-postgres-qltd
     networks:
-      - django-qltd
+      - postgres
 
   postgres:
     container_name: db-postgres-qltd
