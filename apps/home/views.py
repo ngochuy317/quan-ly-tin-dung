@@ -3,24 +3,16 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.views import View
 
-
-class LoginRequireView(View):
-
-    def dispatch(self, request, *args, **kwargs):
-        if request.method == 'GET':
-            if not request.user.is_authenticated:
-                return redirect("login")
-            return self.get(request, *args, **kwargs)
-        return super().dispatch(request, *args, **kwargs)
+from apps.store.models import Store
 
 
-class Index(LoginRequireView):
+class HomeView(View):
 
     def get(self, request, *args, **kwargs):
         return render(request, "home/index.html")
 
 
-class SwipeCard(LoginRequireView):
+class SwipeCardView(View):
 
     def get(self, request, *args, **kwargs):
         context = {
@@ -30,19 +22,77 @@ class SwipeCard(LoginRequireView):
         return render(request, "home/swipe_card.html", context)
     
     def post(self, request, *args, **kwargs):
-        print(request.POST)
         context = {
             "sidebar": "swipecard"
         }
-        # return HttpResponseRedirect('swipe_card')
         return render(request, "home/swipe_card.html", context)
 
 
-class Test(LoginRequireView):
+class StoreDetailView(View):
+
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        store = Store.objects.filter(id=pk).first()
+        if store:
+            context = {
+                "store": store,
+            }
+            return render(request, "home/store.html", context)
+        return redirect("stores")
+    
+    def post(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        store = Store.objects.filter(id=pk).first()
+        data = {
+            "code": request.POST.get("code"),
+            "name": request.POST.get("name"),
+            "phone_number": request.POST.get("phone_number"),
+            "note": request.POST.get("note"),
+            "address": request.POST.get("address"),
+        }
+        store.update(commit=True, **data)
+        return redirect("stores")
+
+
+class StoreView(View):
 
     def get(self, request, *args, **kwargs):
         context = {
-            "sidebar": "swipecard"
+            "sidebar": "add_store",
+            "pagename": "Thiết lập cửa hàng"
+        }
+        return render(request, "home/add_store.html", context)
+    
+    def post(self, request, *args, **kwargs):
+        valid_data = {
+            "code" : request.POST.get("code"),
+            "name" : request.POST.get("name"),
+            "phone_number" : request.POST.get("phone_number"),
+            "note" : request.POST.get("note"),
+            "address" : request.POST.get("address"),
+        }
+        Store.objects.create(**valid_data)
+        return redirect("stores")
+    
+
+class StoresView(View):
+
+    def get(self, request, *args, **kwargs):
+        stores = Store.objects.all()
+        context = {
+            "stores": stores,
+            "sidebar": "stores",
+            "pagename": "Cửa hàng"
+        }
+        return render(request, "home/stores.html", context)
+
+
+class Test(View):
+
+    def get(self, request, *args, **kwargs):
+        context = {
+            "sidebar": "swipecard",
+            "form": POSForm,
         }
         return render(request, "home/test.html", context)
 

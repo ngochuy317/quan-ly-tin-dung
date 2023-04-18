@@ -11,6 +11,13 @@ class Store(models.Model):
 
     def __str__(self) -> str:
         return self.name
+    
+    def update(self, commit=False, **kwargs):
+        print(kwargs)
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+        if commit:
+            self.save()
 
 
 class POS(models.Model):

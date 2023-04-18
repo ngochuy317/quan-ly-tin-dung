@@ -50,7 +50,7 @@ class User(models.Model):
     last_login = models.DateTimeField(blank=True, null=True)
     is_anonymous = models.BooleanField(default=False)
     is_authenticated = models.BooleanField(default=True)
-    permissions = models.ManyToManyField(Permission)
+    permissions = models.ManyToManyField(Permission, blank=True, null=True)
     infomation_detail = models.OneToOneField(InfomationDetail, on_delete=models.CASCADE)
 
     def __str__(self) -> str:
