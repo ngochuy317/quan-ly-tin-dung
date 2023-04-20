@@ -10,7 +10,5 @@ class LoginRequiredMiddleware(MiddlewareMixin):
         assert hasattr(request, 'user')
         if not request.user.is_authenticated:
             current_route_name = resolve(request.path_info).url_name
-            print(request.path_info)
-            print(current_route_name)
             if not current_route_name in settings.AUTH_EXEMPT_ROUTES:
                 return HttpResponseRedirect(settings.LOGIN_URL)

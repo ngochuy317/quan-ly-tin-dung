@@ -38,6 +38,12 @@ class InfomationDetail(models.Model):
     transaction_discount = models.FloatField()
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="users", blank=True, null=True)
 
+    def update(self, commit=False, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+        if commit:
+            self.save()
+
 class User(models.Model):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []

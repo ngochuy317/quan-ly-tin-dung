@@ -14,20 +14,20 @@
         <div class="row">
           <div class="col-md-4">
             <div class="input-group input-group-static my-3">
-              <label>Mã địa điểm</label>
-              <input name="code" type="text" class="form-control" required/>
+              <label>Pos Id</label>
+              <input name="pos_id" type="text" class="form-control" />
             </div>
           </div>
           <div class="col-md-4">
             <div class="input-group input-group-static my-3">
-              <label>Tên ghi nhớ</label>
-              <input name="name" type="text" class="form-control" required/>
+              <label>Merchant ID(MID)</label>
+              <input name="mid" type="text" class="form-control" />
             </div>
           </div>
           <div class="col-md-4">
             <div class="input-group input-group-static my-3">
-              <label>Số điện thoại</label>
-              <input name="phone_number" type="tel" class="form-control" required/>
+              <label>Terminal ID(TID)</label>
+              <input name="tid" type="tel" class="form-control" />
             </div>
           </div>
         </div>
@@ -35,17 +35,36 @@
           <div class="col-md-6">
             <div class="input-group input-group-static my-3">
               <label>Ghi chú</label>
-              <input name="note" type="text" class="form-control" required/>
+              <input name="note" type="text" class="form-control" />
             </div>
           </div>
           <div class="col-md-6">
             <div class="input-group input-group-static my-3">
-              <label>Địa chỉ</label>
-              <input name="address" type="text" class="form-control" required/>
+              <label>Trạng thái</label>
+              <input name="status" type="text" class="form-control" />
             </div>
           </div>
         </div>
-        <div class="row"></div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="input-group input-group-static my-3">
+              <label>Ngân hàng</label>
+              <input name="bank_name" type="text" class="form-control" />
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="input-group input-group-static mb-4">
+              <label for="exampleFormControlSelect1" class="ms-0"
+                >Cửa hàng</label
+              >
+              <select class="form-control" id="exampleFormControlSelect1">
+                {% for store in stores %}
+                <option>{{ store.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+        </div>
         <div class="d-flex justify-content-end">
           <button type="submit" class="btn btn-outline-info">Xác nhận</button>
         </div>

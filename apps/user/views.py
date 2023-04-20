@@ -20,7 +20,7 @@ class LogInView(View):
             user = User.objects.filter(username=username).first()
             if user and check_password(password, user.password):
                 login(request, user, backend='apps.user.backends.MyCustomBackend')
-                return redirect("index")
+                return redirect("home")
         return render(request, "home/login.html", context=context)
 
 

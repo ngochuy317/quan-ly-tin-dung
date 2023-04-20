@@ -13,7 +13,6 @@ class Store(models.Model):
         return self.name
     
     def update(self, commit=False, **kwargs):
-        print(kwargs)
         for key, value in kwargs.items():
             setattr(self, key, value)
         if commit:
@@ -32,3 +31,9 @@ class POS(models.Model):
 
     def __str__(self) -> str:
         return f"{self.code} in {self.store}"
+    
+    def update(self, commit=False, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+        if commit:
+            self.save()
