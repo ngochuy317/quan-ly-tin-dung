@@ -1,116 +1,40 @@
 {% extends 'base/base.html' %} {% block body %}
-<body class="g-sidenav-show bg-gray-200">
-  {% include 'base/sidebar.html' %}
-  <main
-    class="main-content position-relative max-height-vh-100 h-100 border-radius-lg"
-  >
-    <!-- Navbar -->
-    {% include 'base/navbar.html' %}
-    <!-- End Navbar -->
-    <div class="container-fluid py-4">
-      <h2 class="text-center">Danh sách máy POS</h2>
-      <div class="card">
-        <div class="table-responsive">
-          <table class="table align-items-center mb-0">
-            <thead>
-              <tr>
-                <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bold"
-                >
-                  Số thứ tự
-                </th>
-                <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bold"
-                >
-                  Pos Id
-                </th>
-                <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bold"
-                >
-                  Mid
-                </th>
-                <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bold"
-                >
-                  Tid
-                </th>
-                <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bold"
-                >
-                  Ghi chú
-                </th>
-                <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bold"
-                >
-                  Trạng thái
-                </th>
-                <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bold"
-                >
-                  Ngân hàng
-                </th>
-                <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bold"
-                >
-                  Cửa hàng
-                </th>
-                <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bold"
-                >
-                  Thao tác
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for pos in poses %}
-              <tr>
-                <td class="align-middle text-center text-sm">
-                  <p class="text-xs font-weight-bold mb-0">
-                    {{ forloop.counter }}
-                  </p>
-                </td>
-                <td class="align-middle text-center text-sm">
-                  <p class="text-xs font-weight-bold mb-0">{{ pos.pos_id }}</p>
-                </td>
-                <td class="align-middle text-center text-sm">
-                  <p class="text-xs font-weight-bold mb-0">{{ pos.mid }}</p>
-                </td>
-                <td class="align-middle text-center text-sm">
-                  <p class="text-xs font-weight-bold mb-0">{{ pos.tid }}</p>
-                </td>
-                <td class="align-middle text-center">
-                  <p class="text-xs font-weight-bold mb-0">{{ pos.note }}</p>
-                </td>
-                <td class="align-middle text-center">
-                  <p class="text-xs font-weight-bold mb-0">{{ pos.status }}</p>
-                </td>
-                <td class="align-middle text-center">
-                  <p class="text-xs font-weight-bold mb-0">
-                    {{ pos.bank_name }}
-                  </p>
-                </td>
-                <td class="align-middle text-center">
-                  <span class="text-secondary text-xs font-weight-bold"
-                    >{{ pos.store.name }}</span
-                  >
-                </td>
-                <td
-                  class="align-middle text-center text-secondary text-xs font-weight-bold"
-                >
-                  <a href="{% url 'store-detail' store.id  %}"> Chỉnh sửa </a>
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="d-flex justify-content-end m-3">
-        <button type="button" class="btn btn-outline-info">
-          <a href="{% url 'add_pos' %}">Thêm</a>
-        </button>
-      </div>
-    </div>
-  </main>
-</body>
+<h2 class="text-center">Danh sách máy POS</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Số thứ tự</th>
+      <th scope="col">Pos Id</th>
+      <th scope="col">Mid</th>
+      <th scope="col">Tid</th>
+      <th scope="col">Ghi chú</th>
+      <th scope="col">Trạng thái</th>
+      <th scope="col">Ngân hàng</th>
+      <th scope="col">Cửa hàng</th>
+      <th scope="col">Thao tác</th>
+    </tr>
+  </thead>
+  <tbody class="table-group-divider">
+    {% for pos in poses %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td>{{ pos.pos_id }}</td>
+      <td>{{ pos.mid }}</td>
+      <td>{{ pos.tid }}</td>
+      <td>{{ pos.note }}</td>
+      <td>{{ pos.status }}</td>
+      <td>{{ pos.bank_name }}</td>
+      <td>{{ pos.store.name }}</td>
+      <td><a href="{% url 'store-detail' pos.id  %}"> Chỉnh sửa </a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<div class="d-flex justify-content-end">
+  <button type="button" class="btn btn-outline-primary">
+    <a href="{% url 'add_pos' %}" style="color: inherit; text-decoration: none"
+      >Thêm</a
+    >
+  </button>
+</div>
 {% endblock %}

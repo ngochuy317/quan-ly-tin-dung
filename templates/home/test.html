@@ -1,56 +1,33 @@
 {% extends 'base/base.html' %} {% block body %}
-<body class="g-sidenav-show bg-gray-200">
-  {% include 'base/sidebar.html' %}
-  <main
-    class="main-content position-relative max-height-vh-100 h-100 border-radius-lg"
-  >
-    <!-- Navbar -->
-    {% include 'base/navbar.html' %}
-    <!-- End Navbar -->
-    <div class="container-fluid py-4">
-      <h2 class="text-center">Thiếp lập cửa hàng</h2>
-      <form method="post" action="{% url 'add_store' %}">
-        {% csrf_token %}
-        <div class="row">
-          <div class="col-md-4">
-            <div class="input-group input-group-static my-3">
-              <label>Mã địa điểm</label>
-              <input name="code" type="text" class="form-control" required/>
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="input-group input-group-static my-3">
-              <label>Tên ghi nhớ</label>
-              <input name="name" type="text" class="form-control" />
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="input-group input-group-static my-3">
-              <label>Số điện thoại</label>
-              <input name="phone_number" type="tel" class="form-control" />
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="input-group input-group-static my-3">
-              <label>Ghi chú</label>
-              <input name="note" type="text" class="form-control" />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="input-group input-group-static my-3">
-              <label>Địa chỉ</label>
-              <input name="address" type="text" class="form-control" />
-            </div>
-          </div>
-        </div>
-        <div class="row"></div>
-        <div class="d-flex justify-content-end">
-          <button type="submit" class="btn btn-outline-info">Xác nhận</button>
-        </div>
-      </form>
-    </div>
-  </main>
-</body>
+{% include 'base/sidebar.html' %}
+<div class="col py-3">
+  {% include 'base/navbar.html' %}
+  <h2 class="text-center">Danh sách cửa hàng</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Mã cửa hàng</th>
+        <th scope="col">Tên ghi nhớ</th>
+        <th scope="col">Ghi chú</th>
+        <th scope="col">Địa chỉ</th>
+        <th scope="col">Số điện thoại</th>
+        <th scope="col">Thao tác</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for store in stores %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ store.code }}</td>
+        <td>{{ store.name }}</td>
+        <td>{{ store.note }}</td>
+        <td>{{ store.address }}</td>
+        <td>{{ store.phone_number }}</td>
+        <td>Chỉnh sửa</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}

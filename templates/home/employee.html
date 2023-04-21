@@ -1,13 +1,4 @@
 {% extends 'base/base.html' %} {% block body %}
-<body class="g-sidenav-show bg-gray-200">
-  {% include 'base/sidebar.html' %}
-  <main
-    class="main-content position-relative max-height-vh-100 h-100 border-radius-lg"
-  >
-    <!-- Navbar -->
-    {% include 'base/navbar.html' %}
-    <!-- End Navbar -->
-    <div class="container-fluid py-4">
       <h2 class="text-center">
         Nhân viên {{ user.infomation_detail.fullname|upper }}
       </h2>
@@ -15,8 +6,8 @@
         {% csrf_token %}
         <div class="row">
           <div class="col-md-4">
-            <div class="input-group input-group-static my-3">
-              <label>Họ và Tên</label>
+            <div class="mb-3">
+              <label class="form-label">Họ và Tên</label>
               <input
                 name="fullname"
                 type="text"
@@ -27,8 +18,8 @@
             </div>
           </div>
           <div class="col-md-4">
-            <div class="input-group input-group-static my-3">
-              <label>Tên đăng nhập</label>
+            <div class="mb-3">
+              <label class="form-label">Tên đăng nhập</label>
               <input
                 name="username"
                 type="text"
@@ -38,8 +29,8 @@
             </div>
           </div>
           <div class="col-md-4">
-            <div class="input-group input-group-static my-3">
-              <label>Mật khẩu</label>
+            <div class="mb-3">
+              <label class="form-label">Mật khẩu</label>
               <input
                 name="password"
                 type="password"
@@ -49,8 +40,8 @@
             </div>
           </div>
           <div class="col-md-7">
-            <div class="input-group input-group-static my-3">
-              <label>Địa chỉ</label>
+            <div class="mb-3">
+              <label class="form-label">Địa chỉ</label>
               <input
                 name="address"
                 type="text"
@@ -60,8 +51,8 @@
             </div>
           </div>
           <div class="col-md-4">
-            <div class="input-group input-group-static my-3">
-              <label>Số điện thoại</label>
+            <div class="mb-3">
+              <label class="form-label">Số điện thoại</label>
               <input
                 name="phone_number"
                 type="tel"
@@ -73,8 +64,8 @@
         </div>
         <div class="row">
           <div class="col-md-3">
-            <div class="input-group input-group-static my-3">
-              <label>CMND/CCCD</label>
+            <div class="mb-3">
+              <label class="form-label">CMND/CCCD</label>
               <input
                 name="identity_card"
                 type="text"
@@ -84,8 +75,8 @@
             </div>
           </div>
           <div class="col-md-3">
-            <div class="input-group input-group-static my-3">
-              <label>Ngày cấp CMND/CCCD</label>
+            <div class="mb-3">
+              <label class="form-label">Ngày cấp CMND/CCCD</label>
               <input
                 name="place_of_issue_of_identity_card"
                 type="date"
@@ -95,8 +86,8 @@
             </div>
           </div>
           <div class="col-md-3">
-            <div class="input-group input-group-static my-3">
-              <label>Nơi cấp CMND/CCCD</label>
+            <div class="mb-3">
+              <label class="form-label">Nơi cấp CMND/CCCD</label>
               <input
                 name="date_of_issue_of_identity_card"
                 type="text"
@@ -106,8 +97,8 @@
             </div>
           </div>
           <div class="col-md-3">
-            <div class="input-group input-group-static my-3">
-              <label>Phần trăm hoa hồng</label>
+            <div class="mb-3">
+              <label class="form-label">Phần trăm hoa hồng</label>
               <input
                 name="transaction_discount"
                 type="number"
@@ -120,8 +111,8 @@
         </div>
         <div class="row">
           <div class="col-md-3">
-            <div class="input-group input-group-static my-3">
-              <label>Giới tính</label>
+            <div class="mb-3">
+              <label class="form-label">Giới tính</label>
               <input
                 name="gender"
                 type="text"
@@ -131,8 +122,8 @@
             </div>
           </div>
           <div class="col-md-3">
-            <div class="input-group input-group-static my-3">
-              <label>Ngày sinh</label>
+            <div class="mb-3">
+              <label class="form-label">Ngày sinh</label>
               <input
                 name="dob"
                 type="date"
@@ -142,8 +133,8 @@
             </div>
           </div>
           <div class="col-md-3">
-            <div class="input-group input-group-static my-3">
-              <label>Ngày bắt đầu làm việc</label>
+            <div class="mb-3">
+              <label class="form-label">Ngày bắt đầu làm việc</label>
               <input
                 name="date_joined"
                 type="date"
@@ -153,8 +144,8 @@
             </div>
           </div>
           <div class="col-md-3">
-            <div class="input-group input-group-static my-3">
-              <label>Lương</label>
+            <div class="mb-3">
+              <label class="form-label">Lương</label>
               <input
                 name="salary"
                 type="number"
@@ -166,8 +157,8 @@
         </div>
         <div class="row">
           <div class="col-md-6">
-            <div class="input-group input-group-static mb-4">
-              <label for="store" class="ms-0">Cửa hàng</label>
+            <div class="mb-3">
+              <label for="store" class="form-label">Cửa hàng</label>
               <select name="store" class="form-control" id="store">
                 {% for store in stores %}
                 <option value="{{ store.id }}" {% if store.id == user.infomation_detail.store.id %}selected="selected"{% endif %}>{{ store.name }}</option>
@@ -176,8 +167,8 @@
             </div>
           </div>
           <div class="col-md-4">
-            <div class="input-group input-group-static mb-4">
-              <label for="store" class="ms-0">Cấp bậc</label>
+            <div class="mb-3">
+              <label for="store" class="form-label">Cấp bậc</label>
               <select name="role" class="form-control" id="store">
                 {% for role in roles %}
                 <option value="{{ role.0 }}" {% if role.0 == user.infomation_detail.role.0 %}selected="selected"{% endif %}>{{ role.1 }}</option>
@@ -194,8 +185,8 @@
                 >Xoá</a
               >
             </button>
-            <button type="submit" class="btn btn-outline-info mx-3">Lưu</button>
-            <button type="button" class="btn btn-outline-info mx-3">
+            <button type="submit" class="btn btn-outline-primary mx-3">Lưu</button>
+            <button type="button" class="btn btn-outline-primary mx-3">
               <a
                 href="{% url 'employees' %}"
                 style="text-decoration: none; color: inherit"
@@ -204,7 +195,4 @@
             </button>
           </div>
       </form>
-    </div>
-  </main>
-</body>
 {% endblock %}

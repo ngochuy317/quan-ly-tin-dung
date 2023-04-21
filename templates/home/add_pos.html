@@ -1,75 +1,65 @@
 {% extends 'base/base.html' %} {% block body %}
-<body class="g-sidenav-show bg-gray-200">
-  {% include 'base/sidebar.html' %}
-  <main
-    class="main-content position-relative max-height-vh-100 h-100 border-radius-lg"
-  >
-    <!-- Navbar -->
-    {% include 'base/navbar.html' %}
-    <!-- End Navbar -->
-    <div class="container-fluid py-4">
-      <h2 class="text-center">Thiếp lập cửa hàng</h2>
-      <form method="post" action="{% url 'add_store' %}">
-        {% csrf_token %}
-        <div class="row">
-          <div class="col-md-4">
-            <div class="input-group input-group-static my-3">
-              <label>Pos Id</label>
-              <input name="pos_id" type="text" class="form-control" />
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="input-group input-group-static my-3">
-              <label>Merchant ID(MID)</label>
-              <input name="mid" type="text" class="form-control" />
-            </div>
-          </div>
-          <div class="col-md-4">
-            <div class="input-group input-group-static my-3">
-              <label>Terminal ID(TID)</label>
-              <input name="tid" type="tel" class="form-control" />
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="input-group input-group-static my-3">
-              <label>Ghi chú</label>
-              <input name="note" type="text" class="form-control" />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="input-group input-group-static my-3">
-              <label>Trạng thái</label>
-              <input name="status" type="text" class="form-control" />
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="input-group input-group-static my-3">
-              <label>Ngân hàng</label>
-              <input name="bank_name" type="text" class="form-control" />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="input-group input-group-static mb-4">
-              <label for="exampleFormControlSelect1" class="ms-0"
-                >Cửa hàng</label
-              >
-              <select class="form-control" id="exampleFormControlSelect1">
-                {% for store in stores %}
-                <option>{{ store.name }}</option>
-                {% endfor %}
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="d-flex justify-content-end">
-          <button type="submit" class="btn btn-outline-info">Xác nhận</button>
-        </div>
-      </form>
+<h2 class="text-center">Thiếp lập máy POS</h2>
+<form method="post" action="{% url 'add_store' %}">
+  {% csrf_token %}
+  <div class="row">
+    <div class="col-md-4">
+      <div class="mb-3">
+        <label class="form-label">Pos Id</label>
+        <input name="pos_id" type="text" class="form-control" required />
+      </div>
     </div>
-  </main>
-</body>
+    <div class="col-md-4">
+      <div class="mb-3">
+        <label class="form-label">Merchant ID(MID)</label>
+        <input name="mid" type="text" class="form-control" required />
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="mb-3">
+        <label class="form-label">Terminal ID(TID)</label>
+        <input name="tid" type="tel" class="form-control" required />
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="mb-3">
+        <label class="form-label">Ghi chú</label>
+        <input name="note" type="text" class="form-control" required />
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="mb-3">
+        <label class="form-label">Trạng thái</label>
+        <input name="status" type="text" class="form-control" required />
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="mb-3">
+        <label class="form-label">Ngân hàng</label>
+        <input name="bank_name" type="text" class="form-control" required />
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="mb-3">
+      <label for="store" class="form-label ms-0">Cửa hàng</label>
+      <select class="form-control" id="store" name="store">
+        {% for store in stores %}
+        <option>{{ store.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="d-flex justify-content-end">
+    <button type="button" class="btn btn-outline-danger mx-3">
+      <a href="{% url 'poses' %}" style="text-decoration: none; color: inherit"
+        >Thoát</a
+      >
+    </button>
+    <button type="submit" class="btn btn-outline-primary">Xác nhận</button>
+  </div>
+</form>
 {% endblock %}

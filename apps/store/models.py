@@ -30,7 +30,7 @@ class POS(models.Model):
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="poses")
 
     def __str__(self) -> str:
-        return f"{self.code} in {self.store}"
+        return f"{self.pos_id} in {self.store}"
     
     def update(self, commit=False, **kwargs):
         for key, value in kwargs.items():

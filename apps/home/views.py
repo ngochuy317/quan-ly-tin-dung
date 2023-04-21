@@ -194,14 +194,14 @@ class EmployeesView(View):
         return render(request, "home/employees.html", context)
 
 
-class POSView(View):
-    def get(self, request, *args, **kwargs):
-        stores = Store.objects.all()
-        context = {
-            "sidebar": "stores",
-            "stores": stores,
-        }
-        return render(request, "home/add_pos.html", context)
+# class POSView(View):
+#     def get(self, request, *args, **kwargs):
+#         stores = Store.objects.all()
+#         context = {
+#             "sidebar": "stores",
+#             "stores": stores,
+#         }
+#         return render(request, "home/add_pos.html", context)
 
 
 class POSesView(View):
@@ -215,13 +215,15 @@ class POSesView(View):
         return render(request, "home/poses.html", context)
 
 
-class PosView(View):
+class POSView(View):
 
     def get(self, request, *args, **kwargs):
+        stores = Store.objects.all()
         context = {
-            "sidebar": "add_store",
+            "sidebar": "add_pos",
+            "stores": stores,
         }
-        return render(request, "home/add_store.html", context)
+        return render(request, "home/add_pos.html", context)
     
     def post(self, request, *args, **kwargs):
         valid_data = {

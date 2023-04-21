@@ -1,129 +1,36 @@
 {% extends 'base/base.html' %} {% block body %}
-<body class="g-sidenav-show bg-gray-200">
-  {% include 'base/sidebar.html' %}
-  <main
-    class="main-content position-relative max-height-vh-100 h-100 border-radius-lg"
-  >
-    <!-- Navbar -->
-    {% include 'base/navbar.html' %}
-    <!-- End Navbar -->
-    <div class="container-fluid py-4">
-      <h2 class="text-center">Danh sách cửa hàng</h2>
-      <div class="card">
-        <div class="table-responsive">
-          <table class="table align-items-center mb-0">
-            <thead>
-              <tr>
-                <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bold"
-                >
-                  Số thứ tự
-                </th>
-                <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bold"
-                >
-                  Mã cửa hàng
-                </th>
-                <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bold"
-                >
-                  Tên ghi nhớ
-                </th>
-                <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bold"
-                >
-                  Ghi chú
-                </th>
-                <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bold"
-                >
-                  Địa chỉ
-                </th>
-                <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bold"
-                >
-                  Số điện thoại
-                </th>
-                <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bold"
-                >
-                  Thao tác
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for store in stores %}
-              <tr>
-                <td class="align-middle text-center text-sm">
-                  <p class="text-xs font-weight-bold mb-0">
-                    {{ forloop.counter }}
-                  </p>
-                </td>
-                <td class="align-middle text-center text-sm">
-                  <p class="text-xs font-weight-bold mb-0">{{ store.code }}</p>
-                </td>
-                <td class="align-middle text-center text-sm">
-                  <p class="text-xs font-weight-bold mb-0">{{ store.name }}</p>
-                </td>
-                <td class="align-middle text-center text-sm">
-                  <p class="text-xs font-weight-bold mb-0">{{ store.note }}</p>
-                </td>
-                <td class="align-middle text-center">
-                  <span class="text-secondary text-xs font-weight-bold"
-                    >{{ store.address }}</span
-                  >
-                </td>
-                <td class="align-middle text-center">
-                  <span class="text-secondary text-xs font-weight-bold"
-                    >{{ store.phone_number }}</span
-                  >
-                </td>
-                <td
-                  class="align-middle text-center text-secondary text-xs font-weight-bold"
-                >
-                  <a href="{% url 'store-detail' store.id  %}"> Chỉnh sửa </a>
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="d-flex justify-content-between w-100">
-        <div class="m-3">
-          <nav aria-label="Page navigation example">
-            <ul class="pagination">
-              <li class="page-item">
-                <a class="page-link" href="javascript:;" aria-label="Previous">
-                  <span class="material-icons"> keyboard_arrow_left </span>
-                  <span class="sr-only">Previous</span>
-                </a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="javascript:;">1</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="javascript:;">2</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="javascript:;">3</a>
-              </li>
-              <li class="page-item">
-                <a class="page-link" href="javascript:;" aria-label="Next">
-                  <span class="material-icons"> keyboard_arrow_right </span>
-                  <span class="sr-only">Next</span>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-        <div class="m-3">
-          <button type="button" class="btn btn-outline-info">
-            <a href="{% url 'add_store' %}">Thêm</a>
-          </button>
-        </div>
-      </div>
-    </div>
-  </main>
-</body>
+<h2 class="text-center">Danh sách cửa hàng</h2>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Mã cửa hàng</th>
+      <th scope="col">Tên ghi nhớ</th>
+      <th scope="col">Ghi chú</th>
+      <th scope="col">Địa chỉ</th>
+      <th scope="col">Số điện thoại</th>
+      <th scope="col">Thao tác</th>
+    </tr>
+  </thead>
+  <tbody class="table-group-divider">
+    {% for store in stores %}
+    <tr>
+      <th scope="row">{{ forloop.counter }}</th>
+      <td>{{ store.code }}</td>
+      <td>{{ store.name }}</td>
+      <td>{{ store.note }}</td>
+      <td>{{ store.address }}</td>
+      <td>{{ store.phone_number }}</td>
+      <td><a href="{% url 'store-detail' store.id  %}"> Chỉnh sửa </a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<div class="d-flex justify-content-end">
+  <button type="button" class="btn btn-outline-primary">
+    <a href="{% url 'add_store' %}" style="text-decoration: none; color: inherit"
+      >Thêm</a
+    >
+  </button>
+</div>
 {% endblock %}

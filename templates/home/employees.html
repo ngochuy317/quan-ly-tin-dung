@@ -1,114 +1,46 @@
 {% extends 'base/base.html' %} {% block body %}
-<body class="g-sidenav-show bg-gray-200">
-  {% include 'base/sidebar.html' %}
-  <main
-    class="main-content position-relative max-height-vh-100 h-100 border-radius-lg"
-  >
-    <!-- Navbar -->
-    {% include 'base/navbar.html' %}
-    <!-- End Navbar -->
-    <div class="container-fluid py-4">
-      <h2 class="text-center">Danh sách nhân viên</h2>
-      <div class="card">
-        <div class="table-responsive">
-          <table class="table align-items-center mb-0">
-            <thead>
-              <tr>
-                <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bold"
-                >
-                  Số thứ tự
-                </th>
-                <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bold"
-                >
-                  Họ và Tên
-                </th>
-                <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bold"
-                >
-                  Số điện thoại
-                </th>
-                <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bold"
-                >
-                  CMND
-                </th>
-                <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bold"
-                >
-                  Giới tính
-                </th>
-                <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bold"
-                >
-                  Ngày sinh
-                </th>
-                <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bold"
-                >
-                  Lương
-                </th>
-                <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bold"
-                >
-                  Cửa hàng
-                </th>
-                <th
-                  class="text-center text-uppercase text-secondary text-xxs font-weight-bold"
-                >
-                  Thao tác
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for emp in users %}
-              <tr>
-                <td class="align-middle text-center text-sm">
-                  <p class="text-xs font-weight-bold mb-0">
-                    {{ forloop.counter }}
-                  </p>
-                </td>
-                <td class="align-middle text-center text-sm">
-                  <p class="text-xs font-weight-bold mb-0">{{ emp.infomation_detail.fullname }}</p>
-                </td>
-                <td class="align-middle text-center text-sm">
-                  <p class="text-xs font-weight-bold mb-0">{{ emp.infomation_detail.phone_number }}</p>
-                </td>
-                <td class="align-middle text-center text-sm">
-                  <p class="text-xs font-weight-bold mb-0">{{ emp.infomation_detail.identity_card }}</p>
-                </td>
-                <td class="align-middle text-center">
-                  <p class="text-xs font-weight-bold mb-0">{{ emp.infomation_detail.gender }}</p>
-                </td>
-                <td class="align-middle text-center">
-                  <p class="text-xs font-weight-bold mb-0">{{ emp.infomation_detail.dob }}</p>
-                </td>
-                <td class="align-middle text-center">
-                  <p class="text-xs font-weight-bold mb-0">{{ emp.infomation_detail.salary }}</p>
-                </td>
-                <td class="align-middle text-center">
-                  <span class="text-secondary text-xs font-weight-bold"
-                    >{{ emp.infomation_detail.store.name }}</span
-                  >
-                </td>
-                <td
-                  class="align-middle text-center text-secondary text-xs font-weight-bold"
-                >
-                  <a href="{% url 'employee-detail' emp.id  %}"> Chỉnh sửa </a>
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="d-flex justify-content-end m-3">
-        <button type="button" class="btn btn-outline-info">
-          <a href="{% url 'add_employee' %}">Thêm</a>
-        </button>
-      </div>
-    </div>
-  </main>
-</body>
+<h2 class="text-center">Danh sách nhân viên</h2>
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Họ và Tên</th>
+        <th scope="col">Số điện thoại</th>
+        <th scope="col">CMND</th>
+        <th scope="col">Giới tính</th>
+        <th scope="col">Ngày sinh</th>
+        <th scope="col">Lương</th>
+        <th scope="col">Cửa hàng</th>
+        <th scope="col">Thao tác</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      {% for emp in users %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ emp.infomation_detail.fullname }}</td>
+        <td>{{ emp.infomation_detail.phone_number }}</td>
+        <td>{{ emp.infomation_detail.identity_card }}</td>
+        <td>{{ emp.infomation_detail.gender }}</td>
+        <td>{{ emp.infomation_detail.dob }}</td>
+        <td>{{ emp.infomation_detail.salary }}</td>
+        <td>{{ emp.infomation_detail.store.name }}</td>
+        <td>
+          <a href="{% url 'employee-detail' emp.id  %}"> Chỉnh sửa </a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class="d-flex justify-content-end m-3">
+  <button type="button" class="btn btn-outline-primary">
+    <a
+      href="{% url 'add_employee' %}"
+      style="text-decoration: none; color: inherit"
+      >Thêm</a
+    >
+  </button>
+</div>
 {% endblock %}
