@@ -7,25 +7,30 @@
     <div class="col-md-2">
       <div class="mb-3">
         <label class="form-label">Mã KH</label>
-        <input name="customer_code" type="text" class="form-control" />
+        <input name="customer_code" type="text" class="form-control" required />
       </div>
     </div>
     <div class="col-md-4">
       <div class="mb-3">
         <label class="form-label">Tên</label>
-        <input name="customer_name" type="text" class="form-control" />
+        <input name="customer_name" type="text" class="form-control" required />
       </div>
     </div>
     <div class="col-md-2">
       <div class="mb-3">
         <label class="form-label">Giới tính</label>
-        <input name="customer_gender" type="text" class="form-control" />
+        <input
+          name="customer_gender"
+          type="text"
+          class="form-control"
+          required
+        />
       </div>
     </div>
     <div class="col-md-4">
       <div class="mb-3">
         <label class="form-label">Số điện thoại</label>
-        <input name="phone_number" type="tel" class="form-control" />
+        <input name="phone_number" type="tel" class="form-control" required />
       </div>
     </div>
   </div>
@@ -37,19 +42,30 @@
           name="customer_money_needed"
           type="number"
           class="form-control"
+          required
         />
       </div>
     </div>
     <div class="col-md-3">
       <div class="mb-3">
         <label class="form-label">Số TK nhận tiền</label>
-        <input name="customer_account" type="text" class="form-control" />
+        <input
+          name="customer_account"
+          type="text"
+          class="form-control"
+          required
+        />
       </div>
     </div>
     <div class="col-md-3">
       <div class="mb-3">
         <label class="form-label">Ngân hàng</label>
-        <input name="customer_bank_account" type="text" class="form-control" />
+        <input
+          name="customer_bank_account"
+          type="text"
+          class="form-control"
+          required
+        />
       </div>
     </div>
   </div>
@@ -60,31 +76,38 @@
         <label class="form-label">Số thẻ</label>
         <input
           name="card_number"
-          type="tel"
-          inputmode="numeric"
-          pattern="[0-9\s]{13,19}"
-          autocomplete="cc-number"
-          maxlength="19"
+          type="text"
           class="form-control"
+          required
         />
       </div>
     </div>
     <div class="col-md-4">
       <div class="mb-3">
         <label class="form-label">Ngân hàng</label>
-        <input name="bank_name" type="text" class="form-control" />
+        <input
+          name="card_bank_name"
+          type="text"
+          class="form-control"
+          required
+        />
       </div>
     </div>
     <div class="col-md-2">
       <div class="mb-3">
         <label class="form-label">Hạn mức thẻ</label>
-        <input name="line_of_credit" type="number" class="form-control" />
+        <input
+          name="line_of_credit"
+          type="number"
+          class="form-control"
+          required
+        />
       </div>
     </div>
     <div class="col-md-2">
       <div class="mb-3">
         <label class="form-label">Phí</label>
-        <input name="fee" type="number" class="form-control" />
+        <input name="fee" type="number" class="form-control" required />
       </div>
     </div>
   </div>
@@ -92,25 +115,41 @@
     <div class="col-md-4">
       <div class="mb-3">
         <label class="form-label">Tên</label>
-        <input name="name" type="text" class="form-control" />
+        <input name="card_name" type="text" class="form-control" required />
       </div>
     </div>
     <div class="col-md-3">
       <div class="mb-3">
         <label class="form-label">Ngày mở thẻ</label>
-        <input name="issued_date" type="date" class="form-control" />
+        <input
+          name="card_issued_date"
+          type="date"
+          class="form-control"
+          required
+        />
       </div>
     </div>
     <div class="col-md-3">
       <div class="mb-3">
         <label class="form-label">Ngày hết hạn</label>
-        <input name="expire_date" type="date" class="form-control" />
+        <input
+          name="card_expire_date"
+          type="date"
+          class="form-control"
+          required
+        />
       </div>
     </div>
     <div class="col-md-2">
       <div class="mb-3">
         <label class="form-label">CCV</label>
-        <input name="ccv" type="text" maxlength="3" class="form-control" />
+        <input
+          name="card_ccv"
+          type="text"
+          maxlength="3"
+          class="form-control"
+          required
+        />
       </div>
     </div>
   </div>
@@ -118,13 +157,18 @@
     <div class="col-md-2">
       <div class="mb-3">
         <label class="form-label">Ngày sao kê</label>
-        <input name="statement_date" type="date" class="form-control" />
+        <input
+          name="statement_date"
+          type="date"
+          class="form-control"
+          required
+        />
       </div>
     </div>
     <div class="col-md-2">
       <div class="mb-3">
         <label class="form-label">Ngày cuối đáo</label>
-        <input name="maturity_date" type="date" class="form-control" />
+        <input name="maturity_date" type="date" class="form-control" required />
       </div>
     </div>
   </div>

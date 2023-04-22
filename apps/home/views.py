@@ -5,7 +5,7 @@ from django.views import View
 from django.db.models import Q
 
 from apps.base.constants import ROLE_CHOICES
-from apps.store.models import Store, POS
+from apps.store.models import Store, POS, SwipeCardTransaction
 from apps.user.models import User, InfomationDetail
 
 from datetime import datetime
@@ -48,18 +48,27 @@ class SwipeCardView(View):
             "customer_account": request.POST.get("customer_account"),
             "customer_bank_account": request.POST.get("customer_bank_account"),
             "card_number": request.POST.get("card_number"),
-            "bank_name": request.POST.get("bank_name"),
+            "card_bank_name": request.POST.get("card_bank_name"),
             "line_of_credit": request.POST.get("line_of_credit"),
             "fee": request.POST.get("fee"),
-            "name": request.POST.get("name"),
-            "issued_date": request.POST.get("issued_date"),
-            "expire_date": request.POST.get("expire_date"),
-            "ccv": request.POST.get("ccv"),
-            "statement_date": request.POST.get("statement_date"),
-            "maturity_date": request.POST.get("maturity_date"),
+            "card_name": request.POST.get("card_name"),
+            "card_ccv": request.POST.get("card_ccv"),
         }
-        print(request.POST)
-        print(type(request.user))
+        try:
+            card_issued_date_datetime_object = datetime.strptime(request.POST.get("card_issued_date"), "%Y-%m-%d")
+            card_expire_date_datetime_object = datetime.strptime(request.POST.get("card_expire_date"), "%Y-%m-%d")
+            statement_date_datetime_object = datetime.strptime(request.POST.get("statement_date"), "%Y-%m-%d")
+            maturity_date_datetime_object = datetime.strptime(request.POST.get("maturity_date"), "%Y-%m-%d")
+            data["card_issued_date"] = card_issued_date_datetime_object
+            data["card_expire_date"] = card_expire_date_datetime_object
+            data["statement_date"] = statement_date_datetime_object
+            data["maturity_date"] = maturity_date_datetime_object
+            user: User = User.objects.filter(id=request.user.id).first()
+            data["user"] = user
+            SwipeCardTransaction.objects.create(**data)
+        except ValueError as e:
+            print(e)
+
         return render(request, "home/swipe_card.html", context)
 
 

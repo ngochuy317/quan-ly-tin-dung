@@ -1,5 +1,6 @@
 {% extends 'base/base.html' %} {% block body %}
 <h2 class="text-center">Danh sách máy POS</h2>
+<div class="table-responsive">
 <table class="table">
   <thead>
     <tr>
@@ -30,6 +31,7 @@
     {% endfor %}
   </tbody>
 </table>
+</div>
 <div class="d-flex justify-content-end">
   <button type="button" class="btn btn-outline-primary">
     <a href="{% url 'add_pos' %}" style="color: inherit; text-decoration: none"

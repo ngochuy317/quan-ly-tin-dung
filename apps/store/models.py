@@ -42,4 +42,22 @@ class POS(models.Model):
 
 class SwipeCardTransaction(models.Model):
 
-    ...
+    customer_code = models.CharField(max_length=127)
+    customer_name = models.CharField(max_length=127)
+    customer_gender = models.CharField(max_length=127)
+    phone_number = models.CharField(max_length=127)
+    customer_money_needed = models.PositiveBigIntegerField(default=0)
+    customer_account = models.CharField(max_length=127)
+    customer_bank_account = models.CharField(max_length=127)
+    card_number = models.CharField(max_length=127)
+    card_bank_name = models.CharField(max_length=127)
+    line_of_credit = models.PositiveBigIntegerField(default=0)
+    fee = models.PositiveBigIntegerField(default=0)
+    card_name = models.CharField(max_length=127)
+    card_issued_date = models.DateField()
+    card_expire_date = models.DateField()
+    card_ccv = models.CharField(max_length=127)
+    statement_date = models.DateField()
+    maturity_date = models.DateField()
+    is_payment_received = models.BooleanField(default=False)
+    user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="swipe_card_transaction")
