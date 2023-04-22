@@ -27,6 +27,7 @@ class POS(models.Model):
     note = models.TextField()
     status = models.CharField(max_length=30)
     bank_name = models.CharField(max_length=127)
+    money_limit_per_day = models.PositiveBigIntegerField(default=0)
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="poses")
 
     def __str__(self) -> str:
@@ -37,3 +38,8 @@ class POS(models.Model):
             setattr(self, key, value)
         if commit:
             self.save()
+
+
+class SwipeCardTransaction(models.Model):
+
+    ...

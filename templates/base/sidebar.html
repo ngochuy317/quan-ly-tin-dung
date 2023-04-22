@@ -35,11 +35,20 @@
       </li>
       <li class="w-100">
         <a
-          href="{% url 'employees' %}"
+          href="{% url 'swipecard' %}"
           class="nav-link px-0 align-middle text-center {% if sidebar == 'swipecard' %}active{% endif %}"
         >
           <i class="fs-4 bi-people"></i>
           <span class="ms-1 d-none d-sm-inline">Quẹt thẻ</span></a
+        >
+      </li>
+      <li class="w-100">
+        <a
+          href="{% url 'storecard' %}"
+          class="nav-link px-0 align-middle text-center {% if sidebar == 'storecard' %}active{% endif %}"
+        >
+          <i class="fs-4 bi-people"></i>
+          <span class="ms-1 d-none d-sm-inline">Sổ lưu thẻ đáo</span></a
         >
       </li>
     </ul>

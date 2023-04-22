@@ -1,0 +1,4 @@
+{% extends 'base/base.html' %} {% block body %}
+<h2 class="text-center">Sổ lưu thẻ</h2>
+<form method="post" action="{% url 'swipecard' %}">{% csrf_token %}</form>
+{% endblock %}

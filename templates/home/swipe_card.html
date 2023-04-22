@@ -1,66 +1,135 @@
-{% extends 'base/base.html' %}
-{% block body %} 
-<body class="g-sidenav-show  bg-gray-200">
-{% include 'base/sidebar.html' %}
-<main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
-  <!-- Navbar -->
-{% include 'base/navbar.html' %}
-<!-- End Navbar --> 
-<div class="container-fluid py-4">
-  <h2 class="text-center">Thông tin giao dịch thẻ</h2>
-    <form method="post" action="{% url 'swipecard' %}">
-      {% csrf_token %}
-      <h5>Thông tin thẻ</h5>
-    <div class="row">
-      <div class="col-md-6">
-        <div class="input-group input-group-static my-3">
-          <label>Số thẻ</label>
-          <input name="card_number" type="tel" inputmode="numeric" pattern="[0-9\s]{13,19}" autocomplete="cc-number" maxlength="19" class="form-control">
-        </div>
-      </div>
-      <div class="col-md-6">
-        <div class="input-group input-group-static my-3">
-          <label>Ngân hàng</label>
-          <input name="bank_name" type="text" class="form-control">
-        </div>
+{% extends 'base/base.html' %} {% block body %}
+<h2 class="text-center">Quẹt thẻ</h2>
+<form method="post" action="{% url 'swipecard' %}">
+  {% csrf_token %}
+  <h5>Khách hàng</h5>
+  <div class="row">
+    <div class="col-md-2">
+      <div class="mb-3">
+        <label class="form-label">Mã KH</label>
+        <input name="customer_code" type="text" class="form-control" />
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-4">
-        <div class="input-group input-group-static my-3">
-          <label>Tên</label>
-          <input name="name" type="text" class="form-control">
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="input-group input-group-static my-3">
-          <label>Ngày mở thẻ</label>
-          <input name="issued_date" type="date" class="form-control">
-        </div>
-      </div>
-      <div class="col-md-3">
-        <div class="input-group input-group-static my-3">
-          <label>Ngày hết hạn</label>
-          <input name="expire_date" type="date" class="form-control">
-        </div>
-      </div>
-      <div class="col-md-2">
-        <div class="input-group input-group-static my-3">
-          <label>CCV</label>
-          <input name="ccv" type="text" maxlength="3" class="form-control">
-        </div>
+    <div class="col-md-4">
+      <div class="mb-3">
+        <label class="form-label">Tên</label>
+        <input name="customer_name" type="text" class="form-control" />
       </div>
     </div>
-    <div class="row">
+    <div class="col-md-2">
+      <div class="mb-3">
+        <label class="form-label">Giới tính</label>
+        <input name="customer_gender" type="text" class="form-control" />
+      </div>
     </div>
-    <div class="d-flex justify-content-end">
-      <button type="submit" class="btn btn-outline-info">Xác nhận</button>
+    <div class="col-md-4">
+      <div class="mb-3">
+        <label class="form-label">Số điện thoại</label>
+        <input name="phone_number" type="tel" class="form-control" />
+      </div>
     </div>
-  </form>
-</div>
-
-</main>
-
-
-</body>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="mb-3">
+        <label class="form-label">Số tiền cần</label>
+        <input
+          name="customer_money_needed"
+          type="number"
+          class="form-control"
+        />
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="mb-3">
+        <label class="form-label">Số TK nhận tiền</label>
+        <input name="customer_account" type="text" class="form-control" />
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="mb-3">
+        <label class="form-label">Ngân hàng</label>
+        <input name="customer_bank_account" type="text" class="form-control" />
+      </div>
+    </div>
+  </div>
+  <h5>Thông tin thẻ</h5>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="mb-3">
+        <label class="form-label">Số thẻ</label>
+        <input
+          name="card_number"
+          type="tel"
+          inputmode="numeric"
+          pattern="[0-9\s]{13,19}"
+          autocomplete="cc-number"
+          maxlength="19"
+          class="form-control"
+        />
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="mb-3">
+        <label class="form-label">Ngân hàng</label>
+        <input name="bank_name" type="text" class="form-control" />
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="mb-3">
+        <label class="form-label">Hạn mức thẻ</label>
+        <input name="line_of_credit" type="number" class="form-control" />
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="mb-3">
+        <label class="form-label">Phí</label>
+        <input name="fee" type="number" class="form-control" />
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="mb-3">
+        <label class="form-label">Tên</label>
+        <input name="name" type="text" class="form-control" />
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="mb-3">
+        <label class="form-label">Ngày mở thẻ</label>
+        <input name="issued_date" type="date" class="form-control" />
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="mb-3">
+        <label class="form-label">Ngày hết hạn</label>
+        <input name="expire_date" type="date" class="form-control" />
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="mb-3">
+        <label class="form-label">CCV</label>
+        <input name="ccv" type="text" maxlength="3" class="form-control" />
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-2">
+      <div class="mb-3">
+        <label class="form-label">Ngày sao kê</label>
+        <input name="statement_date" type="date" class="form-control" />
+      </div>
+    </div>
+    <div class="col-md-2">
+      <div class="mb-3">
+        <label class="form-label">Ngày cuối đáo</label>
+        <input name="maturity_date" type="date" class="form-control" />
+      </div>
+    </div>
+  </div>
+  <div class="d-flex justify-content-end">
+    <button type="submit" class="btn btn-outline-primary">Xác nhận</button>
+  </div>
+</form>
 {% endblock %}

@@ -1,6 +1,6 @@
 {% extends 'base/base.html' %} {% block body %}
 <h2 class="text-center">Thiếp lập máy POS</h2>
-<form method="post" action="{% url 'add_store' %}">
+<form method="post" action="{% url 'add_pos' %}">
   {% csrf_token %}
   <div class="row">
     <div class="col-md-4">
@@ -29,7 +29,13 @@
         <input name="note" type="text" class="form-control" required />
       </div>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-3">
+      <div class="mb-3">
+        <label class="form-label">Giới hạn quẹt tiền mỗi ngày</label>
+        <input name="money_limit_per_day" type="number" class="form-control" required />
+      </div>
+    </div>
+    <div class="col-md-3">
       <div class="mb-3">
         <label class="form-label">Trạng thái</label>
         <input name="status" type="text" class="form-control" required />
@@ -48,7 +54,7 @@
       <label for="store" class="form-label ms-0">Cửa hàng</label>
       <select class="form-control" id="store" name="store">
         {% for store in stores %}
-        <option>{{ store.name }}</option>
+        <option value="{{ store.id }}">{{ store.name }}</option>
         {% endfor %}
       </select>
     </div>

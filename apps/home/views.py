@@ -8,11 +8,23 @@ from apps.base.constants import ROLE_CHOICES
 from apps.store.models import Store, POS
 from apps.user.models import User, InfomationDetail
 
+from datetime import datetime
+
 
 class HomeView(View):
 
     def get(self, request, *args, **kwargs):
-        return render(request, "home/index.html")
+        return redirect("swipecard")
+        # return render(request, "home/index.html")
+
+
+class StoreCardView(View):
+
+    def get(self, request, *args, **kwargs):
+        context = {
+            "sidebar": "storecard",
+        }
+        return render(request, "home/store_card.html", context)
 
 
 class SwipeCardView(View):
@@ -27,13 +39,34 @@ class SwipeCardView(View):
         context = {
             "sidebar": "swipecard"
         }
+        data = {
+            "customer_code": request.POST.get("customer_code"),
+            "customer_name": request.POST.get("customer_name"),
+            "phone_number": request.POST.get("phone_number"),
+            "customer_gender": request.POST.get("customer_gender"),
+            "customer_money_needed": request.POST.get("customer_money_needed"),
+            "customer_account": request.POST.get("customer_account"),
+            "customer_bank_account": request.POST.get("customer_bank_account"),
+            "card_number": request.POST.get("card_number"),
+            "bank_name": request.POST.get("bank_name"),
+            "line_of_credit": request.POST.get("line_of_credit"),
+            "fee": request.POST.get("fee"),
+            "name": request.POST.get("name"),
+            "issued_date": request.POST.get("issued_date"),
+            "expire_date": request.POST.get("expire_date"),
+            "ccv": request.POST.get("ccv"),
+            "statement_date": request.POST.get("statement_date"),
+            "maturity_date": request.POST.get("maturity_date"),
+        }
+        print(request.POST)
+        print(type(request.user))
         return render(request, "home/swipe_card.html", context)
 
 
 class StoreDetailView(View):
 
     def get(self, request, *args, **kwargs):
-        pk = kwargs.get('pk')
+        pk = kwargs.get("pk")
         store = Store.objects.filter(id=pk).first()
         if store:
             context = {
@@ -43,7 +76,7 @@ class StoreDetailView(View):
         return redirect("stores")
     
     def post(self, request, *args, **kwargs):
-        pk = kwargs.get('pk')
+        pk = kwargs.get("pk")
         store = Store.objects.filter(id=pk).first()
         data = {
             "code": request.POST.get("code"),
@@ -59,7 +92,7 @@ class StoreDetailView(View):
 class StoreDetailDeleteView(View):
 
     def get(self, request, *args, **kwargs):
-        pk = kwargs.get('pk')
+        pk = kwargs.get("pk")
         store = Store.objects.filter(id=pk).first()
         if store:
             store.delete()
@@ -69,7 +102,7 @@ class StoreDetailDeleteView(View):
 class EmployeeDetailDeleteView(View):
 
     def get(self, request, *args, **kwargs):
-        pk = kwargs.get('pk')
+        pk = kwargs.get("pk")
         user = User.objects.filter(id=pk).first()
         if user:
             user.delete()
@@ -110,7 +143,7 @@ class StoresView(View):
 class EmployeeDetailView(View):
 
     def get(self, request, *args, **kwargs):
-        pk = kwargs.get('pk')
+        pk = kwargs.get("pk")
         stores = Store.objects.all()
         user = User.objects.filter(id=pk).first()
         if user:
@@ -123,7 +156,7 @@ class EmployeeDetailView(View):
         return redirect("employees")
     
     def post(self, request, *args, **kwargs):
-        pk = kwargs.get('pk')
+        pk = kwargs.get("pk")
         user: User = User.objects.filter(id=pk).first()
         info_detail = InfomationDetail.objects.filter(id=user.infomation_detail.id).first()
         info_detail_data = {
@@ -132,14 +165,22 @@ class EmployeeDetailView(View):
             "phone_number" : request.POST.get("phone_number"),
             "identity_card" : request.POST.get("identity_card"),
             "place_of_issue_of_identity_card" : request.POST.get("place_of_issue_of_identity_card"),
-            "date_of_issue_of_identity_card" : request.POST.get("date_of_issue_of_identity_card"),
             "gender" : request.POST.get("gender"),
-            "dob" : request.POST.get("dob"),
-            "date_joined" : request.POST.get("date_joined"),
             "salary" : request.POST.get("salary"),
             "transaction_discount" : request.POST.get("transaction_discount"),
         }
-        info_detail.update(commit=True, **info_detail_data)
+        try:
+            dob_datetime_object = datetime.strptime(request.POST.get("dob"), "%Y-%m-%d")
+            date_of_issue_of_identity_card_datetime_object = datetime.strptime(request.POST.get("date_of_issue_of_identity_card"), "%Y-%m-%d")
+            date_joined_datetime_object = datetime.strptime(request.POST.get("date_joined"), "%Y-%m-%d")
+            
+            info_detail_data["dob"] = dob_datetime_object
+            info_detail_data["date_of_issue_of_identity_card"] = date_of_issue_of_identity_card_datetime_object
+            info_detail_data["date_joined"] = date_joined_datetime_object
+            info_detail.update(commit=True, **info_detail_data)
+        except ValueError:
+            pass
+        
         return redirect("employees")
 
 
@@ -162,24 +203,31 @@ class EmployeeView(View):
             "phone_number" : request.POST.get("phone_number"),
             "identity_card" : request.POST.get("identity_card"),
             "place_of_issue_of_identity_card" : request.POST.get("place_of_issue_of_identity_card"),
-            "date_of_issue_of_identity_card" : request.POST.get("date_of_issue_of_identity_card"),
             "gender" : request.POST.get("gender"),
-            "dob" : request.POST.get("dob"),
-            "date_joined" : request.POST.get("date_joined"),
             "transaction_discount" : request.POST.get("transaction_discount"),
             "salary" : request.POST.get("salary"),
         }
-        store_id = request.POST.get("store")
-        store_obj = Store.objects.filter(id=store_id).first()
-        if store_obj:
-            valid_data["store"] = store_obj
-            info_detail = InfomationDetail.objects.create(**valid_data)
-            User.objects.create(
-                username=request.POST.get("username"),
-                password=request.POST.get("password"),
-                role=request.POST.get("role"),
-                infomation_detail=info_detail
-            )
+        try:
+            dob_datetime_object = datetime.strptime(request.POST.get("dob"), "%Y-%m-%d")
+            date_of_issue_of_identity_card_datetime_object = datetime.strptime(request.POST.get("date_of_issue_of_identity_card"), "%Y-%m-%d")
+            date_joined_datetime_object = datetime.strptime(request.POST.get("date_joined"), "%Y-%m-%d")
+
+            store_id = request.POST.get("store")
+            store_obj = Store.objects.filter(id=store_id).first()
+            if store_obj:
+                valid_data["store"] = store_obj
+                valid_data["dob"] = dob_datetime_object
+                valid_data["date_of_issue_of_identity_card"] = date_of_issue_of_identity_card_datetime_object
+                valid_data["date_joined"] = date_joined_datetime_object
+                info_detail = InfomationDetail.objects.create(**valid_data)
+                User.objects.create(
+                    username=request.POST.get("username"),
+                    password=request.POST.get("password"),
+                    role=request.POST.get("role"),
+                    infomation_detail=info_detail
+                )
+        except ValueError as e:
+            print(e)
         return redirect("employees")
     
 
@@ -227,14 +275,20 @@ class POSView(View):
     
     def post(self, request, *args, **kwargs):
         valid_data = {
-            "code" : request.POST.get("code"),
-            "name" : request.POST.get("name"),
-            "phone_number" : request.POST.get("phone_number"),
+            "pos_id" : request.POST.get("pos_id"),
+            "mid" : request.POST.get("mid"),
+            "tid" : request.POST.get("tid"),
             "note" : request.POST.get("note"),
-            "address" : request.POST.get("address"),
+            "money_limit_per_day" : request.POST.get("money_limit_per_day"),
+            "status" : request.POST.get("status"),
+            "bank_name" : request.POST.get("bank_name"),
         }
-        POS.objects.create(**valid_data)
-        return redirect("stores")
+        store_id = request.POST.get("store")
+        store_obj = Store.objects.filter(id=store_id).first()
+        if store_obj:
+            valid_data["store"] = store_obj
+            POS.objects.create(**valid_data)
+        return redirect("poses")
 
 
 class Test(View):

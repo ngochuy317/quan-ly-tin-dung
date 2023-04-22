@@ -13,12 +13,14 @@ from .views import (
     EmployeesView,
     EmployeeDetailView,
     EmployeeDetailDeleteView,
+    StoreCardView,
     Test,
 )
 
 urlpatterns = [
     path('', HomeView.as_view(), name="home"),
     path('swipecard/', SwipeCardView.as_view(), name="swipecard"),
+    path('storecard/', StoreCardView.as_view(), name="storecard"),
     path('add_store/', StoreView.as_view(), name="add_store"),
     path('stores/', StoresView.as_view(), name="stores"),
     path('stores/<pk>/', StoreDetailView.as_view(), name="store-detail"),
