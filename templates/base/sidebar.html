@@ -6,6 +6,7 @@
       class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start w-100"
       id="menu"
     >
+      {% if request.user.role == 'admin' %}
       <li class="nav-item w-100">
         <a
           href="{% url 'stores' %}"
@@ -35,6 +36,34 @@
       </li>
       <li class="w-100">
         <a
+          href="#"
+          class="nav-link px-0 align-middle text-center {% if sidebar == '1' %}active{% endif %}"
+        >
+          <i class="bi bi-save2"></i>
+          <span class="ms-1 d-none d-sm-inline">Thống kê giao dịch</span></a
+        >
+      </li>
+      <li class="w-100">
+        <a
+          href="#"
+          class="nav-link px-0 align-middle text-center {% if sidebar == '2' %}active{% endif %}"
+        >
+          <i class="bi bi-save2"></i>
+          <span class="ms-1 d-none d-sm-inline">Bill máy Pos</span></a
+        >
+      </li>
+      <li class="w-100">
+        <a
+          href="#"
+          class="nav-link px-0 align-middle text-center {% if sidebar == '3' %}active{% endif %}"
+        >
+        <i class="bi bi-receipt"></i>
+          <span class="ms-1 d-none d-sm-inline">Hoá dơn</span></a
+        >
+      </li>
+      {% endif %}
+      <li class="w-100">
+        <a
           href="{% url 'swipecard' %}"
           class="nav-link px-0 align-middle text-center {% if sidebar == 'swipecard' %}active{% endif %}"
         >
@@ -45,10 +74,19 @@
       <li class="w-100">
         <a
           href="{% url 'storecard' %}"
-          class="nav-link px-0 align-middle text-center {% if sidebar == 'storecard' %}active{% endif %}"
+          class="nav-link px-0 align-middle text-center {% if sidebar == '1' %}active{% endif %}"
         >
           <i class="bi bi-save2"></i>
           <span class="ms-1 d-none d-sm-inline">Sổ lưu thẻ đáo</span></a
+        >
+      </li>
+      <li class="w-100">
+        <a
+          href="#"
+          class="nav-link px-0 align-middle text-center {% if sidebar == 'storecard' %}active{% endif %}"
+        >
+        <i class="bi bi-clock-history"></i>
+          <span class="ms-1 d-none d-sm-inline">Lịch sử quẹt thẻ</span></a
         >
       </li>
     </ul>
