@@ -1,37 +1,58 @@
 {% extends 'base/base.html' %} {% block body %}
 <h2 class="text-center">Danh sách máy POS</h2>
 <div class="table-responsive">
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Pos Id</th>
-      <th scope="col">Mid</th>
-      <th scope="col">Tid</th>
-      <th scope="col">Ghi chú</th>
-      <th scope="col">Trạng thái</th>
-      <th scope="col">Ngân hàng</th>
-      <th scope="col">Cửa hàng</th>
-      <th scope="col">Thao tác</th>
-    </tr>
-  </thead>
-  <tbody class="table-group-divider">
-    {% for pos in poses %}
-    <tr>
-      <th scope="row">{{ forloop.counter }}</th>
-      <td>{{ pos.pos_id }}</td>
-      <td>{{ pos.mid }}</td>
-      <td>{{ pos.tid }}</td>
-      <td>{{ pos.note }}</td>
-      <td>{{ pos.status }}</td>
-      <td>{{ pos.bank_name }}</td>
-      <td>{{ pos.store.name }}</td>
-      <td><a href="{% url 'pos-detail' pos.id  %}"> Chỉnh sửa </a></td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Pos Id</th>
+        <th scope="col">Mid</th>
+        <th scope="col">Tid</th>
+        <th scope="col">Ghi chú</th>
+        <th scope="col">Trạng thái</th>
+        <th scope="col">Ngân hàng</th>
+        <th scope="col">Cửa hàng</th>
+        <th scope="col">Thao tác</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      {% for pos in poses %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ pos.pos_id }}</td>
+        <td>{{ pos.mid }}</td>
+        <td>{{ pos.tid }}</td>
+        <td>{{ pos.note }}</td>
+        <td>{{ pos.status }}</td>
+        <td>{{ pos.bank_name }}</td>
+        <td>{{ pos.store.name }}</td>
+        <td><a href="{% url 'pos-detail' pos.id  %}"> Chỉnh sửa </a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
+{% if poses.has_other_pages %}
+<div class="container p-4">
+  <div class="pagination justify-content-center">
+    <span class="step-links">
+      {% if poses.has_previous %}
+      <a href="?page=1">&laquo; first</a>
+      <a href="?page={{ poses.previous_page_number }}">previous</a>
+      {% endif %}
+
+      <span class="current">
+        Page {{ poses.number }} of {{ poses.paginator.num_pages }}
+      </span>
+
+      {% if poses.has_next %}
+      <a href="?page={{ poses.next_page_number }}">next</a>
+      <a href="?page={{ poses.paginator.num_pages }}">last &raquo;</a>
+      {% endif %}
+    </span>
+  </div>
+</div>
+{% endif %}
 <div class="d-flex justify-content-end">
   <button type="button" class="btn btn-outline-primary">
     <a href="{% url 'add_pos' %}" style="color: inherit; text-decoration: none"

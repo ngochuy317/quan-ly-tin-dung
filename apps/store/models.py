@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.timezone import now
 
 
 class Store(models.Model):
@@ -78,4 +79,5 @@ class SwipeCardTransaction(models.Model):
     fee = models.PositiveBigIntegerField(default=0)
     creditcard = models.OneToOneField(CreditCard, on_delete=models.CASCADE, related_name="swipe_card_transaction")
     is_payment_received = models.BooleanField(default=False)
-    user = models.OneToOneField("user.User", on_delete=models.CASCADE, related_name="swipe_card_transaction")
+    user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="swipe_card_transaction")
+    transaction_datetime = models.DateTimeField(default=now)

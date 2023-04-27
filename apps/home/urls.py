@@ -23,6 +23,10 @@ from .views import (
     Test,
 )
 
+from apps.store.views import (
+    TransactionHistory,
+)
+
 urlpatterns = [
     path('', HomeView.as_view(), name="home"),
     path('swipecard/', SwipeCardView.as_view(), name="swipecard"),
@@ -43,5 +47,6 @@ urlpatterns = [
     path('add_employee/', EmployeeView.as_view(), name="add_employee"),
     path('employees/<pk>/', EmployeeDetailView.as_view(), name="employee-detail"),
     path('employees/<pk>/delete/', EmployeeDetailDeleteView.as_view(), name="delete-employee"),
+    path('transaction-history/', TransactionHistory.as_view(), name="transaction-history"),
     path('test/', Test.as_view(), name="test"),
 ]

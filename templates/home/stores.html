@@ -1,36 +1,59 @@
 {% extends 'base/base.html' %} {% block body %}
 <h2 class="text-center">Danh sách cửa hàng</h2>
 <div class="table-responsive">
-<table class="table">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Mã cửa hàng</th>
-      <th scope="col">Tên ghi nhớ</th>
-      <th scope="col">Ghi chú</th>
-      <th scope="col">Địa chỉ</th>
-      <th scope="col">Số điện thoại</th>
-      <th scope="col">Thao tác</th>
-    </tr>
-  </thead>
-  <tbody class="table-group-divider">
-    {% for store in stores %}
-    <tr>
-      <th scope="row">{{ forloop.counter }}</th>
-      <td>{{ store.code }}</td>
-      <td>{{ store.name }}</td>
-      <td>{{ store.note }}</td>
-      <td>{{ store.address }}</td>
-      <td>{{ store.phone_number }}</td>
-      <td><a href="{% url 'store-detail' store.id  %}"> Chỉnh sửa </a></td>
-    </tr>
-    {% endfor %}
-  </tbody>
-</table>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Mã cửa hàng</th>
+        <th scope="col">Tên ghi nhớ</th>
+        <th scope="col">Ghi chú</th>
+        <th scope="col">Địa chỉ</th>
+        <th scope="col">Số điện thoại</th>
+        <th scope="col">Thao tác</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      {% for store in stores %}
+      <tr>
+        <th scope="row">{{ forloop.counter }}</th>
+        <td>{{ store.code }}</td>
+        <td>{{ store.name }}</td>
+        <td>{{ store.note }}</td>
+        <td>{{ store.address }}</td>
+        <td>{{ store.phone_number }}</td>
+        <td><a href="{% url 'store-detail' store.id  %}"> Chỉnh sửa </a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
+{% if stores.has_other_pages %}
+<div class="container p-4">
+  <div class="pagination justify-content-center">
+    <span class="step-links">
+      {% if stores.has_previous %}
+      <a href="?page=1">&laquo; first</a>
+      <a href="?page={{ stores.previous_page_number }}">previous</a>
+      {% endif %}
+
+      <span class="current">
+        Page {{ stores.number }} of {{ stores.paginator.num_pages }}
+      </span>
+
+      {% if stores.has_next %}
+      <a href="?page={{ stores.next_page_number }}">next</a>
+      <a href="?page={{ stores.paginator.num_pages }}">last &raquo;</a>
+      {% endif %}
+    </span>
+  </div>
+</div>
+{% endif %}
 <div class="d-flex justify-content-end">
   <button type="button" class="btn btn-outline-primary">
-    <a href="{% url 'add_store' %}" style="text-decoration: none; color: inherit"
+    <a
+      href="{% url 'add_store' %}"
+      style="text-decoration: none; color: inherit"
       >Thêm</a
     >
   </button>

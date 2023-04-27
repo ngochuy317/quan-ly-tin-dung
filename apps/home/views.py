@@ -1,5 +1,5 @@
 
-from django.http import HttpResponse, HttpResponseRedirect
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.views import View
 from django.db.models import Q
@@ -151,8 +151,11 @@ class StoresView(View):
 
     def get(self, request, *args, **kwargs):
         stores = Store.objects.all()
+        paginator = Paginator(stores, 15)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
         context = {
-            "stores": stores,
+            "stores": page_obj,
             "sidebar": "stores",
         }
         return render(request, "home/stores.html", context)
@@ -253,8 +256,11 @@ class EmployeesView(View):
 
     def get(self, request, *args, **kwargs):
         users = User.objects.filter(~Q(role="admin"))
+        paginator = Paginator(users, 15)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
         context = {
-            "users": users,
+            "users": page_obj,
             "sidebar": "employees",
         }
         return render(request, "home/employees.html", context)
@@ -292,8 +298,11 @@ class NotebooksView(View):
 
     def get(self, request, *args, **kwargs):
         notebooks = NoteBook.objects.all()
+        paginator = Paginator(notebooks, 15)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
         context = {
-            "notebooks": notebooks,
+            "notebooks": page_obj,
             "sidebar": "notebooks"
         }
         return render(request, "home/notebooks.html", context)
@@ -380,8 +389,11 @@ class POSesView(View):
 
     def get(self, request, *args, **kwargs):
         poses = POS.objects.all()
+        paginator = Paginator(poses, 15)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
         context = {
-            "poses": poses,
+            "poses": page_obj,
             "sidebar": "poses",
         }
         return render(request, "home/poses.html", context)
