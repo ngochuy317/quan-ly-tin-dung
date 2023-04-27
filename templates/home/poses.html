@@ -26,7 +26,7 @@
       <td>{{ pos.status }}</td>
       <td>{{ pos.bank_name }}</td>
       <td>{{ pos.store.name }}</td>
-      <td><a href="{% url 'store-detail' pos.id  %}"> Chỉnh sửa </a></td>
+      <td><a href="{% url 'pos-detail' pos.id  %}"> Chỉnh sửa </a></td>
     </tr>
     {% endfor %}
   </tbody>

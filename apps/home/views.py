@@ -5,7 +5,7 @@ from django.views import View
 from django.db.models import Q
 
 from apps.base.constants import ROLE_CHOICES
-from apps.store.models import Store, POS, SwipeCardTransaction
+from apps.store.models import Store, POS, SwipeCardTransaction, CreditCard, NoteBook
 from apps.user.models import User, InfomationDetail
 
 from datetime import datetime
@@ -47,24 +47,33 @@ class SwipeCardView(View):
             "customer_money_needed": request.POST.get("customer_money_needed"),
             "customer_account": request.POST.get("customer_account"),
             "customer_bank_account": request.POST.get("customer_bank_account"),
-            "card_number": request.POST.get("card_number"),
-            "card_bank_name": request.POST.get("card_bank_name"),
             "line_of_credit": request.POST.get("line_of_credit"),
             "fee": request.POST.get("fee"),
-            "card_name": request.POST.get("card_name"),
-            "card_ccv": request.POST.get("card_ccv"),
         }
         try:
+            user: User = User.objects.filter(id=request.user.id).first()
+            data["user"] = user
+            credit_card_data = {
+                "card_number": request.POST.get("card_number"),
+                "card_bank_name": request.POST.get("card_bank_name"),
+                 "card_name": request.POST.get("card_name"),
+                "card_issued_date" : "",
+                "card_expire_date" : "",
+                "card_ccv": request.POST.get("card_ccv"),
+                "statement_date" : "",
+                "maturity_date" : "",
+            }
             card_issued_date_datetime_object = datetime.strptime(request.POST.get("card_issued_date"), "%Y-%m-%d")
             card_expire_date_datetime_object = datetime.strptime(request.POST.get("card_expire_date"), "%Y-%m-%d")
             statement_date_datetime_object = datetime.strptime(request.POST.get("statement_date"), "%Y-%m-%d")
             maturity_date_datetime_object = datetime.strptime(request.POST.get("maturity_date"), "%Y-%m-%d")
-            data["card_issued_date"] = card_issued_date_datetime_object
-            data["card_expire_date"] = card_expire_date_datetime_object
-            data["statement_date"] = statement_date_datetime_object
-            data["maturity_date"] = maturity_date_datetime_object
-            user: User = User.objects.filter(id=request.user.id).first()
-            data["user"] = user
+            credit_card_data["card_issued_date"] = card_issued_date_datetime_object
+            credit_card_data["card_expire_date"] = card_expire_date_datetime_object
+            credit_card_data["statement_date"] = statement_date_datetime_object
+            credit_card_data["maturity_date"] = maturity_date_datetime_object
+
+            credit_card = CreditCard.objects.create(**credit_card_data)
+            data["creditcard"] = credit_card
             SwipeCardTransaction.objects.create(**data)
         except ValueError as e:
             print(e)
@@ -251,14 +260,120 @@ class EmployeesView(View):
         return render(request, "home/employees.html", context)
 
 
-# class POSView(View):
-#     def get(self, request, *args, **kwargs):
-#         stores = Store.objects.all()
-#         context = {
-#             "sidebar": "stores",
-#             "stores": stores,
-#         }
-#         return render(request, "home/add_pos.html", context)
+class NoteBookDetailView(View):
+
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get("pk")
+        notebook = NoteBook.objects.filter(id=pk).first()
+        stores = Store.objects.all()
+        if notebook:
+            context = {
+                "notebook": notebook,
+                "stores": stores,
+            }
+            return render(request, "home/notebook.html", context)
+        return redirect("notebooks")
+    
+    def post(self, request, *args, **kwargs):
+        pk = kwargs.get("pk")
+        notebook = NoteBook.objects.filter(id=pk).first()
+        data = {
+            "name": request.POST.get("name"),
+        }
+        store_id = request.POST.get("store")
+        store_obj = Store.objects.filter(id=store_id).first()
+        if store_obj:
+            data["store"] = store_obj
+            notebook.update(commit=True, **data)
+        return redirect("notebooks")
+
+
+class NotebooksView(View):
+
+    def get(self, request, *args, **kwargs):
+        notebooks = NoteBook.objects.all()
+        context = {
+            "notebooks": notebooks,
+            "sidebar": "notebooks"
+        }
+        return render(request, "home/notebooks.html", context)
+
+
+class NotebookView(View):
+
+    def get(self, request, *args, **kwargs):
+        stores = Store.objects.all()
+        context = {
+            "sidebar": "add_notebook",
+            "stores": stores,
+        }
+        return render(request, "home/add_notebook.html", context)
+    
+    def post(self, request, *args, **kwargs):
+        valid_data = {
+            "name" : request.POST.get("name"),
+        }
+        store_id = request.POST.get("store")
+        store_obj = Store.objects.filter(id=store_id).first()
+        if store_obj:
+            valid_data["store"] = store_obj
+            NoteBook.objects.create(**valid_data)
+        return redirect("notebooks")
+
+
+class NotebookDetailDeleteView(View):
+
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get("pk")
+        notebook = NoteBook.objects.filter(id=pk).first()
+        if notebook:
+            notebook.delete()
+        return redirect("notebooks")
+
+
+class POSDetailDeleteView(View):
+
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get("pk")
+        pos = POS.objects.filter(id=pk).first()
+        if pos:
+            pos.delete()
+        return redirect("poses")
+
+
+class POSDetailView(View):
+
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get("pk")
+        pos = POS.objects.filter(id=pk).first()
+        stores = Store.objects.all()
+        if pos:
+            context = {
+                "pos": pos,
+                "stores": stores,
+            }
+            print(context)
+            return render(request, "home/pos.html", context)
+        return redirect("poses")
+    
+    def post(self, request, *args, **kwargs):
+        pk = kwargs.get("pk")
+        pos = POS.objects.filter(id=pk).first()
+        data = {
+            "pos_id" : request.POST.get("pos_id"),
+            "mid" : request.POST.get("mid"),
+            "tid" : request.POST.get("tid"),
+            "note" : request.POST.get("note"),
+            "money_limit_per_day" : request.POST.get("money_limit_per_day"),
+            "status" : request.POST.get("status"),
+            "bank_name" : request.POST.get("bank_name"),
+        }
+        store_id = request.POST.get("store")
+        store_obj = Store.objects.filter(id=store_id).first()
+        if store_obj:
+            data["store"] = store_obj
+            pos.update(commit=True, **data)
+        return redirect("poses")
 
 
 class POSesView(View):

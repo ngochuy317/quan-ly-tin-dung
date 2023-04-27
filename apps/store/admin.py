@@ -1,7 +1,9 @@
 from django.contrib import admin
 
-from .models import Store, POS, SwipeCardTransaction
+from .models import Store, POS, SwipeCardTransaction, CreditCard, NoteBook
 
 admin.site.register(Store)
 admin.site.register(POS)
 admin.site.register(SwipeCardTransaction)
+admin.site.register(CreditCard)
+admin.site.register(NoteBook)

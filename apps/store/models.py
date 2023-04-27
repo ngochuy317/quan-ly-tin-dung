@@ -40,6 +40,18 @@ class POS(models.Model):
             self.save()
 
 
+class NoteBook(models.Model):
+
+    name = models.CharField(max_length=127, default="Cửa hàng")
+    store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="notebooks")
+
+    def update(self, commit=False, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+        if commit:
+            self.save()
+
+
 class CreditCard(models.Model):
 
     card_number = models.CharField(max_length=127)
@@ -50,6 +62,7 @@ class CreditCard(models.Model):
     card_ccv = models.CharField(max_length=127)
     statement_date = models.DateField()
     maturity_date = models.DateField()
+    notebook = models.OneToOneField(NoteBook, on_delete=models.CASCADE, related_name="creditcard", null=True, blank=True)
 
 
 class SwipeCardTransaction(models.Model):
@@ -63,6 +76,6 @@ class SwipeCardTransaction(models.Model):
     customer_bank_account = models.CharField(max_length=127)
     line_of_credit = models.PositiveBigIntegerField(default=0)
     fee = models.PositiveBigIntegerField(default=0)
-    creditcard = models.ForeignKey(CreditCard, on_delete=models.CASCADE, related_name="swipe_card_transaction")
+    creditcard = models.OneToOneField(CreditCard, on_delete=models.CASCADE, related_name="swipe_card_transaction")
     is_payment_received = models.BooleanField(default=False)
-    user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="swipe_card_transaction")
+    user = models.OneToOneField("user.User", on_delete=models.CASCADE, related_name="swipe_card_transaction")
