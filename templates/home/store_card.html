@@ -1,4 +1,38 @@
 {% extends 'base/base.html' %} {% block body %}
 <h2 class="text-center">Sổ lưu thẻ</h2>
-<form method="post" action="{% url 'swipecard' %}">{% csrf_token %}</form>
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Số thẻ</th>
+        <th scope="col">Ngân hàng</th>
+        <th scope="col">Họ và tên</th>
+        <th scope="col">Ngày sao kê</th>
+        <th scope="col">Ngày đáo hạn</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for creditcard in notebook.creditcards.all %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ creditcard.card_number }}</td>
+        <td>{{ creditcard.card_bank_name }}</td>
+        <td>{{ creditcard.card_name }}</td>
+        <td>{{ creditcard.statement_date|date:'Y-m-d' }}</td>
+        <td>{{ creditcard.maturity_date|date:'Y-m-d' }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div class="d-flex justify-content-end">
+    <button type="button" class="btn btn-outline-primary mx-3">
+      <a
+        href="{% url 'storecard' %}"
+        style="text-decoration: none; color: inherit"
+        >Quay lại</a
+      >
+    </button>
+  </div>
+</div>
 {% endblock %}

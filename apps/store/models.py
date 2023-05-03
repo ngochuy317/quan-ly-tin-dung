@@ -10,6 +10,9 @@ class Store(models.Model):
     address =  models.CharField(max_length=1023)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
 
+    class Meta:
+        ordering = ['-id']
+
     def __str__(self) -> str:
         return self.name
     
@@ -31,6 +34,9 @@ class POS(models.Model):
     money_limit_per_day = models.PositiveBigIntegerField(default=0)
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="poses")
 
+    class Meta:
+        ordering = ['-id']
+
     def __str__(self) -> str:
         return f"{self.pos_id} in {self.store}"
     
@@ -46,11 +52,17 @@ class NoteBook(models.Model):
     name = models.CharField(max_length=127, default="Cửa hàng")
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="notebooks")
 
+    class Meta:
+        ordering = ['-id']
+
     def update(self, commit=False, **kwargs):
         for key, value in kwargs.items():
             setattr(self, key, value)
         if commit:
             self.save()
+
+    def __str__(self) -> str:
+        return self.name
 
 
 class CreditCard(models.Model):
@@ -63,7 +75,10 @@ class CreditCard(models.Model):
     card_ccv = models.CharField(max_length=127)
     statement_date = models.DateField()
     maturity_date = models.DateField()
-    notebook = models.OneToOneField(NoteBook, on_delete=models.CASCADE, related_name="creditcard", null=True, blank=True)
+    notebook = models.ForeignKey(NoteBook, on_delete=models.CASCADE, related_name="creditcards", null=True, blank=True)
+
+    class Meta:
+        ordering = ['-id']
 
 
 class SwipeCardTransaction(models.Model):
@@ -81,3 +96,6 @@ class SwipeCardTransaction(models.Model):
     is_payment_received = models.BooleanField(default=False)
     user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="swipe_card_transaction")
     transaction_datetime = models.DateTimeField(default=now)
+
+    class Meta:
+        ordering = ['-id']

@@ -22,9 +22,45 @@ class StoreCardView(View):
 
     def get(self, request, *args, **kwargs):
         context = {
-            "sidebar": "storecard",
+            "sidebar": "storecard"
         }
-        return render(request, "home/store_card.html", context)
+        if request.user.role == 'admin':
+            store_id = request.GET.get("store_id")
+            if store_id:
+                store = Store.objects.filter(id=store_id).first()
+                notebooks = store.notebooks.all()
+                context.update({
+                    "store": store,
+                    "notebooks": notebooks,
+                })
+            else:
+                stores = Store.objects.all()
+                context.update({
+                    "stores": stores,
+                })
+
+        else:
+            store = Store.objects.filter(id=request.user.infomation_detail.store.id).first()
+            notebooks = store.notebooks.all()
+            context.update({
+                "store": store,
+                "notebooks": notebooks,
+            })
+        return render(request, "home/store_cards.html", context)
+
+
+class StoreCardDetailView(View):
+
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get("pk")
+        notebook = NoteBook.objects.filter(id=pk).first()
+        if notebook:
+            context = {
+                "sidebar": "storecard",
+                "notebook": notebook,
+            }
+            return render(request, "home/store_card.html", context)
+        return redirect("storecard")
 
 
 class SwipeCardView(View):

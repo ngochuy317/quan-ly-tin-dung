@@ -59,6 +59,9 @@ class User(models.Model):
     permissions = models.ManyToManyField(Permission, blank=True, null=True)
     infomation_detail = models.OneToOneField(InfomationDetail, on_delete=models.CASCADE)
 
+    class Meta:
+        ordering = ['-id']
+
     def __str__(self) -> str:
         return self.username
     
