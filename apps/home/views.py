@@ -1,4 +1,5 @@
 
+from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.views import View
@@ -227,6 +228,11 @@ class EmployeeDetailView(AdminRoleViewPermissionsMixin, View):
             "salary" : request.POST.get("salary"),
             "transaction_discount" : request.POST.get("transaction_discount"),
         }
+        user_data= {}
+        if request.POST.get("password"):
+            user_data.update({
+                "password" : make_password(request.POST.get("password")),
+            })
         try:
             dob_datetime_object = datetime.strptime(request.POST.get("dob"), "%Y-%m-%d")
             date_of_issue_of_identity_card_datetime_object = datetime.strptime(request.POST.get("date_of_issue_of_identity_card"), "%Y-%m-%d")
@@ -236,8 +242,9 @@ class EmployeeDetailView(AdminRoleViewPermissionsMixin, View):
             info_detail_data["date_of_issue_of_identity_card"] = date_of_issue_of_identity_card_datetime_object
             info_detail_data["date_joined"] = date_joined_datetime_object
             info_detail.update(commit=True, **info_detail_data)
-        except ValueError:
-            pass
+            user.update(commit=True, **user_data)
+        except ValueError as e:
+            print(e)
         
         return redirect("employees")
 

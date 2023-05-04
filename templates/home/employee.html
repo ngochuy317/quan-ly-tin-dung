@@ -35,7 +35,6 @@
                 name="password"
                 type="password"
                 class="form-control"
-                value="{{ user.password }}"
               />
             </div>
           </div>
@@ -81,7 +80,7 @@
                 name="place_of_issue_of_identity_card"
                 type="date"
                 class="form-control"
-                value="{{user.infomation_detail.date_of_issue_of_identity_card|date:'Y-m-d'}}"
+                value="{{user.infomation_detail.place_of_issue_of_identity_card}}"
               />
             </div>
           </div>
@@ -92,7 +91,7 @@
                 name="date_of_issue_of_identity_card"
                 type="text"
                 class="form-control"
-                value="{{user.infomation_detail.place_of_issue_of_identity_card}}"
+                value="{{user.infomation_detail.date_of_issue_of_identity_card|date:'Y-m-d'}}"
               />
             </div>
           </div>

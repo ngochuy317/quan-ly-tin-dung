@@ -65,6 +65,13 @@ class User(models.Model):
     def __str__(self) -> str:
         return self.username
     
+    def update(self, commit=False, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+        if commit:
+            print("commit", self.password)
+            self.save()
+    
     def has_perm(self, perm):
         for _perm in self.permissions.all():
             if _perm.name == perm:
