@@ -82,11 +82,20 @@
       </li>
       <li class="w-100">
         <a
-          href="{% url 'storecard' %}"
+          href="{% if request.user.role == 'admin' %}{% url 'storecard' %}{% else %}{% url 'storecard-store-detail' store_id=user.infomation_detail.store.id%}{% endif %}"
           class="nav-link px-0 align-middle text-center {% if sidebar == 'storecard' %}active{% endif %}"
         >
           <i class="bi bi-save2"></i>
           <span class="ms-1 d-none d-sm-inline">Sổ lưu thẻ đáo</span></a
+        >
+      </li>
+      <li class="w-100">
+        <a
+          href="#"
+          class="nav-link px-0 align-middle text-center {% if sidebar == '1' %}active{% endif %}"
+        >
+          <i class="bi bi-save2"></i>
+          <span class="ms-1 d-none d-sm-inline">Thẻ chưa lưu</span></a
         >
       </li>
       <li class="w-100">

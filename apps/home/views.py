@@ -5,6 +5,7 @@ from django.views import View
 from django.db.models import Q
 
 from apps.base.constants import ROLE_CHOICES
+from apps.base.views import AdminRoleViewPermissionsMixin
 from apps.store.models import Store, POS, SwipeCardTransaction, CreditCard, NoteBook
 from apps.user.models import User, InfomationDetail
 
@@ -18,49 +19,49 @@ class HomeView(View):
         # return render(request, "home/index.html")
 
 
-class StoreCardView(View):
-
+class StoreCardStorageView(View):
+    
     def get(self, request, *args, **kwargs):
+        stores = Store.objects.all()
         context = {
-            "sidebar": "storecard"
+            "sidebar": "storecard",
+            "stores": stores,
         }
-        if request.user.role == 'admin':
-            store_id = request.GET.get("store_id")
-            if store_id:
-                store = Store.objects.filter(id=store_id).first()
-                notebooks = store.notebooks.all()
-                context.update({
-                    "store": store,
-                    "notebooks": notebooks,
-                })
-            else:
-                stores = Store.objects.all()
-                context.update({
-                    "stores": stores,
-                })
+        return render(request, "home/cards_storage_store.html", context)
 
-        else:
-            store = Store.objects.filter(id=request.user.infomation_detail.store.id).first()
-            notebooks = store.notebooks.all()
-            context.update({
-                "store": store,
-                "notebooks": notebooks,
-            })
-        return render(request, "home/store_cards.html", context)
-
-
-class StoreCardDetailView(View):
+class StoreCardStorageDetailView(View):
 
     def get(self, request, *args, **kwargs):
-        pk = kwargs.get("pk")
-        notebook = NoteBook.objects.filter(id=pk).first()
+        store_id = kwargs.get("store_id")
+        if store_id != request.user.infomation_detail.store.id:
+            return redirect("swipecard")
+        store = Store.objects.filter(id=store_id).first()
+        notebooks = store.notebooks.all()
+        context = {
+            "sidebar": "storecard",
+            "store": store,
+            "notebooks": notebooks,
+        }
+        return render(request, "home/cards_storage.html", context)
+
+
+class StoreCardNotebookDetailView(View):
+
+    def get(self, request, *args, **kwargs):
+        id = kwargs.get("notebook_id")
+        notebook = NoteBook.objects.filter(id=id).first()
         if notebook:
+            creditcards = notebook.creditcards.all()
+            paginator = Paginator(creditcards, 15)
+            page_number = request.GET.get('page')
+            page_obj = paginator.get_page(page_number)
             context = {
                 "sidebar": "storecard",
                 "notebook": notebook,
+                "creditcards": page_obj,
             }
-            return render(request, "home/store_card.html", context)
-        return redirect("storecard")
+            return render(request, "home/card_storage.html", context)
+        return redirect("storecard-store-detail")
 
 
 class SwipeCardView(View):
@@ -117,7 +118,7 @@ class SwipeCardView(View):
         return render(request, "home/swipe_card.html", context)
 
 
-class StoreDetailView(View):
+class StoreDetailView(AdminRoleViewPermissionsMixin, View):
 
     def get(self, request, *args, **kwargs):
         pk = kwargs.get("pk")
@@ -143,7 +144,7 @@ class StoreDetailView(View):
         return redirect("stores")
 
 
-class StoreDetailDeleteView(View):
+class StoreDetailDeleteView(AdminRoleViewPermissionsMixin, View):
 
     def get(self, request, *args, **kwargs):
         pk = kwargs.get("pk")
@@ -153,7 +154,7 @@ class StoreDetailDeleteView(View):
         return redirect("stores")
 
 
-class EmployeeDetailDeleteView(View):
+class EmployeeDetailDeleteView(AdminRoleViewPermissionsMixin, View):
 
     def get(self, request, *args, **kwargs):
         pk = kwargs.get("pk")
@@ -163,7 +164,7 @@ class EmployeeDetailDeleteView(View):
         return redirect("employees")
 
 
-class StoreView(View):
+class StoreView(AdminRoleViewPermissionsMixin, View):
 
     def get(self, request, *args, **kwargs):
         context = {
@@ -183,7 +184,7 @@ class StoreView(View):
         return redirect("stores")
     
 
-class StoresView(View):
+class StoresView(AdminRoleViewPermissionsMixin, View):
 
     def get(self, request, *args, **kwargs):
         stores = Store.objects.all()
@@ -197,7 +198,7 @@ class StoresView(View):
         return render(request, "home/stores.html", context)
 
 
-class EmployeeDetailView(View):
+class EmployeeDetailView(AdminRoleViewPermissionsMixin, View):
 
     def get(self, request, *args, **kwargs):
         pk = kwargs.get("pk")
@@ -241,7 +242,7 @@ class EmployeeDetailView(View):
         return redirect("employees")
 
 
-class EmployeeView(View):
+class EmployeeView(AdminRoleViewPermissionsMixin, View):
 
     def get(self, request, *args, **kwargs):
         stores = Store.objects.all()
@@ -288,7 +289,7 @@ class EmployeeView(View):
         return redirect("employees")
     
 
-class EmployeesView(View):
+class EmployeesView(AdminRoleViewPermissionsMixin, View):
 
     def get(self, request, *args, **kwargs):
         users = User.objects.filter(~Q(role="admin"))
@@ -376,7 +377,7 @@ class NotebookDetailDeleteView(View):
         return redirect("notebooks")
 
 
-class POSDetailDeleteView(View):
+class POSDetailDeleteView(AdminRoleViewPermissionsMixin, View):
 
     def get(self, request, *args, **kwargs):
         pk = kwargs.get("pk")
@@ -386,7 +387,7 @@ class POSDetailDeleteView(View):
         return redirect("poses")
 
 
-class POSDetailView(View):
+class POSDetailView(AdminRoleViewPermissionsMixin, View):
 
     def get(self, request, *args, **kwargs):
         pk = kwargs.get("pk")
@@ -421,7 +422,7 @@ class POSDetailView(View):
         return redirect("poses")
 
 
-class POSesView(View):
+class POSesView(AdminRoleViewPermissionsMixin, View):
 
     def get(self, request, *args, **kwargs):
         poses = POS.objects.all()
@@ -435,7 +436,7 @@ class POSesView(View):
         return render(request, "home/poses.html", context)
 
 
-class POSView(View):
+class POSView(AdminRoleViewPermissionsMixin, View):
 
     def get(self, request, *args, **kwargs):
         stores = Store.objects.all()

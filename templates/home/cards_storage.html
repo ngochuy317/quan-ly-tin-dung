@@ -1,27 +1,5 @@
 {% extends 'base/base.html' %} {% block body %}
-{% if stores %}
-<h2 class="text-start">Danh sách cửa hàng</h2>
-<div class="table-responsive">
-  <table class="table">
-    <thead>
-      <tr>
-        <th scope="col">Tên cửa hàng</th>
-        <th scope="col">Địa chỉ</th>
-        <th scope="col">Số điện thoại</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for store in stores %}
-      <tr>
-        <td><a href="{% url 'storecard' %}?store_id={{ store.id }}">{{ store.name }}</a></td>
-        <td>{{ store.address }}</td>
-        <td>{{ store.phone_number }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
-{% else %}
+
 <h2 class="text-start">Thông tin cửa hàng</h2>
 <div class="table-responsive">
   <table class="table">
@@ -45,9 +23,9 @@
 <div class="btn-group">
   <ol class="list-group list-group-numbered list-group-flush mx-auto">
     {% for notebook in notebooks %}
-    <li class="list-group-item"><a href="{% url 'storecard-detail' notebook.id %}"> {{ notebook.name }} </a></li>
+    <li class="list-group-item"><a href="{% url 'storecard-notebook-detail' notebook_id=notebook.id %}"> {{ notebook.name }} </a></li>
     {% endfor %}
   </ol>
 </div>
-{% endif %}
+
 {% endblock %}

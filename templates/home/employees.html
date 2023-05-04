@@ -39,17 +39,17 @@
   <div class="pagination justify-content-center">
     <span class="step-links">
       {% if users.has_previous %}
-      <a href="?page=1">&laquo; first</a>
-      <a href="?page={{ users.previous_page_number }}">previous</a>
+      <a href="?page=1">&laquo; Trang đầu</a>
+      <a href="?page={{ users.previous_page_number }}">Trang trước</a>
       {% endif %}
 
       <span class="current">
-        Page {{ users.number }} of {{ users.paginator.num_pages }}
+        Trang {{ users.number }} trên {{ users.paginator.num_pages }}
       </span>
 
       {% if users.has_next %}
-      <a href="?page={{ users.next_page_number }}">next</a>
-      <a href="?page={{ users.paginator.num_pages }}">last &raquo;</a>
+      <a href="?page={{ users.next_page_number }}">Trang tiếp</a>
+      <a href="?page={{ users.paginator.num_pages }}">Trang cuối &raquo;</a>
       {% endif %}
     </span>
   </div>
