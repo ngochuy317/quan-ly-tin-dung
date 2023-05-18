@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.user.models import User, InfomationDetail
-from apps.store.models import Store, POS
+from apps.store.models import Store, POS, NoteBook
     
 
 class InfomationDetailSerializer(serializers.ModelSerializer):
@@ -33,5 +33,13 @@ class POSSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = POS
+        fields = '__all__'
+        read_only_fields = ('id', )
+
+
+class NoteBookSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = NoteBook
         fields = '__all__'
         read_only_fields = ('id', )

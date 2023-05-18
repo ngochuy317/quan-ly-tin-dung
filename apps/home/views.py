@@ -17,7 +17,7 @@ from apps.user.models import User, InfomationDetail
 
 from datetime import datetime
 
-from .serializers import UserSerializer, StoreSerializer, POSSerializer
+from .serializers import UserSerializer, StoreSerializer, POSSerializer, NoteBookSerializer
 
 
 class HomeView(View):
@@ -316,7 +316,28 @@ class EmployeesView(AdminRoleViewPermissionsMixin, View):
         }
         return render(request, "home/employees.html", context)
 
-class POSViewAPI(ListAPIView):
+
+class NotebookListAPIView(ListAPIView):
+
+    queryset = NoteBook.objects.all()
+    serializer_class = NoteBookSerializer
+
+
+class NoteBookDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+
+    queryset = NoteBook.objects.all()
+    serializer_class = NoteBookSerializer
+
+    def put(self, request, *args, **kwargs):
+        id = kwargs.get("pk")
+        obj = NoteBook.objects.filter(id=id).first()
+        serializer = NoteBookSerializer(obj, data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class POSListAPIView(ListAPIView):
 
     queryset = POS.objects.all()
     serializer_class = POSSerializer
@@ -336,7 +357,7 @@ class POSDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class StoreViewAPI(ListAPIView):
+class StoreListAPIView(ListAPIView):
 
     queryset = Store.objects.all()
     serializer_class = StoreSerializer
@@ -356,7 +377,7 @@ class StoreDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class EmployeesViewAPI(ListAPIView):
+class EmployeesListAPIView(ListAPIView):
 
     queryset = User.objects.filter(~Q(role="admin"))
     serializer_class = UserSerializer
