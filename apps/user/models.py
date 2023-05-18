@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 from apps.base.constants import ROLE_CHOICES
@@ -5,6 +6,9 @@ from apps.base.constants import ROLE_CHOICES
 from apps.store.models import Store
 
 from .managers import UserManager
+
+from datetime import datetime, timedelta
+import jwt
 
 
 class Permission(models.Model):
@@ -84,3 +88,21 @@ class User(models.Model):
         for _perm in self.permissions.all():
             all_perms[_perm.name] = True
         return all_perms
+    
+    def get_access_token(self):
+        data = {
+            'id': self.id,
+            'role': self.role,
+            'expire_time': (datetime.utcnow() + timedelta(hours=4)).strftime(settings.STRPTIME_FORMAT),
+            'create_at': (datetime.utcnow()).strftime(settings.STRPTIME_FORMAT)
+        }
+        try:
+            secret_key = settings.SECRET_KEY
+            encoded_jwt = jwt.encode(
+                data,
+                secret_key,
+                algorithm="HS256"
+            )
+            return encoded_jwt
+        except jwt.exceptions.ExpiredSignatureError as e:
+            pass

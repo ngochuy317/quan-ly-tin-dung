@@ -155,3 +155,5 @@ AUTHENTICATION_BACKENDS = [
 
 AUTH_EXEMPT_ROUTES = ('logout', 'login', 'forgot-password', 'index')
 LOGIN_URL = '/user/login/'
+
+STRPTIME_FORMAT = "%m/%d/%Y, %H:%M:%S"

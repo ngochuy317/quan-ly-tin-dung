@@ -3,7 +3,30 @@ from django.contrib.auth import login, logout
 from django.shortcuts import render, redirect
 from django.views import View
 
+from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
 from .models import User
+from .serializers import UserLoginSerializer
+
+
+class UserLoginView(APIView):
+
+    def post(self, request):
+        serializer = UserLoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = User.objects.filter(username=serializer.validated_data['username']).first()
+        if user:
+            if check_password(serializer.validated_data['password'], user.password):
+                data = {
+                    'access_token': user.get_access_token()
+                }
+                return Response(data, status=status.HTTP_200_OK)
+
+        return Response({
+            'error_message': 'Username or password is incorrect!',
+        }, status=status.HTTP_400_BAD_REQUEST)
 
 class LogInView(View):
 
