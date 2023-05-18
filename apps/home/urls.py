@@ -23,13 +23,13 @@ from .views import (
     NoteBookDetailView,
     NotebookDetailDeleteView,
     Test,
-    EmployeesListAPIView,
+    EmployeesListCreateAPIView,
     EmployeeDetailRetrieveUpdateDestroyAPIView,
-    StoreListAPIView,
+    StoreListCreateAPIView,
     StoreDetailRetrieveUpdateDestroyAPIView,
-    POSListAPIView,
+    POSListCreateAPIView,
     POSDetailRetrieveUpdateDestroyAPIView,
-    NotebookListAPIView,
+    NotebookListCreateAPIView,
     NoteBookDetailRetrieveUpdateDestroyAPIView,
 )
 
@@ -38,12 +38,12 @@ from apps.store.views import (
 )
 
 urlpatterns = [
-    path('api/notebooks/', NotebookListAPIView.as_view(), name="notebooks"),
+    path('api/notebooks/', NotebookListCreateAPIView.as_view(), name="notebooks"),
     path('api/notebooks/<pk>/', NoteBookDetailRetrieveUpdateDestroyAPIView.as_view(), name="notebook-detail"),
-    path('api/poses/', POSListAPIView.as_view(), name="poses"),
+    path('api/poses/', POSListCreateAPIView.as_view(), name="poses"),
     path('api/poses/<pk>/', POSDetailRetrieveUpdateDestroyAPIView.as_view(), name="pos-detail"),
-    path('api/stores/', StoreListAPIView.as_view(), name="stores"),
+    path('api/stores/', StoreListCreateAPIView.as_view(), name="stores"),
     path('api/stores/<pk>/', StoreDetailRetrieveUpdateDestroyAPIView.as_view(), name="stores-detail"),
-    path('api/employees/', EmployeesListAPIView.as_view(), name="employees"),
+    path('api/employees/', EmployeesListCreateAPIView.as_view(), name="employees"),
     path('api/employees/<pk>/', EmployeeDetailRetrieveUpdateDestroyAPIView.as_view(), name="employee-detail"),
 ]

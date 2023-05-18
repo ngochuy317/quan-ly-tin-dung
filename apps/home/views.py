@@ -8,7 +8,7 @@ from django.db.models import Q
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView, ListCreateAPIView
 
 from apps.base.constants import ROLE_CHOICES
 from apps.base.views import AdminRoleViewPermissionsMixin
@@ -317,7 +317,7 @@ class EmployeesView(AdminRoleViewPermissionsMixin, View):
         return render(request, "home/employees.html", context)
 
 
-class NotebookListAPIView(ListAPIView):
+class NotebookListCreateAPIView(ListCreateAPIView):
 
     queryset = NoteBook.objects.all()
     serializer_class = NoteBookSerializer
@@ -337,7 +337,7 @@ class NoteBookDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class POSListAPIView(ListAPIView):
+class POSListCreateAPIView(ListCreateAPIView):
 
     queryset = POS.objects.all()
     serializer_class = POSSerializer
@@ -357,7 +357,7 @@ class POSDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class StoreListAPIView(ListAPIView):
+class StoreListCreateAPIView(ListCreateAPIView):
 
     queryset = Store.objects.all()
     serializer_class = StoreSerializer
@@ -377,7 +377,7 @@ class StoreDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-class EmployeesListAPIView(ListAPIView):
+class EmployeesListCreateAPIView(ListCreateAPIView):
 
     queryset = User.objects.filter(~Q(role="admin"))
     serializer_class = UserSerializer
