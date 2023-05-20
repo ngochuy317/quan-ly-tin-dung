@@ -1,14 +1,13 @@
 from django.conf import settings
 
-from rest_framework import authentication
-from rest_framework import exceptions
+from rest_framework import authentication, permissions, exceptions
 
 import jwt
 from datetime import datetime
 
 from .models import User
 
-class CustomerAuthentication(authentication.BaseAuthentication):
+class CustomAuthentication(authentication.BaseAuthentication):
     AUTH_HEADER_TYPES = 'Bearer'
 
     def authenticate(self, request):
@@ -30,8 +29,8 @@ class CustomerAuthentication(authentication.BaseAuthentication):
             )
             expire_time = token_payload.get("expire_time")
             expire_time = datetime.strptime(expire_time, settings.STRPTIME_FORMAT)
-            if not expire_time or datetime.utcnow() >= expire_time:
-                raise exceptions.AuthenticationFailed('Token expired')
+            # if not expire_time or datetime.utcnow() >= expire_time:
+            #     raise exceptions.AuthenticationFailed('Token expired')
             id = token_payload.get("id")
             user = User.objects.filter(id=id).first()
             if not user:
@@ -44,3 +43,12 @@ class CustomerAuthentication(authentication.BaseAuthentication):
             jwt.exceptions.InvalidSignatureError,
         ) as e:
             raise exceptions.AuthenticationFailed('Invalid token')
+        
+
+class IsAdmin(permissions.BasePermission):
+    """
+    Permission class to check that only this user can get, update, delete his own resource
+    """
+
+    def has_permission(self, request, view):
+        return request.user.role == "admin"

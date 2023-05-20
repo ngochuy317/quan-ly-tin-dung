@@ -9,15 +9,18 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView, ListCreateAPIView
+from rest_framework.permissions import IsAuthenticated
 
 from apps.base.constants import ROLE_CHOICES
 from apps.base.views import AdminRoleViewPermissionsMixin
 from apps.store.models import Store, POS, SwipeCardTransaction, CreditCard, NoteBook
 from apps.user.models import User, InfomationDetail
+from apps.user.authentication import IsAdmin
 
 from datetime import datetime
 
 from .serializers import UserSerializer, StoreSerializer, POSSerializer, NoteBookSerializer
+from .pagination import CustomPageNumberPagination
 
 
 class HomeView(View):
@@ -321,12 +324,15 @@ class NotebookListCreateAPIView(ListCreateAPIView):
 
     queryset = NoteBook.objects.all()
     serializer_class = NoteBookSerializer
+    pagination_class = CustomPageNumberPagination
+    permission_classes = [IsAdmin]
 
 
 class NoteBookDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
     queryset = NoteBook.objects.all()
     serializer_class = NoteBookSerializer
+    permission_classes = [IsAuthenticated]
 
     def put(self, request, *args, **kwargs):
         id = kwargs.get("pk")
@@ -341,12 +347,15 @@ class POSListCreateAPIView(ListCreateAPIView):
 
     queryset = POS.objects.all()
     serializer_class = POSSerializer
+    pagination_class = CustomPageNumberPagination
+    permission_classes = [IsAuthenticated]
 
 
 class POSDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
     queryset = POS.objects.all()
     serializer_class = POSSerializer
+    permission_classes = [IsAuthenticated]
 
     def put(self, request, *args, **kwargs):
         id = kwargs.get("pk")
@@ -361,12 +370,22 @@ class StoreListCreateAPIView(ListCreateAPIView):
 
     queryset = Store.objects.all()
     serializer_class = StoreSerializer
+    pagination_class = CustomPageNumberPagination
+    permission_classes = [IsAuthenticated]
+
+
+class StoreListCreateAPIViewNoPagination(ListCreateAPIView):
+
+    queryset = Store.objects.all()
+    serializer_class = StoreSerializer
+    permission_classes = [IsAuthenticated]
 
 
 class StoreDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
     queryset = Store.objects.all()
     serializer_class = StoreSerializer
+    permission_classes = [IsAuthenticated]
 
     def put(self, request, *args, **kwargs):
         id = kwargs.get("pk")
@@ -381,12 +400,15 @@ class EmployeesListCreateAPIView(ListCreateAPIView):
 
     queryset = User.objects.filter(~Q(role="admin"))
     serializer_class = UserSerializer
+    pagination_class = CustomPageNumberPagination
+    permission_classes = [IsAuthenticated]
 
 
 class EmployeeDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
     queryset = User.objects.filter(~Q(role="admin"))
     serializer_class = UserSerializer
+    permission_classes = [IsAuthenticated]
 
     def put(self, request, *args, **kwargs):
         id = kwargs.get("pk")
