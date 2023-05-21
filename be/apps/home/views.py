@@ -8,9 +8,16 @@ from django.db.models import Q
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.generics import ListAPIView, RetrieveAPIView, UpdateAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView, ListCreateAPIView
+from rest_framework.generics import (
+    ListAPIView, 
+    RetrieveAPIView, 
+    UpdateAPIView, 
+    RetrieveUpdateAPIView, 
+    RetrieveUpdateDestroyAPIView, 
+    ListCreateAPIView,
+)
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.parsers import FileUploadParser, MultiPartParser
+from rest_framework.parsers import FileUploadParser, MultiPartParser, JSONParser
 
 from apps.base.constants import ROLE_CHOICES
 from apps.base.views import AdminRoleViewPermissionsMixin
@@ -26,6 +33,7 @@ from apps.user.models import User, InfomationDetail
 from apps.user.authentication import IsAdmin
 
 from datetime import datetime
+from nested_multipart_parser import NestedParser
 
 from .serializers import (
     UserSerializer,
@@ -33,6 +41,8 @@ from .serializers import (
     POSSerializer, 
     NoteBookSerializer, 
     CustomerSerializer,
+    CreditCardSerializer,
+    SwipeCardTransactionSerializer,
 )
 from .pagination import CustomPageNumberPagination
 
@@ -338,7 +348,31 @@ class EmployeesView(AdminRoleViewPermissionsMixin, View):
             "sidebar": "employees",
         }
         return render(request, "home/employees.html", context)
+
+class SwipeCardTransactionAPIView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+
+        parser = NestedParser(request.data)
+        if parser.is_valid(raise_exception=True):
+            data = parser.validate_data
+            request.data["user"] = request.user.id
+            data["user"] = request.user.id
+            serializer = SwipeCardTransactionSerializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(status=status.HTTP_201_CREATED)
+        else:
+            return Response("Parser error", status=status.HTTP_400_BAD_REQUEST)
     
+    def get(self, request, *args, **kwargs):
+        data = SwipeCardTransaction.objects.all()
+        serializer = SwipeCardTransactionSerializer(data, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 
 class CustomerAPIView(APIView):
 

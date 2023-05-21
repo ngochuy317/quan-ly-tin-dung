@@ -35,6 +35,8 @@ from .views import (
     NotebookListCreateAPIView,
     NoteBookDetailRetrieveUpdateDestroyAPIView,
     CustomerAPIView,
+    CreditCardAPIView,
+    SwipeCardTransactionAPIView,
 )
 
 from apps.store.views import (
@@ -53,6 +55,8 @@ urlpatterns = [
     path('api/employees/<pk>/', EmployeeDetailRetrieveUpdateDestroyAPIView.as_view(), name="employee-detail"),
     path('api/user/infomation-detail/', InformationDetailAPIView.as_view(), name="user-information-detail"),
     path('api/customer/', CustomerAPIView.as_view(), name="customer"),
+    path('api/creditcard/upload/', CreditCardAPIView.as_view(), name="upload-creditcard"),
+    path('api/swipecardtransaction/', SwipeCardTransactionAPIView.as_view(), name="swipe-card-transaction"),
     # path('', HomeView.as_view(), name="home"),
     # path('unsavedcard/', UnsavedCard.as_view(), name="unsavedcard"),
     # path('swipecard/', SwipeCardView.as_view(), name="swipecard"),

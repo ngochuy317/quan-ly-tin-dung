@@ -1,8 +1,15 @@
 from rest_framework import serializers
 
 from apps.user.models import User, InfomationDetail
-from apps.store.models import Store, POS, NoteBook, Customer
-    
+from apps.store.models import (
+    Store,
+    POS,
+    NoteBook,
+    Customer,
+    CreditCard,
+    SwipeCardTransaction,
+)
+
 
 class InfomationDetailSerializer(serializers.ModelSerializer):
     store_name = serializers.ReadOnlyField(source='store.name')
@@ -74,4 +81,25 @@ class CustomerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Customer
-        fields = ('name','phone_number', 'account_number', 'id_card_image') 
+        fields = ('name','phone_number', 'account_number', 'id_card_image')
+
+
+class CreditCardSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CreditCard
+        exclude = ("id",)
+
+
+class SwipeCardTransactionSerializer(serializers.ModelSerializer):
+    creditcard = CreditCardSerializer()
+
+    class Meta:
+        model = SwipeCardTransaction
+        exclude = ("id",)
+
+    def create(self, validated_data):
+        creditcard_data = validated_data.pop('creditcard')
+        creditcard_instance = CreditCard.objects.create(**creditcard_data)
+        instance = SwipeCardTransaction.objects.create(**validated_data, creditcard=creditcard_instance)
+        return instance

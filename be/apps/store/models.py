@@ -66,15 +66,17 @@ class NoteBook(models.Model):
 
 
 class CreditCard(models.Model):
-
-    card_number = models.CharField(max_length=127)
-    card_bank_name = models.CharField(max_length=127)
-    card_name = models.CharField(max_length=127)
-    card_issued_date = models.DateField()
-    card_expire_date = models.DateField()
-    card_ccv = models.CharField(max_length=127)
-    statement_date = models.DateField()
-    maturity_date = models.DateField()
+    
+    card_number = models.CharField(max_length=127, blank=True, null=True)
+    card_bank_name = models.CharField(max_length=127, blank=True, null=True)
+    card_name = models.CharField(max_length=127, blank=True, null=True)
+    card_issued_date = models.DateField(blank=True, null=True)
+    card_expire_date = models.DateField(blank=True, null=True)
+    card_ccv = models.CharField(max_length=127, blank=True, null=True)
+    statement_date = models.DateField(blank=True, null=True)
+    maturity_date = models.DateField(blank=True, null=True)
+    credit_card_front_image = models.ImageField(upload_to ='uploads/creditcards/')
+    credit_card_back_image = models.ImageField(upload_to ='uploads/creditcards/')
     notebook = models.ForeignKey(NoteBook, on_delete=models.CASCADE, related_name="creditcards", null=True, blank=True)
 
     class Meta:
@@ -82,24 +84,27 @@ class CreditCard(models.Model):
 
 
 class Customer(models.Model):
-    name = models.CharField(max_length=127)
-    phone_number = models.CharField(max_length=12)
-    account_number = models.CharField(max_length=127)
-    id_card_image = models.ImageField(upload_to ='uploads/% Y/% m/% d/')
+    name = models.CharField(max_length=127, blank=True, null=True)
+    phone_number = models.CharField(max_length=12, blank=True, null=True)
+    gender = models.CharField(max_length=127, blank=True, null=True)
+    account_number = models.CharField(max_length=127, blank=True, null=True)
+    id_card_image = models.ImageField(upload_to ='uploads/customer/')
 
 
 class SwipeCardTransaction(models.Model):
 
-    customer_code = models.CharField(max_length=127)
-    customer_name = models.CharField(max_length=127)
-    customer_gender = models.CharField(max_length=127)
-    phone_number = models.CharField(max_length=127)
+    customer_name = models.CharField(max_length=127, blank=True, null=True)
+    customer_phone_number = models.CharField(max_length=12, blank=True, null=True)
+    customer_gender = models.CharField(max_length=127, blank=True, null=True)
+    customer_account_number = models.CharField(max_length=127, blank=True, null=True)
+    customer_id_card_front_image = models.ImageField(upload_to ='uploads/customer/')
+    customer_id_card_back_image = models.ImageField(upload_to ='uploads/customer/')
     customer_money_needed = models.PositiveBigIntegerField(default=0)
-    customer_account = models.CharField(max_length=127)
-    customer_bank_account = models.CharField(max_length=127)
+    customer_account = models.CharField(max_length=127, blank=True, null=True)
+    customer_bank_account = models.CharField(max_length=127, blank=True, null=True)
     line_of_credit = models.PositiveBigIntegerField(default=0)
     fee = models.PositiveBigIntegerField(default=0)
-    creditcard = models.OneToOneField(CreditCard, on_delete=models.CASCADE, related_name="swipe_card_transaction")
+    creditcard = models.OneToOneField(CreditCard, on_delete=models.CASCADE, related_name="swipe_card_transaction",blank=True, null=True)
     is_payment_received = models.BooleanField(default=False)
     user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="swipe_card_transaction")
     at_store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="swipe_card_transaction", blank=True, null=True)

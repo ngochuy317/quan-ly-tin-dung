@@ -1,6 +1,12 @@
 from django.contrib import admin
 
-from .models import Store, POS, SwipeCardTransaction, CreditCard, NoteBook
+from .models import (
+    Store, 
+    POS,
+    SwipeCardTransaction, 
+    CreditCard, 
+    NoteBook
+)
 
 class SwipeCardTransactionAdmin(admin.ModelAdmin):
     readonly_fields=('transaction_datetime',)
