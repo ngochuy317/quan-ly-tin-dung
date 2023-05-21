@@ -1,0 +1,27 @@
+{% extends 'base/base.html' %} {% block body %}
+<h2 class="text-center">Thẻ chưa lưu</h2>
+<div class="table-responsive">
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Số thẻ</th>
+          <th scope="col">Tên trên thẻ</th>
+          <th scope="col">Thao tác</th>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider">
+        {% for card in cards %}
+        <tr>
+          <th scope="row">{{ forloop.counter }}</th>
+          <td>{{ card.card_number }}</td>
+          <td>{{ card.card_name }}</td>
+          <td>
+            <a href="{% url 'employee-detail' card.id  %}"> Chỉnh sửa </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock %}

@@ -10,7 +10,9 @@ x-common-variables: &common-variables
 services:
   django-qltd:
     container_name: django-qltd
-    build: .
+    build:
+      context: be
+      dockerfile: ./be.Dockerfile
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=!03Z5^9G*k9yyta&YX9W61O7VldVTrNod0IPck9
@@ -19,7 +21,7 @@ services:
     ports: 
       - '8000:8000'
     volumes:
-      - .:/code
+      - ./be:/code
       - django-qltd_media:/code/media
       - django-qltd_volume:/code/staticfiles
     depends_on:
