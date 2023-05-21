@@ -356,7 +356,7 @@ class SwipeCardTransactionAPIView(APIView):
     def post(self, request, *args, **kwargs):
 
         parser = NestedParser(request.data)
-        if parser.is_valid(raise_exception=True):
+        if parser.is_valid():
             data = parser.validate_data
             request.data["user"] = request.user.id
             data["user"] = request.user.id
