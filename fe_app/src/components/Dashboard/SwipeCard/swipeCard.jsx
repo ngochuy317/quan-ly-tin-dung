@@ -109,10 +109,9 @@ function SwipeCard() {
             <div className="mb-3">
               <label className="form-label">Tên</label>
               <input
-                name="customer_name"
+              {...register("customer_name")}
                 type="text"
                 className="form-control"
-                // required
               />
             </div>
           </div>
@@ -120,10 +119,9 @@ function SwipeCard() {
             <div className="mb-3">
               <label className="form-label">Giới tính</label>
               <input
-                name="customer_gender"
+              {...register("customer_gender")}
                 type="text"
                 className="form-control"
-                // required
               />
             </div>
           </div>
@@ -131,10 +129,9 @@ function SwipeCard() {
             <div className="mb-3">
               <label className="form-label">Số điện thoại</label>
               <input
-                name="phone_number"
+              {...register("phone_number")}
                 type="tel"
                 className="form-control"
-                // required
               />
             </div>
           </div>
@@ -142,10 +139,9 @@ function SwipeCard() {
             <div className="mb-3">
               <label className="form-label">Số tiền cần</label>
               <input
-                name="customer_money_needed"
+              {...register("customer_money_needed")}
                 type="number"
                 className="form-control"
-                // required
               />
             </div>
           </div>
@@ -153,10 +149,9 @@ function SwipeCard() {
             <div className="mb-3">
               <label className="form-label">Số TK nhận tiền</label>
               <input
-                name="customer_account"
+              {...register("customer_account")}
                 type="text"
                 className="form-control"
-                // required
               />
             </div>
           </div>
@@ -164,10 +159,9 @@ function SwipeCard() {
             <div className="mb-3">
               <label className="form-label">Ngân hàng</label>
               <input
-                name="customer_bank_account"
+              {...register("customer_bank_account")}
                 type="text"
                 className="form-control"
-                // required
               />
             </div>
           </div>
@@ -204,7 +198,6 @@ function SwipeCard() {
                 {...register("card_number")}
                 type="text"
                 className="form-control"
-                // required
               />
             </div>
           </div>
@@ -212,10 +205,9 @@ function SwipeCard() {
             <div className="mb-3">
               <label className="form-label">Ngân hàng</label>
               <input
-                name="card_bank_name"
+              {...register("card_bank_name")}
                 type="text"
                 className="form-control"
-                // required
               />
             </div>
           </div>
@@ -223,10 +215,9 @@ function SwipeCard() {
             <div className="mb-3">
               <label className="form-label">Hạn mức thẻ</label>
               <input
-                name="line_of_credit"
+              {...register("line_of_credit")}
                 type="number"
                 className="form-control"
-                // required
               />
             </div>
           </div>
@@ -234,10 +225,9 @@ function SwipeCard() {
             <div className="mb-3">
               <label className="form-label">Phí</label>
               <input
-                name="fee"
+              {...register("fee")}
                 type="number"
                 className="form-control"
-                // required
               />
             </div>
           </div>
@@ -247,10 +237,9 @@ function SwipeCard() {
             <div className="mb-3">
               <label className="form-label">Tên</label>
               <input
-                name="card_name"
+              {...register("card_name")}
                 type="text"
                 className="form-control"
-                // required
               />
             </div>
           </div>
@@ -258,10 +247,9 @@ function SwipeCard() {
             <div className="mb-3">
               <label className="form-label">Ngày mở thẻ</label>
               <input
-                name="card_issued_date"
+              {...register("card_issued_date")}
                 type="date"
                 className="form-control"
-                // required
               />
             </div>
           </div>
@@ -269,10 +257,9 @@ function SwipeCard() {
             <div className="mb-3">
               <label className="form-label">Ngày hết hạn</label>
               <input
-                name="card_expire_date"
+              {...register("card_expire_date")}
                 type="date"
                 className="form-control"
-                // required
               />
             </div>
           </div>
@@ -280,11 +267,10 @@ function SwipeCard() {
             <div className="mb-3">
               <label className="form-label">CCV</label>
               <input
-                name="card_ccv"
+              {...register("card_ccv")}
                 type="text"
                 maxLength="3"
                 className="form-control"
-                // required
               />
             </div>
           </div>
@@ -294,10 +280,9 @@ function SwipeCard() {
             <div className="mb-3">
               <label className="form-label">Ngày sao kê</label>
               <input
-                name="statement_date"
+              {...register("statement_date")}
                 type="date"
                 className="form-control"
-                // required
               />
             </div>
           </div>
@@ -305,10 +290,9 @@ function SwipeCard() {
             <div className="mb-3">
               <label className="form-label">Ngày cuối đáo</label>
               <input
-                name="maturity_date"
+              {...register("maturity_date")}
                 type="date"
                 className="form-control"
-                // required
               />
             </div>
           </div>

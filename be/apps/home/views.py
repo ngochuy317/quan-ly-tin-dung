@@ -374,6 +374,21 @@ class SwipeCardTransactionAPIView(APIView):
 
 
 
+class CreditCardAPIView(APIView):
+    parser_classes = [MultiPartParser, FileUploadParser]
+
+    def post(self, request, *args, **kwargs):
+        serializer = CreditCardSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(status=status.HTTP_201_CREATED)
+    
+    def get(self, request, *args, **kwargs):
+        data = CreditCard.objects.all()
+        serializer = CreditCardSerializer(data, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
 class CustomerAPIView(APIView):
 
     parser_classes = [MultiPartParser,]
