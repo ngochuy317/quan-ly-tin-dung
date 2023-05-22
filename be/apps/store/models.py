@@ -6,7 +6,7 @@ class Store(models.Model):
 
     code = models.CharField(max_length=127)
     name = models.CharField(max_length=127)
-    note = models.TextField()
+    note = models.TextField(blank=True, null=True)
     address =  models.CharField(max_length=1023)
     phone_number = models.CharField(max_length=20, blank=True, null=True)
 
@@ -93,6 +93,11 @@ class Customer(models.Model):
 
 class SwipeCardTransaction(models.Model):
 
+    store_code = models.CharField(max_length=127)
+    store_name = models.CharField(max_length=127)
+    store_note = models.TextField(blank=True, null=True)
+    store_address =  models.CharField(max_length=1023)
+    store_phone_number = models.CharField(max_length=20, blank=True, null=True)
     customer_name = models.CharField(max_length=127, blank=True, null=True)
     customer_phone_number = models.CharField(max_length=12, blank=True, null=True)
     customer_gender = models.CharField(max_length=127, blank=True, null=True)

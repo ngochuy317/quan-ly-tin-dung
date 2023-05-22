@@ -85,16 +85,27 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 
 class CreditCardSerializer(serializers.ModelSerializer):
+    credit_card_front_image = serializers.SerializerMethodField('get_image_credit_card_front_image')
+    credit_card_back_image = serializers.SerializerMethodField('get_image_credit_card_back_image')
 
     class Meta:
         model = CreditCard
         exclude = ("id",)
+
+    def get_image_credit_card_front_image(self, obj):
+        return self.context['request'].build_absolute_uri(obj.credit_card_front_image.url)
+
+    def get_image_credit_card_back_image(self, obj):
+        return self.context['request'].build_absolute_uri(obj.credit_card_back_image.url)
 
 
 class SwipeCardTransactionSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     creditcard = CreditCardSerializer()
     transaction_datetime = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
+    customer_id_card_front_image = serializers.SerializerMethodField('get_image_customer_id_card_front_image')
+    customer_id_card_back_image = serializers.SerializerMethodField('get_image_customer_id_card_back_image')
+
 
     class Meta:
         model = SwipeCardTransaction
@@ -105,3 +116,10 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
         creditcard_instance = CreditCard.objects.create(**creditcard_data)
         instance = SwipeCardTransaction.objects.create(**validated_data, creditcard=creditcard_instance)
         return instance
+    
+    def get_image_customer_id_card_front_image(self, obj):
+        return self.context['request'].build_absolute_uri(obj.customer_id_card_front_image.url)
+
+    def get_image_customer_id_card_back_image(self, obj):
+        return self.context['request'].build_absolute_uri(obj.customer_id_card_back_image.url)
+

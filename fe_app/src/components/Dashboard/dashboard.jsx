@@ -22,7 +22,6 @@ function Dashboard() {
     };
 
     getDecodedToken();
-    console.log("Did mount");
   }, []);
   return (
     <>
