@@ -92,11 +92,13 @@ class CreditCardSerializer(serializers.ModelSerializer):
 
 
 class SwipeCardTransactionSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(read_only=True)
     creditcard = CreditCardSerializer()
+    transaction_datetime = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
 
     class Meta:
         model = SwipeCardTransaction
-        exclude = ("id",)
+        fields = ('__all__')
 
     def create(self, validated_data):
         creditcard_data = validated_data.pop('creditcard')

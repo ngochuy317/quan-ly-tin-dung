@@ -44,6 +44,28 @@ services:
     networks:
       - django-qltd
 
+  nginx:
+    container_name: nginx
+    build:
+      context: nginx
+      dockerfile: ./nginx.Dockerfile
+    ports:
+      - 80:80
+    volumes:
+      - django-qltd_volume:/var/www/mywebsite/backend/staticfiles
+      - django-qltd_media:/var/www/mywebsite/backend/media
+      - /var/log/nginx/:/var/log/nginx/
+
+  frontend:
+    container_name: frontend
+    build: 
+      context: ./fe_app
+    ports: 
+      - '3000:80'
+    volumes:
+      - './frontend:/app'
+      - '/app/node_modules'
+
 volumes:
   django-qltd_media:
   django-qltd_volume:
