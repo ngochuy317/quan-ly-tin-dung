@@ -360,7 +360,7 @@ class SwipeCardTransactionAPIView(APIView):
             data = parser.validate_data
             request.data["user"] = request.user.id
             data["user"] = request.user.id
-            serializer = SwipeCardTransactionSerializer(data=data)
+            serializer = SwipeCardTransactionSerializer(data=data, context={"request": self.request})
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(status=status.HTTP_201_CREATED)
