@@ -30,6 +30,7 @@ from apps.user.authentication import IsAdmin
 from datetime import datetime
 from nested_multipart_parser import NestedParser
 
+from .filters import SwipeCardTransactionFilter
 from .serializers import (
     UserSerializer,
     StoreSerializer,
@@ -103,10 +104,13 @@ class SwipeCardView(View):
         return render(request, "home/swipe_card.html", context)
 
 
-class SwipeCardTransactionAPIView(APIView, CustomPageNumberPagination):
+class SwipeCardTransactionAPIView(ListAPIView):
 
     permission_classes = [IsAuthenticated]
     pagination_class = CustomPageNumberPagination
+    filterset_class = SwipeCardTransactionFilter
+    queryset = SwipeCardTransaction.objects.all()
+    serializer_class = SwipeCardTransactionSerializer
 
     def post(self, request, *args, **kwargs):
 
@@ -122,12 +126,11 @@ class SwipeCardTransactionAPIView(APIView, CustomPageNumberPagination):
         else:
             return Response("Parser error", status=status.HTTP_400_BAD_REQUEST)
     
-    def get(self, request, *args, **kwargs):
-        data = SwipeCardTransaction.objects.all()
-        results = self.paginate_queryset(data, request, view=self)
-        serializer = SwipeCardTransactionSerializer(results, many=True, context={"request": self.request})
-        return self.get_paginated_response(serializer.data)
-
+    def get_queryset(self):
+        qs = super().get_queryset()
+        if self.request.user.role != "admin":
+            qs = qs.filter(user=self.request.user.id)
+        return qs
 
 
 class CreditCardAPIView(APIView):

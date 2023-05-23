@@ -13,6 +13,7 @@ function SwipeCard() {
   const [responseSwipeCardData, setResponseSwipeCardData] = useState([]);
   const [params, setParams] = useState({ page: 1 });
   const [currentPage, setCurrentPage] = useState(1);
+  const [posMachine, setPOSMachine] = useState([]);
 
   useEffect(() => {
     async function fetchEmployeeDetail() {
@@ -20,6 +21,28 @@ function SwipeCard() {
         const response = await userApi.getInformationDetail();
         console.log("Fetch information detail successfully", response);
 
+        let initValues = {};
+        initValues.customer_money_needed = 0;
+        initValues.fee = 0;
+        initValues.line_of_credit = 0;
+        initValues.store_name = response.store.name;
+        initValues.store_code = response.store.code;
+        initValues.store_id = response.store.id;
+        initValues.store_phone_number = response.store.phone_number;
+        initValues.store_address = response.store.address;
+        setPOSMachine(response.store.poses);
+        reset({ ...initValues });
+      } catch (error) {
+        console.log("Failed to information detail", error);
+      }
+    }
+
+    fetchEmployeeDetail();
+  }, []);
+
+  useEffect(() => {
+    async function fetchTransactionHistory() {
+      try {
         const responseHistorySwipeCard = await swipeCardTransactionAPI.getAll(
           params
         );
@@ -28,23 +51,12 @@ function SwipeCard() {
           responseHistorySwipeCard
         );
         setResponseSwipeCardData(responseHistorySwipeCard);
-
-        let initValues = {};
-        initValues.customer_money_needed = 0;
-        initValues.fee = 0;
-        initValues.line_of_credit = 0;
-        initValues.store_name = response.store.name;
-        initValues.store_code = response.store.code;
-        initValues.store_phone_number = response.store.phone_number;
-        initValues.store_address = response.store.address;
-        reset({ ...initValues });
       } catch (error) {
-        console.log("Failed to information detail detail", error);
+        console.log("Failed to swipe card history", error);
       }
     }
-
-    fetchEmployeeDetail();
-  }, []);
+    fetchTransactionHistory();
+  }, [params]);
 
   const onSubmit = async (data) => {
     try {
@@ -54,7 +66,6 @@ function SwipeCard() {
         data.creditcard.credit_card_front_image[0];
       data.creditcard.credit_card_back_image =
         data.creditcard.credit_card_back_image[0];
-      console.log("data", data);
       const response = await swipeCardTransactionAPI.createOne(data);
       console.log("Create swipe card transaction successfully", response);
 
@@ -82,7 +93,7 @@ function SwipeCard() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <h5>Cửa hàng</h5>
         <div className="row">
-          <div className="col-md-2">
+          <div className="col-md-3">
             <div className="mb-3">
               <label className="form-label">Tên cửa hàng</label>
               <input
@@ -93,7 +104,7 @@ function SwipeCard() {
               />
             </div>
           </div>
-          <div className="col-md-2">
+          <div className="col-md-4">
             <div className="mb-3">
               <label className="form-label">Địa chỉ</label>
               <input
@@ -118,53 +129,25 @@ function SwipeCard() {
         </div>
         <h5>Máy POS</h5>
         <div className="row">
-          <div className="col-md-2">
+          <div className="col-md-6">
             <div className="mb-3">
-              <label className="form-label">Tên cửa hàng</label>
-              <input
-                {...register("store_name")}
-                type="text"
-                className="form-control"
-                disabled
-              />
-            </div>
-          </div>
-          <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">Địa chỉ</label>
-              <input
-                {...register("store_address")}
-                type="text"
-                className="form-control"
-                disabled
-              />
-            </div>
-          </div>
-          <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">Số điện thoại</label>
-              <input
-                {...register("store_phone_number")}
-                type="text"
-                className="form-control"
-                disabled
-              />
+              <label className="form-label">Id-Mid-Tid-Tên ngân hàng</label>
+              <select
+                {...register("pos", { required: true })}
+                className="form-select"
+              >
+                {posMachine &&
+                  posMachine.map((pos) => (
+                    <option key={pos.id} value={pos.id}>
+                      {pos.id}-{pos.mid}-{pos.tid}-{pos.bank_name}
+                    </option>
+                  ))}
+              </select>
             </div>
           </div>
         </div>
         <h5>Khách hàng</h5>
         <div className="row">
-          {/* <div className="col-md-1">
-            <div className="mb-3">
-              <label className="form-label">Mã KH</label>
-              <input
-                name="customer_code"
-                type="text"
-                className="form-control"
-                required
-              />
-            </div>
-          </div> */}
           <div className="col-md-2">
             <div className="mb-3">
               <label className="form-label">Tên</label>

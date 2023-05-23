@@ -3,6 +3,8 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import notebookAPI from "../../../api/notebookAPI";
 import storeApi from "../../../api/storeAPI";
+import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function NewNotebook() {
   const [stores, setStores] = useState([]);
@@ -51,10 +53,16 @@ function NewNotebook() {
           </div>
           <div className="col-md-6">
             <div className="mb-3">
-              <label className="form-label">Cửa hàng</label>
+              <label className="form-label">
+                Cửa hàng{" "}
+                <FontAwesomeIcon
+                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
+                  color="red"
+                />
+              </label>
               <select
                 {...register("store", { required: true })}
-                className="form-control"
+                className="form-select"
                 defaultValue={{ label: "Select Dept", value: 0 }}
               >
                 {stores &&

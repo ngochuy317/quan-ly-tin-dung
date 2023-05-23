@@ -116,7 +116,7 @@ function NewPos() {
           <div className="col-md-6">
             <div className="mb-3">
               <label className="form-label">Cửa hàng</label>
-              <select {...register("store")} className="form-control">
+              <select {...register("store")} className="form-select">
                 {stores &&
                   stores.map((store) => (
                     <option key={store.id} value={store.id}>

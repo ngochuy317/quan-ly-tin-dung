@@ -1,37 +1,11 @@
 import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import jwtDecode from "jwt-decode";
-import PropTypes from "prop-types";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../Dashboard/dashboard";
 
-SideBar.propTypes = {
-  path: PropTypes.string,
-};
-
-SideBar.defaultProps = {
-  path: "/employees",
-};
-
-function SideBar(props) {
-  const { path } = props;
-  const [active, setActive] = useState(path);
-  const [decodedToken, setDecodedToken] = useState({
-    role: null,
-  });
-
-  useEffect(() => {
-    const getDecodedToken = () => {
-      try {
-        let access_token = jwtDecode(localStorage.getItem("access_token"));
-        setDecodedToken(access_token);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    getDecodedToken();
-  }, []);
+function SideBar() {
+  const { role } = React.useContext(AuthContext);
 
   const dataItemSideBarForEmployee = [
     {
@@ -42,7 +16,7 @@ function SideBar(props) {
           icon={icon({ name: "chart-simple", style: "solid" })}
         />
       ),
-      path: "/dashboard/stores1",
+      path: "/dashboard/report",
       role: ["admin", "employee"],
     },
     {
@@ -150,14 +124,14 @@ function SideBar(props) {
           className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start w-100"
           id="menu"
         >
-          {dataItemSideBar[decodedToken.role] &&
-            dataItemSideBar[decodedToken.role].map((item) => (
+          {dataItemSideBar[role] &&
+            dataItemSideBar[role].map((item) => (
               <li className="nav-item w-100" key={item.id}>
                 <Link to={item.path} style={{ textDecoration: "none" }}>
                   <SideBarItem
                     {...item}
-                    isActive={active === item.path}
-                    onClick={() => setActive(item.path)}
+                    isActive={localStorage.getItem("activeTab") === item.path}
+                    onClick={() => localStorage.setItem("activeTab", item.path)}
                   />
                 </Link>
               </li>

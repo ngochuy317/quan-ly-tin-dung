@@ -93,6 +93,7 @@ class Customer(models.Model):
 
 class SwipeCardTransaction(models.Model):
 
+    store_id = models.PositiveBigIntegerField()
     store_code = models.CharField(max_length=127)
     store_name = models.CharField(max_length=127)
     store_note = models.TextField(blank=True, null=True)
@@ -114,6 +115,7 @@ class SwipeCardTransaction(models.Model):
     user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="swipe_card_transaction")
     at_store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="swipe_card_transaction", blank=True, null=True)
     transaction_datetime = models.DateTimeField(default=now)
+    pos = models.ForeignKey(POS, on_delete=models.CASCADE, related_name="swipe_card_transaction")
 
     class Meta:
         ordering = ['-id']

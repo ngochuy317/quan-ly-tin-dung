@@ -1,9 +1,11 @@
 import jwtDecode from "jwt-decode";
-import React, { useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import RoutesApp from "../../routes";
 import NavBar from "../NavBar/navBar";
 import SideBar from "../Sidebar/sideBar";
+
+export const AuthContext = createContext();
 
 function Dashboard() {
   const [decodedToken, setDecodedToken] = useState();
@@ -24,13 +26,13 @@ function Dashboard() {
     getDecodedToken();
   }, []);
   return (
-    <>
+    <AuthContext.Provider value={{ ...decodedToken }}>
       <SideBar path={"/dashboard/swipecard"} />
       <div className="col py-3">
         <NavBar />
         <RoutesApp />
       </div>
-    </>
+    </AuthContext.Provider>
   );
 }
 

@@ -13,6 +13,7 @@ import NotebooksList from "./components/Dashboard/Notebooks/notebooksList";
 import NotebookDetail from "./components/Dashboard/Notebooks/notebookDetail";
 import NewNotebook from "./components/Dashboard/Notebooks/addNewNotebook";
 import SwipeCard from "./components/Dashboard/SwipeCard/swipeCard";
+import Report from "./components/Dashboard/Report/report";
 
 function RoutesApp() {
   return (
@@ -30,6 +31,7 @@ function RoutesApp() {
       <Route path="/employees/add" element={<NewEmployee />} />
       <Route path="/employees/:id" element={<EmployeeDetail />} />
       <Route path="/swipecard" element={<SwipeCard />} />
+      <Route path="/report" element={<Report />} />
     </Routes>
   );
 }

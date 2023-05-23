@@ -1,5 +1,6 @@
 Django==3.2
 django-cors-headers==3.13.0
+django-filter==23.2
 djangorestframework==3.14.0
 nested-multipart-parser==0.0.3
 Pillow==9.5.0

@@ -3,21 +3,19 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import notebookAPI from "../../../api/notebookAPI";
 import storeApi from "../../../api/storeAPI";
+import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function NotebookDetail() {
   const [stores, setStores] = useState([]);
-  const {
-    register,
-    handleSubmit,
-    reset,
-  } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const { id } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchNotebookDetail() {
       try {
-        const responseJSONStore = await storeApi.getAll();
+        const responseJSONStore = await storeApi.getAllFull();
         console.log("Fetch store list successfully", responseJSONStore);
         setStores(responseJSONStore);
 
@@ -28,8 +26,6 @@ function NotebookDetail() {
         initValues.name = response.name;
         initValues.store = response.store;
         reset({ ...initValues });
-
-        
       } catch (error) {
         console.log("Failed to fetch notebook detail", error);
       }
@@ -40,7 +36,7 @@ function NotebookDetail() {
 
   const onSubmit = async (data) => {
     try {
-      console.log(data)
+      console.log(data);
       const response = await notebookAPI.updateOne(id, data);
       console.log("Update notebook successfully", response);
       navigate("./..");
@@ -76,8 +72,14 @@ function NotebookDetail() {
           </div>
           <div className="col-md-6">
             <div className="mb-3">
-              <label className="form-label">Cửa hàng</label>
-              <select {...register("store")} className="form-control">
+              <label className="form-label">
+                Cửa hàng{" "}
+                <FontAwesomeIcon
+                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
+                  color="red"
+                />
+              </label>
+              <select {...register("store")} className="form-select">
                 {stores &&
                   stores.map((store) => (
                     <option key={store.id} value={store.id}>
