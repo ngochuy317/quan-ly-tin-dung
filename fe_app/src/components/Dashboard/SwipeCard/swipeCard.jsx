@@ -1,13 +1,18 @@
+import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import userApi from "../../../api/userAPI";
+import Pagination from "../../Pagination/pagination";
 
 function SwipeCard() {
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, formState } = useForm();
+  const { isSubmitting } = formState;
   const [responseSwipeCardData, setResponseSwipeCardData] = useState([]);
-  const navigate = useNavigate();
+  const [params, setParams] = useState({ page: 1 });
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     async function fetchEmployeeDetail() {
@@ -15,7 +20,9 @@ function SwipeCard() {
         const response = await userApi.getInformationDetail();
         console.log("Fetch information detail successfully", response);
 
-        const responseHistorySwipeCard = await swipeCardTransactionAPI.getAll();
+        const responseHistorySwipeCard = await swipeCardTransactionAPI.getAll(
+          params
+        );
         console.log(
           "Fetch swipe card history list successfully",
           responseHistorySwipeCard
@@ -64,11 +71,52 @@ function SwipeCard() {
     }
   };
 
+  const handleChangePage = (direction) => {
+    setParams({ page: currentPage + direction });
+    setCurrentPage(currentPage + direction);
+  };
+
   return (
     <div>
       <h2 className="text-center">Quẹt thẻ</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <h5>Cửa hàng</h5>
+        <div className="row">
+          <div className="col-md-2">
+            <div className="mb-3">
+              <label className="form-label">Tên cửa hàng</label>
+              <input
+                {...register("store_name")}
+                type="text"
+                className="form-control"
+                disabled
+              />
+            </div>
+          </div>
+          <div className="col-md-2">
+            <div className="mb-3">
+              <label className="form-label">Địa chỉ</label>
+              <input
+                {...register("store_address")}
+                type="text"
+                className="form-control"
+                disabled
+              />
+            </div>
+          </div>
+          <div className="col-md-2">
+            <div className="mb-3">
+              <label className="form-label">Số điện thoại</label>
+              <input
+                {...register("store_phone_number")}
+                type="text"
+                className="form-control"
+                disabled
+              />
+            </div>
+          </div>
+        </div>
+        <h5>Máy POS</h5>
         <div className="row">
           <div className="col-md-2">
             <div className="mb-3">
@@ -179,7 +227,13 @@ function SwipeCard() {
           </div>
           <div className="col-md-3">
             <div className="mb-3">
-              <label className="form-label">Ảnh mặt trước cmnd/cccd</label>
+              <label className="form-label">
+                Ảnh mặt trước cmnd/cccd{" "}
+                <FontAwesomeIcon
+                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
+                  color="red"
+                />
+              </label>
               <input
                 {...register("customer_id_card_front_image")}
                 type="file"
@@ -190,7 +244,13 @@ function SwipeCard() {
           </div>
           <div className="col-md-3">
             <div className="mb-3">
-              <label className="form-label">Ảnh mặt sau cmnd/cccd</label>
+              <label className="form-label">
+                Ảnh mặt sau cmnd/cccd{" "}
+                <FontAwesomeIcon
+                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
+                  color="red"
+                />
+              </label>
               <input
                 {...register("customer_id_card_back_image")}
                 type="file"
@@ -310,7 +370,13 @@ function SwipeCard() {
           </div>
           <div className="col-md-3">
             <div className="mb-3">
-              <label className="form-label">Ảnh mặt trước thẻ tín dụng</label>
+              <label className="form-label">
+                Ảnh mặt trước thẻ tín dụng{" "}
+                <FontAwesomeIcon
+                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
+                  color="red"
+                />
+              </label>
               <input
                 {...register("creditcard.credit_card_front_image")}
                 type="file"
@@ -321,7 +387,13 @@ function SwipeCard() {
           </div>
           <div className="col-md-3">
             <div className="mb-3">
-              <label className="form-label">Ảnh mặt sau thẻ tín dụng</label>
+              <label className="form-label">
+                Ảnh mặt sau thẻ tín dụng{" "}
+                <FontAwesomeIcon
+                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
+                  color="red"
+                />
+              </label>
               <input
                 {...register("creditcard.credit_card_back_image")}
                 type="file"
@@ -332,7 +404,14 @@ function SwipeCard() {
           </div>
         </div>
         <div className="d-flex justify-content-end">
-          <button type="submit" className="btn btn-outline-primary">
+          <button
+            disabled={isSubmitting}
+            type="submit"
+            className="btn btn-outline-primary"
+          >
+            {isSubmitting && (
+              <span className="spinner-border spinner-border-sm mr-1"></span>
+            )}
             Xác nhận
           </button>
         </div>
@@ -352,8 +431,8 @@ function SwipeCard() {
             </tr>
           </thead>
           <tbody className="table-group-divider">
-            {responseSwipeCardData &&
-              responseSwipeCardData.map((swipeCard, index) => (
+            {responseSwipeCardData.results &&
+              responseSwipeCardData.results.map((swipeCard, index) => (
                 <tr key={swipeCard.id}>
                   <th scope="row">{index + 1}</th>
                   <td>{swipeCard.transaction_datetime}</td>
@@ -369,11 +448,11 @@ function SwipeCard() {
           </tbody>
         </table>
       </div>
-      {/* <Pagination
+      <Pagination
         currentPage={currentPage}
-        totalPages={responseData.total_pages}
+        totalPages={responseSwipeCardData.total_pages}
         handleChangePage={handleChangePage}
-      /> */}
+      />
     </div>
   );
 }
