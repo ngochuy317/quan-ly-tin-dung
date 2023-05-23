@@ -39,14 +39,6 @@ class UserSerializer(serializers.ModelSerializer):
         return instance
 
 
-class StoreSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Store
-        fields = '__all__'
-        read_only_fields = ('id', )
-
-
 class POSSerializer(serializers.ModelSerializer):
     store_name = serializers.ReadOnlyField(source='store.name')
 
@@ -60,6 +52,15 @@ class POSSerializer(serializers.ModelSerializer):
         instance.store = store
         instance.save()
         return instance
+
+
+class StoreSerializer(serializers.ModelSerializer):
+    poses = POSSerializer(many=True)
+
+    class Meta:
+        model = Store
+        fields = '__all__'
+        read_only_fields = ('id', )
 
 
 class NoteBookSerializer(serializers.ModelSerializer):
