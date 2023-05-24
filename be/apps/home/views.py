@@ -6,25 +6,23 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.generics import (
-    ListAPIView, 
-    RetrieveAPIView, 
-    UpdateAPIView, 
-    RetrieveUpdateAPIView, 
+    ListAPIView,
     RetrieveUpdateDestroyAPIView, 
     ListCreateAPIView,
 )
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.parsers import FileUploadParser, MultiPartParser, JSONParser
+from rest_framework.parsers import FileUploadParser, MultiPartParser
 
 from apps.store.models import (
-    Store, 
-    POS, 
-    SwipeCardTransaction, 
-    CreditCard, 
+    Store,
+    StoreCost,
+    POS,
+    SwipeCardTransaction,
+    CreditCard,
     NoteBook,
     Customer,
 )
-from apps.user.models import User, InfomationDetail
+from apps.user.models import User
 from apps.user.authentication import IsAdmin
 
 from datetime import datetime
@@ -34,14 +32,14 @@ from .filters import SwipeCardTransactionFilter
 from .serializers import (
     UserSerializer,
     StoreSerializer,
+    StoreCostSerializer,
     POSSerializer, 
     NoteBookSerializer, 
     CustomerSerializer,
     CreditCardSerializer,
     SwipeCardTransactionSerializer,
 )
-from .pagination import CustomPageNumberPagination
-
+from .pagination import CustomPageNumberPagination, SwipeCardTransactionPageNumberPagination
 
 
 class SwipeCardView(View):
@@ -79,12 +77,12 @@ class SwipeCardView(View):
             credit_card_data = {
                 "card_number": request.POST.get("card_number"),
                 "card_bank_name": request.POST.get("card_bank_name"),
-                 "card_name": request.POST.get("card_name"),
-                "card_issued_date" : "",
-                "card_expire_date" : "",
+                "card_name": request.POST.get("card_name"),
+                "card_issued_date": "",
+                "card_expire_date": "",
                 "card_ccv": request.POST.get("card_ccv"),
-                "statement_date" : "",
-                "maturity_date" : "",
+                "statement_date": "",
+                "maturity_date": "",
             }
             card_issued_date_datetime_object = datetime.strptime(request.POST.get("card_issued_date"), "%Y-%m-%d")
             card_expire_date_datetime_object = datetime.strptime(request.POST.get("card_expire_date"), "%Y-%m-%d")
@@ -107,7 +105,7 @@ class SwipeCardView(View):
 class SwipeCardTransactionAPIView(ListAPIView):
 
     permission_classes = [IsAuthenticated]
-    pagination_class = CustomPageNumberPagination
+    pagination_class = SwipeCardTransactionPageNumberPagination
     filterset_class = SwipeCardTransactionFilter
     queryset = SwipeCardTransaction.objects.all()
     serializer_class = SwipeCardTransactionSerializer
@@ -150,7 +148,7 @@ class CreditCardAPIView(APIView):
 
 class CustomerAPIView(APIView):
 
-    parser_classes = [MultiPartParser,]
+    parser_classes = [MultiPartParser, ]
     serializer_class = CustomerSerializer
     # permission_classes = [IsAuthenticated]
 
@@ -165,6 +163,7 @@ class CustomerAPIView(APIView):
         serializer = CustomerSerializer(data, many=True)
         # serializer.is_valid(raise_exception=True)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
 class NotebookListCreateAPIView(ListCreateAPIView):
 
@@ -210,6 +209,21 @@ class POSDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class StoreCostCreateAPIView(ListCreateAPIView):
+
+    queryset = StoreCost.objects.all()
+    serializer_class = StoreCostSerializer
+    pagination_class = CustomPageNumberPagination
+    permission_classes = [IsAdmin]
+
+
+class StoreCostCreateAPIViewNoPagination(ListCreateAPIView):
+
+    queryset = StoreCost.objects.all()
+    serializer_class = StoreCostSerializer
+    permission_classes = [IsAdmin]
 
 
 class StoreListCreateAPIView(ListCreateAPIView):

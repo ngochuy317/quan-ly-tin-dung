@@ -1,5 +1,6 @@
 from django_filters import rest_framework as filters
 
+
 class SwipeCardTransactionFilter(filters.FilterSet):
     store_id = filters.NumberFilter()
     pos = filters.NumberFilter()

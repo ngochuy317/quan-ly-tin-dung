@@ -3,6 +3,7 @@ from rest_framework import serializers
 from apps.user.models import User, InfomationDetail
 from apps.store.models import (
     Store,
+    StoreCost,
     POS,
     NoteBook,
     Customer,
@@ -16,7 +17,7 @@ class InfomationDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InfomationDetail
-        fields = fields = '__all__'
+        fields = '__all__'
     
     def update(self, instance, validated_data):
         store = validated_data.pop('store')
@@ -30,7 +31,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = fields = '__all__'
+        fields = '__all__'
 
     def create(self, validated_data):
         infomation_detail_data = validated_data.pop('infomation_detail')
@@ -82,7 +83,7 @@ class CustomerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Customer
-        fields = ('name','phone_number', 'account_number', 'id_card_image')
+        fields = ('name', 'phone_number', 'account_number', 'id_card_image')
 
 
 class CreditCardSerializer(serializers.ModelSerializer):
@@ -124,10 +125,9 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
         except KeyError:
             pass
 
-
     class Meta:
         model = SwipeCardTransaction
-        fields = ('__all__')
+        fields = '__all__'
 
     def get_creditcard(self, obj):
         serializer_context = {'request': self.context.get('request')}
@@ -145,3 +145,10 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
 
     def get_customer_id_card_back_image(self, obj):
         return self.context['request'].build_absolute_uri(obj.customer_id_card_back_image.url)
+
+
+class StoreCostSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = StoreCost
+        fields = '__all__'

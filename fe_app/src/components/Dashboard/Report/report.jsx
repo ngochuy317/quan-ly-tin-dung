@@ -80,9 +80,11 @@ function Report() {
             <div className="mb-3">
               <label className="form-label">Máy POS</label>
               <select
-                {...register("pos", { required: true })}
+                {...register("pos")}
                 className="form-select"
+                disabled={poses.length > 0 ? null : true}
               >
+                {poses ? <option value="">Tất cả</option> : null}
                 {poses &&
                   poses.map((pos) => (
                     <option key={pos.id} value={pos.id}>
@@ -132,7 +134,7 @@ function Report() {
                   <td>{swipeCard.transaction_datetime}</td>
                   <td>{swipeCard.customer_name}</td>
                   <td>{swipeCard.customer_phone_number}</td>
-                  <td>{swipeCard.customer_money_needed}</td>
+                  <td>{swipeCard.customer_money_needed.toLocaleString("vn")}</td>
                   <td>{swipeCard.fee}</td>
                   {/* <td>
                     <Link to={swipeCard.id + "/"}>Chỉnh sửa</Link>
@@ -142,6 +144,11 @@ function Report() {
           </tbody>
         </table>
       </div>
+      {responseSwipeCardData.results ? (
+        <div className="d-flex justify-content-end">
+          Tổng tiền: {responseSwipeCardData.sum_customer_money_needed.toLocaleString("vn")}
+        </div>
+      ) : <div></div>}
       <Pagination
         currentPage={currentPage}
         totalPages={responseSwipeCardData.total_pages}

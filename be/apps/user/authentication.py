@@ -7,6 +7,7 @@ from datetime import datetime
 
 from .models import User
 
+
 class CustomAuthentication(authentication.BaseAuthentication):
     AUTH_HEADER_TYPES = 'Bearer'
 
@@ -42,7 +43,7 @@ class CustomAuthentication(authentication.BaseAuthentication):
             jwt.exceptions.ExpiredSignatureError,
             jwt.exceptions.InvalidSignatureError,
         ) as e:
-            raise exceptions.AuthenticationFailed('Invalid token')
+            raise exceptions.AuthenticationFailed(f'Invalid token with {e}')
         
 
 class IsAdmin(permissions.BasePermission):

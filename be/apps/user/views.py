@@ -28,6 +28,7 @@ class UserLoginView(APIView):
             'error_message': 'Username or password is incorrect!',
         }, status=status.HTTP_400_BAD_REQUEST)
 
+
 class LogInView(View):
 
     def get(self, request, *args, **kwargs):
