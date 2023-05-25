@@ -26,7 +26,7 @@ class Group(models.Model):
 
     def __str__(self) -> str:
         return self.name
-    
+
 
 class InfomationDetail(models.Model):
     fullname = models.CharField(max_length=511)
@@ -48,6 +48,7 @@ class InfomationDetail(models.Model):
         if commit:
             self.save()
 
+
 class User(models.Model):
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = []
@@ -68,30 +69,31 @@ class User(models.Model):
 
     def __str__(self) -> str:
         return self.username
-    
+
     def update(self, commit=False, **kwargs):
         for key, value in kwargs.items():
             setattr(self, key, value)
         if commit:
             print("commit", self.password)
             self.save()
-    
+
     def has_perm(self, perm):
         for _perm in self.permissions.all():
             if _perm.name == perm:
                 return True
         return False
-    
+
     @property
     def list_all_permissions(self):
         all_perms = {perm.name: False for perm in Permission.objects.all()}
         for _perm in self.permissions.all():
             all_perms[_perm.name] = True
         return all_perms
-    
+
     def get_access_token(self):
         data = {
             'id': self.id,
+            'username': self.username,
             'role': self.role,
             'expire_time': (datetime.utcnow() + timedelta(hours=4)).strftime(settings.STRPTIME_FORMAT),
             'create_at': (datetime.utcnow()).strftime(settings.STRPTIME_FORMAT)
@@ -105,4 +107,4 @@ class User(models.Model):
             )
             return encoded_jwt
         except jwt.exceptions.ExpiredSignatureError as e:
-            pass
+            print(e)

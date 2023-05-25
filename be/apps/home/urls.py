@@ -5,9 +5,9 @@ from .views import (
     EmployeesListCreateAPIView,
     EmployeeDetailRetrieveUpdateDestroyAPIView,
     StoreListCreateAPIView,
-    StoreListCreateAPIViewNoPagination,
+    StoreListAPIViewNoPagination,
     StoreCostCreateAPIView,
-    StoreCostCreateAPIViewNoPagination,
+    StoreCostListAPIViewNoPagination,
     StoreDetailRetrieveUpdateDestroyAPIView,
     POSListCreateAPIView,
     POSDetailRetrieveUpdateDestroyAPIView,
@@ -16,6 +16,7 @@ from .views import (
     CustomerAPIView,
     CreditCardAPIView,
     SwipeCardTransactionAPIView,
+    SwipeCardTransactionDetailRetrieveUpdateDestroyAPIView,
 )
 
 urlpatterns = [
@@ -24,9 +25,9 @@ urlpatterns = [
     path('api/poses/', POSListCreateAPIView.as_view(), name="poses"),
     path('api/poses/<pk>/', POSDetailRetrieveUpdateDestroyAPIView.as_view(), name="pos-detail"),
     path('api/storecost/', StoreCostCreateAPIView.as_view(), name="store-cost"),
-    path('api/storecost/nopagination/', StoreCostCreateAPIViewNoPagination.as_view(), name="store-cost"),
+    path('api/storecost/nopagination/', StoreCostListAPIViewNoPagination.as_view(), name="store-cost"),
     path('api/stores/', StoreListCreateAPIView.as_view(), name="stores"),
-    path('api/stores/nopagination/', StoreListCreateAPIViewNoPagination.as_view(), name="stores"),
+    path('api/stores/nopagination/', StoreListAPIViewNoPagination.as_view(), name="stores"),
     path('api/stores/<pk>/', StoreDetailRetrieveUpdateDestroyAPIView.as_view(), name="stores-detail"),
     path('api/employees/', EmployeesListCreateAPIView.as_view(), name="employees"),
     path('api/employees/<pk>/', EmployeeDetailRetrieveUpdateDestroyAPIView.as_view(), name="employee-detail"),
@@ -34,4 +35,9 @@ urlpatterns = [
     path('api/customer/', CustomerAPIView.as_view(), name="customer"),
     path('api/creditcard/upload/', CreditCardAPIView.as_view(), name="upload-creditcard"),
     path('api/swipecardtransaction/', SwipeCardTransactionAPIView.as_view(), name="swipe-card-transaction"),
+    path(
+        'api/swipecardtransaction/<pk>/',
+        SwipeCardTransactionDetailRetrieveUpdateDestroyAPIView.as_view(),
+        name="swipe-card-transaction-detail"
+    ),
 ]

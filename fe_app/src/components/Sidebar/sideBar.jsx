@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../Dashboard/dashboard";
 
 function SideBar() {
-  const { role } = React.useContext(AuthContext);
+  const { role, username } = React.useContext(AuthContext);
 
   const dataItemSideBarForEmployee = [
     {
@@ -57,15 +57,15 @@ function SideBar() {
       path: "/dashboard/storecard",
       role: ["admin", "employee"],
     },
-    {
-      id: 10,
-      name: "Thẻ chưa lưu",
-      icon: (
-        <FontAwesomeIcon icon={icon({ name: "id-card", style: "solid" })} />
-      ),
-      path: "/dashboard/unsavedcard",
-      role: ["admin", "employee"],
-    },
+    // {
+    //   id: 10,
+    //   name: "Thẻ chưa lưu",
+    //   icon: (
+    //     <FontAwesomeIcon icon={icon({ name: "id-card", style: "solid" })} />
+    //   ),
+    //   path: "/dashboard/unsavedcard",
+    //   role: ["admin", "employee"],
+    // },
     {
       id: 11,
       name: "Lịch sử quẹt thẻ",
@@ -124,6 +124,10 @@ function SideBar() {
           className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start w-100"
           id="menu"
         >
+          <span className="ms-1 d-none d-sm-inline">
+            Tên đăng nhập: {username}
+          </span>
+          <span className="ms-1 d-none d-sm-inline">Chức vụ: {role}</span>
           {dataItemSideBar[role] &&
             dataItemSideBar[role].map((item) => (
               <li className="nav-item w-100" key={item.id}>

@@ -18,6 +18,16 @@ class SwipeCardTransactionAPI {
       },
     });
   };
+
+  getDetail = (id) => {
+    const url = this.creditCardBaseUrl + id + "/";
+    return axiosClient.get(url);
+  };
+
+  updateOne = (id, data) => {
+    const url = this.creditCardBaseUrl + id + "/";
+    return axiosClient.patch(url, data);
+  };
 }
 
 const swipeCardTransactionAPI = new SwipeCardTransactionAPI();

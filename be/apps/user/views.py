@@ -33,7 +33,7 @@ class LogInView(View):
 
     def get(self, request, *args, **kwargs):
         return render(request, "home/login.html")
-    
+
     def post(self, request, *args, **kwargs):
         username = request.POST.get("username")
         password = request.POST.get("password")

@@ -149,10 +149,10 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-# AUTHENTICATION_BACKENDS = [
-#     # 'apps.user.backends.MyCustomBackend',
-#     'django.contrib.auth.backends.ModelBackend'
-# ]
+AUTHENTICATION_BACKENDS = [
+    # 'apps.user.backends.MyCustomBackend',
+    'django.contrib.auth.backends.ModelBackend'
+]
 
 AUTH_EXEMPT_ROUTES = ('logout', 'login', 'forgot-password', 'index')
 LOGIN_URL = '/user/login/'

@@ -15,7 +15,7 @@ class Store(models.Model):
 
     def __str__(self) -> str:
         return self.name
-    
+
     def update(self, commit=False, **kwargs):
         for key, value in kwargs.items():
             setattr(self, key, value)
@@ -49,7 +49,7 @@ class POS(models.Model):
 
     def __str__(self) -> str:
         return f"{self.pos_id} in {self.store}"
-    
+
     def update(self, commit=False, **kwargs):
         for key, value in kwargs.items():
             setattr(self, key, value)
@@ -75,8 +75,21 @@ class NoteBook(models.Model):
         return self.name
 
 
+class RowNotebook(models.Model):
+    notebook = models.ForeignKey(NoteBook, on_delete=models.CASCADE, related_name="row_notebook")
+    status = models.CharField(max_length=128)
+    storage_datetime = models.DateTimeField(default=now)
+    closing_balance = models.BigIntegerField(blank=True, null=True)
+    note = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"Tên sổ: {self.notebook.name},  "\
+                f"  Trạng thái: {self.status},  "\
+                f"  Giờ lưu: {self.storage_datetime:%m/%d/%Y %H:%M}"
+
+
 class CreditCard(models.Model):
-    
+
     card_number = models.CharField(max_length=127, blank=True, null=True)
     card_bank_name = models.CharField(max_length=127, blank=True, null=True)
     card_name = models.CharField(max_length=127, blank=True, null=True)
@@ -88,7 +101,7 @@ class CreditCard(models.Model):
     credit_card_front_image = models.ImageField(upload_to='uploads/creditcards/')
     credit_card_back_image = models.ImageField(upload_to='uploads/creditcards/')
     note = models.TextField(blank=True, null=True)
-    notebook = models.ForeignKey(NoteBook, on_delete=models.CASCADE, related_name="creditcards", null=True, blank=True)
+    notebook = models.ForeignKey(RowNotebook, on_delete=models.CASCADE, related_name="creditcards", null=True, blank=True)
 
     class Meta:
         ordering = ['-id']

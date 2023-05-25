@@ -13,6 +13,8 @@ import NotebooksList from "./components/Dashboard/Notebooks/notebooksList";
 import NotebookDetail from "./components/Dashboard/Notebooks/notebookDetail";
 import NewNotebook from "./components/Dashboard/Notebooks/addNewNotebook";
 import SwipeCard from "./components/Dashboard/SwipeCard/swipeCard";
+import SwipeCardDetail from "./components/Dashboard/SwipeCard/swipeCardDetail";
+import StoreCard from "./components/Dashboard/StoreCard/storeCard";
 import Report from "./components/Dashboard/Report/report";
 
 function RoutesApp() {
@@ -31,6 +33,8 @@ function RoutesApp() {
       <Route path="/employees/add" element={<NewEmployee />} />
       <Route path="/employees/:id" element={<EmployeeDetail />} />
       <Route path="/swipecard" element={<SwipeCard />} />
+      <Route path="/swipecard/:id" element={<SwipeCardDetail />} />
+      <Route path="/storecard" element={<StoreCard />} />
       <Route path="/report" element={<Report />} />
     </Routes>
   );

@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.generics import (
     ListAPIView,
-    RetrieveUpdateDestroyAPIView, 
+    RetrieveUpdateDestroyAPIView,
     ListCreateAPIView,
 )
 from rest_framework.permissions import IsAuthenticated
@@ -33,8 +33,8 @@ from .serializers import (
     UserSerializer,
     StoreSerializer,
     StoreCostSerializer,
-    POSSerializer, 
-    NoteBookSerializer, 
+    POSSerializer,
+    NoteBookSerializer,
     CustomerSerializer,
     CreditCardSerializer,
     SwipeCardTransactionSerializer,
@@ -52,7 +52,7 @@ class SwipeCardView(View):
             "store": store,
         }
         return render(request, "home/swipe_card.html", context)
-    
+
     def post(self, request, *args, **kwargs):
         store_id = request.user.infomation_detail.store.id
         store = Store.objects.filter(id=store_id).first()
@@ -102,6 +102,13 @@ class SwipeCardView(View):
         return render(request, "home/swipe_card.html", context)
 
 
+class SwipeCardTransactionDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+
+    queryset = SwipeCardTransaction.objects.all()
+    serializer_class = SwipeCardTransactionSerializer
+    permission_classes = [IsAuthenticated]
+
+
 class SwipeCardTransactionAPIView(ListAPIView):
 
     permission_classes = [IsAuthenticated]
@@ -123,7 +130,7 @@ class SwipeCardTransactionAPIView(ListAPIView):
             return Response(status=status.HTTP_201_CREATED)
         else:
             return Response("Parser error", status=status.HTTP_400_BAD_REQUEST)
-    
+
     def get_queryset(self):
         qs = super().get_queryset()
         if self.request.user.role != "admin":
@@ -139,12 +146,12 @@ class CreditCardAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(status=status.HTTP_201_CREATED)
-    
+
     def get(self, request, *args, **kwargs):
         data = CreditCard.objects.all()
         serializer = CreditCardSerializer(data, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
 
 class CustomerAPIView(APIView):
 
@@ -157,7 +164,7 @@ class CustomerAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(status=status.HTTP_201_CREATED)
-    
+
     def get(self, request, *args, **kwargs):
         data = Customer.objects.all()
         serializer = CustomerSerializer(data, many=True)
@@ -219,7 +226,7 @@ class StoreCostCreateAPIView(ListCreateAPIView):
     permission_classes = [IsAdmin]
 
 
-class StoreCostCreateAPIViewNoPagination(ListCreateAPIView):
+class StoreCostListAPIViewNoPagination(ListAPIView):
 
     queryset = StoreCost.objects.all()
     serializer_class = StoreCostSerializer
@@ -234,7 +241,7 @@ class StoreListCreateAPIView(ListCreateAPIView):
     permission_classes = [IsAdmin]
 
 
-class StoreListCreateAPIViewNoPagination(ListCreateAPIView):
+class StoreListAPIViewNoPagination(ListAPIView):
 
     queryset = Store.objects.all()
     serializer_class = StoreSerializer

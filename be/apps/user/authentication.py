@@ -44,7 +44,7 @@ class CustomAuthentication(authentication.BaseAuthentication):
             jwt.exceptions.InvalidSignatureError,
         ) as e:
             raise exceptions.AuthenticationFailed(f'Invalid token with {e}')
-        
+
 
 class IsAdmin(permissions.BasePermission):
     """

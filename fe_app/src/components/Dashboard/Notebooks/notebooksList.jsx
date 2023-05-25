@@ -35,7 +35,8 @@ function NotebooksList() {
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Tên cửa hàng</th>
+              {/* <th scope="col">Tên sổ</th> */}
+              <th scope="col">Tên sổ</th>
               <th scope="col">Cửa hàng</th>
               <th scope="col">Thao tác</th>
             </tr>
