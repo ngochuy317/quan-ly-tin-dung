@@ -9,8 +9,16 @@ from apps.store.models import (
     RowNotebook,
     Customer,
     CreditCard,
+    Product,
     SwipeCardTransaction,
 )
+
+
+class ProductSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Product
+        fields = '__all__'
 
 
 class InfomationDetailSerializer(serializers.ModelSerializer):

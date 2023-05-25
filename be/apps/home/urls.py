@@ -15,6 +15,8 @@ from .views import (
     NoteBookDetailRetrieveUpdateDestroyAPIView,
     CustomerAPIView,
     CreditCardAPIView,
+    ProductListCreateAPIView,
+    ProductRetrieveUpdateDestroyAPIView,
     SwipeCardTransactionAPIView,
     SwipeCardTransactionDetailRetrieveUpdateDestroyAPIView,
 )
@@ -33,6 +35,8 @@ urlpatterns = [
     path('api/employees/<pk>/', EmployeeDetailRetrieveUpdateDestroyAPIView.as_view(), name="employee-detail"),
     path('api/user/infomation-detail/', InformationDetailAPIView.as_view(), name="user-information-detail"),
     path('api/customer/', CustomerAPIView.as_view(), name="customer"),
+    path('api/products/', ProductListCreateAPIView.as_view(), name="products"),
+    path('api/products/<pk>/', ProductRetrieveUpdateDestroyAPIView.as_view(), name="product-detail"),
     path('api/creditcard/upload/', CreditCardAPIView.as_view(), name="upload-creditcard"),
     path('api/swipecardtransaction/', SwipeCardTransactionAPIView.as_view(), name="swipe-card-transaction"),
     path(

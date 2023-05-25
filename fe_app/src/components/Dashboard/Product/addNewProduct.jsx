@@ -1,40 +1,29 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import storeApi from "../../../api/storeAPI";
+import productApi from "../../../api/productAPI";
 
-function NewStore() {
+function NewProduct() {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
-      const response = await storeApi.createOne(data);
-      console.log("Create store successfully", response);
+      const response = await productApi.createOne(data);
+      console.log("Create product successfully", response);
       navigate("./..");
     } catch (error) {
-      console.log("Failed to create store", error);
+      console.log("Failed to create product", error);
     }
   };
-
   return (
     <div>
-      <h2 className="text-center">Cửa hàng </h2>
+      <h2 className="text-center">Sản phẩm </h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="row">
           <div className="col-md-4">
             <div className="mb-3">
-              <label className="form-label">Mã địa điểm</label>
-              <input
-                {...register("code", { required: true })}
-                type="text"
-                className="form-control"
-              />
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="mb-3">
-              <label className="form-label">Tên ghi nhớ</label>
+              <label className="form-label">Tên sản phẩm</label>
               <input
                 {...register("name", { required: true })}
                 type="text"
@@ -44,32 +33,20 @@ function NewStore() {
           </div>
           <div className="col-md-4">
             <div className="mb-3">
-              <label className="form-label">Số điện thoại</label>
+              <label className="form-label">Giá</label>
               <input
-                {...register("phone_number", { required: true })}
-                type="tel"
+                {...register("price")}
+                type="number"
                 className="form-control"
               />
             </div>
           </div>
-        </div>
-        <div className="row">
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div className="mb-3">
-              <label className="form-label">Ghi chú</label>
+              <label className="form-label">Số lượng</label>
               <input
-                {...register("note", { required: true })}
-                type="text"
-                className="form-control"
-              />
-            </div>
-          </div>
-          <div className="col-md-6">
-            <div className="mb-3">
-              <label className="form-label">Địa chỉ</label>
-              <input
-                {...register("address", { required: true })}
-                type="text"
+                {...register("quantity")}
+                type="number"
                 className="form-control"
               />
             </div>
@@ -93,4 +70,4 @@ function NewStore() {
   );
 }
 
-export default NewStore;
+export default NewProduct;

@@ -112,6 +112,13 @@ function SideBar() {
       path: "/dashboard/employees",
       role: ["admin"],
     },
+    {
+      id: 12,
+      name: "Sản phẩm",
+      icon: <FontAwesomeIcon icon={icon({ name: "boxes-stacked", style: "solid" })} />,
+      path: "/dashboard/products",
+      role: ["admin"],
+    },
   ];
   const dataItemSideBar = {
     admin: dataItemSideBarForAdmin,

@@ -21,6 +21,7 @@ from apps.store.models import (
     CreditCard,
     NoteBook,
     Customer,
+    Product,
 )
 from apps.user.models import User
 from apps.user.authentication import IsAdmin
@@ -37,6 +38,7 @@ from .serializers import (
     NoteBookSerializer,
     CustomerSerializer,
     CreditCardSerializer,
+    ProductSerializer,
     SwipeCardTransactionSerializer,
 )
 from .pagination import CustomPageNumberPagination, SwipeCardTransactionPageNumberPagination
@@ -100,6 +102,21 @@ class SwipeCardView(View):
             print(e)
 
         return render(request, "home/swipe_card.html", context)
+
+
+class ProductRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    permission_classes = [IsAdmin]
+
+
+class ProductListCreateAPIView(ListCreateAPIView):
+
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    pagination_class = CustomPageNumberPagination
+    permission_classes = [IsAdmin]
 
 
 class SwipeCardTransactionDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):

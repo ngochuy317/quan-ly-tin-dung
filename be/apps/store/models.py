@@ -157,6 +157,13 @@ class SwipeCardTransaction(models.Model):
         ordering = ['-id']
 
 
+class Product(models.Model):
+
+    name = models.CharField(max_length=128)
+    price = models.BigIntegerField(default=0)
+    quantity = models.IntegerField(default=0)
+
+
 class BillPos(models.Model):
 
     transaction_id = models.PositiveBigIntegerField()
