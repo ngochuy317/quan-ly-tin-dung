@@ -40,6 +40,7 @@ from .serializers import (
     CreditCardSerializer,
     ProductSerializer,
     SwipeCardTransactionSerializer,
+    RowNotebookSerializer,
 )
 from .pagination import CustomPageNumberPagination, SwipeCardTransactionPageNumberPagination
 
@@ -313,3 +314,28 @@ class InformationDetailAPIView(APIView):
             "store": serializer.data
         }
         return Response(context, status=status.HTTP_200_OK)
+
+
+class RowNotebookAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+
+        serializer = RowNotebookSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(status=status.HTTP_201_CREATED)
+
+
+class UnsaveCreditCardByStoreAPIView(APIView):
+
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        swipe_card_transactions = SwipeCardTransaction.objects.filter(
+            store_id=request.user.infomation_detail.store.id,
+            creditcard__notebook__isnull=True
+        )
+        creditcards = [x.creditcard for x in swipe_card_transactions]
+        serializer = CreditCardSerializer(creditcards, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

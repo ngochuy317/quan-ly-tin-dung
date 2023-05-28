@@ -66,17 +66,17 @@ function SideBar() {
     //   path: "/dashboard/unsavedcard",
     //   role: ["admin", "employee"],
     // },
-    {
-      id: 11,
-      name: "Lịch sử quẹt thẻ",
-      icon: (
-        <FontAwesomeIcon
-          icon={icon({ name: "clock-rotate-left", style: "solid" })}
-        />
-      ),
-      path: "/dashboard/transaction-history",
-      role: ["admin", "employee"],
-    },
+    // {
+    //   id: 11,
+    //   name: "Lịch sử quẹt thẻ",
+    //   icon: (
+    //     <FontAwesomeIcon
+    //       icon={icon({ name: "clock-rotate-left", style: "solid" })}
+    //     />
+    //   ),
+    //   path: "/dashboard/transaction-history",
+    //   role: ["admin", "employee"],
+    // },
   ];
   const dataItemSideBarForAdmin = [
     ...dataItemSideBarForEmployee,

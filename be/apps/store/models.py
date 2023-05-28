@@ -101,7 +101,12 @@ class CreditCard(models.Model):
     credit_card_front_image = models.ImageField(upload_to='uploads/creditcards/')
     credit_card_back_image = models.ImageField(upload_to='uploads/creditcards/')
     note = models.TextField(blank=True, null=True)
-    notebook = models.ForeignKey(RowNotebook, on_delete=models.CASCADE, related_name="creditcards", null=True, blank=True)
+    notebook = models.ForeignKey(
+        RowNotebook,
+        on_delete=models.CASCADE,
+        related_name="creditcards",
+        null=True, blank=True
+    )
 
     class Meta:
         ordering = ['-id']

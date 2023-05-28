@@ -64,14 +64,6 @@ class POSSerializer(serializers.ModelSerializer):
         return instance
 
 
-class RowNotebookSerializer(serializers.ModelSerializer):
-    storage_datetime = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
-
-    class Meta:
-        model = RowNotebook
-        fields = "__all__"
-
-
 class CreditCardSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
@@ -89,13 +81,31 @@ class CreditCardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CreditCard
-        exclude = ("id",)
+        fields = "__all__"
 
     def get_credit_card_front_image(self, obj):
         return self.context['request'].build_absolute_uri(obj.credit_card_front_image.url)
 
     def get_credit_card_back_image(self, obj):
         return self.context['request'].build_absolute_uri(obj.credit_card_back_image.url)
+
+
+class RowNotebookSerializer(serializers.ModelSerializer):
+    storage_datetime = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
+    creditcard_id = serializers.IntegerField(write_only=True)
+
+    class Meta:
+        model = RowNotebook
+        fields = "__all__"
+
+    def create(self, validated_data):
+        creditcard_id = validated_data.pop("creditcard_id")
+        instance = RowNotebook.objects.create(**validated_data)
+        creditcard_instance = CreditCard.objects.filter(id=creditcard_id).first()
+        if creditcard_instance:
+            creditcard_instance.notebook = instance
+            return instance
+        raise serializers.ValidationError("Can not found creditcard object")
 
 
 class NoteBookSerializer(serializers.ModelSerializer):
