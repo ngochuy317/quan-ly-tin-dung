@@ -58,12 +58,9 @@ function StoreCard() {
     console.log(data);
     try {
       const response = await creditCardApi.saveCreditCard2Notebook(data);
-      console.log(
-        "Save creditcard 2 notebook successfully",
-        response
-      );
+      console.log("Save creditcard 2 notebook successfully", response);
     } catch (error) {
-        console.log("Failed to save creditcard 2 notebook")
+      console.log("Failed to save creditcard 2 notebook");
     }
   };
 

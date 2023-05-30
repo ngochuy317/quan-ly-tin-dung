@@ -50,22 +50,22 @@ function SideBar() {
     },
     {
       id: 9,
-      name: "Sổ lưu thẻ đáo",
+      name: "Lưu thẻ",
       icon: (
         <FontAwesomeIcon icon={icon({ name: "book-open", style: "solid" })} />
       ),
       path: "/dashboard/storecard",
       role: ["admin", "employee"],
     },
-    // {
-    //   id: 10,
-    //   name: "Thẻ chưa lưu",
-    //   icon: (
-    //     <FontAwesomeIcon icon={icon({ name: "id-card", style: "solid" })} />
-    //   ),
-    //   path: "/dashboard/unsavedcard",
-    //   role: ["admin", "employee"],
-    // },
+    {
+      id: 10,
+      name: "Danh sách thẻ đã lưu",
+      icon: (
+        <FontAwesomeIcon icon={icon({ name: "id-card", style: "solid" })} />
+      ),
+      path: "/dashboard/savedcard",
+      role: ["admin", "employee"],
+    },
     // {
     //   id: 11,
     //   name: "Lịch sử quẹt thẻ",
@@ -82,7 +82,7 @@ function SideBar() {
     ...dataItemSideBarForEmployee,
     {
       id: 1,
-      name: "Cửa hàng",
+      name: "Cửa hàng ",
       icon: <FontAwesomeIcon icon={icon({ name: "house" })} />,
       path: "/dashboard/stores",
       role: ["admin"],
@@ -115,7 +115,11 @@ function SideBar() {
     {
       id: 12,
       name: "Sản phẩm",
-      icon: <FontAwesomeIcon icon={icon({ name: "boxes-stacked", style: "solid" })} />,
+      icon: (
+        <FontAwesomeIcon
+          icon={icon({ name: "boxes-stacked", style: "solid" })}
+        />
+      ),
       path: "/dashboard/products",
       role: ["admin"],
     },
@@ -163,7 +167,12 @@ function SideBarItem(props) {
       onClick={props.onClick}
     >
       {props.icon}
-      <span className="ms-1 d-none d-sm-inline">{props.name}</span>
+      <span className="ms-1 d-none d-sm-inline">
+        {props.name}{" "}
+        { JSON.stringify(props.role) === JSON.stringify(["admin"]) ? (
+          <FontAwesomeIcon icon={icon({ name: "lock", style: "solid" })} />
+        ) : null}
+      </span>
     </a>
   );
 }

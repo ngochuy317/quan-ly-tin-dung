@@ -16,6 +16,7 @@ import SwipeCard from "./components/Dashboard/SwipeCard/swipeCard";
 import SwipeCardDetail from "./components/Dashboard/SwipeCard/swipeCardDetail";
 import StoreCard from "./components/Dashboard/StoreCard/storeCard";
 import UnsaveCard from "./components/Dashboard/StoreCard/unsaveCard";
+import SavedCardList from "./components/Dashboard/StoreCard/savedCardList";
 import ProductList from "./components/Dashboard/Product/productList";
 import NewProduct from "./components/Dashboard/Product/addNewProduct";
 import ProductDetail from "./components/Dashboard/Product/productDetail";
@@ -40,6 +41,7 @@ function RoutesApp() {
       <Route path="/swipecard/:id" element={<SwipeCardDetail />} />
       <Route path="/storecard" element={<StoreCard />} />
       <Route path="/unsavedcard" element={<UnsaveCard />} />
+      <Route path="/savedcard" element={<SavedCardList />} />
       <Route path="/products" element={<ProductList />} />
       <Route path="/products/add" element={<NewProduct />} />
       <Route path="/products/:id" element={<ProductDetail />} />

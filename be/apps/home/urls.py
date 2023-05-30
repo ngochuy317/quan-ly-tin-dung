@@ -21,6 +21,7 @@ from .views import (
     SwipeCardTransactionDetailRetrieveUpdateDestroyAPIView,
     UnsaveCreditCardByStoreAPIView,
     RowNotebookAPIView,
+    RowNotebookListAPIView,
 )
 
 urlpatterns = [
@@ -40,6 +41,7 @@ urlpatterns = [
     path('api/products/', ProductListCreateAPIView.as_view(), name="products"),
     path('api/products/<pk>/', ProductRetrieveUpdateDestroyAPIView.as_view(), name="product-detail"),
     path('api/creditcard/upload/', CreditCardAPIView.as_view(), name="upload-creditcard"),
+    path('api/rownotebook/<pk>/', RowNotebookListAPIView.as_view(), name="list-row-notebook"),
     path('api/savecardtonotebook/', RowNotebookAPIView.as_view(), name="save-card-to-notebook"),
     path('api/unsavecreditcardbystore/', UnsaveCreditCardByStoreAPIView.as_view(), name="unsave-creditcard-by-store"),
     path('api/swipecardtransaction/', SwipeCardTransactionAPIView.as_view(), name="swipe-card-transaction"),

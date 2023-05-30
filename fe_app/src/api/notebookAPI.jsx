@@ -28,6 +28,11 @@ class NotebookApi {
     const url = this.notebookBaseUrl + id + "/";
     return axiosClient.put(url, data);
   };
+
+  getDetailRowNotebook = (id, params) => {
+    const url = "/rownotebook/" + id;
+    return axiosClient.get(url, { params });
+  };
 }
 
 const notebookApi = new NotebookApi();

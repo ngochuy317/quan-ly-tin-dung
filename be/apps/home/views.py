@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.generics import (
     ListAPIView,
+    RetrieveAPIView,
     RetrieveUpdateDestroyAPIView,
     ListCreateAPIView,
 )
@@ -20,6 +21,7 @@ from apps.store.models import (
     SwipeCardTransaction,
     CreditCard,
     NoteBook,
+    RowNotebook,
     Customer,
     Product,
 )
@@ -146,8 +148,7 @@ class SwipeCardTransactionAPIView(ListAPIView):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(status=status.HTTP_201_CREATED)
-        else:
-            return Response("Parser error", status=status.HTTP_400_BAD_REQUEST)
+        return Response("Parser error", status=status.HTTP_400_BAD_REQUEST)
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -325,6 +326,21 @@ class RowNotebookAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(status=status.HTTP_201_CREATED)
+
+
+class RowNotebookListAPIView(APIView):
+
+    permission_classes = [IsAdmin]
+
+    def get(self, request, *args, **kwargs):
+        id = kwargs.get("pk")
+        if id:
+            data = RowNotebook.objects.filter(notebook__id=id)
+            pagination = CustomPageNumberPagination()
+            data = pagination.paginate_queryset(data, request, view=self)
+            serializer = RowNotebookSerializer(data, many=True)
+            return pagination.get_paginated_response(serializer.data)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class UnsaveCreditCardByStoreAPIView(APIView):
