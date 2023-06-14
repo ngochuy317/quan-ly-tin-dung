@@ -1,3 +1,4 @@
+import jwtDecode from "jwt-decode";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -7,17 +8,21 @@ function LoginForm() {
   const [error, setError] = useState();
   const navigate = useNavigate();
 
-  const {
-    register,
-    handleSubmit,
-  } = useForm();
+  const { register, handleSubmit } = useForm();
 
   const onSubmit = async (data) => {
     try {
       const response = await authApi.login(data);
       console.log("Login successfully", response);
       localStorage.setItem("access_token", response.access_token);
-      navigate("/dashboard/swipecard");
+      let access_token = jwtDecode(response.access_token);
+      if (access_token.role === "admin") {
+        localStorage.setItem("activeTab", "/dashboard/report");
+        navigate("/dashboard/report");
+      } else {
+        localStorage.setItem("activeTab", "/dashboard/swipecard");
+        navigate("/dashboard/swipecard");
+      }
     } catch (error) {
       console.log("Failed to login", error);
       if (error.response && error.response.status === 400) {

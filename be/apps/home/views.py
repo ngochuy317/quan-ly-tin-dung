@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from django.views import View
-from django.db.models import Q
+from django.db.models import Q, Sum
+
+import pytz
+from datetime import datetime
 
 from rest_framework import status
 from rest_framework.views import APIView
@@ -322,10 +325,14 @@ class RowNotebookAPIView(APIView):
 
     def post(self, request, *args, **kwargs):
 
-        serializer = RowNotebookSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(status=status.HTTP_201_CREATED)
+        parser = NestedParser(request.data)
+        if parser.is_valid():
+            data = parser.validate_data
+            serializer = RowNotebookSerializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(status=status.HTTP_201_CREATED)
+        return Response("Parser error", status=status.HTTP_400_BAD_REQUEST)
 
 
 class RowNotebookListAPIView(APIView):
@@ -355,3 +362,17 @@ class UnsaveCreditCardByStoreAPIView(APIView):
         creditcards = [x.creditcard for x in swipe_card_transactions]
         serializer = CreditCardSerializer(creditcards, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class TotalMoneyTodayAPIView(APIView):
+
+    permission_classes = [IsAdmin]
+
+    def get(self, request, *args, **kwargs):
+        today = datetime.now(tz=pytz.timezone("Asia/Saigon"))
+        total_money = SwipeCardTransaction.objects.filter(transaction_datetime__date=today)\
+            .aggregate(Sum('customer_money_needed'))['customer_money_needed__sum']
+        context = {
+            "total_money": total_money,
+        }
+        return Response(context, status=status.HTTP_200_OK)

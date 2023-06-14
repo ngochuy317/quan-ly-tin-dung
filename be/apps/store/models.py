@@ -87,6 +87,9 @@ class RowNotebook(models.Model):
                 f"  Trạng thái: {self.status},  "\
                 f"  Giờ lưu: {self.storage_datetime:%m/%d/%Y %H:%M}"
 
+    class Meta:
+        ordering = ['-storage_datetime']
+
 
 class CreditCard(models.Model):
 

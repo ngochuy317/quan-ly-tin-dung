@@ -33,7 +33,7 @@ function SavedCardList() {
     }
 
     fetchEmployeeDetail();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleChangePage = async (direction) => {
     setCurrentPage(currentPage + direction);

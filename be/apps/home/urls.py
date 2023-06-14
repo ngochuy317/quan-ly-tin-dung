@@ -22,6 +22,7 @@ from .views import (
     UnsaveCreditCardByStoreAPIView,
     RowNotebookAPIView,
     RowNotebookListAPIView,
+    TotalMoneyTodayAPIView,
 )
 
 urlpatterns = [
@@ -45,6 +46,7 @@ urlpatterns = [
     path('api/savecardtonotebook/', RowNotebookAPIView.as_view(), name="save-card-to-notebook"),
     path('api/unsavecreditcardbystore/', UnsaveCreditCardByStoreAPIView.as_view(), name="unsave-creditcard-by-store"),
     path('api/swipecardtransaction/', SwipeCardTransactionAPIView.as_view(), name="swipe-card-transaction"),
+    path('api/totalmoneytoday/', TotalMoneyTodayAPIView.as_view(), name="total-money-today"),
     path(
         'api/swipecardtransaction/<pk>/',
         SwipeCardTransactionDetailRetrieveUpdateDestroyAPIView.as_view(),

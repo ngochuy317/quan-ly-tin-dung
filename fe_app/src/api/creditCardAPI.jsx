@@ -1,4 +1,3 @@
-
 import axiosClient from "./axiosClient";
 
 class CreditCardApi {
@@ -13,12 +12,13 @@ class CreditCardApi {
 
   saveCreditCard2Notebook = (data) => {
     const url = "savecardtonotebook/";
-    return axiosClient.post(url, data);
+    return axiosClient.post(url, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   };
-
 }
-
-
 
 const creditCardApi = new CreditCardApi();
 export default creditCardApi;

@@ -1,3 +1,5 @@
+import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 import React from "react";
 
@@ -17,7 +19,6 @@ function Creditcard(props) {
               {...register("card_number")}
               type="text"
               className="form-control"
-              disabled
             />
           </div>
         </div>
@@ -28,7 +29,6 @@ function Creditcard(props) {
               {...register("card_bank_name")}
               type="text"
               className="form-control"
-              disabled
             />
           </div>
         </div>
@@ -39,7 +39,6 @@ function Creditcard(props) {
               {...register("line_of_credit")}
               type="number"
               className="form-control"
-              disabled
             />
           </div>
         </div>
@@ -50,7 +49,6 @@ function Creditcard(props) {
               {...register("fee")}
               type="number"
               className="form-control"
-              disabled
             />
           </div>
         </div>
@@ -63,7 +61,6 @@ function Creditcard(props) {
               {...register("card_name")}
               type="text"
               className="form-control"
-              disabled
             />
           </div>
         </div>
@@ -74,7 +71,6 @@ function Creditcard(props) {
               {...register("card_issued_date")}
               type="date"
               className="form-control"
-              disabled
             />
           </div>
         </div>
@@ -85,7 +81,6 @@ function Creditcard(props) {
               {...register("card_expire_date")}
               type="date"
               className="form-control"
-              disabled
             />
           </div>
         </div>
@@ -97,7 +92,6 @@ function Creditcard(props) {
               type="text"
               maxLength="3"
               className="form-control"
-              disabled
             />
           </div>
         </div>
@@ -110,7 +104,6 @@ function Creditcard(props) {
               {...register("statement_date")}
               type="date"
               className="form-control"
-              disabled
             />
           </div>
         </div>
@@ -121,11 +114,10 @@ function Creditcard(props) {
               {...register("maturity_date")}
               type="date"
               className="form-control"
-              disabled
             />
           </div>
         </div>
-        {/* <div className="col-md-3">
+        <div className="col-md-3">
           <div className="mb-3">
             <label className="form-label">
               Ảnh mặt trước thẻ tín dụng{" "}
@@ -158,7 +150,7 @@ function Creditcard(props) {
               required
             />
           </div>
-        </div> */}
+        </div>
       </div>
     </div>
   );

@@ -52,4 +52,6 @@ class IsAdmin(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        return request.user.role == "admin"
+        if hasattr(request, "user") and hasattr(request.user, "role"):
+            return request.user.role == "admin"
+        return False

@@ -22,7 +22,7 @@ function ProductDetail() {
     }
 
     fetchProductDetail();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onSubmit = async (data) => {
     try {

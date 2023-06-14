@@ -38,7 +38,7 @@ function SwipeCard() {
     }
 
     fetchEmployeeDetail();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     async function fetchTransactionHistory() {
@@ -62,10 +62,10 @@ function SwipeCard() {
     try {
       data.customer_id_card_front_image = data.customer_id_card_front_image[0];
       data.customer_id_card_back_image = data.customer_id_card_back_image[0];
-      data.creditcard.credit_card_front_image =
-        data.creditcard.credit_card_front_image[0];
-      data.creditcard.credit_card_back_image =
-        data.creditcard.credit_card_back_image[0];
+      // data.creditcard.credit_card_front_image =
+      //   data.creditcard.credit_card_front_image[0];
+      // data.creditcard.credit_card_back_image =
+      //   data.creditcard.credit_card_back_image[0];
       const response = await swipeCardTransactionAPI.createOne(data);
       console.log("Create swipe card transaction successfully", response);
 
@@ -244,148 +244,6 @@ function SwipeCard() {
           </div>
         </div>
         <div className="row"></div>
-        <h5>Thông tin thẻ</h5>
-        <div className="row">
-          <div className="col-md-4">
-            <div className="mb-3">
-              <label className="form-label">Số thẻ</label>
-              <input
-                {...register("card_number")}
-                type="text"
-                className="form-control"
-              />
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="mb-3">
-              <label className="form-label">Ngân hàng</label>
-              <input
-                {...register("card_bank_name")}
-                type="text"
-                className="form-control"
-              />
-            </div>
-          </div>
-          <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">Hạn mức thẻ</label>
-              <input
-                {...register("line_of_credit")}
-                type="number"
-                className="form-control"
-              />
-            </div>
-          </div>
-          <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">Phí</label>
-              <input
-                {...register("fee")}
-                type="number"
-                className="form-control"
-              />
-            </div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-4">
-            <div className="mb-3">
-              <label className="form-label">Tên</label>
-              <input
-                {...register("card_name")}
-                type="text"
-                className="form-control"
-              />
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="mb-3">
-              <label className="form-label">Ngày mở thẻ</label>
-              <input
-                {...register("card_issued_date")}
-                type="date"
-                className="form-control"
-              />
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="mb-3">
-              <label className="form-label">Ngày hết hạn</label>
-              <input
-                {...register("card_expire_date")}
-                type="date"
-                className="form-control"
-              />
-            </div>
-          </div>
-          <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">CCV</label>
-              <input
-                {...register("card_ccv")}
-                type="text"
-                maxLength="3"
-                className="form-control"
-              />
-            </div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">Ngày sao kê</label>
-              <input
-                {...register("statement_date")}
-                type="date"
-                className="form-control"
-              />
-            </div>
-          </div>
-          <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">Ngày cuối đáo</label>
-              <input
-                {...register("maturity_date")}
-                type="date"
-                className="form-control"
-              />
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="mb-3">
-              <label className="form-label">
-                Ảnh mặt trước thẻ tín dụng{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("creditcard.credit_card_front_image")}
-                type="file"
-                className="form-control"
-                required
-              />
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="mb-3">
-              <label className="form-label">
-                Ảnh mặt sau thẻ tín dụng{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("creditcard.credit_card_back_image")}
-                type="file"
-                className="form-control"
-                required
-              />
-            </div>
-          </div>
-        </div>
         <div className="d-flex justify-content-end">
           <button
             disabled={isSubmitting}
@@ -409,7 +267,7 @@ function SwipeCard() {
               <th scope="col">Tên khách hàng</th>
               <th scope="col">SDT khách hàng</th>
               <th scope="col">Số tiền KH cần</th>
-              <th scope="col">Phí</th>
+              <th scope="col">Số thẻ</th>
               <th scope="col">Thao tác</th>
             </tr>
           </thead>
@@ -422,7 +280,7 @@ function SwipeCard() {
                   <td>{swipeCard.customer_name}</td>
                   <td>{swipeCard.customer_phone_number}</td>
                   <td>{swipeCard.customer_money_needed}</td>
-                  <td>{swipeCard.fee}</td>
+                  <td><Link>{swipeCard.creditcard ? swipeCard.creditcard.card_number : null}</Link></td>
                   <td>
                     <Link to={swipeCard.id + "/"}>Chỉnh sửa</Link>
                   </td>

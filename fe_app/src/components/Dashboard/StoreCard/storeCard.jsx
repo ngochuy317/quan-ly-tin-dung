@@ -2,17 +2,22 @@ import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import creditCardApi from "../../../api/creditCardAPI";
+import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import unsaveCreditcardApi from "../../../api/unsaveCreditCard";
 import userApi from "../../../api/userAPI";
 import Creditcard from "../../CreditCard/creditcard";
-import creditCardApi from "../../../api/creditCardAPI";
+import Pagination from "../../Pagination/pagination";
 
 function StoreCard() {
   const { register, handleSubmit, reset, formState } = useForm();
   const { isSubmitting } = formState;
   const [notebooks, setNotebooks] = useState([]);
+  const [responseSwipeCardData, setResponseSwipeCardData] = useState([]);
   const [creditcards, setCreditcards] = useState([]);
   const [rowNotebooks, setRowNotebooks] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [params, setParams] = useState({ page: 1 });
 
   useEffect(() => {
     async function fetchEmployeeDetail() {
@@ -54,9 +59,29 @@ function StoreCard() {
     fetchUnsaveCreditcardByStore();
   }, []);
 
+  useEffect(() => {
+    async function fetchTransactionHistory() {
+      try {
+        const responseHistorySwipeCard = await swipeCardTransactionAPI.getAll();
+        console.log(
+          "Fetch swipe card history list successfully",
+          responseHistorySwipeCard
+        );
+        setResponseSwipeCardData(responseHistorySwipeCard.results);
+      } catch (error) {
+        console.log("Failed to swipe card history", error);
+      }
+    }
+    fetchTransactionHistory();
+  }, []);
+
   const onSubmit = async (data) => {
     console.log(data);
     try {
+      data.creditcard.credit_card_front_image =
+        data.creditcard.credit_card_front_image[0];
+      data.creditcard.credit_card_back_image =
+        data.creditcard.credit_card_back_image[0];
       const response = await creditCardApi.saveCreditCard2Notebook(data);
       console.log("Save creditcard 2 notebook successfully", response);
     } catch (error) {
@@ -71,10 +96,9 @@ function StoreCard() {
     console.log("notebook.row_notebook", notebook.row_notebook);
   };
 
-  const handleOnChangeCreditCard = (e) => {
-    let val = parseInt(e.target.value);
-    let creditcard = creditcards.find((c) => c.id === val);
-    reset({ ...creditcard });
+  const handleChangePage = (direction) => {
+    setParams({ page: currentPage + direction });
+    setCurrentPage(currentPage + direction);
   };
 
   return (
@@ -137,7 +161,7 @@ function StoreCard() {
               </select>
             </div>
           </div>
-          <div className="col-md-3">
+          {/* <div className="col-md-3">
             <div className="mb-3">
               <label className="form-label">Thẻ chưa lưu</label>
               <select
@@ -154,7 +178,7 @@ function StoreCard() {
                   ))}
               </select>
             </div>
-          </div>
+          </div> */}
           <div className="col-md-2">
             <div className="mb-3">
               <label className="form-label">
@@ -182,8 +206,6 @@ function StoreCard() {
               />
             </div>
           </div>
-        </div>
-        <div className="row">
           <div className="col-md-2">
             <div className="mb-3">
               <label className="form-label">Ghi chú</label>
@@ -195,7 +217,179 @@ function StoreCard() {
             </div>
           </div>
         </div>
-        <Creditcard register={register}></Creditcard>
+        <h5>Thông tin thẻ</h5>
+        {/* <div className="row">
+          <div className="col-md-4">
+            <div className="mb-3">
+              <label className="form-label">Số thẻ</label>
+              <input
+                {...register("card_number")}
+                type="text"
+                className="form-control"
+              />
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="mb-3">
+              <label className="form-label">Ngân hàng</label>
+              <input
+                {...register("card_bank_name")}
+                type="text"
+                className="form-control"
+              />
+            </div>
+          </div>
+          <div className="col-md-2">
+            <div className="mb-3">
+              <label className="form-label">Hạn mức thẻ</label>
+              <input
+                {...register("line_of_credit")}
+                type="number"
+                className="form-control"
+              />
+            </div>
+          </div>
+          <div className="col-md-2">
+            <div className="mb-3">
+              <label className="form-label">Phí</label>
+              <input
+                {...register("fee")}
+                type="number"
+                className="form-control"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-4">
+            <div className="mb-3">
+              <label className="form-label">Tên</label>
+              <input
+                {...register("card_name")}
+                type="text"
+                className="form-control"
+              />
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="mb-3">
+              <label className="form-label">Ngày mở thẻ</label>
+              <input
+                {...register("card_issued_date")}
+                type="date"
+                className="form-control"
+              />
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="mb-3">
+              <label className="form-label">Ngày hết hạn</label>
+              <input
+                {...register("card_expire_date")}
+                type="date"
+                className="form-control"
+              />
+            </div>
+          </div>
+          <div className="col-md-2">
+            <div className="mb-3">
+              <label className="form-label">CCV</label>
+              <input
+                {...register("card_ccv")}
+                type="text"
+                maxLength="3"
+                className="form-control"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-2">
+            <div className="mb-3">
+              <label className="form-label">Ngày sao kê</label>
+              <input
+                {...register("statement_date")}
+                type="date"
+                className="form-control"
+              />
+            </div>
+          </div>
+          <div className="col-md-2">
+            <div className="mb-3">
+              <label className="form-label">Ngày cuối đáo</label>
+              <input
+                {...register("maturity_date")}
+                type="date"
+                className="form-control"
+              />
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="mb-3">
+              <label className="form-label">
+                Ảnh mặt trước thẻ tín dụng{" "}
+                <FontAwesomeIcon
+                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
+                  color="red"
+                />
+              </label>
+              <input
+                {...register("creditcard.credit_card_front_image")}
+                type="file"
+                className="form-control"
+                required
+              />
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="mb-3">
+              <label className="form-label">
+                Ảnh mặt sau thẻ tín dụng{" "}
+                <FontAwesomeIcon
+                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
+                  color="red"
+                />
+              </label>
+              <input
+                {...register("creditcard.credit_card_back_image")}
+                type="file"
+                className="form-control"
+                required
+              />
+            </div>
+          </div>
+        </div> */}
+        <Creditcard register={register} />
+        <div className="row">
+          <div className="col-md-5">
+            <div className="mb-3">
+              <label className="form-label">
+                Giao dịch{" "}
+                <FontAwesomeIcon
+                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
+                  color="red"
+                />
+              </label>
+              <select
+                {...register("transaction_id")}
+                className="form-select"
+                disabled={responseSwipeCardData.length > 0 ? null : true}
+                required
+              >
+                {responseSwipeCardData &&
+                  responseSwipeCardData.map((swipeCardTransaction) => (
+                    <option
+                      key={swipeCardTransaction.id}
+                      value={swipeCardTransaction.id}
+                    >
+                      {swipeCardTransaction.transaction_datetime}--
+                      {swipeCardTransaction.customer_name}
+                    </option>
+                  ))}
+              </select>
+            </div>
+          </div>
+        </div>
         <div className="d-flex justify-content-end">
           <button
             disabled={isSubmitting}
@@ -235,10 +429,10 @@ function StoreCard() {
           </table>
         </div>
         {/* <Pagination
-        currentPage={currentPage}
-        totalPages={responseData.total_pages}
-        handleChangePage={handleChangePage}
-      /> */}
+          currentPage={currentPage}
+          totalPages={rowNotebooks.total_pages}
+          handleChangePage={handleChangePage}
+        /> */}
       </form>
     </div>
   );

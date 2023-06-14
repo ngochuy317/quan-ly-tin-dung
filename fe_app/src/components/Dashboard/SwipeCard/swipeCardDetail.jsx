@@ -26,7 +26,7 @@ function SwipeCardDetail() {
     }
 
     fetchSwipeCardTransactionDetail();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onSubmit = async (data) => {
     try {
@@ -306,7 +306,7 @@ function SwipeCardDetail() {
           <div className="col-md-6">
             <div className="mb-3">
               <label className="form-label">Ảnh mặt trước thẻ tín dụng</label>
-              {dataSwipCardDetail && (
+              {dataSwipCardDetail && dataSwipCardDetail.creditcard && (
                 <img
                   src={`${dataSwipCardDetail.creditcard.credit_card_front_image}`}
                   style={{ maxWidth: "100%", height: "auto" }}
@@ -319,7 +319,7 @@ function SwipeCardDetail() {
           <div className="col-md-6">
             <div className="mb-3">
               <label className="form-label">Ảnh mặt sau thẻ tín dụng</label>
-              {dataSwipCardDetail && (
+              {dataSwipCardDetail && dataSwipCardDetail.creditcard && (
                 <img
                   src={`${dataSwipCardDetail.creditcard.credit_card_back_image}`}
                   style={{ maxWidth: "100%", height: "auto" }}

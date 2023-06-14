@@ -60,7 +60,7 @@ function EmployeeDetail() {
     };
 
     fetchEmployeeDetail();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const onSubmit = async (data) => {
     try {

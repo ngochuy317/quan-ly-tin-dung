@@ -7,6 +7,7 @@ function NavBar() {
   function handleClickLogOut(e) {
     e.preventDefault();
     localStorage.removeItem("access_token");
+    localStorage.removeItem("activeTab");
     navigate("/login");
   }
 
