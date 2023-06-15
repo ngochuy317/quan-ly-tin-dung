@@ -60,7 +60,7 @@ function EmployeeDetail() {
     };
 
     fetchEmployeeDetail();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line
 
   const onSubmit = async (data) => {
     try {
@@ -229,12 +229,11 @@ function EmployeeDetail() {
             <div className="mb-3">
               <label className="form-label">Cửa hàng</label>
               <select {...register("store")} className="form-select">
-                {stores &&
-                  stores.map((store) => (
-                    <option key={store.id} value={store.id}>
-                      {store.name}
-                    </option>
-                  ))}
+                {stores?.map((store) => (
+                  <option key={store.id} value={store.id}>
+                    {store.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -242,12 +241,11 @@ function EmployeeDetail() {
             <div className="mb-3">
               <label className="form-label">Cấp bậc</label>
               <select {...register("role")} className="form-select">
-                {Roles &&
-                  Roles.map((role) => (
-                    <option key={role.roleKey} value={role.roleKey}>
-                      {role.roleName}
-                    </option>
-                  ))}
+                {Roles?.map((role) => (
+                  <option key={role.roleKey} value={role.roleKey}>
+                    {role.roleName}
+                  </option>
+                ))}
               </select>
             </div>
           </div>

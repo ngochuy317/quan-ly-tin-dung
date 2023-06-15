@@ -20,7 +20,8 @@ import SavedCardList from "./components/Dashboard/StoreCard/savedCardList";
 import ProductList from "./components/Dashboard/Product/productList";
 import NewProduct from "./components/Dashboard/Product/addNewProduct";
 import ProductDetail from "./components/Dashboard/Product/productDetail";
-import Report from "./components/Dashboard/Report/report";
+import ReportAdmin from "./components/Dashboard/Report/reportAdmin";
+import ReportEmployee from "./components/Dashboard/Report/reportEmployee";
 
 function RoutesApp() {
   return (
@@ -45,7 +46,8 @@ function RoutesApp() {
       <Route path="/products" element={<ProductList />} />
       <Route path="/products/add" element={<NewProduct />} />
       <Route path="/products/:id" element={<ProductDetail />} />
-      <Route path="/report" element={<Report />} />
+      <Route path="/reportadm" element={<ReportAdmin />} />
+      <Route path="/reportemp" element={<ReportEmployee />} />
     </Routes>
   );
 }

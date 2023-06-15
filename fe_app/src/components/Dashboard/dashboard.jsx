@@ -24,7 +24,7 @@ function Dashboard() {
     };
 
     getDecodedToken();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line
   return (
     <AuthContext.Provider value={{ ...decodedToken }}>
       <SideBar path={"/dashboard/swipecard"} />

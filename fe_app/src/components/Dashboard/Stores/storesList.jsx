@@ -45,20 +45,19 @@ function StoresList() {
             </tr>
           </thead>
           <tbody className="table-group-divider">
-            {responseData.results &&
-              responseData.results.map((store, index) => (
-                <tr key={store.id}>
-                  <th scope="row">{index + 1}</th>
-                  <td>{store.code}</td>
-                  <td>{store.name}</td>
-                  <td>{store.note}</td>
-                  <td>{store.address}</td>
-                  <td>{store.phone_number}</td>
-                  <td>
-                    <Link to={store.id + "/"}>Chỉnh sửa</Link>
-                  </td>
-                </tr>
-              ))}
+            {responseData?.results?.map((store, index) => (
+              <tr key={store.id}>
+                <th scope="row">{index + 1}</th>
+                <td>{store.code}</td>
+                <td>{store.name}</td>
+                <td>{store.note}</td>
+                <td>{store.address}</td>
+                <td>{store.phone_number}</td>
+                <td>
+                  <Link to={store.id + "/"}>Chỉnh sửa</Link>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

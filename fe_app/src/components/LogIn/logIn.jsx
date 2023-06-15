@@ -25,7 +25,7 @@ function LoginForm() {
       }
     } catch (error) {
       console.log("Failed to login", error);
-      if (error.response && error.response.status === 400) {
+      if (error?.response?.status === 400) {
         setError(error.response.data.error_message);
       } else {
         setError("Đã xảy ra lỗi. Vui lòng thử lại");
@@ -59,7 +59,7 @@ function LoginForm() {
           <p className="mt-3 text-sm">
             <br />
           </p>
-          {error && error.length && <h6 className="text-center">{error}</h6>}
+          {error?.length && <h6 className="text-center">{error}</h6>}
 
           <div className="text-center">
             <button type="submit" className="btn btn-primary w-100 my-0 mb-2">

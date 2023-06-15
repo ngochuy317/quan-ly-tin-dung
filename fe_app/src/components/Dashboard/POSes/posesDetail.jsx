@@ -6,11 +6,7 @@ import storeApi from "../../../api/storeAPI";
 
 function POSesDetail() {
   const [stores, setStores] = useState([]);
-  const {
-    register,
-    handleSubmit,
-    reset,
-  } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -34,15 +30,13 @@ function POSesDetail() {
         initValues.store = response.store;
         setStores(responseJSONStore);
         reset({ ...initValues });
-
-        
       } catch (error) {
         console.log("Failed to fetch pos detail", error);
       }
     }
 
     fetchPOSDetail();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line
 
   const onSubmit = async (data) => {
     try {
@@ -148,12 +142,11 @@ function POSesDetail() {
             <div className="mb-3">
               <label className="form-label">Cửa hàng</label>
               <select {...register("store")} className="form-select">
-                {stores &&
-                  stores.map((store) => (
-                    <option key={store.id} value={store.id}>
-                      {store.name}
-                    </option>
-                  ))}
+                {stores?.map((store) => (
+                  <option key={store.id} value={store.id}>
+                    {store.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>

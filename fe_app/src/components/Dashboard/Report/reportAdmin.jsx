@@ -1,15 +1,12 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import reportApi from "../../../api/reportAPI";
 import storeApi from "../../../api/storeAPI";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import Pagination from "../../Pagination/pagination";
-import { AuthContext } from "../dashboard";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
-function Report() {
-  const { role } = useContext(AuthContext);
-  const isAdmin = role === "admin";
+function ReportAdmin() {
   const [stores, setStores] = useState([]);
   const [poses, setPoses] = useState([]);
   const [dataPieChart, setDataPieChart] = useState([]);
@@ -48,41 +45,33 @@ function Report() {
   useEffect(() => {
     async function fetchListStore() {
       try {
-        if (isAdmin) {
-          const responseJSONStore = await storeApi.getAllFull();
-          console.log("Fetch store list successfully", responseJSONStore);
-          setStores(responseJSONStore);
-        }
+        const responseJSONStore = await storeApi.getAllFull();
+        console.log("Fetch store list successfully", responseJSONStore);
+        setStores(responseJSONStore);
       } catch (error) {
         console.log("Failed to fetch notebook detail", error);
       }
     }
 
     fetchListStore();
-  }, [isAdmin]);
+  }, []);
 
   useEffect(() => {
     async function fetchTotalMoneyToday() {
       try {
-        if (isAdmin) {
-          const responseTotalMoney = await reportApi.gettotalmoneytoday();
-          console.log(
-            "Fetch total money today successfully",
-            responseTotalMoney
-          );
-          setTotalMoneyToday(responseTotalMoney.total_money);
-        }
+        const responseTotalMoney = await reportApi.gettotalmoneytoday();
+        console.log("Fetch total money today successfully", responseTotalMoney);
+        setTotalMoneyToday(responseTotalMoney.total_money);
       } catch (error) {
         console.log("Failed to fetch total money today", error);
       }
     }
 
     fetchTotalMoneyToday();
-  }, [isAdmin]);
+  }, []);
 
   const onSubmit = async (data) => {
     try {
-      console.log("data", data);
       const response = await swipeCardTransactionAPI.getAll({
         ...params,
         ...data,
@@ -91,7 +80,6 @@ function Report() {
       setResponseSwipeCardData(response);
       let remain_money =
         response.money_limit_per_day - response.sum_customer_money_needed;
-      console.log("remain_money", remain_money);
       let remain_money_color = "";
       let remain_money_name = "";
       if (remain_money > 0) {
@@ -134,7 +122,7 @@ function Report() {
   return (
     <div>
       <h2 className="text-center">Thống kê</h2>
-      {isAdmin && (
+      {
         <div className="row">
           <div className="col-md-8">
             <strong>
@@ -143,13 +131,13 @@ function Report() {
             </strong>
           </div>
         </div>
-      )}
+      }
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="row">
           <div className="col-md-4">
             <div className="mb-3">
               <label className="form-label">Cửa hàng</label>
-              {isAdmin ? (
+              {
                 <select
                   {...register("store_id", { required: true })}
                   className="form-select"
@@ -161,14 +149,7 @@ function Report() {
                     </option>
                   ))}
                 </select>
-              ) : (
-                <input
-                  {...register("store_id")}
-                  type="text"
-                  className="form-control"
-                  disabled
-                />
-              )}
+              }
             </div>
           </div>
           <div className="col-md-4">
@@ -271,4 +252,4 @@ function Report() {
   );
 }
 
-export default Report;
+export default ReportAdmin;

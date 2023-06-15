@@ -33,11 +33,13 @@ function SavedCardList() {
     }
 
     fetchEmployeeDetail();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line
 
   const handleChangePage = async (direction) => {
     setCurrentPage(currentPage + direction);
-    const response = await notebookApi.getDetailRowNotebook(idNotebook, { page: currentPage + direction });
+    const response = await notebookApi.getDetailRowNotebook(idNotebook, {
+      page: currentPage + direction,
+    });
     console.log("Fetch detail rownotebook successfully", response);
     setRowNotebooks(response);
   };
@@ -46,7 +48,7 @@ function SavedCardList() {
     let id = parseInt(e.target.value);
     const response = await notebookApi.getDetailRowNotebook(id, { page: 1 });
     console.log("Fetch detail rownotebook successfully", response);
-    setIdNotebook(id)
+    setIdNotebook(id);
     setRowNotebooks(response);
   };
 
@@ -101,12 +103,11 @@ function SavedCardList() {
               onChange={handleOnChangeNotebook}
             >
               <option></option>
-              {notebooks &&
-                notebooks.map((notebook) => (
-                  <option key={notebook.id} value={notebook.id}>
-                    {notebook.name}
-                  </option>
-                ))}
+              {notebooks?.map((notebook) => (
+                <option key={notebook.id} value={notebook.id}>
+                  {notebook.name}
+                </option>
+              ))}
             </select>
           </div>
         </div>
@@ -123,16 +124,15 @@ function SavedCardList() {
             </tr>
           </thead>
           <tbody className="table-group-divider">
-            {rowNotebooks.results &&
-              rowNotebooks.results.map((rowNotebook, index) => (
-                <tr key={rowNotebook.id}>
-                  <th scope="row">{index + 1}</th>
-                  <td>{rowNotebook.status}</td>
-                  <td>{rowNotebook.storage_datetime}</td>
-                  <td>{rowNotebook.closing_balance}</td>
-                  <td>{rowNotebook.note}</td>
-                </tr>
-              ))}
+            {rowNotebooks?.results?.map((rowNotebook, index) => (
+              <tr key={rowNotebook.id}>
+                <th scope="row">{index + 1}</th>
+                <td>{rowNotebook.status}</td>
+                <td>{rowNotebook.storage_datetime}</td>
+                <td>{rowNotebook.closing_balance}</td>
+                <td>{rowNotebook.note}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
         <Pagination

@@ -201,12 +201,11 @@ function NewEmployee() {
                 {...register("infomation_detail.store")}
                 className="form-select"
               >
-                {stores &&
-                  stores.map((store) => (
-                    <option key={store.id} value={store.id}>
-                      {store.name}
-                    </option>
-                  ))}
+                {stores?.map((store) => (
+                  <option key={store.id} value={store.id}>
+                    {store.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -214,12 +213,11 @@ function NewEmployee() {
             <div className="mb-3">
               <label className="form-label">Cấp bậc</label>
               <select {...register("role")} className="form-select">
-                {Roles &&
-                  Roles.map((role) => (
-                    <option key={role.roleKey} value={role.roleKey}>
-                      {role.roleName}
-                    </option>
-                  ))}
+                {Roles?.map((role) => (
+                  <option key={role.roleKey} value={role.roleKey}>
+                    {role.roleName}
+                  </option>
+                ))}
               </select>
             </div>
           </div>

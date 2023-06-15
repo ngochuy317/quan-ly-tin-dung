@@ -42,21 +42,20 @@ function NotebooksList() {
             </tr>
           </thead>
           <tbody className="table-group-divider">
-            {responseData.results &&
-              responseData.results.map((notebook, index) => (
-                <tr key={notebook.id}>
-                  <th scope="row">{index + 1}</th>
-                  <td>{notebook.name}</td>
-                  <td>
-                    <Link to={"/dashboard/stores/" + notebook.store.id}>
-                      {notebook.store_name}
-                    </Link>
-                  </td>
-                  <td>
-                    <Link to={notebook.id + "/"}>Chỉnh sửa</Link>
-                  </td>
-                </tr>
-              ))}
+            {responseData?.results?.map((notebook, index) => (
+              <tr key={notebook.id}>
+                <th scope="row">{index + 1}</th>
+                <td>{notebook.name}</td>
+                <td>
+                  <Link to={"/dashboard/stores/" + notebook.store.id}>
+                    {notebook.store_name}
+                  </Link>
+                </td>
+                <td>
+                  <Link to={notebook.id + "/"}>Chỉnh sửa</Link>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

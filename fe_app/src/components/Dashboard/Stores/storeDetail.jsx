@@ -31,7 +31,7 @@ function StoreDetail() {
     }
 
     fetchStoreDetail();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line
 
   const onSubmit = async (data) => {
     try {

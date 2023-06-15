@@ -65,12 +65,11 @@ function NewNotebook() {
                 className="form-select"
                 defaultValue={{ label: "Select Dept", value: 0 }}
               >
-                {stores &&
-                  stores.map((store) => (
-                    <option key={store.id} value={store.id}>
-                      {store.name}
-                    </option>
-                  ))}
+                {stores?.map((store) => (
+                  <option key={store.id} value={store.id}>
+                    {store.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>

@@ -47,22 +47,21 @@ function POSesList() {
             </tr>
           </thead>
           <tbody className="table-group-divider">
-            {responseData.results &&
-              responseData.results.map((pos, index) => (
-                <tr key={pos.id}>
-                  <th scope="row">{index + 1}</th>
-                  <td>{pos.pos_id}</td>
-                  <td>{pos.mid}</td>
-                  <td>{pos.tid}</td>
-                  <td>{pos.note}</td>
-                  <td>{pos.status}</td>
-                  <td>{pos.bank_name}</td>
-                  <td>{pos.store_name}</td>
-                  <td>
-                    <Link to={pos.id + "/"}>Chỉnh sửa</Link>
-                  </td>
-                </tr>
-              ))}
+            {responseData?.results?.map((pos, index) => (
+              <tr key={pos.id}>
+                <th scope="row">{index + 1}</th>
+                <td>{pos.pos_id}</td>
+                <td>{pos.mid}</td>
+                <td>{pos.tid}</td>
+                <td>{pos.note}</td>
+                <td>{pos.status}</td>
+                <td>{pos.bank_name}</td>
+                <td>{pos.store_name}</td>
+                <td>
+                  <Link to={pos.id + "/"}>Chỉnh sửa</Link>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

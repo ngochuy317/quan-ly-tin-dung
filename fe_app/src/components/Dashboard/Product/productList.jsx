@@ -1,14 +1,12 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import productAPI from "../../../api/productAPI";
 import { Link } from "react-router-dom";
 import Pagination from "../../Pagination/pagination";
-
 
 function ProductList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [responseData, setResponseData] = useState({});
   const [params, setParams] = useState({ page: 1 });
-
 
   useEffect(() => {
     const fetchProductList = async () => {
@@ -45,18 +43,17 @@ function ProductList() {
             </tr>
           </thead>
           <tbody className="table-group-divider">
-            {responseData.results &&
-              responseData.results.map((product, index) => (
-                <tr key={product.id}>
-                  <th scope="row">{index + 1}</th>
-                  <td>{product.name}</td>
-                  <td>{product.price}</td>
-                  <td>{product.quantity}</td>
-                  <td>
-                    <Link to={product.id + "/"}>Chỉnh sửa</Link>
-                  </td>
-                </tr>
-              ))}
+            {responseData?.results?.map((product, index) => (
+              <tr key={product.id}>
+                <th scope="row">{index + 1}</th>
+                <td>{product.name}</td>
+                <td>{product.price}</td>
+                <td>{product.quantity}</td>
+                <td>
+                  <Link to={product.id + "/"}>Chỉnh sửa</Link>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

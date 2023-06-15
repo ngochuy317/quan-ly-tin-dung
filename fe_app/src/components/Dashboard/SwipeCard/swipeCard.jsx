@@ -38,7 +38,7 @@ function SwipeCard() {
     }
 
     fetchEmployeeDetail();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // eslint-disable-line
 
   useEffect(() => {
     async function fetchTransactionHistory() {
@@ -136,12 +136,11 @@ function SwipeCard() {
                 {...register("pos", { required: true })}
                 className="form-select"
               >
-                {posMachine &&
-                  posMachine.map((pos) => (
-                    <option key={pos.id} value={pos.id}>
-                      {pos.id}-{pos.mid}-{pos.tid}-{pos.bank_name}
-                    </option>
-                  ))}
+                {posMachine?.map((pos) => (
+                  <option key={pos.id} value={pos.id}>
+                    {pos.id}-{pos.mid}-{pos.tid}-{pos.bank_name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -268,24 +267,29 @@ function SwipeCard() {
               <th scope="col">SDT khách hàng</th>
               <th scope="col">Số tiền KH cần</th>
               <th scope="col">Số thẻ</th>
+              <th scope="col">Đáo hạn</th>
               <th scope="col">Thao tác</th>
             </tr>
           </thead>
           <tbody className="table-group-divider">
-            {responseSwipeCardData.results &&
-              responseSwipeCardData.results.map((swipeCard, index) => (
-                <tr key={swipeCard.id}>
-                  <th scope="row">{index + 1}</th>
-                  <td>{swipeCard.transaction_datetime}</td>
-                  <td>{swipeCard.customer_name}</td>
-                  <td>{swipeCard.customer_phone_number}</td>
-                  <td>{swipeCard.customer_money_needed}</td>
-                  <td><Link>{swipeCard.creditcard ? swipeCard.creditcard.card_number : null}</Link></td>
-                  <td>
-                    <Link to={swipeCard.id + "/"}>Chỉnh sửa</Link>
-                  </td>
-                </tr>
-              ))}
+            {responseSwipeCardData?.results?.map((swipeCard, index) => (
+              <tr key={swipeCard.id}>
+                <th scope="row">{index + 1}</th>
+                <td>{swipeCard.transaction_datetime}</td>
+                <td>{swipeCard.customer_name}</td>
+                <td>{swipeCard.customer_phone_number}</td>
+                <td>{swipeCard.customer_money_needed}</td>
+                <td>
+                  <Link>{swipeCard.creditcard?.card_number}</Link>
+                </td>
+                <td>
+                  {swipeCard.creditcard?.is_expired ? "Đã đáo" : "Chưa đáo"}
+                </td>
+                <td>
+                  <Link to={swipeCard.id + "/"}>Chỉnh sửa</Link>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

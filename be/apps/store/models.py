@@ -110,6 +110,7 @@ class CreditCard(models.Model):
         related_name="creditcards",
         null=True, blank=True
     )
+    is_expired = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-id']

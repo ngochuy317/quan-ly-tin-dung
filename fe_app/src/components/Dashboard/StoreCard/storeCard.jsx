@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import creditCardApi from "../../../api/creditCardAPI";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
-import unsaveCreditcardApi from "../../../api/unsaveCreditCard";
 import userApi from "../../../api/userAPI";
 import Creditcard from "../../CreditCard/creditcard";
 import Pagination from "../../Pagination/pagination";
@@ -14,7 +13,6 @@ function StoreCard() {
   const { isSubmitting } = formState;
   const [notebooks, setNotebooks] = useState([]);
   const [responseSwipeCardData, setResponseSwipeCardData] = useState([]);
-  const [creditcards, setCreditcards] = useState([]);
   const [rowNotebooks, setRowNotebooks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [params, setParams] = useState({ page: 1 });
@@ -42,22 +40,7 @@ function StoreCard() {
     }
 
     fetchEmployeeDetail();
-  }, []);
-
-  useEffect(() => {
-    async function fetchUnsaveCreditcardByStore() {
-      try {
-        const response =
-          await unsaveCreditcardApi.getAllUnsaveCreditcardByStore();
-        console.log("Fetch unsave creditcard by store successfully", response);
-        setCreditcards(response);
-      } catch (error) {
-        console.log("Failed to fetch unsave creditcard by store", error);
-      }
-    }
-
-    fetchUnsaveCreditcardByStore();
-  }, []);
+  }, []); // eslint-disable-line
 
   useEffect(() => {
     async function fetchTransactionHistory() {
@@ -152,12 +135,11 @@ function StoreCard() {
                 disabled={notebooks.length > 0 ? null : true}
                 onChange={handleOnChangeNotebook}
               >
-                {notebooks &&
-                  notebooks.map((notebook) => (
-                    <option key={notebook.id} value={notebook.id}>
-                      {notebook.name}
-                    </option>
-                  ))}
+                {notebooks?.map((notebook) => (
+                  <option key={notebook.id} value={notebook.id}>
+                    {notebook.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -376,16 +358,15 @@ function StoreCard() {
                 disabled={responseSwipeCardData.length > 0 ? null : true}
                 required
               >
-                {responseSwipeCardData &&
-                  responseSwipeCardData.map((swipeCardTransaction) => (
-                    <option
-                      key={swipeCardTransaction.id}
-                      value={swipeCardTransaction.id}
-                    >
-                      {swipeCardTransaction.transaction_datetime}--
-                      {swipeCardTransaction.customer_name}
-                    </option>
-                  ))}
+                {responseSwipeCardData?.map((swipeCardTransaction) => (
+                  <option
+                    key={swipeCardTransaction.id}
+                    value={swipeCardTransaction.id}
+                  >
+                    {swipeCardTransaction.transaction_datetime}--
+                    {swipeCardTransaction.customer_name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
@@ -415,16 +396,15 @@ function StoreCard() {
               </tr>
             </thead>
             <tbody className="table-group-divider">
-              {rowNotebooks &&
-                rowNotebooks.map((rowNotebook, index) => (
-                  <tr key={rowNotebook.id}>
-                    <th scope="row">{index + 1}</th>
-                    <td>{rowNotebook.status}</td>
-                    <td>{rowNotebook.storage_datetime}</td>
-                    <td>{rowNotebook.closing_balance}</td>
-                    <td>{rowNotebook.note}</td>
-                  </tr>
-                ))}
+              {rowNotebooks?.map((rowNotebook, index) => (
+                <tr key={rowNotebook.id}>
+                  <th scope="row">{index + 1}</th>
+                  <td>{rowNotebook.status}</td>
+                  <td>{rowNotebook.storage_datetime}</td>
+                  <td>{rowNotebook.closing_balance}</td>
+                  <td>{rowNotebook.note}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
