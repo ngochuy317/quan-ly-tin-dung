@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import creditCardApi from "../../../api/creditCardAPI";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import userApi from "../../../api/userAPI";
+import { useNavigate } from "react-router-dom";
 import Creditcard from "../../CreditCard/creditcard";
 import Pagination from "../../Pagination/pagination";
 
@@ -16,6 +17,7 @@ function StoreCard() {
   const [rowNotebooks, setRowNotebooks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [params, setParams] = useState({ page: 1 });
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchEmployeeDetail() {
@@ -82,6 +84,12 @@ function StoreCard() {
   const handleChangePage = (direction) => {
     setParams({ page: currentPage + direction });
     setCurrentPage(currentPage + direction);
+  };
+
+  const handleNavigateSwipecard = () => {
+    let path = "/dashboard/swipecard";
+    navigate(path);
+    localStorage.setItem("activeTab", path);
   };
 
   return (
@@ -391,7 +399,12 @@ function StoreCard() {
           </div>
         </div>
         <div className="d-flex justify-content-end">
-          <button className="btn btn-outline-primary mx-1">Trừ đáo</button>
+          <button
+            className="btn btn-outline-primary mx-1"
+            onClick={handleNavigateSwipecard}
+          >
+            Trừ đáo
+          </button>
           <button
             disabled={isSubmitting}
             type="submit"
