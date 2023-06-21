@@ -28,6 +28,16 @@ function StoresList() {
     setCurrentPage(currentPage + direction);
   };
 
+  const onDelete = async (id) => {
+    try {
+      const response = await storeApi.deleteOne(id);
+      console.log("Delete store successfully", response);
+      setParams({...params});
+    } catch (error) {
+      console.log("Failed to delete store", error);
+    }
+  };
+
   return (
     <div>
       <h2 className="text-center">Danh sách cửa hàng</h2>
@@ -55,6 +65,15 @@ function StoresList() {
                 <td>{store.phone_number}</td>
                 <td>
                   <Link to={store.id + "/"}>Chỉnh sửa</Link>
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    onClick={() => onDelete(store.id)}
+                    className="btn btn-outline-danger mx-3"
+                  >
+                    Xoá
+                  </button>
                 </td>
               </tr>
             ))}

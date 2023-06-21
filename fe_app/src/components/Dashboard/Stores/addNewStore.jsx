@@ -45,7 +45,7 @@ function NewStore() {
             </div>
           </div>
           <div className="col-md-4">
-            <div className="mb-3">
+            <div className="mb-3"> 
               <label className="form-label">Số điện thoại</label>
               <input
                 {...register("phone_number")}
