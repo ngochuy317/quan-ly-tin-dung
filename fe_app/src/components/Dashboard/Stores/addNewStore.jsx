@@ -26,9 +26,10 @@ function NewStore() {
             <div className="mb-3">
               <label className="form-label">Mã địa điểm</label>
               <input
-                {...register("code", { required: true })}
+                {...register("code")}
                 type="text"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -36,9 +37,10 @@ function NewStore() {
             <div className="mb-3">
               <label className="form-label">Tên ghi nhớ</label>
               <input
-                {...register("name", { required: true })}
+                {...register("name")}
                 type="text"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -46,7 +48,7 @@ function NewStore() {
             <div className="mb-3">
               <label className="form-label">Số điện thoại</label>
               <input
-                {...register("phone_number", { required: true })}
+                {...register("phone_number")}
                 type="tel"
                 className="form-control"
               />
@@ -58,7 +60,7 @@ function NewStore() {
             <div className="mb-3">
               <label className="form-label">Ghi chú</label>
               <input
-                {...register("note", { required: true })}
+                {...register("note")}
                 type="text"
                 className="form-control"
               />
@@ -68,9 +70,10 @@ function NewStore() {
             <div className="mb-3">
               <label className="form-label">Địa chỉ</label>
               <input
-                {...register("address", { required: true })}
+                {...register("address")}
                 type="text"
                 className="form-control"
+                required
               />
             </div>
           </div>

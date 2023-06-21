@@ -132,8 +132,9 @@ class NoteBookSerializer(serializers.ModelSerializer):
 
 
 class StoreSerializer(serializers.ModelSerializer):
-    poses = POSSerializer(many=True)
-    notebooks = NoteBookSerializer(many=True)
+    phone_number = serializers.CharField(required=False)
+    poses = POSSerializer(many=True, read_only=True)
+    notebooks = NoteBookSerializer(many=True, read_only=True)
 
     class Meta:
         model = Store
