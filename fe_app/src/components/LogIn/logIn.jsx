@@ -18,7 +18,7 @@ function LoginForm() {
       let access_token = jwtDecode(response.access_token);
       if (access_token.role === "admin") {
         localStorage.setItem("activeTab", "/dashboard/report");
-        navigate("/dashboard/report");
+        navigate("/dashboard/reportadm");
       } else {
         localStorage.setItem("activeTab", "/dashboard/swipecard");
         navigate("/dashboard/swipecard");

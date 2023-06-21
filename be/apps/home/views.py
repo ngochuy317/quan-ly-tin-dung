@@ -131,6 +131,21 @@ class SwipeCardTransactionDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestr
     serializer_class = SwipeCardTransactionSerializer
     permission_classes = [IsAuthenticated]
 
+    def patch(self, request, *args, **kwargs):
+
+        parser = NestedParser(request.data)
+        print("parser", parser)
+        if parser.is_valid():
+            data = parser.validate_data
+            partial = True
+            instance = self.get_object()
+            print("data", data)
+            serializer = SwipeCardTransactionSerializer(instance, data=data, partial=partial)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(status=status.HTTP_200_OK)
+        return Response("Parser error", status=status.HTTP_400_BAD_REQUEST)
+
 
 class SwipeCardTransactionAPIView(ListAPIView):
 
@@ -302,6 +317,7 @@ class EmployeeDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     def put(self, request, *args, **kwargs):
         id = kwargs.get("pk")
         obj = User.objects.filter(id=id).first()
+        print(request.data)
         serializer = UserSerializer(obj, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()

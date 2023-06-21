@@ -42,9 +42,10 @@ function NewPos() {
             <div className="mb-3">
               <label className="form-label">Pos Id</label>
               <input
-                {...register("pos_id", { required: true })}
+                {...register("pos_id")}
                 type="text"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -52,9 +53,10 @@ function NewPos() {
             <div className="mb-3">
               <label className="form-label">Merchant ID(MID)</label>
               <input
-                {...register("mid", { required: true })}
+                {...register("mid")}
                 type="text"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -62,9 +64,10 @@ function NewPos() {
             <div className="mb-3">
               <label className="form-label">Terminal ID(TID)</label>
               <input
-                {...register("tid", { required: true })}
+                {...register("tid")}
                 type="tel"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -74,7 +77,7 @@ function NewPos() {
             <div className="mb-3">
               <label className="form-label">Ghi chú</label>
               <input
-                {...register("note", { required: true })}
+                {...register("note")}
                 type="text"
                 className="form-control"
               />
@@ -84,9 +87,10 @@ function NewPos() {
             <div className="mb-3">
               <label className="form-label">Giới hạn quẹt tiền mỗi ngày</label>
               <input
-                {...register("money_limit_per_day", { required: true })}
+                {...register("money_limit_per_day")}
                 type="number"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -94,7 +98,7 @@ function NewPos() {
             <div className="mb-3">
               <label className="form-label">Trạng thái</label>
               <input
-                {...register("status", { required: true })}
+                {...register("status")}
                 type="text"
                 className="form-control"
               />
@@ -107,16 +111,20 @@ function NewPos() {
             <div className="mb-3">
               <label className="form-label">Ngân hàng</label>
               <input
-                {...register("bank_name", { required: true })}
+                {...register("bank_name")}
                 type="text"
                 className="form-control"
+                required
               />
             </div>
           </div>
           <div className="col-md-6">
             <div className="mb-3">
               <label className="form-label">Cửa hàng</label>
-              <select {...register("store")} className="form-select">
+              <select
+                {...register("store", { required: true })}
+                className="form-select"
+              >
                 {stores?.map((store) => (
                   <option key={store.id} value={store.id}>
                     {store.name}

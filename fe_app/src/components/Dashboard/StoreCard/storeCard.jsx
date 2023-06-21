@@ -370,12 +370,32 @@ function StoreCard() {
               </select>
             </div>
           </div>
+          <div className="col-md-1">
+            <div className="mb-3">
+              <label className="form-label">
+                Ngày cuối{" "}
+                <FontAwesomeIcon
+                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
+                  color="red"
+                />
+              </label>
+              <input
+                {...register("last_date")}
+                type="number"
+                className="form-control"
+                min={1}
+                max={31}
+                required
+              />
+            </div>
+          </div>
         </div>
         <div className="d-flex justify-content-end">
+          <button className="btn btn-outline-primary mx-1">Trừ đáo</button>
           <button
             disabled={isSubmitting}
             type="submit"
-            className="btn btn-outline-primary"
+            className="btn btn-outline-primary mx-3"
           >
             {isSubmitting && (
               <span className="spinner-border spinner-border-sm mr-1"></span>
@@ -392,6 +412,8 @@ function StoreCard() {
                 <th scope="col">Trạng thái</th>
                 <th scope="col">Ngày giờ lưu</th>
                 <th scope="col">Số dư cuối kì</th>
+                <th scope="col">Đã đáo</th>
+                <th scope="col">Ngày cuối</th>
                 <th scope="col">Ghi chú</th>
               </tr>
             </thead>
@@ -402,6 +424,8 @@ function StoreCard() {
                   <td>{rowNotebook.status}</td>
                   <td>{rowNotebook.storage_datetime}</td>
                   <td>{rowNotebook.closing_balance}</td>
+                  <td>{rowNotebook.closing_balance}</td>
+                  <td>{rowNotebook.last_date}</td>
                   <td>{rowNotebook.note}</td>
                 </tr>
               ))}

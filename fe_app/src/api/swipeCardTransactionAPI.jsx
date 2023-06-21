@@ -26,7 +26,11 @@ class SwipeCardTransactionAPI {
 
   updateOne = (id, data) => {
     const url = this.creditCardBaseUrl + id + "/";
-    return axiosClient.patch(url, data);
+    return axiosClient.patch(url, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   };
 }
 

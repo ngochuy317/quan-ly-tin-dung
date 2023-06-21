@@ -12,6 +12,7 @@ from .serializers import UserLoginSerializer
 
 
 class UserLoginView(APIView):
+    authentication_classes = []
 
     def post(self, request):
         serializer = UserLoginSerializer(data=request.data)

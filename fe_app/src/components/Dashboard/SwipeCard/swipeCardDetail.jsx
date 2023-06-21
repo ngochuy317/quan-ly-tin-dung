@@ -30,13 +30,30 @@ function SwipeCardDetail() {
 
   const onSubmit = async (data) => {
     try {
-      console.log(data);
+      if (typeof data.bill_pos_image === "string") {
+        delete data.bill_pos_image;
+      } else {
+        data.bill_pos_image = data.bill_pos_image[0];
+      }
+
+      if (typeof data.customer_id_card_front_image === "string") {
+        delete data.customer_id_card_front_image;
+      } else {
+        data.customer_id_card_front_image =
+          data.customer_id_card_front_image[0];
+      }
+
+      if (typeof data.customer_id_card_back_image === "string") {
+        delete data.customer_id_card_back_image;
+      } else {
+        data.customer_id_card_back_image = data.customer_id_card_back_image[0];
+      }
+
       delete data.creditcard.credit_card_front_image;
       delete data.creditcard.credit_card_back_image;
-      delete data.customer_id_card_front_image;
-      delete data.customer_id_card_back_image;
       delete data.pos;
 
+      console.log("🚀 ~ file: swipeCardDetail.jsx:56 ~ onSubmit ~ data:", data)
       const response = await swipeCardTransactionAPI.updateOne(id, data);
       console.log("Update Swipecard successfully", response);
       navigate("./..");
@@ -142,6 +159,7 @@ function SwipeCardDetail() {
                 {...register("customer_money_needed")}
                 type="number"
                 className="form-control"
+                max="999999999"
               />
             </div>
           </div>
@@ -167,25 +185,58 @@ function SwipeCardDetail() {
           </div>
         </div>
         <div className="row">
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div className="mb-3">
               <label className="form-label">Ảnh mặt trước cmnd/cccd</label>
-              <img
-                src={`${dataSwipCardDetail?.customer_id_card_front_image}`}
-                style={{ maxWidth: "100%", height: "auto" }}
-                alt=""
-              ></img>
+              {dataSwipCardDetail?.customer_id_card_front_image ? (
+                <img
+                  src={`${dataSwipCardDetail?.customer_id_card_front_image}`}
+                  style={{ maxWidth: "100%", height: "auto" }}
+                  alt=""
+                ></img>
+              ) : (
+                <input
+                  {...register("customer_id_card_front_image")}
+                  type="file"
+                  className="form-control"
+                />
+              )}
             </div>
           </div>
-
-          <div className="col-md-6">
+          <div className="col-md-4">
             <div className="mb-3">
               <label className="form-label">Ảnh mặt sau cmnd/cccd</label>
-              <img
-                src={`${dataSwipCardDetail?.customer_id_card_back_image}`}
-                style={{ maxWidth: "100%", height: "auto" }}
-                alt=""
-              ></img>
+              {dataSwipCardDetail?.customer_id_card_back_image ? (
+                <img
+                  src={`${dataSwipCardDetail?.customer_id_card_back_image}`}
+                  style={{ maxWidth: "100%", height: "auto" }}
+                  alt=""
+                ></img>
+              ) : (
+                <input
+                  {...register("customer_id_card_back_image")}
+                  type="file"
+                  className="form-control"
+                />
+              )}
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="mb-3">
+              <label className="form-label">Ảnh bill máy pos</label>
+              {dataSwipCardDetail?.bill_pos_image ? (
+                <img
+                  src={`${dataSwipCardDetail?.bill_pos_image}`}
+                  style={{ maxWidth: "100%", height: "auto" }}
+                  alt=""
+                ></img>
+              ) : (
+                <input
+                  {...register("customer_id_card_front_image")}
+                  type="file"
+                  className="form-control"
+                />
+              )}
             </div>
           </div>
         </div>

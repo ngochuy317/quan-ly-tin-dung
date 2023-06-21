@@ -215,8 +215,7 @@ function SideBar() {
 
 function SideBarItem(props) {
   return (
-    <a
-      href="/#"
+    <div
       className={`nav-link align-middle px-0 text-center ${
         props.isActive ? "active" : ""
       }`}
@@ -229,7 +228,7 @@ function SideBarItem(props) {
           <FontAwesomeIcon icon={icon({ name: "lock", style: "solid" })} />
         ) : null}
       </span>
-    </a>
+    </div>
   );
 }
 

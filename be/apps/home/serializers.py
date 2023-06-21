@@ -115,7 +115,7 @@ class RowNotebookSerializer(serializers.ModelSerializer):
 
 class NoteBookSerializer(serializers.ModelSerializer):
     store_name = serializers.ReadOnlyField(source='store.name')
-    row_notebook = RowNotebookSerializer(many=True)
+    row_notebook = RowNotebookSerializer(many=True, read_only=True)
 
     class Meta:
         model = NoteBook
@@ -161,6 +161,7 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
                 self.fields['creditcard'] = serializers.SerializerMethodField()
                 self.fields['customer_id_card_front_image'] = serializers.SerializerMethodField()
                 self.fields['customer_id_card_back_image'] = serializers.SerializerMethodField()
+                self.fields['bill_pos_image'] = serializers.SerializerMethodField()
                 self.fields['pos'] = serializers.SerializerMethodField()
         except KeyError:
             pass
@@ -199,10 +200,19 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
         return instance
 
     def get_customer_id_card_front_image(self, obj):
-        return self.context['request'].build_absolute_uri(obj.customer_id_card_front_image.url)
+        if obj.customer_id_card_front_image:
+            return self.context['request'].build_absolute_uri(obj.customer_id_card_front_image.url)
+        return ""
 
     def get_customer_id_card_back_image(self, obj):
-        return self.context['request'].build_absolute_uri(obj.customer_id_card_back_image.url)
+        if obj.customer_id_card_back_image:
+            return self.context['request'].build_absolute_uri(obj.customer_id_card_back_image.url)
+        return ""
+
+    def get_bill_pos_image(self, obj):
+        if obj.bill_pos_image:
+            return self.context['request'].build_absolute_uri(obj.bill_pos_image.url)
+        return ""
 
 
 class StoreCostSerializer(serializers.ModelSerializer):

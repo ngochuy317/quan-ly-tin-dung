@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.timezone import now
+import datetime
 
 
 class Store(models.Model):
@@ -38,8 +39,8 @@ class POS(models.Model):
     pos_id = models.CharField(max_length=127)
     mid = models.CharField(max_length=127)
     tid = models.CharField(max_length=127)
-    note = models.TextField()
-    status = models.CharField(max_length=30)
+    note = models.TextField(blank=True, null=True)
+    status = models.CharField(max_length=30, blank=True, null=True)
     bank_name = models.CharField(max_length=127)
     money_limit_per_day = models.PositiveBigIntegerField(default=0)
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="poses")
@@ -80,6 +81,7 @@ class RowNotebook(models.Model):
     status = models.CharField(max_length=128)
     storage_datetime = models.DateTimeField(default=now)
     closing_balance = models.BigIntegerField(blank=True, null=True)
+    last_date = models.DateField(default=datetime.date.today)
     note = models.TextField(blank=True, null=True)
 
     def __str__(self):
@@ -136,8 +138,9 @@ class SwipeCardTransaction(models.Model):
     customer_phone_number = models.CharField(max_length=12, blank=True, null=True)
     customer_gender = models.CharField(max_length=127, blank=True, null=True)
     customer_account_number = models.CharField(max_length=127, blank=True, null=True)
-    customer_id_card_front_image = models.ImageField(upload_to='uploads/customer/')
-    customer_id_card_back_image = models.ImageField(upload_to='uploads/customer/')
+    customer_id_card_front_image = models.ImageField(upload_to='uploads/customer/', blank=True, null=True)
+    customer_id_card_back_image = models.ImageField(upload_to='uploads/customer/', blank=True, null=True)
+    bill_pos_image = models.ImageField(upload_to='uploads/pos/')
     customer_money_needed = models.PositiveBigIntegerField(default=0)
     customer_account = models.CharField(max_length=127, blank=True, null=True)
     customer_bank_account = models.CharField(max_length=127, blank=True, null=True)
