@@ -3,21 +3,8 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import employeeApi from "../../../api/employeeAPI";
 import storeApi from "../../../api/storeAPI";
-
-const Roles = [
-  {
-    roleKey: "admin",
-    roleName: "Admin",
-  },
-  {
-    roleKey: "employee",
-    roleName: "Nhân viên",
-  },
-  {
-    roleKey: "collaborators",
-    roleName: "Cộng tác viên",
-  },
-];
+import { Roles } from "../../utils/constants";
+import { genderChoices } from "../../utils/constants";
 
 function NewEmployee() {
   const [stores, setStores] = useState([]);
@@ -155,11 +142,16 @@ function NewEmployee() {
           <div className="col-md-3">
             <div className="mb-3">
               <label className="form-label">Giới tính</label>
-              <input
+              <select
                 {...register("infomation_detail.gender")}
-                type="text"
-                className="form-control"
-              />
+                className="form-select"
+              >
+                {genderChoices.map((gender) => (
+                  <option key={gender.value} value={gender.value}>
+                    {gender.label}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
           <div className="col-md-3">
@@ -200,7 +192,9 @@ function NewEmployee() {
               <select
                 {...register("infomation_detail.store")}
                 className="form-select"
+                required
               >
+                <option value="">Chọn cửa hàng</option>
                 {stores?.map((store) => (
                   <option key={store.id} value={store.id}>
                     {store.name}
@@ -212,7 +206,8 @@ function NewEmployee() {
           <div className="col-md-4">
             <div className="mb-3">
               <label className="form-label">Cấp bậc</label>
-              <select {...register("role")} className="form-select">
+              <select {...register("role")} className="form-select" required>
+                <option value="">Chọn cấp bậc</option>
                 {Roles?.map((role) => (
                   <option key={role.roleKey} value={role.roleKey}>
                     {role.roleName}

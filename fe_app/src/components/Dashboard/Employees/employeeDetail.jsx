@@ -3,21 +3,8 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import employeeApi from "../../../api/employeeAPI";
 import storeApi from "../../../api/storeAPI";
-
-const Roles = [
-  {
-    roleKey: "admin",
-    roleName: "Admin",
-  },
-  {
-    roleKey: "employee",
-    roleName: "Nhân viên",
-  },
-  {
-    roleKey: "collaborators",
-    roleName: "Cộng tác viên",
-  },
-];
+import { Roles } from "../../utils/constants";
+import { genderChoices } from "../../utils/constants";
 
 function EmployeeDetail() {
   const [stores, setStores] = useState([]);
@@ -38,21 +25,26 @@ function EmployeeDetail() {
         initValues.infomation_detail = {};
         initValues.infomation_detail.fullname =
           response.infomation_detail.fullname;
-        initValues.infomation_detail.address = response.infomation_detail.address;
+        initValues.infomation_detail.address =
+          response.infomation_detail.address;
         initValues.infomation_detail.transaction_discount =
           response.infomation_detail.transaction_discount;
         initValues.infomation_detail.gender = response.infomation_detail.gender;
         initValues.infomation_detail.dob = response.infomation_detail.dob;
-        initValues.infomation_detail.date_joined = response.infomation_detail.date_joined;
+        initValues.infomation_detail.date_joined =
+          response.infomation_detail.date_joined;
         initValues.infomation_detail.salary = response.infomation_detail.salary;
-        initValues.infomation_detail.phone_number = response.infomation_detail.phone_number;
-        initValues.identity_card = response.infomation_detail.identity_card;
-        initValues.place_of_issue_of_identity_card =
+        initValues.infomation_detail.phone_number =
+          response.infomation_detail.phone_number;
+        initValues.infomation_detail.identity_card =
+          response.infomation_detail.identity_card;
+        initValues.infomation_detail.place_of_issue_of_identity_card =
           response.infomation_detail.place_of_issue_of_identity_card;
-        initValues.date_of_issue_of_identity_card =
+        initValues.infomation_detail.date_of_issue_of_identity_card =
           response.infomation_detail.date_of_issue_of_identity_card;
         initValues.username = response.username;
-        initValues.infomation_detail.store = response.infomation_detail.store_id;
+        initValues.infomation_detail.store =
+          response.infomation_detail.store_id;
         initValues.role = response.role;
         setStores(responseStore);
         reset({ ...initValues });
@@ -96,7 +88,7 @@ function EmployeeDetail() {
                 {...register("infomation_detail.fullname")}
                 type="text"
                 className="form-control"
-                readOnly
+                required
               />
             </div>
           </div>
@@ -113,12 +105,12 @@ function EmployeeDetail() {
           </div>
           <div className="col-md-4">
             <div className="mb-3">
-              <label className="form-label">Mật khẩu</label>
+              {/* <label className="form-label">Mật khẩu</label>
               <input
                 {...register("password")}
                 type="password"
                 className="form-control"
-              />
+              /> */}
             </div>
           </div>
           <div className="col-md-7">
@@ -138,6 +130,7 @@ function EmployeeDetail() {
                 {...register("infomation_detail.phone_number")}
                 type="tel"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -147,9 +140,10 @@ function EmployeeDetail() {
             <div className="mb-3">
               <label className="form-label">CMND/CCCD</label>
               <input
-                {...register("identity_card")}
+                {...register("infomation_detail.identity_card")}
                 type="text"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -157,9 +151,12 @@ function EmployeeDetail() {
             <div className="mb-3">
               <label className="form-label">Ngày cấp CMND/CCCD</label>
               <input
-                {...register("date_of_issue_of_identity_card")}
+                {...register(
+                  "infomation_detail.date_of_issue_of_identity_card"
+                )}
                 type="date"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -167,9 +164,12 @@ function EmployeeDetail() {
             <div className="mb-3">
               <label className="form-label">Nơi cấp CMND/CCCD</label>
               <input
-                {...register("place_of_issue_of_identity_card")}
+                {...register(
+                  "infomation_detail.place_of_issue_of_identity_card"
+                )}
                 type="text"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -189,11 +189,16 @@ function EmployeeDetail() {
           <div className="col-md-3">
             <div className="mb-3">
               <label className="form-label">Giới tính</label>
-              <input
+              <select
                 {...register("infomation_detail.gender")}
-                type="text"
-                className="form-control"
-              />
+                className="form-select"
+              >
+                {genderChoices.map((gender) => (
+                  <option key={gender.value} value={gender.value}>
+                    {gender.label}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
           <div className="col-md-3">
@@ -203,6 +208,7 @@ function EmployeeDetail() {
                 {...register("infomation_detail.dob")}
                 type="date"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -231,7 +237,12 @@ function EmployeeDetail() {
           <div className="col-md-6">
             <div className="mb-3">
               <label className="form-label">Cửa hàng</label>
-              <select {...register("infomation_detail.store")} className="form-select">
+              <select
+                {...register("infomation_detail.store")}
+                className="form-select"
+                required
+              >
+                <option value="">Chọn cửa hàng</option>
                 {stores?.map((store) => (
                   <option key={store.id} value={store.id}>
                     {store.name}
@@ -243,7 +254,8 @@ function EmployeeDetail() {
           <div className="col-md-4">
             <div className="mb-3">
               <label className="form-label">Cấp bậc</label>
-              <select {...register("role")} className="form-select">
+              <select {...register("role")} className="form-select" required>
+                <option value="">Chọn cấp bậc</option>
                 {Roles?.map((role) => (
                   <option key={role.roleKey} value={role.roleKey}>
                     {role.roleName}

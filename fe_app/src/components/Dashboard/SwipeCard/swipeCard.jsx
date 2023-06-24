@@ -334,10 +334,11 @@ function SwipeCard() {
             <tr>
               <th scope="col">#</th>
               <th scope="col">Ngày giao dịch</th>
+              <th scope="col">Tên trên thẻ thẻ</th>
+              <th scope="col">Số thẻ</th>
+              <th scope="col">Số tiền KH cần</th>
               <th scope="col">Tên khách hàng</th>
               <th scope="col">SDT khách hàng</th>
-              <th scope="col">Số tiền KH cần</th>
-              <th scope="col">Số thẻ</th>
               <th scope="col">Đáo hạn</th>
               <th scope="col">Thao tác</th>
             </tr>
@@ -347,12 +348,13 @@ function SwipeCard() {
               <tr key={swipeCard.id}>
                 <th scope="row">{index + 1}</th>
                 <td>{swipeCard.transaction_datetime}</td>
-                <td>{swipeCard.customer_name}</td>
-                <td>{swipeCard.customer_phone_number}</td>
-                <td>{swipeCard.customer_money_needed}</td>
+                <td>{swipeCard.creditcard?.card_name}</td>
                 <td>
                   <Link>{swipeCard.creditcard?.card_number}</Link>
                 </td>
+                <td>{swipeCard.customer_money_needed}</td>
+                <td>{swipeCard.customer_name}</td>
+                <td>{swipeCard.customer_phone_number}</td>
                 <td>
                   {swipeCard.creditcard?.is_expired ? "Đã đáo" : "Chưa đáo"}
                 </td>

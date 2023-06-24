@@ -29,13 +29,18 @@ class Group(models.Model):
 
 
 class InfomationDetail(models.Model):
+    GENDER_CHOICES = (
+        (1, "Nam"),
+        (2, "Nữ"),
+        (3, "Khác")
+    )
     fullname = models.CharField(max_length=511)
     address = models.CharField(max_length=1023)
     phone_number = models.CharField(max_length=10)
     identity_card = models.CharField(max_length=20)
     place_of_issue_of_identity_card = models.CharField(max_length=511)
     date_of_issue_of_identity_card = models.DateField()
-    gender = models.CharField(max_length=10)
+    gender = models.PositiveSmallIntegerField(choices=GENDER_CHOICES, default=1)
     dob = models.DateField()
     date_joined = models.DateField()
     salary = models.IntegerField()

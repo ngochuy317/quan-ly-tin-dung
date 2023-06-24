@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import employeeApi from "../../../api/employeeAPI";
 import Pagination from "../../Pagination/pagination";
+import { genderChoices } from "../../utils/constants";
 
 function EmployeesList(props) {
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,6 +27,16 @@ function EmployeesList(props) {
   const handleChangePage = (direction) => {
     setParams({ page: currentPage + direction });
     setCurrentPage(currentPage + direction);
+  };
+
+  const onDelete = async (id) => {
+    try {
+      const response = await employeeApi.deleteOne(id);
+      console.log("Delete employee successfully", response);
+      setParams({ ...params });
+    } catch (error) {
+      console.log("Failed to delete employee", error);
+    }
   };
 
   return (
@@ -54,12 +65,21 @@ function EmployeesList(props) {
                     <td>{user.infomation_detail.fullname}</td>
                     <td>{user.infomation_detail.phone_number}</td>
                     <td>{user.infomation_detail.identity_card}</td>
-                    <td>{user.infomation_detail.gender}</td>
+                    <td>{genderChoices.find((c) => c.value === user.infomation_detail.gender)?.label}</td>
                     <td>{user.infomation_detail.dob}</td>
                     <td>{user.infomation_detail.salary}</td>
                     <td>{user.infomation_detail.store}</td>
                     <td>
                       <Link to={user.id + "/"}>Chỉnh sửa</Link>
+                    </td>
+                    <td>
+                      <button
+                        type="button"
+                        onClick={() => onDelete(user.id)}
+                        className="btn btn-outline-danger mx-3"
+                      >
+                        Xoá
+                      </button>
                     </td>
                   </tr>
                 ))

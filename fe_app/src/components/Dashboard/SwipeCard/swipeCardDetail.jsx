@@ -287,7 +287,7 @@ function SwipeCardDetail() {
         <div className="row">
           <div className="col-md-4">
             <div className="mb-3">
-              <label className="form-label">Tên</label>
+              <label className="form-label">Tên trên thẻ</label>
               <input
                 {...register("creditcard.card_name")}
                 type="text"

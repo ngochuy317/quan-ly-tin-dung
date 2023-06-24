@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import posApi from "../../../api/posAPI";
 import storeApi from "../../../api/storeAPI";
+import { posStatus } from "../../utils/constants";
 
 function POSesDetail() {
   const [stores, setStores] = useState([]);
@@ -16,7 +17,7 @@ function POSesDetail() {
         const response = await posApi.getDetail(id);
         console.log("Fetch pos detail successfully", response);
 
-        const responseJSONStore = await storeApi.getAll();
+        const responseJSONStore = await storeApi.getAllFull();
         console.log("Fetch store list successfully", responseJSONStore);
 
         let initValues = {};
@@ -118,12 +119,13 @@ function POSesDetail() {
           <div className="col-md-3">
             <div className="mb-3">
               <label className="form-label">Trạng thái</label>
-              <input
-                {...register("status", { required: true })}
-                type="text"
-                className="form-control"
-              />
-              {/* {errors.status && <p style={{ color: "red"}}>This is required.</p>} */}
+              <select {...register("status")} className="form-select">
+                {posStatus.map((pos) => (
+                  <option key={pos.value} value={pos.value}>
+                    {pos.label}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
         </div>
@@ -141,7 +143,8 @@ function POSesDetail() {
           <div className="col-md-6">
             <div className="mb-3">
               <label className="form-label">Cửa hàng</label>
-              <select {...register("store")} className="form-select">
+              <select {...register("store")} className="form-select" required>
+                <option value="">Chọn cửa hàng</option>
                 {stores?.map((store) => (
                   <option key={store.id} value={store.id}>
                     {store.name}

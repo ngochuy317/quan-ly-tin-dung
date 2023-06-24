@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import posApi from "../../../api/posAPI";
 import Pagination from "../../Pagination/pagination";
+import { posStatus } from "../../utils/constants";
 
 function POSesList() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,6 +27,16 @@ function POSesList() {
   const handleChangePage = (direction) => {
     setParams({ page: currentPage + direction });
     setCurrentPage(currentPage + direction);
+  };
+
+  const onDelete = async (id) => {
+    try {
+      const response = await posApi.deleteOne(id);
+      console.log("Delete pos successfully", response);
+      setParams({ ...params });
+    } catch (error) {
+      console.log("Failed to delete pos", error);
+    }
   };
 
   return (
@@ -54,11 +65,20 @@ function POSesList() {
                 <td>{pos.mid}</td>
                 <td>{pos.tid}</td>
                 <td>{pos.note}</td>
-                <td>{pos.status}</td>
+                <td>{posStatus.find((c) => c.value === pos.status)?.label}</td>
                 <td>{pos.bank_name}</td>
                 <td>{pos.store_name}</td>
                 <td>
                   <Link to={pos.id + "/"}>Chỉnh sửa</Link>
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    onClick={() => onDelete(pos.id)}
+                    className="btn btn-outline-danger mx-3"
+                  >
+                    Xoá
+                  </button>
                 </td>
               </tr>
             ))}

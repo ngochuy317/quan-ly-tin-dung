@@ -60,10 +60,7 @@ function SwipeCardInput(props) {
                 color="red"
               />
             </label>
-            <select
-              {...register("pos", { required: true })}
-              className="form-select"
-            >
+            <select {...register("pos")} className="form-select" required>
               {posMachine?.map((pos) => (
                 <option key={pos.id} value={pos.id}>
                   {pos.id}-{pos.mid}-{pos.tid}-{pos.bank_name}
@@ -74,35 +71,21 @@ function SwipeCardInput(props) {
         </div>
         <div className="col-md-2">
           <div className="mb-3">
-            <label className="form-label">
-              Tên trên thẻ{" "}
-              <FontAwesomeIcon
-                icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                color="red"
-              />
-            </label>
+            <label className="form-label">Tên trên thẻ </label>
             <input
-              {...register("card_name")}
+              {...register("creditcard.card_name")}
               type="text"
               className="form-control"
-              required
             />
           </div>
         </div>
         <div className="col-md-2">
           <div className="mb-3">
-            <label className="form-label">
-              Số thẻ{" "}
-              <FontAwesomeIcon
-                icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                color="red"
-              />
-            </label>
+            <label className="form-label">Số thẻ </label>
             <input
-              {...register("card_number")}
+              {...register("creditcard.card_number")}
               type="text"
               className="form-control"
-              required
             />
           </div>
         </div>
@@ -129,9 +112,13 @@ function SwipeCardInput(props) {
               White lbl
             </label>
             <button
+              disabled={isSubmitting}
               onClick={() => deleteFormInput()}
               className="btn btn-outline-danger"
             >
+              {isSubmitting && (
+                <span className="spinner-border spinner-border-sm mr-1"></span>
+              )}
               Xoá
             </button>
           </div>

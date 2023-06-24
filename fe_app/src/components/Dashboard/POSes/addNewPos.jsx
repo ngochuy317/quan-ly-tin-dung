@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import posApi from "../../../api/posAPI";
 import storeApi from "../../../api/storeAPI";
+import { posStatus } from "../../utils/constants";
 
 function NewPos() {
   const [stores, setStores] = useState([]);
@@ -97,11 +98,16 @@ function NewPos() {
           <div className="col-md-3">
             <div className="mb-3">
               <label className="form-label">Trạng thái</label>
-              <input
-                {...register("status")}
-                type="text"
-                className="form-control"
-              />
+              <select
+                {...register("status", { required: true })}
+                className="form-select"
+              >
+                {posStatus.map((pos) => (
+                  <option key={pos.value} value={pos.value}>
+                    {pos.label}
+                  </option>
+                ))}
+              </select>
               {/* {errors.status && <p style={{ color: "red"}}>This is required.</p>} */}
             </div>
           </div>
@@ -124,7 +130,9 @@ function NewPos() {
               <select
                 {...register("store", { required: true })}
                 className="form-select"
+                required
               >
+                <option value="">Chọn cửa hàng</option>
                 {stores?.map((store) => (
                   <option key={store.id} value={store.id}>
                     {store.name}

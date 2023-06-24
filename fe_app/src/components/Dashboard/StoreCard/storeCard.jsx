@@ -6,16 +6,16 @@ import creditCardApi from "../../../api/creditCardAPI";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import userApi from "../../../api/userAPI";
 import { useNavigate } from "react-router-dom";
-import Creditcard from "../../CreditCard/creditcard";
 import Pagination from "../../Pagination/pagination";
 
 function StoreCard() {
-  const { register, handleSubmit, reset, formState } = useForm();
+  const { register, handleSubmit, reset, formState, setValue } = useForm();
   const { isSubmitting } = formState;
   const [notebooks, setNotebooks] = useState([]);
   const [responseSwipeCardData, setResponseSwipeCardData] = useState([]);
   const [rowNotebooks, setRowNotebooks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [reloadAfterSubmit, setReloadAfterSubmit] = useState(false);
   const [params, setParams] = useState({ page: 1 });
   const navigate = useNavigate();
 
@@ -53,22 +53,54 @@ function StoreCard() {
           responseHistorySwipeCard
         );
         setResponseSwipeCardData(responseHistorySwipeCard.results);
+        if (responseHistorySwipeCard.results.length > 0) {
+          setValue(
+            "creditcard.card_number",
+            responseHistorySwipeCard.results[0].creditcard?.card_number
+          );
+          setValue(
+            "creditcard.card_name",
+            responseHistorySwipeCard.results[0].creditcard?.card_name
+          );
+        }
       } catch (error) {
         console.log("Failed to swipe card history", error);
       }
     }
     fetchTransactionHistory();
-  }, []);
+  }, [reloadAfterSubmit]);
 
   const onSubmit = async (data) => {
-    console.log(data);
     try {
       data.creditcard.credit_card_front_image =
         data.creditcard.credit_card_front_image[0];
       data.creditcard.credit_card_back_image =
         data.creditcard.credit_card_back_image[0];
+      data.is_creditcard_stored = true;
+      console.log("data", data);
       const response = await creditCardApi.saveCreditCard2Notebook(data);
       console.log("Save creditcard 2 notebook successfully", response);
+      setReloadAfterSubmit(!reloadAfterSubmit);
+      reset({
+        creditcard: {
+          card_number: "",
+          card_bank_name: "",
+          line_of_credit: "",
+          card_name: "",
+          card_issued_date: "",
+          card_expire_date: "",
+          card_ccv: "",
+          credit_card_front_image: "",
+          credit_card_back_image: "",
+        },
+        statement_date: "",
+        maturity_date: "",
+        statement_date: "",
+        status: "",
+        closing_balance: "",
+        note: "",
+        last_date: "",
+      });
     } catch (error) {
       console.log("Failed to save creditcard 2 notebook");
     }
@@ -81,10 +113,17 @@ function StoreCard() {
     console.log("notebook.row_notebook", notebook.row_notebook);
   };
 
-  const handleChangePage = (direction) => {
-    setParams({ page: currentPage + direction });
-    setCurrentPage(currentPage + direction);
+  const handleOnChangeTransaction = (e) => {
+    let val = parseInt(e.target.value);
+    let swipeCardData = responseSwipeCardData.find((c) => c.id === val);
+    setValue("creditcard.card_number", swipeCardData?.creditcard?.card_number);
+    setValue("creditcard.card_name", swipeCardData?.creditcard?.card_name);
   };
+
+  // const handleChangePage = (direction) => {
+  //   setParams({ page: currentPage + direction });
+  //   setCurrentPage(currentPage + direction);
+  // };
 
   const handleNavigateSwipecard = () => {
     let path = "/dashboard/swipecard";
@@ -142,6 +181,7 @@ function StoreCard() {
                 className="form-select"
                 disabled={notebooks.length > 0 ? null : true}
                 onChange={handleOnChangeNotebook}
+                required
               >
                 {notebooks?.map((notebook) => (
                   <option key={notebook.id} value={notebook.id}>
@@ -193,6 +233,7 @@ function StoreCard() {
                 {...register("closing_balance")}
                 type="number"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -208,14 +249,15 @@ function StoreCard() {
           </div>
         </div>
         <h5>Thông tin thẻ</h5>
-        {/* <div className="row">
+        <div className="row">
           <div className="col-md-4">
             <div className="mb-3">
               <label className="form-label">Số thẻ</label>
               <input
-                {...register("card_number")}
+                {...register("creditcard.card_number")}
                 type="text"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -223,9 +265,10 @@ function StoreCard() {
             <div className="mb-3">
               <label className="form-label">Ngân hàng</label>
               <input
-                {...register("card_bank_name")}
+                {...register("creditcard.card_bank_name")}
                 type="text"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -233,9 +276,10 @@ function StoreCard() {
             <div className="mb-3">
               <label className="form-label">Hạn mức thẻ</label>
               <input
-                {...register("line_of_credit")}
+                {...register("creditcard.line_of_credit")}
                 type="number"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -246,6 +290,7 @@ function StoreCard() {
                 {...register("fee")}
                 type="number"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -253,11 +298,12 @@ function StoreCard() {
         <div className="row">
           <div className="col-md-4">
             <div className="mb-3">
-              <label className="form-label">Tên</label>
+              <label className="form-label">Tên trên thẻ</label>
               <input
-                {...register("card_name")}
+                {...register("creditcard.card_name")}
                 type="text"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -265,9 +311,10 @@ function StoreCard() {
             <div className="mb-3">
               <label className="form-label">Ngày mở thẻ</label>
               <input
-                {...register("card_issued_date")}
+                {...register("creditcard.card_issued_date")}
                 type="date"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -275,9 +322,10 @@ function StoreCard() {
             <div className="mb-3">
               <label className="form-label">Ngày hết hạn</label>
               <input
-                {...register("card_expire_date")}
+                {...register("creditcard.card_expire_date")}
                 type="date"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -285,32 +333,35 @@ function StoreCard() {
             <div className="mb-3">
               <label className="form-label">CCV</label>
               <input
-                {...register("card_ccv")}
+                {...register("creditcard.card_ccv")}
                 type="text"
                 maxLength="3"
                 className="form-control"
+                required
               />
             </div>
           </div>
         </div>
         <div className="row">
-          <div className="col-md-2">
+          <div className="col-md-3">
             <div className="mb-3">
               <label className="form-label">Ngày sao kê</label>
               <input
                 {...register("statement_date")}
                 type="date"
                 className="form-control"
+                required
               />
             </div>
           </div>
-          <div className="col-md-2">
+          <div className="col-md-3">
             <div className="mb-3">
               <label className="form-label">Ngày cuối đáo</label>
               <input
                 {...register("maturity_date")}
                 type="date"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -348,8 +399,7 @@ function StoreCard() {
               />
             </div>
           </div>
-        </div> */}
-        <Creditcard register={register} />
+        </div>
         <div className="row">
           <div className="col-md-5">
             <div className="mb-3">
@@ -365,6 +415,7 @@ function StoreCard() {
                 className="form-select"
                 disabled={responseSwipeCardData.length > 0 ? null : true}
                 required
+                onChange={handleOnChangeTransaction}
               >
                 {responseSwipeCardData?.map((swipeCardTransaction) => (
                   <option

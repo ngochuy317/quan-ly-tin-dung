@@ -134,12 +134,10 @@ class SwipeCardTransactionDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestr
     def patch(self, request, *args, **kwargs):
 
         parser = NestedParser(request.data)
-        print("parser", parser)
         if parser.is_valid():
             data = parser.validate_data
             partial = True
             instance = self.get_object()
-            print("data", data)
             serializer = SwipeCardTransactionSerializer(instance, data=data, partial=partial)
             serializer.is_valid(raise_exception=True)
             serializer.save()
@@ -160,6 +158,7 @@ class SwipeCardTransactionAPIView(ListAPIView):
         parser = NestedParser(request.data)
         if parser.is_valid():
             data = parser.validate_data
+            print("data", data)
             request.data["user"] = request.user.id
             data["user"] = request.user.id
             serializer = SwipeCardTransactionSerializer(data=data)
@@ -170,6 +169,7 @@ class SwipeCardTransactionAPIView(ListAPIView):
 
     def get_queryset(self):
         qs = super().get_queryset()
+        qs = qs.filter(is_creditcard_stored=False)
         if self.request.user.role != "admin":
             qs = qs.filter(user=self.request.user.id)
         return qs
@@ -317,7 +317,6 @@ class EmployeeDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     def put(self, request, *args, **kwargs):
         id = kwargs.get("pk")
         obj = User.objects.filter(id=id).first()
-        print(request.data)
         serializer = UserSerializer(obj, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()

@@ -61,10 +61,12 @@ function NewNotebook() {
                 />
               </label>
               <select
-                {...register("store", { required: true })}
+                {...register("store")}
                 className="form-select"
                 defaultValue={{ label: "Select Dept", value: 0 }}
+                required
               >
+                <option value="">Chọn cửa hàng</option>
                 {stores?.map((store) => (
                   <option key={store.id} value={store.id}>
                     {store.name}

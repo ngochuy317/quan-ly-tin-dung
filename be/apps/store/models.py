@@ -36,11 +36,17 @@ class StoreCost(models.Model):
 
 class POS(models.Model):
 
+    STATUS_POS_CHOICES = (
+        (1, "Đang hoạt động"),
+        (2, "Tạm dừng"),
+        (3, "Đóng")
+    )
+
     pos_id = models.CharField(max_length=127)
     mid = models.CharField(max_length=127)
     tid = models.CharField(max_length=127)
     note = models.TextField(blank=True, null=True)
-    status = models.CharField(max_length=30, blank=True, null=True)
+    status = models.PositiveSmallIntegerField(choices=STATUS_POS_CHOICES, default=1)
     bank_name = models.CharField(max_length=127)
     money_limit_per_day = models.PositiveBigIntegerField(default=0)
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="poses")
@@ -81,7 +87,7 @@ class RowNotebook(models.Model):
     status = models.CharField(max_length=128)
     storage_datetime = models.DateTimeField(default=now)
     closing_balance = models.BigIntegerField(blank=True, null=True)
-    last_date = models.DateField(default=datetime.date.today)
+    last_date = models.IntegerField(default=0)
     note = models.TextField(blank=True, null=True)
 
     def __str__(self):
@@ -103,8 +109,8 @@ class CreditCard(models.Model):
     card_ccv = models.CharField(max_length=127, blank=True, null=True)
     statement_date = models.DateField(blank=True, null=True)
     maturity_date = models.DateField(blank=True, null=True)
-    credit_card_front_image = models.ImageField(upload_to='uploads/creditcards/')
-    credit_card_back_image = models.ImageField(upload_to='uploads/creditcards/')
+    credit_card_front_image = models.ImageField(upload_to='uploads/creditcards/', blank=True, null=True)
+    credit_card_back_image = models.ImageField(upload_to='uploads/creditcards/', blank=True, null=True)
     note = models.TextField(blank=True, null=True)
     notebook = models.ForeignKey(
         RowNotebook,
@@ -128,6 +134,7 @@ class Customer(models.Model):
 
 class SwipeCardTransaction(models.Model):
 
+    is_creditcard_stored = models.BooleanField(default=False)
     store_id = models.PositiveBigIntegerField()
     store_code = models.CharField(max_length=127)
     store_name = models.CharField(max_length=127)

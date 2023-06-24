@@ -79,7 +79,8 @@ function NotebookDetail() {
                   color="red"
                 />
               </label>
-              <select {...register("store")} className="form-select">
+              <select {...register("store")} className="form-select" required>
+                <option value="">Chọn cửa hàng</option>
                 {stores?.map((store) => (
                   <option key={store.id} value={store.id}>
                     {store.name}

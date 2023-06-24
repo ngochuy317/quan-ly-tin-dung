@@ -23,6 +23,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class InfomationDetailSerializer(serializers.ModelSerializer):
     store_name = serializers.ReadOnlyField(source='store.name')
+    # store = serializers.IntegerField(required=True)
 
     class Meta:
         model = InfomationDetail
@@ -37,6 +38,7 @@ class InfomationDetailSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     infomation_detail = InfomationDetailSerializer()
+    password = serializers.CharField(allow_blank=True, required=False)
 
     class Meta:
         model = User
@@ -46,6 +48,25 @@ class UserSerializer(serializers.ModelSerializer):
         infomation_detail_data = validated_data.pop('infomation_detail')
         infomation_detail_instance = InfomationDetail.objects.create(**infomation_detail_data)
         instance = User.objects.create(**validated_data, infomation_detail=infomation_detail_instance)
+        return instance
+
+    def update(self, instance, validated_data):
+        infomation_detail = validated_data.pop('infomation_detail')
+        if instance.infomation_detail:
+            infomation_detail_instance = InfomationDetail.objects.filter(id=instance.infomation_detail.id).first()
+            if infomation_detail_instance:
+                for attr, value in infomation_detail.items():
+                    setattr(infomation_detail_instance, attr, value)
+                infomation_detail_instance.save()
+            else:
+                infomation_detail_instance = InfomationDetail.objects.create(**infomation_detail)
+                instance.infomation_detail = infomation_detail_instance
+        else:
+            infomation_detail_instance = InfomationDetail.objects.create(**infomation_detail)
+            instance.infomation_detail = infomation_detail_instance
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
         return instance
 
 
@@ -60,6 +81,8 @@ class POSSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         store = validated_data.pop('store')
         instance.store = store
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
         instance.save()
         return instance
 
@@ -84,16 +107,21 @@ class CreditCardSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def get_credit_card_front_image(self, obj):
-        return self.context['request'].build_absolute_uri(obj.credit_card_front_image.url)
+        if obj.credit_card_front_image:
+            return self.context['request'].build_absolute_uri(obj.credit_card_front_image.url)
+        return ""
 
     def get_credit_card_back_image(self, obj):
-        return self.context['request'].build_absolute_uri(obj.credit_card_back_image.url)
+        if obj.credit_card_back_image:
+            return self.context['request'].build_absolute_uri(obj.credit_card_back_image.url)
+        return ""
 
 
 class RowNotebookSerializer(serializers.ModelSerializer):
     storage_datetime = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
     creditcard = CreditCardSerializer(write_only=True)
     transaction_id = serializers.IntegerField(write_only=True)
+    is_creditcard_stored = serializers.BooleanField(write_only=True)
 
     class Meta:
         model = RowNotebook
@@ -102,13 +130,17 @@ class RowNotebookSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         creditcard_data = validated_data.pop('creditcard')
         transaction_id = validated_data.pop('transaction_id')
+        is_creditcard_stored = validated_data.pop('is_creditcard_stored')
         transaction_instance = SwipeCardTransaction.objects.filter(id=transaction_id).first()
         if transaction_instance:
-            creditcard_instance = CreditCard.objects.create(**creditcard_data)
-            transaction_instance.creditcard = creditcard_instance
+            creditcard_instance = CreditCard.objects.filter(id=transaction_instance.creditcard.id).first()
+            for attr, value in creditcard_data.items():
+                setattr(creditcard_instance, attr, value)
+            transaction_instance.is_creditcard_stored = is_creditcard_stored
             transaction_instance.save()
             instance = RowNotebook.objects.create(**validated_data)
             creditcard_instance.notebook = instance
+            creditcard_instance.save()
             return instance
         raise serializers.ValidationError("Can not found creditcard object")
 
@@ -151,7 +183,7 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 class SwipeCardTransactionSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    creditcard = CreditCardSerializer(read_only=True)
+    creditcard = CreditCardSerializer(required=False)
     transaction_datetime = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
 
     def __init__(self, *args, **kwargs):
@@ -181,20 +213,19 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
         return serializer.data
 
     def create(self, validated_data):
-        # creditcard_data = validated_data.pop('creditcard')
-        # creditcard_instance = CreditCard.objects.create(**creditcard_data)
-        instance = SwipeCardTransaction.objects.create(**validated_data)  # , creditcard=creditcard_instance)
+        creditcard_data = validated_data.pop('creditcard')
+        creditcard_instance = CreditCard.objects.create(**creditcard_data)
+        instance = SwipeCardTransaction.objects.create(**validated_data, creditcard=creditcard_instance)
         return instance
 
-    def update(self, instance, validated_data):
-        # creditcard = validated_data.pop("creditcard", {})
-        # if getattr(instance, "creditcard", ""):
-        #     for attr, value in creditcard.items():
-        #         setattr(instance.creditcard, attr, value)
-        #     instance.creditcard.save()
-        # else:
-        #     creditcard_instance = CreditCard.objects.create(**creditcard)
-        #     instance.creditcard = creditcard_instance
+    def update(self, instance: SwipeCardTransaction, validated_data):
+        creditcard = validated_data.pop("creditcard", None)
+        if creditcard:
+            creditcard_instance = CreditCard.objects.filter(id=instance.creditcard.id).first()
+            for attr, value in creditcard.items():
+                setattr(creditcard_instance, attr, value)
+            creditcard_instance.save()
+
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()

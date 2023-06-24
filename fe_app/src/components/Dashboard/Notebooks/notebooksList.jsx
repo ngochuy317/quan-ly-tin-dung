@@ -27,6 +27,17 @@ function NotebooksList() {
     setParams({ page: currentPage + direction });
     setCurrentPage(currentPage + direction);
   };
+
+  const onDelete = async (id) => {
+    try {
+      const response = await notebookApi.deleteOne(id);
+      console.log("Delete notebook successfully", response);
+      setParams({ ...params });
+    } catch (error) {
+      console.log("Failed to delete notebook", error);
+    }
+  };
+
   return (
     <div>
       <h2 className="text-center">Danh sách sổ lưu</h2>
@@ -53,6 +64,15 @@ function NotebooksList() {
                 </td>
                 <td>
                   <Link to={notebook.id + "/"}>Chỉnh sửa</Link>
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    onClick={() => onDelete(notebook.id)}
+                    className="btn btn-outline-danger mx-3"
+                  >
+                    Xoá
+                  </button>
                 </td>
               </tr>
             ))}
