@@ -9,6 +9,7 @@ import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 function ReportAdmin() {
   const [stores, setStores] = useState([]);
   const [poses, setPoses] = useState([]);
+  const [users, setUsers] = useState([]);
   const [dataPieChart, setDataPieChart] = useState([]);
   const [responseSwipeCardData, setResponseSwipeCardData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -59,7 +60,7 @@ function ReportAdmin() {
   useEffect(() => {
     async function fetchTotalMoneyToday() {
       try {
-        const responseTotalMoney = await reportApi.gettotalmoneytoday();
+        const responseTotalMoney = await reportApi.getTotalMoneyToday();
         console.log("Fetch total money today successfully", responseTotalMoney);
         setTotalMoneyToday(responseTotalMoney.total_money);
       } catch (error) {
@@ -72,7 +73,7 @@ function ReportAdmin() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await swipeCardTransactionAPI.getAll({
+      const response = await reportApi.getAllSwipeTransactionReport({
         ...params,
         ...data,
       });
@@ -111,6 +112,7 @@ function ReportAdmin() {
     let val = parseInt(e.target.value);
     let store = stores.find((c) => c.id === val);
     setPoses([...store.poses]);
+    setUsers([...store.users]);
     console.log("store", poses);
   };
 
@@ -134,7 +136,7 @@ function ReportAdmin() {
       }
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="row">
-          <div className="col-md-4">
+          <div className="col-md-3">
             <div className="mb-3">
               <label className="form-label">Cửa hàng</label>
               {
@@ -152,7 +154,7 @@ function ReportAdmin() {
               }
             </div>
           </div>
-          <div className="col-md-4">
+          <div className="col-md-3">
             <div className="mb-3">
               <label className="form-label">Máy POS</label>
               <select
@@ -160,7 +162,7 @@ function ReportAdmin() {
                 className="form-select"
                 disabled={poses.length > 0 ? null : true}
               >
-                {poses ? <option value="">Tất cả</option> : null}
+                <option value="">Tất cả</option>
                 {poses?.map((pos) => (
                   <option key={pos.id} value={pos.id}>
                     {pos.pos_id}
@@ -169,11 +171,28 @@ function ReportAdmin() {
               </select>
             </div>
           </div>
-          <div className="col-md-4">
+          <div className="col-md-3">
+            <div className="mb-3">
+              <label className="form-label">Nhân viên</label>
+              <select
+                {...register("user")}
+                className="form-select"
+                disabled={users.length > 0 ? null : true}
+              >
+                <option value="">Tất cả</option>
+                {users?.map((user) => (
+                  <option key={user.id} value={user.id}>
+                    {user.id}-{user.fullname}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+          <div className="col-md-3">
             <div className="mb-3">
               <label className="form-label">Ngày giao dịch</label>
               <input
-                {...register("transaction_datetime")}
+                {...register("transaction_datetime_created")}
                 type="date"
                 className="form-control"
               />
@@ -214,6 +233,7 @@ function ReportAdmin() {
               <th scope="col">Tên khách hàng</th>
               <th scope="col">SDT khách hàng</th>
               <th scope="col">Số tiền KH cần</th>
+              <th scope="col">Nhân Viên</th>
               <th scope="col">Phí</th>
               {/* <th scope="col">Thao tác</th> */}
             </tr>
@@ -222,10 +242,11 @@ function ReportAdmin() {
             {responseSwipeCardData?.results?.map((swipeCard, index) => (
               <tr key={swipeCard.id}>
                 <th scope="row">{index + 1}</th>
-                <td>{swipeCard.transaction_datetime}</td>
+                <td>{swipeCard.transaction_datetime_created}</td>
                 <td>{swipeCard.customer_name}</td>
                 <td>{swipeCard.customer_phone_number}</td>
                 <td>{swipeCard.customer_money_needed.toLocaleString("vn")}</td>
+                <td>{swipeCard.user_name}</td>
                 <td>{swipeCard.fee}</td>
                 {/* <td>
                     <Link to={swipeCard.id + "/"}>Chỉnh sửa</Link>

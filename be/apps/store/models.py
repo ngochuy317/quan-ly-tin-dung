@@ -1,6 +1,5 @@
 from django.db import models
 from django.utils.timezone import now
-import datetime
 
 
 class Store(models.Model):
@@ -89,6 +88,7 @@ class RowNotebook(models.Model):
     closing_balance = models.BigIntegerField(blank=True, null=True)
     last_date = models.IntegerField(default=0)
     note = models.TextField(blank=True, null=True)
+    card_location = models.CharField(max_length=256, blank=True, null=True)
 
     def __str__(self):
         return f"Tên sổ: {self.notebook.name},  "\
@@ -112,7 +112,7 @@ class CreditCard(models.Model):
     credit_card_front_image = models.ImageField(upload_to='uploads/creditcards/', blank=True, null=True)
     credit_card_back_image = models.ImageField(upload_to='uploads/creditcards/', blank=True, null=True)
     note = models.TextField(blank=True, null=True)
-    notebook = models.ForeignKey(
+    notebook = models.OneToOneField(
         RowNotebook,
         on_delete=models.CASCADE,
         related_name="creditcards",
@@ -169,7 +169,8 @@ class SwipeCardTransaction(models.Model):
         blank=True,
         null=True
     )
-    transaction_datetime = models.DateTimeField(default=now)
+    transaction_datetime_created = models.DateTimeField(auto_now_add=True)
+    transaction_datetime_updated = models.DateTimeField(auto_now=True)
     pos = models.ForeignKey(POS, on_delete=models.CASCADE, related_name="swipe_card_transaction")
 
     class Meta:

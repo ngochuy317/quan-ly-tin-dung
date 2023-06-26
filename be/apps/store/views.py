@@ -11,7 +11,7 @@ class TransactionHistory(View):
         if request.user.role != "admin":
             transactions = SwipeCardTransaction.objects.\
                 filter(user__id=request.user.id).\
-                order_by("-transaction_datetime")
+                order_by("-transaction_datetime_created")
         else:
             transactions = SwipeCardTransaction.objects.all()
         paginator = Paginator(transactions, 15)

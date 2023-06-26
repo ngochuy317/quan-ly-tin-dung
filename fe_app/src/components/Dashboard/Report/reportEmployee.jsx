@@ -91,7 +91,7 @@ function ReportEmployee() {
             <div className="mb-3">
               <label className="form-label">Ngày giao dịch</label>
               <input
-                {...register("transaction_datetime")}
+                {...register("transaction_datetime_created")}
                 type="date"
                 className="form-control"
               />
@@ -123,7 +123,7 @@ function ReportEmployee() {
             {responseSwipeCardData?.results?.map((swipeCard, index) => (
               <tr key={swipeCard.id}>
                 <th scope="row">{index + 1}</th>
-                <td>{swipeCard.transaction_datetime}</td>
+                <td>{swipeCard.transaction_datetime_created}</td>
                 <td>{swipeCard.customer_name}</td>
                 <td>{swipeCard.customer_phone_number}</td>
                 <td>{swipeCard.customer_money_needed.toLocaleString("vn")}</td>

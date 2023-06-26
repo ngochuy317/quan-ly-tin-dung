@@ -1,8 +1,12 @@
 import axiosClient from "./axiosClient";
 
 class ReportAPI {
-  gettotalmoneytoday = () => {
+  getTotalMoneyToday = () => {
     return axiosClient.get("/totalmoneytoday/");
+  };
+
+  getAllSwipeTransactionReport = (params) => {
+    return axiosClient.get("/swipecardtransactionreport/", { params });
   };
 }
 

@@ -45,6 +45,7 @@ from .serializers import (
     CreditCardSerializer,
     ProductSerializer,
     SwipeCardTransactionSerializer,
+    SwipeCardTransactionReportSerializer,
     RowNotebookSerializer,
 )
 from .pagination import CustomPageNumberPagination, SwipeCardTransactionPageNumberPagination
@@ -145,11 +146,19 @@ class SwipeCardTransactionDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestr
         return Response("Parser error", status=status.HTTP_400_BAD_REQUEST)
 
 
+class SwipeCardTransactionReportAPIView(ListAPIView):
+    permission_classes = [IsAdmin]
+    pagination_class = SwipeCardTransactionPageNumberPagination
+    filterset_class = SwipeCardTransactionFilter
+    queryset = SwipeCardTransaction.objects.all()
+    serializer_class = SwipeCardTransactionReportSerializer
+
+
 class SwipeCardTransactionAPIView(ListAPIView):
 
     permission_classes = [IsAuthenticated]
     pagination_class = SwipeCardTransactionPageNumberPagination
-    filterset_class = SwipeCardTransactionFilter
+    # filterset_class = SwipeCardTransactionFilter
     queryset = SwipeCardTransaction.objects.all()
     serializer_class = SwipeCardTransactionSerializer
 
@@ -352,7 +361,7 @@ class RowNotebookAPIView(APIView):
 
 class RowNotebookListAPIView(APIView):
 
-    permission_classes = [IsAdmin]
+    # permission_classes = [IsAdmin]
 
     def get(self, request, *args, **kwargs):
         id = kwargs.get("pk")
@@ -385,7 +394,7 @@ class TotalMoneyTodayAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
         today = datetime.now(tz=pytz.timezone("Asia/Saigon"))
-        total_money = SwipeCardTransaction.objects.filter(transaction_datetime__date=today)\
+        total_money = SwipeCardTransaction.objects.filter(transaction_datetime_created__date=today)\
             .aggregate(Sum('customer_money_needed'))['customer_money_needed__sum']
         context = {
             "total_money": total_money,

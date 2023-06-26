@@ -36,6 +36,13 @@ class InfomationDetailSerializer(serializers.ModelSerializer):
         return instance
 
 
+class ShortInfomationDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = InfomationDetail
+        fields = ('id', 'fullname',)
+
+
 class UserSerializer(serializers.ModelSerializer):
     infomation_detail = InfomationDetailSerializer()
     password = serializers.CharField(allow_blank=True, required=False)
@@ -119,7 +126,8 @@ class CreditCardSerializer(serializers.ModelSerializer):
 
 class RowNotebookSerializer(serializers.ModelSerializer):
     storage_datetime = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
-    creditcard = CreditCardSerializer(write_only=True)
+    creditcard = serializers.CharField(read_only=True, source='creditcards.card_number')
+    # creditcard = CreditCardSerializer(write_only=True)
     transaction_id = serializers.IntegerField(write_only=True)
     is_creditcard_stored = serializers.BooleanField(write_only=True)
 
@@ -167,6 +175,7 @@ class StoreSerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField(allow_blank=True, required=False)
     poses = POSSerializer(many=True, read_only=True)
     notebooks = NoteBookSerializer(many=True, read_only=True)
+    users = ShortInfomationDetailSerializer(many=True, read_only=True)
 
     class Meta:
         model = Store
@@ -181,10 +190,29 @@ class CustomerSerializer(serializers.ModelSerializer):
         fields = ('name', 'phone_number', 'account_number', 'id_card_image')
 
 
+class SwipeCardTransactionReportSerializer(serializers.ModelSerializer):
+    user_name = serializers.CharField(source='user.infomation_detail.fullname', read_only=True)
+    pos = POSSerializer()
+
+    class Meta:
+        model = SwipeCardTransaction
+        fields = (
+            'id',
+            'customer_money_needed',
+            'transaction_datetime_created',
+            'user_name',
+            'fee',
+            'customer_name',
+            'customer_phone_number',
+            'pos',
+        )
+
+
 class SwipeCardTransactionSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     creditcard = CreditCardSerializer(required=False)
-    transaction_datetime = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
+    transaction_datetime_created = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
+    transaction_datetime_updated = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

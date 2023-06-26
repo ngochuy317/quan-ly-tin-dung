@@ -340,6 +340,7 @@ function SwipeCard() {
               <th scope="col">Tên khách hàng</th>
               <th scope="col">SDT khách hàng</th>
               <th scope="col">Đáo hạn</th>
+              <th scope="col">Ngày chỉnh sửa</th>
               <th scope="col">Thao tác</th>
             </tr>
           </thead>
@@ -347,7 +348,7 @@ function SwipeCard() {
             {responseSwipeCardData?.results?.map((swipeCard, index) => (
               <tr key={swipeCard.id}>
                 <th scope="row">{index + 1}</th>
-                <td>{swipeCard.transaction_datetime}</td>
+                <td>{swipeCard.transaction_datetime_created}</td>
                 <td>{swipeCard.creditcard?.card_name}</td>
                 <td>
                   <Link>{swipeCard.creditcard?.card_number}</Link>
@@ -358,6 +359,7 @@ function SwipeCard() {
                 <td>
                   {swipeCard.creditcard?.is_expired ? "Đã đáo" : "Chưa đáo"}
                 </td>
+                <td>{swipeCard.transaction_datetime_updated}</td>
                 <td>
                   <Link to={swipeCard.id + "/"}>Chỉnh sửa</Link>
                 </td>

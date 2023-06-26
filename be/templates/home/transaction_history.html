@@ -15,7 +15,7 @@
     {% for trans in transactions %}
     <tr>
       <th scope="row">{{ forloop.counter }}</th>
-      <td>{{ trans.transaction_datetime|date:'Y-m-d H:i' }}</td>
+      <td>{{ trans.transaction_datetime_created|date:'Y-m-d H:i' }}</td>
       <td>{{ trans.customer_name }}</td>
       <td>{{ trans.phone_number }}</td>
       <td>{{ trans.line_of_credit }}</td>

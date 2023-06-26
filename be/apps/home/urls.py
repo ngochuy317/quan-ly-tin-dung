@@ -18,6 +18,7 @@ from .views import (
     ProductListCreateAPIView,
     ProductRetrieveUpdateDestroyAPIView,
     SwipeCardTransactionAPIView,
+    SwipeCardTransactionReportAPIView,
     SwipeCardTransactionDetailRetrieveUpdateDestroyAPIView,
     UnsaveCreditCardByStoreAPIView,
     RowNotebookAPIView,
@@ -46,6 +47,7 @@ urlpatterns = [
     path('api/savecardtonotebook/', RowNotebookAPIView.as_view(), name="save-card-to-notebook"),
     path('api/unsavecreditcardbystore/', UnsaveCreditCardByStoreAPIView.as_view(), name="unsave-creditcard-by-store"),
     path('api/swipecardtransaction/', SwipeCardTransactionAPIView.as_view(), name="swipe-card-transaction"),
+    path('api/swipecardtransactionreport/', SwipeCardTransactionReportAPIView.as_view(), name="swipe-card-transaction-report"),
     path('api/totalmoneytoday/', TotalMoneyTodayAPIView.as_view(), name="total-money-today"),
     path(
         'api/swipecardtransaction/<pk>/',

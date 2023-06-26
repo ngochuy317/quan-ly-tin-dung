@@ -117,6 +117,7 @@ function SavedCardList() {
           <thead>
             <tr>
               <th scope="col">#</th>
+              <th scope="col">Số thẻ</th>
               <th scope="col">Trạng thái</th>
               <th scope="col">Ngày giờ lưu</th>
               <th scope="col">Số dư cuối kì</th>
@@ -127,6 +128,7 @@ function SavedCardList() {
             {rowNotebooks?.results?.map((rowNotebook, index) => (
               <tr key={rowNotebook.id}>
                 <th scope="row">{index + 1}</th>
+                <td>{rowNotebook.creditcard?.card_number}</td>
                 <td>{rowNotebook.status}</td>
                 <td>{rowNotebook.storage_datetime}</td>
                 <td>{rowNotebook.closing_balance}</td>

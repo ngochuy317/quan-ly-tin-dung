@@ -93,7 +93,6 @@ function StoreCard() {
           credit_card_front_image: "",
           credit_card_back_image: "",
         },
-        statement_date: "",
         maturity_date: "",
         statement_date: "",
         status: "",
@@ -226,7 +225,7 @@ function StoreCard() {
               />
             </div>
           </div>
-          <div className="col-md-3">
+          <div className="col-md-2">
             <div className="mb-3">
               <label className="form-label">Số dư cuối kì</label>
               <input
@@ -244,6 +243,17 @@ function StoreCard() {
                 {...register("note")}
                 type="text"
                 className="form-control"
+              />
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="mb-3">
+              <label className="form-label">Ngăn chứa thẻ</label>
+              <input
+                {...register("card_location")}
+                type="text"
+                className="form-control"
+                required
               />
             </div>
           </div>
@@ -422,7 +432,7 @@ function StoreCard() {
                     key={swipeCardTransaction.id}
                     value={swipeCardTransaction.id}
                   >
-                    {swipeCardTransaction.transaction_datetime}--
+                    {swipeCardTransaction.transaction_datetime_created}--
                     {swipeCardTransaction.customer_name}
                   </option>
                 ))}

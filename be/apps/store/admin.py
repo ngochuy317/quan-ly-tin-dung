@@ -11,7 +11,7 @@ from .models import (
 
 
 class SwipeCardTransactionAdmin(admin.ModelAdmin):
-    readonly_fields = ('transaction_datetime',)
+    readonly_fields = ('transaction_datetime_created', 'transaction_datetime_updated',)
 
 
 admin.site.register(Store)

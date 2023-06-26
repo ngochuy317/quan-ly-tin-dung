@@ -51,10 +51,10 @@ function SwipeCardInput(props) {
         hidden
       />
       <div className="row">
-        <div className="col-md-3">
+        <div className="col-md-2">
           <div className="mb-3">
             <label className="form-label">
-              Máy POS Id-Mid-Tid-Tên ngân hàng{" "}
+              POS Mid-Tid-Ngân hàng{" "}
               <FontAwesomeIcon
                 icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
                 color="red"
@@ -67,6 +67,16 @@ function SwipeCardInput(props) {
                 </option>
               ))}
             </select>
+          </div>
+        </div>
+        <div className="col-md-2">
+          <div className="mb-3">
+            <label className="form-label">Số tiền KH cần </label>
+            <input
+              {...register("customer_money_needed")}
+              type="number"
+              className="form-control"
+            />
           </div>
         </div>
         <div className="col-md-2">
@@ -89,7 +99,7 @@ function SwipeCardInput(props) {
             />
           </div>
         </div>
-        <div className="col-md-3">
+        <div className="col-md-2">
           <div className="mb-3">
             <label className="form-label">
               Hình bill máy pos{" "}
