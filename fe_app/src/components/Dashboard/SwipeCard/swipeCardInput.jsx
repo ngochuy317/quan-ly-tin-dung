@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import { useForm } from "react-hook-form";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
+import { transactionType } from "../../utils/constants";
 
 SwipeCardInput.propTypes = {
   deleteFormInput: PropTypes.func,
@@ -69,6 +70,22 @@ function SwipeCardInput(props) {
             </select>
           </div>
         </div>
+        <div className="col-md-1">
+          <div className="mb-3">
+            <label className="form-label">Hoạt động</label>
+            <select
+              {...register("transaction_type")}
+              className="form-select"
+              required
+            >
+              {transactionType?.map((ele) => (
+                <option key={ele.value} value={ele.value}>
+                  {ele.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
         <div className="col-md-2">
           <div className="mb-3">
             <label className="form-label">Số tiền KH cần </label>
@@ -76,6 +93,7 @@ function SwipeCardInput(props) {
               {...register("customer_money_needed")}
               type="number"
               className="form-control"
+              defaultValue={0}
             />
           </div>
         </div>
@@ -116,10 +134,10 @@ function SwipeCardInput(props) {
             />
           </div>
         </div>
-        <div className="col-md-1">
+        <div className="d-flex col-md-1">
           <div className="mb-3">
             <label className="form-label" style={{ color: "white" }}>
-              White lbl
+              White
             </label>
             <button
               disabled={isSubmitting}
@@ -132,11 +150,11 @@ function SwipeCardInput(props) {
               Xoá
             </button>
           </div>
-        </div>
-        <div className="col-md-1">
+          {/* </div>
+        <div className="col-md-1"> */}
           <div className="mb-3">
             <label className="form-label" style={{ color: "white" }}>
-              White lbl
+              White
             </label>
             <button
               disabled={isSubmitting}

@@ -47,6 +47,7 @@ from .serializers import (
     SwipeCardTransactionSerializer,
     SwipeCardTransactionReportSerializer,
     RowNotebookSerializer,
+    StoreInformationDetailSerializer,
 )
 from .pagination import CustomPageNumberPagination, SwipeCardTransactionPageNumberPagination
 
@@ -337,7 +338,7 @@ class InformationDetailAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
         store = Store.objects.filter(id=request.user.infomation_detail.store.id).first()
-        serializer = StoreSerializer(store)
+        serializer = StoreInformationDetailSerializer(store)
         context = {
             "store": serializer.data
         }

@@ -217,7 +217,7 @@ function ReportAdmin() {
             outerRadius={120}
             dataKey="value"
           >
-            {dataPieChart.map((entry, index) => (
+            {dataPieChart?.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={entry.color} />
             ))}
           </Pie>

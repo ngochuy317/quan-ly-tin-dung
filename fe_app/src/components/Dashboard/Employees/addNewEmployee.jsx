@@ -146,7 +146,7 @@ function NewEmployee() {
                 {...register("infomation_detail.gender")}
                 className="form-select"
               >
-                {genderChoices.map((gender) => (
+                {genderChoices?.map((gender) => (
                   <option key={gender.value} value={gender.value}>
                     {gender.label}
                   </option>

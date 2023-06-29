@@ -488,6 +488,7 @@ function StoreCard() {
                 <th scope="col">Số dư cuối kì</th>
                 <th scope="col">Đã đáo</th>
                 <th scope="col">Ngày cuối</th>
+                <th scope="col">Tiền về</th>
                 <th scope="col">Ghi chú</th>
               </tr>
             </thead>
@@ -500,6 +501,7 @@ function StoreCard() {
                   <td>{rowNotebook.closing_balance}</td>
                   <td>{rowNotebook.closing_balance}</td>
                   <td>{rowNotebook.last_date}</td>
+                  <td>{rowNotebook.is_payment_received}</td>
                   <td>{rowNotebook.note}</td>
                 </tr>
               ))}

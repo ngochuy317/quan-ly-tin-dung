@@ -120,7 +120,7 @@ function POSesDetail() {
             <div className="mb-3">
               <label className="form-label">Trạng thái</label>
               <select {...register("status")} className="form-select">
-                {posStatus.map((pos) => (
+                {posStatus?.map((pos) => (
                   <option key={pos.value} value={pos.value}>
                     {pos.label}
                   </option>

@@ -153,6 +153,12 @@ class RowNotebookSerializer(serializers.ModelSerializer):
         raise serializers.ValidationError("Can not found creditcard object")
 
 
+class ShortNoteBookSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NoteBook
+        fields = '__all__'
+
+
 class NoteBookSerializer(serializers.ModelSerializer):
     store_name = serializers.ReadOnlyField(source='store.name')
     row_notebook = RowNotebookSerializer(many=True, read_only=True)
@@ -169,6 +175,18 @@ class NoteBookSerializer(serializers.ModelSerializer):
         instance.store = store
         instance.save()
         return instance
+
+
+class StoreInformationDetailSerializer(serializers.ModelSerializer):
+    # phone_number = serializers.CharField(allow_blank=True, required=False)
+    poses = POSSerializer(many=True, read_only=True)
+    notebooks = ShortNoteBookSerializer(many=True, read_only=True)
+    # users = ShortInfomationDetailSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Store
+        fields = '__all__'
+        # read_only_fields = ('id', )
 
 
 class StoreSerializer(serializers.ModelSerializer):
@@ -213,6 +231,7 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
     creditcard = CreditCardSerializer(required=False)
     transaction_datetime_created = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
     transaction_datetime_updated = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
+    customer_money_needed = serializers.IntegerField()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -220,6 +239,7 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
         try:
             if self.context['request'].method in ['GET']:
                 self.fields['creditcard'] = serializers.SerializerMethodField()
+                self.fields['transaction_type'] = serializers.SerializerMethodField()
                 self.fields['customer_id_card_front_image'] = serializers.SerializerMethodField()
                 self.fields['customer_id_card_back_image'] = serializers.SerializerMethodField()
                 self.fields['bill_pos_image'] = serializers.SerializerMethodField()
@@ -239,6 +259,9 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
     def get_pos(self, obj):
         serializer = POSSerializer(obj.pos)
         return serializer.data
+
+    def get_transaction_type(self, obj):
+        return obj.get_transaction_type_display()
 
     def create(self, validated_data):
         creditcard_data = validated_data.pop('creditcard')

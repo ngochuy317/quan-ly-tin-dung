@@ -58,8 +58,7 @@ function EmployeesList(props) {
             </tr>
           </thead>
           <tbody className="table-group-divider">
-            {responseData.results
-              ? responseData.results.map((user, index) => (
+            {responseData?.results?.map((user, index) => (
                   <tr key={user.id}>
                     <th scope="row">{index + 1}</th>
                     <td>{user.infomation_detail.fullname}</td>
@@ -83,7 +82,7 @@ function EmployeesList(props) {
                     </td>
                   </tr>
                 ))
-              : null}
+              }
           </tbody>
         </table>
       </div>

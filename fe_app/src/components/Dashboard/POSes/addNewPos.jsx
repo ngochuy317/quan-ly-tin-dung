@@ -102,7 +102,7 @@ function NewPos() {
                 {...register("status", { required: true })}
                 className="form-select"
               >
-                {posStatus.map((pos) => (
+                {posStatus?.map((pos) => (
                   <option key={pos.value} value={pos.value}>
                     {pos.label}
                   </option>

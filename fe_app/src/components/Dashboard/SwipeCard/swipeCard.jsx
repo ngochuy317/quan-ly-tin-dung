@@ -339,7 +339,7 @@ function SwipeCard() {
               <th scope="col">Số tiền KH cần</th>
               <th scope="col">Tên khách hàng</th>
               <th scope="col">SDT khách hàng</th>
-              <th scope="col">Đáo hạn</th>
+              <th scope="col">Hoạt động</th>
               <th scope="col">Ngày chỉnh sửa</th>
               <th scope="col">Thao tác</th>
             </tr>
@@ -357,7 +357,7 @@ function SwipeCard() {
                 <td>{swipeCard.customer_name}</td>
                 <td>{swipeCard.customer_phone_number}</td>
                 <td>
-                  {swipeCard.creditcard?.is_expired ? "Đã đáo" : "Chưa đáo"}
+                  {swipeCard.transaction_type}
                 </td>
                 <td>{swipeCard.transaction_datetime_updated}</td>
                 <td>

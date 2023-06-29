@@ -118,7 +118,7 @@ class CreditCard(models.Model):
         related_name="creditcards",
         null=True, blank=True
     )
-    is_expired = models.BooleanField(default=False)
+    is_payment_received = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-id']
@@ -133,6 +133,11 @@ class Customer(models.Model):
 
 
 class SwipeCardTransaction(models.Model):
+
+    TRANSACTION_TYPE_CHOICES = (
+        (1, "Rút tiền"),
+        (2, "TĐáo thẻ")
+    )
 
     is_creditcard_stored = models.BooleanField(default=False)
     store_id = models.PositiveBigIntegerField()
@@ -160,7 +165,6 @@ class SwipeCardTransaction(models.Model):
         blank=True,
         null=True
     )
-    is_payment_received = models.BooleanField(default=False)
     user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="swipe_card_transaction")
     at_store = models.ForeignKey(
         Store,
@@ -172,6 +176,7 @@ class SwipeCardTransaction(models.Model):
     transaction_datetime_created = models.DateTimeField(auto_now_add=True)
     transaction_datetime_updated = models.DateTimeField(auto_now=True)
     pos = models.ForeignKey(POS, on_delete=models.CASCADE, related_name="swipe_card_transaction")
+    transaction_type = models.SmallIntegerField(choices=TRANSACTION_TYPE_CHOICES, default=1)
 
     class Meta:
         ordering = ['-id']

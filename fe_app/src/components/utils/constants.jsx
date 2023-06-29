@@ -42,3 +42,14 @@ export const genderChoices = [
         label: "Khác",
     }
 ]
+
+export const transactionType = [
+    {
+        value: 1,
+        label: "Rút tiền",
+    },
+    {
+        value: 2,
+        label: "Đáo thẻ",
+    }
+]
