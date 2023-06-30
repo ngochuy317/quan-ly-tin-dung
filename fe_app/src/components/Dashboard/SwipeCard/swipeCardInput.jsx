@@ -16,6 +16,7 @@ function SwipeCardInput(props) {
   const { initData, posMachine, deleteFormInput } = props;
   const { register, handleSubmit, formState } = useForm();
   const { isSubmitting } = formState;
+  const constTransactionType = transactionType;
 
   const onSubmit = async (data) => {
     console.log("data", data);
@@ -78,7 +79,7 @@ function SwipeCardInput(props) {
               className="form-select"
               required
             >
-              {transactionType?.map((ele) => (
+              {constTransactionType?.map((ele) => (
                 <option key={ele.value} value={ele.value}>
                   {ele.label}
                 </option>

@@ -9,6 +9,7 @@ function NewPos() {
   const [stores, setStores] = useState([]);
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
+  const constPosStatus = posStatus;
 
   useEffect(() => {
     async function fetchListStore() {
@@ -102,7 +103,7 @@ function NewPos() {
                 {...register("status", { required: true })}
                 className="form-select"
               >
-                {posStatus?.map((pos) => (
+                {constPosStatus?.map((pos) => (
                   <option key={pos.value} value={pos.value}>
                     {pos.label}
                   </option>

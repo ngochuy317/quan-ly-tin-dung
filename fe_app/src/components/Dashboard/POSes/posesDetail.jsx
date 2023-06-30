@@ -10,6 +10,7 @@ function POSesDetail() {
   const { register, handleSubmit, reset } = useForm();
   const { id } = useParams();
   const navigate = useNavigate();
+  const constPosStatus = posStatus;
 
   useEffect(() => {
     async function fetchPOSDetail() {
@@ -120,7 +121,7 @@ function POSesDetail() {
             <div className="mb-3">
               <label className="form-label">Trạng thái</label>
               <select {...register("status")} className="form-select">
-                {posStatus?.map((pos) => (
+                {constPosStatus?.map((pos) => (
                   <option key={pos.value} value={pos.value}>
                     {pos.label}
                   </option>
