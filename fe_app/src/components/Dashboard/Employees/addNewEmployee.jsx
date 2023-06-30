@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import employeeApi from "../../../api/employeeAPI";
 import storeApi from "../../../api/storeAPI";
-import { Roles } from "../../utils/constants";
-import { genderChoices } from "../../utils/constants";
+import { Roles } from "../../ConstantUtils/constants";
+import { genderChoices } from "../../ConstantUtils/constants";
 
 function NewEmployee() {
   const [stores, setStores] = useState([]);

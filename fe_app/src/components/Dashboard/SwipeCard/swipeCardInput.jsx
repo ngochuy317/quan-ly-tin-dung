@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import { useForm } from "react-hook-form";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
-import { transactionType } from "../../utils/constants";
+import { transactionType } from "../../ConstantUtils/constants";
 
 SwipeCardInput.propTypes = {
   deleteFormInput: PropTypes.func,

@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import posApi from "../../../api/posAPI";
 import storeApi from "../../../api/storeAPI";
-import { posStatus } from "../../utils/constants";
+import { posStatus } from "../../ConstantUtils/constants";
 
 function NewPos() {
   const [stores, setStores] = useState([]);

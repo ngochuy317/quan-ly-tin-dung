@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import employeeApi from "../../../api/employeeAPI";
 import Pagination from "../../Pagination/pagination";
-import { genderChoices } from "../../utils/constants";
+import { genderChoices } from "../../ConstantUtils/constants";
 
 function EmployeesList(props) {
   const [currentPage, setCurrentPage] = useState(1);

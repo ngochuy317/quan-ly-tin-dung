@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import posApi from "../../../api/posAPI";
 import Pagination from "../../Pagination/pagination";
-import { posStatus } from "../../utils/constants";
+import { posStatus } from "../../ConstantUtils/constants";
 
 function POSesList() {
   const [currentPage, setCurrentPage] = useState(1);
