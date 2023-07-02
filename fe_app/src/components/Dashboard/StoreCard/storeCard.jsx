@@ -7,6 +7,7 @@ import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import userApi from "../../../api/userAPI";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../../Pagination/pagination";
+import notebookApi from "../../../api/notebookAPI";
 
 function StoreCard() {
   const { register, handleSubmit, reset, formState, setValue } = useForm();
@@ -15,6 +16,7 @@ function StoreCard() {
   const [responseSwipeCardData, setResponseSwipeCardData] = useState([]);
   const [rowNotebooks, setRowNotebooks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [maxLengthOrderInNotebook, setMaxLengthOrderInNotebook] = useState(0);
   const [reloadAfterSubmit, setReloadAfterSubmit] = useState(false);
   const [params, setParams] = useState({ page: 1 });
   const navigate = useNavigate();
@@ -34,7 +36,7 @@ function StoreCard() {
         reset({ ...initValues });
         if (response.store.notebooks) {
           setNotebooks(response.store.notebooks);
-          setRowNotebooks(response.store.notebooks[0].row_notebook);
+          // setRowNotebooks(response.store.notebooks[0].row_notebook);
         }
       } catch (error) {
         console.log("Failed to information detail", error);
@@ -105,11 +107,14 @@ function StoreCard() {
     }
   };
 
-  const handleOnChangeNotebook = (e) => {
+  const handleOnChangeNotebook = async (e) => {
     let val = parseInt(e.target.value);
     let notebook = notebooks.find((c) => c.id === val);
-    setRowNotebooks([...notebook.row_notebook]);
-    console.log("notebook.row_notebook", notebook.row_notebook);
+    setMaxLengthOrderInNotebook(notebook?.capacity);
+    let id = parseInt(e.target.value);
+    const response = await notebookApi.getDetailRowNotebook(id, { page: 1 });
+    console.log("Fetch detail rownotebook successfully", response);
+    setRowNotebooks(response?.results);
   };
 
   const handleOnChangeTransaction = (e) => {
@@ -172,7 +177,7 @@ function StoreCard() {
         </div>
         <h5>Sổ lưu thẻ</h5>
         <div className="row">
-          <div className="col-md-3">
+          <div className="col-md-2">
             <div className="mb-3">
               <label className="form-label">Sổ lưu thẻ</label>
               <select
@@ -182,6 +187,7 @@ function StoreCard() {
                 onChange={handleOnChangeNotebook}
                 required
               >
+                <option value="">Chọn Sổ lưu</option>
                 {notebooks?.map((notebook) => (
                   <option key={notebook.id} value={notebook.id}>
                     {notebook.name}
@@ -246,7 +252,7 @@ function StoreCard() {
               />
             </div>
           </div>
-          <div className="col-md-3">
+          <div className="col-md-2">
             <div className="mb-3">
               <label className="form-label">Ngăn chứa thẻ</label>
               <input
@@ -254,6 +260,23 @@ function StoreCard() {
                 type="text"
                 className="form-control"
                 required
+              />
+            </div>
+          </div>
+          <div className="col-md-2">
+            <div className="mb-3">
+              <label className="form-label">Số thứ tự trên sổ</label>
+              <input
+                {...register("order_in_notebook")}
+                type="number"
+                className="form-control"
+                max={maxLengthOrderInNotebook}
+                required
+                placeholder={
+                  maxLengthOrderInNotebook > 0
+                    ? "Tối đa " + maxLengthOrderInNotebook
+                    : null
+                }
               />
             </div>
           </div>

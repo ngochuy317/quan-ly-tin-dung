@@ -48,6 +48,7 @@ function NotebooksList() {
               <th scope="col">#</th>
               {/* <th scope="col">Tên sổ</th> */}
               <th scope="col">Tên sổ</th>
+              <th scope="col">Số lượng lưu trữ tối đa</th>
               <th scope="col">Cửa hàng</th>
               <th scope="col">Thao tác</th>
             </tr>
@@ -57,6 +58,7 @@ function NotebooksList() {
               <tr key={notebook.id}>
                 <th scope="row">{index + 1}</th>
                 <td>{notebook.name}</td>
+                <td>{notebook.capacity}</td>
                 <td>
                   <Link to={"/dashboard/stores/" + notebook.store.id}>
                     {notebook.store_name}

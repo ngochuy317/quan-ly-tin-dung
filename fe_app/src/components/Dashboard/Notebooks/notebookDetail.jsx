@@ -24,6 +24,7 @@ function NotebookDetail() {
 
         let initValues = {};
         initValues.name = response.name;
+        initValues.capacity = response.capacity;
         initValues.store = response.store;
         reset({ ...initValues });
       } catch (error) {
@@ -67,6 +68,17 @@ function NotebookDetail() {
                 {...register("name", { required: true })}
                 type="text"
                 className="form-control"
+              />
+            </div>
+          </div>
+          <div className="col-md-2">
+            <div className="mb-3">
+              <label className="form-label">Số lượng lưu trữ</label>
+              <input
+                {...register("capacity")}
+                type="number"
+                className="form-control"
+                required
               />
             </div>
           </div>

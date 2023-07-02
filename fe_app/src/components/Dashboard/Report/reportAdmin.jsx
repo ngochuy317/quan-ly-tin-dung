@@ -10,6 +10,7 @@ function ReportAdmin() {
   const [stores, setStores] = useState([]);
   const [poses, setPoses] = useState([]);
   const [users, setUsers] = useState([]);
+  const [isCalledApi, setIsCalledApi] = useState(false);
   const [dataPieChart, setDataPieChart] = useState([]);
   const [responseSwipeCardData, setResponseSwipeCardData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -103,6 +104,7 @@ function ReportAdmin() {
           color: remain_money_color,
         },
       ]);
+      setIsCalledApi(true);
     } catch (error) {
       console.log("Failed to Get swipecard transaction", error);
     }
@@ -141,10 +143,12 @@ function ReportAdmin() {
               <label className="form-label">Cửa hàng</label>
               {
                 <select
-                  {...register("store_id", { required: true })}
+                  {...register("store_id")}
                   className="form-select"
                   onChange={handleOnChange}
+                  required
                 >
+                  <option value="">Chọn cửa hàng</option>
                   {stores?.map((store) => (
                     <option key={store.id} value={store.id}>
                       {store.name}
@@ -207,23 +211,30 @@ function ReportAdmin() {
         </div>
       </form>
       <h2 className="text-center">Lịch sử quẹt thẻ</h2>
-      <ResponsiveContainer width="100%" height={400}>
-        <PieChart width={400} height={400}>
-          <Pie
-            data={dataPieChart}
-            cx="50%"
-            cy="50%"
-            label={renderCustomizedLabel}
-            outerRadius={120}
-            dataKey="value"
-          >
-            {dataPieChart?.map((entry, index) => (
-              <Cell key={`cell-${index}`} fill={entry.color} />
-            ))}
-          </Pie>
-          <Tooltip />
-        </PieChart>
-      </ResponsiveContainer>
+      {isCalledApi &&
+        (responseSwipeCardData?.result ? (
+          <ResponsiveContainer width="100%" height={400}>
+            <PieChart width={400} height={400}>
+              <Pie
+                data={dataPieChart}
+                cx="50%"
+                cy="50%"
+                label={renderCustomizedLabel}
+                outerRadius={120}
+                dataKey="value"
+              >
+                {dataPieChart?.map((entry, index) => (
+                  <Cell key={`cell-${index}`} fill={entry.color} />
+                ))}
+              </Pie>
+              <Tooltip />
+            </PieChart>
+          </ResponsiveContainer>
+        ) : (
+          <div>
+            <h5 className="text-center text-danger">Không có giao dịch</h5>
+          </div>
+        ))}
       <div className="table-responsive">
         <table className="table">
           <thead>

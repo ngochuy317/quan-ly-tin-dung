@@ -124,12 +124,25 @@ class CreditCardSerializer(serializers.ModelSerializer):
         return ""
 
 
-class RowNotebookSerializer(serializers.ModelSerializer):
-    storage_datetime = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
-    creditcard = serializers.CharField(read_only=True, source='creditcards.card_number')
-    # creditcard = CreditCardSerializer(write_only=True)
-    transaction_id = serializers.IntegerField(write_only=True)
-    is_creditcard_stored = serializers.BooleanField(write_only=True)
+class GetRowNotebookSerializer(serializers.ModelSerializer):
+    """
+    For Get method
+    """
+    storage_datetime = serializers.DateTimeField(format="%Y-%m-%d %H:%M")
+    creditcard = serializers.CharField(source='creditcards.card_number')
+
+    class Meta:
+        model = RowNotebook
+        fields = "__all__"
+
+
+class CreateRowNotebookSerializer(serializers.ModelSerializer):
+    """
+    For Post method
+    """
+    creditcard = CreditCardSerializer()
+    transaction_id = serializers.IntegerField()
+    is_creditcard_stored = serializers.BooleanField()
 
     class Meta:
         model = RowNotebook
@@ -161,7 +174,7 @@ class ShortNoteBookSerializer(serializers.ModelSerializer):
 
 class NoteBookSerializer(serializers.ModelSerializer):
     store_name = serializers.ReadOnlyField(source='store.name')
-    row_notebook = RowNotebookSerializer(many=True, read_only=True)
+    row_notebook = GetRowNotebookSerializer(many=True, read_only=True)
 
     class Meta:
         model = NoteBook
@@ -169,10 +182,8 @@ class NoteBookSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', )
 
     def update(self, instance, validated_data):
-        name = validated_data.get("name")
-        store = validated_data.get('store')
-        instance.name = name
-        instance.store = store
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
         instance.save()
         return instance
 
@@ -231,7 +242,6 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
     creditcard = CreditCardSerializer(required=False)
     transaction_datetime_created = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
     transaction_datetime_updated = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
-    customer_money_needed = serializers.IntegerField()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

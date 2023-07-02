@@ -45,9 +45,21 @@ function NewNotebook() {
             <div className="mb-3">
               <label className="form-label">Tên</label>
               <input
-                {...register("name", { required: true })}
+                {...register("name")}
                 type="text"
                 className="form-control"
+                required
+              />
+            </div>
+          </div>
+          <div className="col-md-2">
+            <div className="mb-3">
+              <label className="form-label">Số lượng lưu trữ</label>
+              <input
+                {...register("capacity")}
+                type="number"
+                className="form-control"
+                required
               />
             </div>
           </div>

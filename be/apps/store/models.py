@@ -66,6 +66,7 @@ class POS(models.Model):
 class NoteBook(models.Model):
 
     name = models.CharField(max_length=127, default="Cửa hàng")
+    capacity = models.IntegerField(default=0)
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="notebooks")
 
     class Meta:
@@ -83,6 +84,7 @@ class NoteBook(models.Model):
 
 class RowNotebook(models.Model):
     notebook = models.ForeignKey(NoteBook, on_delete=models.CASCADE, related_name="row_notebook")
+    order_in_notebook = models.IntegerField(default=1)
     status = models.CharField(max_length=128)
     storage_datetime = models.DateTimeField(default=now)
     closing_balance = models.BigIntegerField(blank=True, null=True)

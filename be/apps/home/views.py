@@ -46,7 +46,8 @@ from .serializers import (
     ProductSerializer,
     SwipeCardTransactionSerializer,
     SwipeCardTransactionReportSerializer,
-    RowNotebookSerializer,
+    CreateRowNotebookSerializer,
+    GetRowNotebookSerializer,
     StoreInformationDetailSerializer,
 )
 from .pagination import CustomPageNumberPagination, SwipeCardTransactionPageNumberPagination
@@ -168,7 +169,6 @@ class SwipeCardTransactionAPIView(ListAPIView):
         parser = NestedParser(request.data)
         if parser.is_valid():
             data = parser.validate_data
-            print("data", data)
             request.data["user"] = request.user.id
             data["user"] = request.user.id
             serializer = SwipeCardTransactionSerializer(data=data)
@@ -353,7 +353,7 @@ class RowNotebookAPIView(APIView):
         parser = NestedParser(request.data)
         if parser.is_valid():
             data = parser.validate_data
-            serializer = RowNotebookSerializer(data=data)
+            serializer = CreateRowNotebookSerializer(data=data)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(status=status.HTTP_201_CREATED)
@@ -370,7 +370,7 @@ class RowNotebookListAPIView(APIView):
             data = RowNotebook.objects.filter(notebook__id=id)
             pagination = CustomPageNumberPagination()
             data = pagination.paginate_queryset(data, request, view=self)
-            serializer = RowNotebookSerializer(data, many=True)
+            serializer = GetRowNotebookSerializer(data, many=True)
             return pagination.get_paginated_response(serializer.data)
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
