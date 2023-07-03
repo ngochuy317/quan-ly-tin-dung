@@ -1,11 +1,12 @@
 import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../Dashboard/dashboard";
 
 function SideBar() {
   const { role, username } = React.useContext(AuthContext);
+  const [openMenu, setOpenMenu] = useState(false);
 
   const dataItemSideBarForEmployee = [
     {
@@ -186,7 +187,28 @@ function SideBar() {
     employee: dataItemSideBarForEmployee,
   };
   return (
-    <div className="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+    <div
+      style={
+        openMenu
+          ? {
+              transform: "translateX(-14rem)",
+              transition: "transform 300ms ease-in-out",
+            }
+          : {
+              transform: "translateX(0)",
+              transition: "transform 300ms ease-in-out",
+            }
+      }
+      className="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark"
+    >
+      <div className="text-light p-2 d-flex flex-row-reverse">
+        <FontAwesomeIcon
+          style={{ position: "absolute" }}
+          className="btn btn-dark"
+          onClick={() => setOpenMenu(!openMenu)}
+          icon={icon({ name: "bars", style: "solid" })}
+        />
+      </div>
       <div className="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
         <ul
           className="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start w-100"
@@ -200,6 +222,7 @@ function SideBar() {
             <li className="nav-item w-100" key={item.id}>
               <Link to={item.path} style={{ textDecoration: "none" }}>
                 <SideBarItem
+                  openMenu={openMenu}
                   {...item}
                   isActive={localStorage.getItem("activeTab") === item.path}
                   onClick={() => localStorage.setItem("activeTab", item.path)}
@@ -217,7 +240,7 @@ function SideBarItem(props) {
   return (
     <div
       className={`nav-link align-middle px-0 text-center ${
-        props.isActive ? "active" : ""
+        props.isActive && !props.openMenu ? "active" : ""
       }`}
       onClick={props.onClick}
     >
