@@ -47,6 +47,7 @@ function NewEmployee() {
                 {...register("infomation_detail.fullname")}
                 type="text"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -57,6 +58,7 @@ function NewEmployee() {
                 {...register("username")}
                 type="text"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -67,6 +69,7 @@ function NewEmployee() {
                 {...register("password")}
                 type="password"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -77,6 +80,7 @@ function NewEmployee() {
                 {...register("infomation_detail.address")}
                 type="text"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -87,6 +91,7 @@ function NewEmployee() {
                 {...register("infomation_detail.phone_number")}
                 type="tel"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -99,6 +104,7 @@ function NewEmployee() {
                 {...register("infomation_detail.identity_card")}
                 type="text"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -111,6 +117,7 @@ function NewEmployee() {
                 )}
                 type="date"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -123,6 +130,7 @@ function NewEmployee() {
                 )}
                 type="text"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -145,6 +153,7 @@ function NewEmployee() {
               <select
                 {...register("infomation_detail.gender")}
                 className="form-select"
+                required
               >
                 {genderChoices?.map((gender) => (
                   <option key={gender.value} value={gender.value}>
@@ -161,6 +170,7 @@ function NewEmployee() {
                 {...register("infomation_detail.dob")}
                 type="date"
                 className="form-control"
+                required
               />
             </div>
           </div>
@@ -181,6 +191,7 @@ function NewEmployee() {
                 {...register("infomation_detail.salary")}
                 type="number"
                 className="form-control"
+                required
               />
             </div>
           </div>
