@@ -1,0 +1,136 @@
+import React, { useState } from "react";
+
+export const dataItemSideBarForEmployee = [
+  {
+    id: 5,
+    name: "Thống kê giao dịch",
+    icon: "chart-bar",
+    path: "/dashboard/reportemp",
+    role: ["employee"],
+  },
+  {
+    id: 6,
+    name: "Bill máy POS",
+    icon: "money-bill",
+    path: "/dashboard/stores2",
+    role: ["admin", "employee"],
+  },
+  {
+    id: 7,
+    name: "Hoá đơn",
+    icon: "file-invoice",
+    path: "/dashboard/stores3",
+    role: ["admin", "employee"],
+  },
+  {
+    id: 8,
+    name: "Quẹt thẻ",
+    icon: "credit-card",
+    path: "/dashboard/swipecard",
+    role: ["admin", "employee"],
+  },
+  {
+    id: 9,
+    name: "Lưu thẻ",
+    icon: "box",
+    path: "/dashboard/storecard",
+    role: ["admin", "employee"],
+  },
+  {
+    id: 10,
+    name: "Danh sách thẻ đã lưu",
+    icon: "list",
+    path: "/dashboard/savedcard",
+    role: ["admin", "employee"],
+  },
+  // {
+  //   id: 11,
+  //   name: "Lịch sử quẹt thẻ",
+  //   icon: (
+  //     <FontAwesomeIcon
+  //       icon={icon({ name: "clock-rotate-left", style: "solid" })}
+  //     />
+  //   ),
+  //   path: "/dashboard/transaction-history",
+  //   role: ["admin", "employee"],
+  // },
+];
+export const dataItemSideBarForAdmin = [
+  {
+    id: 1,
+    name: "Cửa hàng ",
+    icon: "store",
+    path: "/dashboard/stores",
+    role: ["admin"],
+  },
+  {
+    id: 2,
+    name: "Máy POS",
+    icon: "cash-register",
+    path: "/dashboard/poses",
+    role: ["admin"],
+  },
+  {
+    id: 3,
+    name: "Sổ lưu thẻ",
+    icon: "book-open",
+    path: "/dashboard/notebooks",
+    role: ["admin"],
+  },
+  {
+    id: 4,
+    name: "Nhân viên",
+    icon: "users",
+    path: "/dashboard/employees",
+    role: ["admin"],
+  },
+  {
+    id: 6,
+    name: "Bill máy POS",
+    icon: "receipt",
+    path: "/dashboard/stores2",
+    role: ["admin", "employee"],
+  },
+  {
+    id: 7,
+    name: "Hoá đơn",
+    icon: "file-invoice",
+    path: "/dashboard/stores3",
+    role: ["admin", "employee"],
+  },
+  {
+    id: 8,
+    name: "Quẹt thẻ",
+    icon: "credit-card",
+    path: "/dashboard/swipecard",
+    role: ["admin", "employee"],
+  },
+  {
+    id: 9,
+    name: "Lưu thẻ",
+    icon: "box",
+    path: "/dashboard/storecard",
+    role: ["admin", "employee"],
+  },
+  {
+    id: 10,
+    name: "Danh sách thẻ đã lưu",
+    icon: "list",
+    path: "/dashboard/savedcard",
+    role: ["admin", "employee"],
+  },
+  {
+    id: 12,
+    name: "Sản phẩm",
+    icon: "boxes",
+    path: "/dashboard/products",
+    role: ["admin"],
+  },
+  {
+    id: 13,
+    name: "Thống kê giao dịch",
+    icon: "chart-bar",
+    path: "/dashboard/reportadm",
+    role: ["admin"],
+  },
+];
