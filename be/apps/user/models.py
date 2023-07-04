@@ -44,7 +44,7 @@ class InfomationDetail(models.Model):
     dob = models.DateField()
     date_joined = models.DateField()
     salary = models.IntegerField()
-    transaction_discount = models.FloatField()
+    transaction_discount = models.FloatField(default=0)
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="users", blank=True, null=True)
 
     def update(self, commit=False, **kwargs):
