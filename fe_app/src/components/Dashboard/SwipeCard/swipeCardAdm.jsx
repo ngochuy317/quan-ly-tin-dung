@@ -210,12 +210,14 @@ function SwipeCardAdm() {
             <tr>
               <th scope="col">#</th>
               <th scope="col">Ngày giao dịch</th>
-              <th scope="col">Tên trên thẻ thẻ</th>
+              <th scope="col">Hình bill</th>
+              <th scope="col">Tên trên thẻ</th>
               <th scope="col">Số thẻ</th>
               <th scope="col">Số tiền KH cần</th>
               <th scope="col">Tên khách hàng</th>
               <th scope="col">SDT khách hàng</th>
               <th scope="col">Hoạt động</th>
+              <th scope="col">Ngày quẹt thẻ</th>
               <th scope="col">Ngày chỉnh sửa</th>
               <th scope="col">Thao tác</th>
             </tr>
@@ -225,6 +227,7 @@ function SwipeCardAdm() {
               <tr key={swipeCard.id}>
                 <th scope="row">{index + 1}</th>
                 <td>{swipeCard.transaction_datetime_created}</td>
+                <td><Link to={swipeCard.bill_pos_image} target="_blank">Xem</Link></td>
                 <td>{swipeCard.creditcard?.card_name}</td>
                 <td>
                   <Link>{swipeCard.creditcard?.card_number}</Link>
@@ -233,6 +236,7 @@ function SwipeCardAdm() {
                 <td>{swipeCard.customer_name}</td>
                 <td>{swipeCard.customer_phone_number}</td>
                 <td>{swipeCard.transaction_type}</td>
+                <td>{swipeCard.transaction_datetime_created}</td>
                 <td>{swipeCard.transaction_datetime_updated}</td>
                 <td>
                   <Link to={swipeCard.id + "/"}>Chỉnh sửa</Link>
