@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import userApi from "../../../api/userAPI";
+import { transactionType } from "../../ConstantUtils/constants";
 import Pagination from "../../Pagination/pagination";
 import SwipeCardInput from "./swipeCardInput";
 
@@ -199,6 +200,7 @@ function SwipeCard() {
               <th scope="col">SDT khách hàng</th>
               <th scope="col">Hoạt động</th>
               <th scope="col">Ngày quẹt thẻ</th>
+              <th scope="col">NV quẹt thẻ</th>
               <th scope="col">Ngày chỉnh sửa</th>
               <th scope="col">Thao tác</th>
             </tr>
@@ -208,7 +210,11 @@ function SwipeCard() {
               <tr key={swipeCard.id}>
                 <th scope="row">{index + 1}</th>
                 <td>{swipeCard.transaction_datetime_created}</td>
-                <td><Link to={swipeCard.bill_pos_image} target="_blank">Xem</Link></td>
+                <td>
+                  <Link to={swipeCard.bill_pos_image} target="_blank">
+                    Xem
+                  </Link>
+                </td>
                 <td>{swipeCard.creditcard?.card_name}</td>
                 <td>
                   <Link>{swipeCard.creditcard?.card_number}</Link>
@@ -216,8 +222,15 @@ function SwipeCard() {
                 <td>{swipeCard.customer_money_needed}</td>
                 <td>{swipeCard.customer_name}</td>
                 <td>{swipeCard.customer_phone_number}</td>
-                <td>{swipeCard.transaction_type}</td>
+                <td>
+                  {
+                    transactionType.find(
+                      (c) => c.value === swipeCard.transaction_type
+                    )?.label
+                  }
+                </td>
                 <td>{swipeCard.transaction_datetime_created}</td>
+                <td>{swipeCard.username}</td>
                 <td>{swipeCard.transaction_datetime_updated}</td>
                 <td>
                   <Link to={swipeCard.id + "/"}>Chỉnh sửa</Link>

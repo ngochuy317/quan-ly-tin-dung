@@ -40,8 +40,9 @@ function RoutesApp() {
       <Route path="/employees/add" element={<NewEmployee />} />
       <Route path="/employees/:id" element={<EmployeeDetail />} />
       <Route path="/swipecard" element={<SwipeCard />} />
-      <Route path="/swipecardadm" element={<SwipeCardAdm />} />
       <Route path="/swipecard/:id" element={<SwipeCardDetail />} />
+      <Route path="/swipecardadm" element={<SwipeCardAdm />} />
+      <Route path="/swipecardadm/:id" element={<SwipeCardDetail />} />
       <Route path="/storecard" element={<StoreCard />} />
       <Route path="/unsavedcard" element={<UnsaveCard />} />
       <Route path="/savedcard" element={<SavedCardList />} />

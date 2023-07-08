@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-
 import { Link, useNavigate, useParams } from "react-router-dom";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
+import { transactionType } from "../../ConstantUtils/constants";
 
 function SwipeCardDetail() {
   const { id } = useParams();
@@ -52,9 +52,7 @@ function SwipeCardDetail() {
       delete data.creditcard.credit_card_front_image;
       delete data.creditcard.credit_card_back_image;
       delete data.pos;
-      delete data.transaction_type;
 
-      console.log("🚀 ~ file: swipeCardDetail.jsx:56 ~ onSubmit ~ data:", data)
       const response = await swipeCardTransactionAPI.updateOne(id, data);
       console.log("Update Swipecard successfully", response);
       navigate("./..");
@@ -147,7 +145,7 @@ function SwipeCardDetail() {
             <div className="mb-3">
               <label className="form-label">Số điện thoại</label>
               <input
-                {...register("phone_number")}
+                {...register("customer_phone_number")}
                 type="tel"
                 className="form-control"
               />
@@ -347,6 +345,22 @@ function SwipeCardDetail() {
                 type="date"
                 className="form-control"
               />
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="mb-3">
+              <label className="form-label">Hoạt động</label>
+              <select
+                {...register("transaction_type")}
+                className="form-select"
+                required
+              >
+                {transactionType?.map((ele) => (
+                  <option key={ele.value} value={ele.value}>
+                    {ele.label}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
         </div>

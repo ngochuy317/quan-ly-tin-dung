@@ -138,7 +138,7 @@ class SwipeCardTransaction(models.Model):
 
     TRANSACTION_TYPE_CHOICES = (
         (1, "Rút tiền"),
-        (2, "TĐáo thẻ")
+        (2, "Đáo thẻ")
     )
 
     is_creditcard_stored = models.BooleanField(default=False)

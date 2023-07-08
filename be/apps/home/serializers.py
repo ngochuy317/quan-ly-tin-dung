@@ -242,6 +242,7 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
     creditcard = CreditCardSerializer(required=False)
     transaction_datetime_created = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
     transaction_datetime_updated = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
+    username = serializers.CharField(source='user.username')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -249,7 +250,7 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
         try:
             if self.context['request'].method in ['GET']:
                 self.fields['creditcard'] = serializers.SerializerMethodField()
-                self.fields['transaction_type'] = serializers.SerializerMethodField()
+                # self.fields['transaction_type'] = serializers.SerializerMethodField()
                 self.fields['customer_id_card_front_image'] = serializers.SerializerMethodField()
                 self.fields['customer_id_card_back_image'] = serializers.SerializerMethodField()
                 self.fields['bill_pos_image'] = serializers.SerializerMethodField()
@@ -270,8 +271,8 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
         serializer = POSSerializer(obj.pos)
         return serializer.data
 
-    def get_transaction_type(self, obj):
-        return obj.get_transaction_type_display()
+    # def get_transaction_type(self, obj):
+    #     return obj.get_transaction_type_display()
 
     def create(self, validated_data):
         creditcard_data = validated_data.pop('creditcard')
