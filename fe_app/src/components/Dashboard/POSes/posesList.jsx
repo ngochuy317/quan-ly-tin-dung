@@ -8,7 +8,6 @@ function POSesList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [responseData, setResponseData] = useState({});
   const [params, setParams] = useState({ page: 1 });
-  const constPosStatus = posStatus
 
   useEffect(() => {
     const fetchPOSList = async () => {
@@ -66,7 +65,7 @@ function POSesList() {
                 <td>{pos.mid}</td>
                 <td>{pos.tid}</td>
                 <td>{pos.note}</td>
-                <td>{constPosStatus.find((c) => c.value === pos.status)?.label}</td>
+                <td>{posStatus.find((c) => c.value === pos.status)?.label}</td>
                 <td>{pos.bank_name}</td>
                 <td>{pos.store_name}</td>
                 <td>

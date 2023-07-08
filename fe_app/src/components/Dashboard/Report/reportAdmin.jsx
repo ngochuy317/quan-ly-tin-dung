@@ -6,16 +6,17 @@ import storeApi from "../../../api/storeAPI";
 import Pagination from "../../Pagination/pagination";
 
 function ReportAdmin() {
+  const { register, handleSubmit, getValues } = useForm();
+
   const [stores, setStores] = useState([]);
   const [poses, setPoses] = useState([]);
   const [users, setUsers] = useState([]);
-  const [isCalledApi, setIsCalledApi] = useState(false);
   const [dataPieChart, setDataPieChart] = useState([]);
   const [responseSwipeCardData, setResponseSwipeCardData] = useState([]);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [totalMoneyToday, setTotalMoneyToday] = useState(0);
   const [params, setParams] = useState({ page: 1 });
-  const { register, handleSubmit } = useForm();
 
   const renderCustomizedLabel = ({
     cx,
@@ -103,7 +104,6 @@ function ReportAdmin() {
           color: remain_money_color,
         },
       ]);
-      setIsCalledApi(true);
     } catch (error) {
       console.log("Failed to Get swipecard transaction", error);
     }
@@ -115,14 +115,24 @@ function ReportAdmin() {
       let store = stores.find((c) => c.id === val);
       setPoses([...store.poses]);
       setUsers([...store.users]);
-      console.log("store", poses);
     } else {
       setPoses([]);
       setUsers([]);
     }
   };
 
-  const handleChangePage = (direction) => {
+  const handleChangePage = async (direction) => {
+    let dataForm = getValues();
+    try {
+      const response = await reportApi.getAllSwipeTransactionReport({
+        page: currentPage + direction,
+        ...dataForm,
+      });
+      console.log("Get swipecard transaction successfully", response);
+      setResponseSwipeCardData(response);
+    } catch (error) {
+      console.log("Failed to Get swipecard transaction", error);
+    }
     setParams({ page: currentPage + direction });
     setCurrentPage(currentPage + direction);
   };
@@ -215,30 +225,29 @@ function ReportAdmin() {
         </div>
       </form>
       <h2 className="text-center">Lịch sử quẹt thẻ</h2>
-      {isCalledApi &&
-        (responseSwipeCardData?.result ? (
-          <ResponsiveContainer width="100%" height={400}>
-            <PieChart width={400} height={400}>
-              <Pie
-                data={dataPieChart}
-                cx="50%"
-                cy="50%"
-                label={renderCustomizedLabel}
-                outerRadius={120}
-                dataKey="value"
-              >
-                {dataPieChart?.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip />
-            </PieChart>
-          </ResponsiveContainer>
-        ) : (
-          <div>
-            <h5 className="text-center text-danger">Không có giao dịch</h5>
-          </div>
-        ))}
+      {responseSwipeCardData?.results?.length ? (
+        <ResponsiveContainer width="100%" height={400}>
+          <PieChart width={400} height={400}>
+            <Pie
+              data={dataPieChart}
+              cx="50%"
+              cy="50%"
+              label={renderCustomizedLabel}
+              outerRadius={120}
+              dataKey="value"
+            >
+              {dataPieChart?.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry.color} />
+              ))}
+            </Pie>
+            <Tooltip />
+          </PieChart>
+        </ResponsiveContainer>
+      ) : (
+        <div>
+          <h5 className="text-center text-danger">Không có giao dịch</h5>
+        </div>
+      )}
       <div className="table-responsive">
         <table className="table">
           <thead>
@@ -280,6 +289,7 @@ function ReportAdmin() {
         <div></div>
       )}
       <Pagination
+        canBedisabled={responseSwipeCardData?.results?.length ? false : true}
         currentPage={currentPage}
         totalPages={responseSwipeCardData.total_pages}
         handleChangePage={handleChangePage}

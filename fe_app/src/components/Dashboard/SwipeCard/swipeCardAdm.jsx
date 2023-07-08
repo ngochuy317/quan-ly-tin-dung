@@ -10,7 +10,7 @@ import Pagination from "../../Pagination/pagination";
 import SwipeCardInput from "./swipeCardInput";
 
 function SwipeCardAdm() {
-  const { register, formState, setValue, getValues } = useForm();
+  const { register, setValue, getValues } = useForm();
 
   const [responseSwipeCardData, setResponseSwipeCardData] = useState([]);
   const [formInput, setFormInput] = useState([]);
@@ -221,6 +221,7 @@ function SwipeCardAdm() {
               <th scope="col">Ngày quẹt thẻ</th>
               <th scope="col">NV quẹt thẻ</th>
               <th scope="col">Ngày chỉnh sửa</th>
+              <th scope="col">Tiền về</th>
               <th scope="col">Thao tác</th>
             </tr>
           </thead>
@@ -251,6 +252,7 @@ function SwipeCardAdm() {
                 <td>{swipeCard.transaction_datetime_created}</td>
                 <td>{swipeCard.username}</td>
                 <td>{swipeCard.transaction_datetime_updated}</td>
+                <td>{swipeCard.is_payment_received ? "Đã về" : "Chưa về"}</td>
                 <td>
                   <Link to={swipeCard.id + "/"}>Chỉnh sửa</Link>
                 </td>

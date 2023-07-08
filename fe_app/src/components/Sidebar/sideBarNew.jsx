@@ -5,9 +5,7 @@ import {
   CDBSidebarHeader,
   CDBSidebarMenu,
   CDBSidebarMenuItem,
-  CDBSidebarFooter,
   CDBBadge,
-  CDBIcon,
 } from "cdbreact";
 import { AuthContext } from "../Dashboard/dashboard";
 import { Roles } from "../../components/ConstantUtils/constants";

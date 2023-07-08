@@ -120,7 +120,6 @@ class CreditCard(models.Model):
         related_name="creditcards",
         null=True, blank=True
     )
-    is_payment_received = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-id']
@@ -179,6 +178,7 @@ class SwipeCardTransaction(models.Model):
     transaction_datetime_updated = models.DateTimeField(auto_now=True)
     pos = models.ForeignKey(POS, on_delete=models.CASCADE, related_name="swipe_card_transaction")
     transaction_type = models.SmallIntegerField(choices=TRANSACTION_TYPE_CHOICES, default=1)
+    is_payment_received = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-id']

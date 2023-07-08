@@ -6,10 +6,11 @@ Pagination.propTypes = {
   totalPages: PropTypes.number,
   currentPage: PropTypes.number,
   handleChangePage: PropTypes.func,
+  canBedisabled: PropTypes.bool,
 };
 
 function Pagination(props) {
-  const { totalPages, currentPage, handleChangePage } = props;
+  const { totalPages, currentPage, handleChangePage, canBedisabled } = props;
 
   const handleChangePageClick = (direction) => {
     handleChangePage(direction);
@@ -24,8 +25,7 @@ function Pagination(props) {
               <CDBBtn
                 color="primary"
                 circle
-                // className="btn btn-primary btn-sm"
-                disabled={currentPage <= 1}
+                disabled={canBedisabled || currentPage <= 1}
                 onClick={() => {
                   handleChangePageClick(1 - currentPage);
                 }}
@@ -37,8 +37,7 @@ function Pagination(props) {
               <CDBBtn
                 color="primary"
                 circle
-                disabled={currentPage <= 1}
-                // className="btn btn-primary btn-sm"
+                disabled={canBedisabled || currentPage <= 1}
                 onClick={() => {
                   handleChangePageClick(-1);
                 }}
@@ -54,8 +53,7 @@ function Pagination(props) {
               <CDBBtn
                 color="primary"
                 circle
-                disabled={currentPage >= totalPages}
-                // className="btn btn-primary btn-sm"
+                disabled={canBedisabled || currentPage >= totalPages}
                 onClick={() => {
                   handleChangePageClick(1);
                 }}
@@ -67,8 +65,7 @@ function Pagination(props) {
               <CDBBtn
                 color="primary"
                 circle
-                disabled={currentPage >= totalPages}
-                // className="btn btn-primary btn-sm"
+                disabled={canBedisabled || currentPage >= totalPages}
                 onClick={() => {
                   handleChangePageClick(totalPages - currentPage);
                 }}

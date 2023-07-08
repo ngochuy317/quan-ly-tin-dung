@@ -347,7 +347,7 @@ function SwipeCardDetail() {
               />
             </div>
           </div>
-          <div className="col-md-3">
+          <div className="col-md-2">
             <div className="mb-3">
               <label className="form-label">Hoạt động</label>
               <select
@@ -363,6 +363,17 @@ function SwipeCardDetail() {
               </select>
             </div>
           </div>
+          {/* <div className="col-md-2">
+            <div className="mb-3">
+              <label className="form-label">Tiền về</label>
+              <input
+                {...register("is_payment_received")}
+                type="checkbox"
+                className="form-control"
+                checked
+              />
+            </div>
+          </div> */}
         </div>
         <div className="row">
           <div className="col-md-6">

@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 export const dataItemSideBarForEmployee = [
   {
     id: 5,
@@ -78,6 +76,7 @@ export const dataItemSideBarForAdmin = [
     icon: "book-open",
     path: "/dashboard/notebooks",
     role: ["admin"],
+    private: true,
   },
   {
     id: 4,
