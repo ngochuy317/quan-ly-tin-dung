@@ -119,9 +119,17 @@ function StoreCard() {
 
   const handleOnChangeTransaction = (e) => {
     let val = parseInt(e.target.value);
-    let swipeCardData = responseSwipeCardData.find((c) => c.id === val);
-    setValue("creditcard.card_number", swipeCardData?.creditcard?.card_number);
-    setValue("creditcard.card_name", swipeCardData?.creditcard?.card_name);
+    if (val) {
+      let swipeCardData = responseSwipeCardData.find((c) => c.id === val);
+      setValue(
+        "creditcard.card_number",
+        swipeCardData?.creditcard?.card_number
+      );
+      setValue("creditcard.card_name", swipeCardData?.creditcard?.card_name);
+    } else {
+      setValue("creditcard.card_number");
+      setValue("creditcard.card_name");
+    }
   };
 
   // const handleChangePage = (direction) => {

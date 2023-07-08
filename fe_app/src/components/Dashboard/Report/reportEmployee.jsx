@@ -44,9 +44,12 @@ function ReportEmployee() {
 
   const handleOnChange = (e) => {
     let val = parseInt(e.target.value);
-    let store = stores.find((c) => c.id === val);
-    setPoses([...store.poses]);
-    console.log("store", poses);
+    if (val) {
+      let store = stores.find((c) => c.id === val);
+      setPoses([...store.poses]);
+    } else {
+      setPoses([]);
+    }
   };
 
   const handleChangePage = (direction) => {

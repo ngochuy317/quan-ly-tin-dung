@@ -52,6 +52,7 @@ function SwipeCardDetail() {
       delete data.creditcard.credit_card_front_image;
       delete data.creditcard.credit_card_back_image;
       delete data.pos;
+      delete data.transaction_type;
 
       console.log("🚀 ~ file: swipeCardDetail.jsx:56 ~ onSubmit ~ data:", data)
       const response = await swipeCardTransactionAPI.updateOne(id, data);

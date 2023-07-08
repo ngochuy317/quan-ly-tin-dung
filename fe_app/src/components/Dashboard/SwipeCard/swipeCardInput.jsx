@@ -9,11 +9,12 @@ import { transactionType } from "../../ConstantUtils/constants";
 SwipeCardInput.propTypes = {
   deleteFormInput: PropTypes.func,
   initData: PropTypes.object,
-  posMachine: PropTypes.array,
+  posData: PropTypes.string,
+  posId: PropTypes.number,
 };
 
 function SwipeCardInput(props) {
-  const { initData, posMachine, deleteFormInput } = props;
+  const { initData, deleteFormInput, posData, posId } = props;
   const { register, handleSubmit, formState } = useForm();
   const { isSubmitting } = formState;
   const constTransactionType = transactionType;
@@ -55,20 +56,20 @@ function SwipeCardInput(props) {
       <div className="row">
         <div className="col-md-2">
           <div className="mb-3">
-            <label className="form-label">
-              POS Mid-Tid-Ngân hàng{" "}
-              <FontAwesomeIcon
-                icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                color="red"
-              />
-            </label>
-            <select {...register("pos")} className="form-select" required>
-              {posMachine?.map((pos) => (
-                <option key={pos.id} value={pos.id}>
-                  {pos.id}-{pos.mid}-{pos.tid}-{pos.bank_name}
-                </option>
-              ))}
-            </select>
+            <label className="form-label">POS Mid-Tid-Ngân hàng </label>
+            <input
+              type="text"
+              className="form-control"
+              value={posData}
+              disabled
+            />
+            <input
+              {...register("pos")}
+              type="number"
+              className="form-control"
+              value={posId}
+              hidden
+            />
           </div>
         </div>
         <div className="col-md-1">

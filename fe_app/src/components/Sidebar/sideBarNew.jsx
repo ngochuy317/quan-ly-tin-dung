@@ -6,6 +6,8 @@ import {
   CDBSidebarMenu,
   CDBSidebarMenuItem,
   CDBSidebarFooter,
+  CDBBadge,
+  CDBIcon,
 } from "cdbreact";
 import { AuthContext } from "../Dashboard/dashboard";
 import { Roles } from "../../components/ConstantUtils/constants";
@@ -22,7 +24,7 @@ function SideBarNew() {
     employee: dataItemSideBarForEmployee,
   };
   return (
-    <CDBSidebar className="min-vh-100" backgroundColor="#212529">
+    <CDBSidebar className="min-vh-100" textColor="#fff" backgroundColor="#333">
       <CDBSidebarHeader prefix={<i className="fa fa-bars" />}>
         <div>{username}</div>
         <div>{Roles.find((c) => c.roleKey === role)?.roleName}</div>
@@ -41,6 +43,13 @@ function SideBarNew() {
               key={item.id}
             >
               <CDBSidebarMenuItem
+                suffix={
+                  item?.private === true ? (
+                    <CDBBadge color="danger" size="small">
+                      AD
+                    </CDBBadge>
+                  ) : null
+                }
                 icon={item.icon}
                 onClick={() => localStorage.setItem("activeTab", item.path)}
               >

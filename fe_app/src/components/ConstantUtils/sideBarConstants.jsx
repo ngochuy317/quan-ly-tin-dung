@@ -62,6 +62,7 @@ export const dataItemSideBarForAdmin = [
     icon: "store",
     path: "/dashboard/stores",
     role: ["admin"],
+    private: true,
   },
   {
     id: 2,
@@ -69,6 +70,7 @@ export const dataItemSideBarForAdmin = [
     icon: "cash-register",
     path: "/dashboard/poses",
     role: ["admin"],
+    private: true,
   },
   {
     id: 3,
@@ -83,6 +85,7 @@ export const dataItemSideBarForAdmin = [
     icon: "users",
     path: "/dashboard/employees",
     role: ["admin"],
+    private: true,
   },
   {
     id: 6,
@@ -102,7 +105,7 @@ export const dataItemSideBarForAdmin = [
     id: 8,
     name: "Quẹt thẻ",
     icon: "credit-card",
-    path: "/dashboard/swipecard",
+    path: "/dashboard/swipecardadm",
     role: ["admin", "employee"],
   },
   {
@@ -114,7 +117,7 @@ export const dataItemSideBarForAdmin = [
   },
   {
     id: 10,
-    name: "Danh sách thẻ đã lưu",
+    name: "Thẻ đã lưu",
     icon: "list",
     path: "/dashboard/savedcard",
     role: ["admin", "employee"],
@@ -128,9 +131,10 @@ export const dataItemSideBarForAdmin = [
   },
   {
     id: 13,
-    name: "Thống kê giao dịch",
+    name: "Thống kê",
     icon: "chart-bar",
     path: "/dashboard/reportadm",
     role: ["admin"],
+    private: true,
   },
 ];

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import reportApi from "../../../api/reportAPI";
 import storeApi from "../../../api/storeAPI";
-import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import Pagination from "../../Pagination/pagination";
-import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
 function ReportAdmin() {
   const [stores, setStores] = useState([]);
@@ -112,10 +111,15 @@ function ReportAdmin() {
 
   const handleOnChange = (e) => {
     let val = parseInt(e.target.value);
-    let store = stores.find((c) => c.id === val);
-    setPoses([...store.poses]);
-    setUsers([...store.users]);
-    console.log("store", poses);
+    if (val) {
+      let store = stores.find((c) => c.id === val);
+      setPoses([...store.poses]);
+      setUsers([...store.users]);
+      console.log("store", poses);
+    } else {
+      setPoses([]);
+      setUsers([]);
+    }
   };
 
   const handleChangePage = (direction) => {

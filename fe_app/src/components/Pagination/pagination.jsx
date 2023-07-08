@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
+import { CDBBtn } from "cdbreact";
 
 Pagination.propTypes = {
   totalPages: PropTypes.number,
@@ -20,52 +21,60 @@ function Pagination(props) {
         <div className="pagination justify-content-center">
           <div className="btn-group">
             <div className="btn-group me-1" role="group">
-              <button
-                className="btn btn-primary btn-sm"
+              <CDBBtn
+                color="primary"
+                circle
+                // className="btn btn-primary btn-sm"
                 disabled={currentPage <= 1}
                 onClick={() => {
                   handleChangePageClick(1 - currentPage);
                 }}
               >
-                &laquo; Trang đầu
-              </button>
+                &laquo;&laquo;
+              </CDBBtn>
             </div>
             <div className="btn-group me-1" role="group">
-              <button
+              <CDBBtn
+                color="primary"
+                circle
                 disabled={currentPage <= 1}
-                className="btn btn-primary btn-sm"
+                // className="btn btn-primary btn-sm"
                 onClick={() => {
                   handleChangePageClick(-1);
                 }}
               >
-                Trang trước
-              </button>
+                &laquo;
+              </CDBBtn>
             </div>
 
             <span className="current">
               &nbsp; {currentPage} / {totalPages} &nbsp;
             </span>
             <div className="btn-group me-1" role="group">
-              <button
+              <CDBBtn
+                color="primary"
+                circle
                 disabled={currentPage >= totalPages}
-                className="btn btn-primary btn-sm"
+                // className="btn btn-primary btn-sm"
                 onClick={() => {
                   handleChangePageClick(1);
                 }}
               >
-                Trang tiếp &nbsp;
-              </button>
+                &raquo;
+              </CDBBtn>
             </div>
             <div className="btn-group me-1" role="group">
-              <button
+              <CDBBtn
+                color="primary"
+                circle
                 disabled={currentPage >= totalPages}
-                className="btn btn-primary btn-sm"
+                // className="btn btn-primary btn-sm"
                 onClick={() => {
                   handleChangePageClick(totalPages - currentPage);
                 }}
               >
-                Trang cuối &raquo;
-              </button>
+                &raquo;&raquo;
+              </CDBBtn>
             </div>
           </div>
         </div>
