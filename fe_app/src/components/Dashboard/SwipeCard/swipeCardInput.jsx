@@ -111,11 +111,18 @@ function SwipeCardInput(props) {
         </div>
         <div className="col-md-2">
           <div className="mb-3">
-            <label className="form-label">Số thẻ </label>
+            <label className="form-label">
+              Số thẻ{" "}
+              <FontAwesomeIcon
+                icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
+                color="red"
+              />{" "}
+            </label>
             <input
               {...register("creditcard.card_number")}
               type="text"
               className="form-control"
+              required
             />
           </div>
         </div>
