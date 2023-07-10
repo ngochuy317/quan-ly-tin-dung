@@ -47,7 +47,6 @@ function POSesList() {
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Pos Id</th>
               <th scope="col">Mid</th>
               <th scope="col">Tid</th>
               <th scope="col">Ghi chú</th>
@@ -61,7 +60,6 @@ function POSesList() {
             {responseData?.results?.map((pos, index) => (
               <tr key={pos.id}>
                 <th scope="row">{index + 1}</th>
-                <td>{pos.pos_id}</td>
                 <td>{pos.mid}</td>
                 <td>{pos.tid}</td>
                 <td>{pos.note}</td>

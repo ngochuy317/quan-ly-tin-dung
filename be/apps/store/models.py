@@ -41,7 +41,6 @@ class POS(models.Model):
         (3, "Đóng")
     )
 
-    pos_id = models.CharField(max_length=127)
     mid = models.CharField(max_length=127)
     tid = models.CharField(max_length=127)
     note = models.TextField(blank=True, null=True)

@@ -41,17 +41,6 @@ function NewPos() {
         <div className="row">
           <div className="col-md-4">
             <div className="mb-3">
-              <label className="form-label">Pos Id</label>
-              <input
-                {...register("pos_id")}
-                type="text"
-                className="form-control"
-                required
-              />
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="mb-3">
               <label className="form-label">Merchant ID(MID)</label>
               <input
                 {...register("mid")}
