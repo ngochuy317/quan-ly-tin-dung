@@ -12,6 +12,7 @@ from .views import (
     POSListCreateAPIView,
     POSDetailRetrieveUpdateDestroyAPIView,
     NotebookListCreateAPIView,
+    NotebookListAPIViewNoPagination,
     NoteBookDetailRetrieveUpdateDestroyAPIView,
     CustomerAPIView,
     CreditCardAPIView,
@@ -28,6 +29,7 @@ from .views import (
 
 urlpatterns = [
     path('api/notebooks/', NotebookListCreateAPIView.as_view(), name="notebooks"),
+    path('api/notebooks/nopagination/', NotebookListAPIViewNoPagination.as_view(), name="notebooks-nopagination"),
     path('api/notebooks/<pk>/', NoteBookDetailRetrieveUpdateDestroyAPIView.as_view(), name="notebook-detail"),
     path('api/poses/', POSListCreateAPIView.as_view(), name="poses"),
     path('api/poses/<pk>/', POSDetailRetrieveUpdateDestroyAPIView.as_view(), name="pos-detail"),
@@ -47,7 +49,11 @@ urlpatterns = [
     path('api/savecardtonotebook/', RowNotebookAPIView.as_view(), name="save-card-to-notebook"),
     path('api/unsavecreditcardbystore/', UnsaveCreditCardByStoreAPIView.as_view(), name="unsave-creditcard-by-store"),
     path('api/swipecardtransaction/', SwipeCardTransactionAPIView.as_view(), name="swipe-card-transaction"),
-    path('api/swipecardtransactionreport/', SwipeCardTransactionReportAPIView.as_view(), name="swipe-card-transaction-report"),
+    path(
+        'api/swipecardtransactionreport/',
+        SwipeCardTransactionReportAPIView.as_view(),
+        name="swipe-card-transaction-report"
+    ),
     path('api/totalmoneytoday/', TotalMoneyTodayAPIView.as_view(), name="total-money-today"),
     path(
         'api/swipecardtransaction/<pk>/',

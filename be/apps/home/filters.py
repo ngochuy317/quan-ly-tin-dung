@@ -12,3 +12,7 @@ class SwipeCardTransactionFilter(filters.FilterSet):
 
     def user_filter(self, queryset, name, value):
         return queryset.filter(user=value)
+
+
+class NotebookFilter(filters.FilterSet):
+    store_id = filters.NumberFilter(field_name='store__id')

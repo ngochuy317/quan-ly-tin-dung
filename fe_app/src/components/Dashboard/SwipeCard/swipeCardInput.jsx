@@ -88,7 +88,7 @@ function SwipeCardInput(props) {
             </select>
           </div>
         </div>
-        <div className="col-md-2">
+        {/* <div className="col-md-2">
           <div className="mb-3">
             <label className="form-label">Số tiền KH cần </label>
             <input
@@ -98,7 +98,7 @@ function SwipeCardInput(props) {
               defaultValue={0}
             />
           </div>
-        </div>
+        </div> */}
         <div className="col-md-2">
           <div className="mb-3">
             <label className="form-label">Tên trên thẻ </label>
@@ -143,7 +143,7 @@ function SwipeCardInput(props) {
             />
           </div>
         </div>
-        <div className="d-flex col-md-1">
+        <div className="d-flex col-md-3">
           <div className="mb-3">
             <label className="form-label" style={{ color: "white" }}>
               White
@@ -151,7 +151,7 @@ function SwipeCardInput(props) {
             <button
               disabled={isSubmitting}
               onClick={() => deleteFormInput()}
-              className="btn btn-outline-danger"
+              className="btn btn-outline-danger form-control"
             >
               {isSubmitting && (
                 <span className="spinner-border spinner-border-sm mr-1"></span>
@@ -159,8 +159,6 @@ function SwipeCardInput(props) {
               Xoá
             </button>
           </div>
-          {/* </div>
-        <div className="col-md-1"> */}
           <div className="mb-3">
             <label className="form-label" style={{ color: "white" }}>
               White
@@ -168,12 +166,27 @@ function SwipeCardInput(props) {
             <button
               disabled={isSubmitting}
               type="submit"
-              className="btn btn-outline-primary"
+              className="btn btn-outline-primary form-control"
             >
               {isSubmitting && (
                 <span className="spinner-border spinner-border-sm mr-1"></span>
               )}
               Lưu
+            </button>
+          </div>
+          <div className="mb-3">
+            <label className="form-label" style={{ color: "white" }}>
+              White
+            </label>
+            <button
+              disabled={isSubmitting}
+              type="submit"
+              className="btn btn-outline-primary form-control"
+            >
+              {isSubmitting && (
+                <span className="spinner-border spinner-border-sm mr-1"></span>
+              )}
+              Chi tiết
             </button>
           </div>
         </div>

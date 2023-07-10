@@ -9,6 +9,11 @@ class NotebookApi {
     return axiosClient.get(url, { params });
   };
 
+  getAllFull = (params) => {
+    const url = this.notebookBaseUrl + "nopagination/";
+    return axiosClient.get(url, { params });
+  };
+
   getDetail = (id) => {
     const url = this.notebookBaseUrl + id + "/";
     return axiosClient.get(url);

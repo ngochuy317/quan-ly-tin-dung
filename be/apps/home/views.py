@@ -31,10 +31,9 @@ from apps.store.models import (
 from apps.user.models import User
 from apps.user.authentication import IsAdmin
 
-from datetime import datetime
 from nested_multipart_parser import NestedParser
 
-from .filters import SwipeCardTransactionFilter
+from .filters import SwipeCardTransactionFilter, NotebookFilter
 from .serializers import (
     UserSerializer,
     StoreSerializer,
@@ -225,6 +224,15 @@ class NotebookListCreateAPIView(ListCreateAPIView):
     serializer_class = NoteBookSerializer
     pagination_class = CustomPageNumberPagination
     permission_classes = [IsAdmin]
+    filterset_class = NotebookFilter
+
+
+class NotebookListAPIViewNoPagination(ListAPIView):
+
+    queryset = NoteBook.objects.all()
+    serializer_class = NoteBookSerializer
+    permission_classes = [IsAdmin]
+    filterset_class = NotebookFilter
 
 
 class NoteBookDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):

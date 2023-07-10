@@ -6,8 +6,9 @@ import creditCardApi from "../../../api/creditCardAPI";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import userApi from "../../../api/userAPI";
 import { useNavigate } from "react-router-dom";
-import Pagination from "../../Pagination/pagination";
+// import Pagination from "../../Pagination/pagination";
 import notebookApi from "../../../api/notebookAPI";
+import { AuthContext } from "../../Dashboard/dashboard";
 
 function StoreCard() {
   const { register, handleSubmit, reset, formState, setValue } = useForm();
@@ -15,36 +16,40 @@ function StoreCard() {
   const [notebooks, setNotebooks] = useState([]);
   const [responseSwipeCardData, setResponseSwipeCardData] = useState([]);
   const [rowNotebooks, setRowNotebooks] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
   const [maxLengthOrderInNotebook, setMaxLengthOrderInNotebook] = useState(0);
   const [reloadAfterSubmit, setReloadAfterSubmit] = useState(false);
-  const [params, setParams] = useState({ page: 1 });
+  // const [params, setParams] = useState({ page: 1 });
   const navigate = useNavigate();
+  const { role = "" } = React.useContext(AuthContext);
 
   useEffect(() => {
-    async function fetchEmployeeDetail() {
+    async function callAPIInit() {
       try {
-        const response = await userApi.getInformationDetail();
-        console.log("Fetch information detail successfully", response);
+        if (role === "employee") {
+          const response = await userApi.getInformationDetail();
+          console.log("Fetch information detail successfully", response);
 
-        let initValues = {};
-        initValues.store_name = response.store.name;
-        initValues.store_code = response.store.code;
-        initValues.store_id = response.store.id;
-        initValues.store_phone_number = response.store.phone_number;
-        initValues.store_address = response.store.address;
-        reset({ ...initValues });
-        if (response.store.notebooks) {
-          setNotebooks(response.store.notebooks);
-          // setRowNotebooks(response.store.notebooks[0].row_notebook);
+          let initValues = {};
+          initValues.store_name = response.store.name;
+          initValues.store_code = response.store.code;
+          initValues.store_id = response.store.id;
+          initValues.store_phone_number = response.store.phone_number;
+          initValues.store_address = response.store.address;
+          reset({ ...initValues });
+          if (response.store.notebooks) {
+            setNotebooks(response.store.notebooks);
+            // setRowNotebooks(response.store.notebooks[0].row_notebook);
+          }
+        } else if (role === "admin") {
         }
       } catch (error) {
         console.log("Failed to information detail", error);
       }
     }
 
-    fetchEmployeeDetail();
-  }, []); // eslint-disable-line
+    callAPIInit();
+  }, [role]); // eslint-disable-line
 
   useEffect(() => {
     async function fetchTransactionHistory() {
@@ -70,6 +75,7 @@ function StoreCard() {
       }
     }
     fetchTransactionHistory();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reloadAfterSubmit]);
 
   const onSubmit = async (data) => {
@@ -117,16 +123,40 @@ function StoreCard() {
     setRowNotebooks(response?.results);
   };
 
-  const handleOnChangeTransaction = (e) => {
+  const handleOnChangeTransaction = async (e) => {
     let val = parseInt(e.target.value);
     if (val) {
       let swipeCardData = responseSwipeCardData.find((c) => c.id === val);
+      console.log(
+        "🚀 ~ file: storeCard.jsx:132 ~ handleOnChangeTransaction ~ swipeCardData:",
+        swipeCardData
+      );
+      setValue("store_name", swipeCardData?.store_name);
+      setValue("store_code", swipeCardData?.store_code);
+      setValue("store_id", swipeCardData?.store_id);
+      setValue("store_phone_number", swipeCardData?.store_phone_number);
+      setValue("store_address", swipeCardData?.store_address);
       setValue(
         "creditcard.card_number",
         swipeCardData?.creditcard?.card_number
       );
       setValue("creditcard.card_name", swipeCardData?.creditcard?.card_name);
+      if (role === "admin") {
+        const response = await notebookApi.getAllFull({
+          store_id: swipeCardData?.store_id,
+        });
+        console.log(
+          `Fetch notebook for store_id: ${swipeCardData?.store_id} successfully`,
+          response
+        );
+        setNotebooks(response);
+      }
     } else {
+      setValue("store_name");
+      setValue("store_code");
+      setValue("store_id");
+      setValue("store_phone_number");
+      setValue("store_address");
       setValue("creditcard.card_number");
       setValue("creditcard.card_name");
     }
@@ -204,24 +234,6 @@ function StoreCard() {
               </select>
             </div>
           </div>
-          {/* <div className="col-md-3">
-            <div className="mb-3">
-              <label className="form-label">Thẻ chưa lưu</label>
-              <select
-                {...register("creditcard_id")}
-                className="form-select"
-                disabled={creditcards.length > 0 ? null : true}
-                onChange={handleOnChangeCreditCard}
-              >
-                {creditcards &&
-                  creditcards.map((creditcard) => (
-                    <option key={creditcard.id} value={creditcard.id}>
-                      {creditcard.id}
-                    </option>
-                  ))}
-              </select>
-            </div>
-          </div> */}
           <div className="col-md-2">
             <div className="mb-3">
               <label className="form-label">
@@ -241,7 +253,13 @@ function StoreCard() {
           </div>
           <div className="col-md-2">
             <div className="mb-3">
-              <label className="form-label">Số dư cuối kì</label>
+              <label className="form-label">
+                Số dư cuối kì{" "}
+                <FontAwesomeIcon
+                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
+                  color="red"
+                />
+              </label>
               <input
                 {...register("closing_balance")}
                 type="number"
@@ -262,7 +280,13 @@ function StoreCard() {
           </div>
           <div className="col-md-2">
             <div className="mb-3">
-              <label className="form-label">Ngăn chứa thẻ</label>
+              <label className="form-label">
+                Ngăn chứa thẻ{" "}
+                <FontAwesomeIcon
+                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
+                  color="red"
+                />
+              </label>
               <input
                 {...register("card_location")}
                 type="text"
@@ -273,7 +297,13 @@ function StoreCard() {
           </div>
           <div className="col-md-2">
             <div className="mb-3">
-              <label className="form-label">Số thứ tự trên sổ</label>
+              <label className="form-label">
+                Số thứ tự trên sổ{" "}
+                <FontAwesomeIcon
+                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
+                  color="red"
+                />
+              </label>
               <input
                 {...register("order_in_notebook")}
                 type="number"
@@ -293,7 +323,13 @@ function StoreCard() {
         <div className="row">
           <div className="col-md-4">
             <div className="mb-3">
-              <label className="form-label">Số thẻ</label>
+              <label className="form-label">
+                Số thẻ{" "}
+                <FontAwesomeIcon
+                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
+                  color="red"
+                />
+              </label>
               <input
                 {...register("creditcard.card_number")}
                 type="text"
@@ -304,7 +340,13 @@ function StoreCard() {
           </div>
           <div className="col-md-4">
             <div className="mb-3">
-              <label className="form-label">Ngân hàng</label>
+              <label className="form-label">
+                Ngân hàng{" "}
+                <FontAwesomeIcon
+                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
+                  color="red"
+                />
+              </label>
               <input
                 {...register("creditcard.card_bank_name")}
                 type="text"
@@ -315,7 +357,13 @@ function StoreCard() {
           </div>
           <div className="col-md-2">
             <div className="mb-3">
-              <label className="form-label">Hạn mức thẻ</label>
+              <label className="form-label">
+                Hạn mức thẻ{" "}
+                <FontAwesomeIcon
+                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
+                  color="red"
+                />
+              </label>
               <input
                 {...register("creditcard.line_of_credit")}
                 type="number"
@@ -326,7 +374,13 @@ function StoreCard() {
           </div>
           <div className="col-md-2">
             <div className="mb-3">
-              <label className="form-label">Phí</label>
+              <label className="form-label">
+                Phí{" "}
+                <FontAwesomeIcon
+                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
+                  color="red"
+                />
+              </label>
               <input
                 {...register("fee")}
                 type="number"
@@ -339,7 +393,13 @@ function StoreCard() {
         <div className="row">
           <div className="col-md-4">
             <div className="mb-3">
-              <label className="form-label">Tên trên thẻ</label>
+              <label className="form-label">
+                Tên trên thẻ{" "}
+                <FontAwesomeIcon
+                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
+                  color="red"
+                />
+              </label>
               <input
                 {...register("creditcard.card_name")}
                 type="text"
@@ -350,7 +410,13 @@ function StoreCard() {
           </div>
           <div className="col-md-3">
             <div className="mb-3">
-              <label className="form-label">Ngày mở thẻ</label>
+              <label className="form-label">
+                Ngày mở thẻ{" "}
+                <FontAwesomeIcon
+                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
+                  color="red"
+                />
+              </label>
               <input
                 {...register("creditcard.card_issued_date")}
                 type="date"
@@ -361,7 +427,13 @@ function StoreCard() {
           </div>
           <div className="col-md-3">
             <div className="mb-3">
-              <label className="form-label">Ngày hết hạn</label>
+              <label className="form-label">
+                Ngày hết hạn{" "}
+                <FontAwesomeIcon
+                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
+                  color="red"
+                />
+              </label>
               <input
                 {...register("creditcard.card_expire_date")}
                 type="date"
@@ -372,7 +444,13 @@ function StoreCard() {
           </div>
           <div className="col-md-2">
             <div className="mb-3">
-              <label className="form-label">CCV</label>
+              <label className="form-label">
+                CCV{" "}
+                <FontAwesomeIcon
+                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
+                  color="red"
+                />
+              </label>
               <input
                 {...register("creditcard.card_ccv")}
                 type="text"
@@ -386,7 +464,13 @@ function StoreCard() {
         <div className="row">
           <div className="col-md-3">
             <div className="mb-3">
-              <label className="form-label">Ngày sao kê</label>
+              <label className="form-label">
+                Ngày sao kê{" "}
+                <FontAwesomeIcon
+                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
+                  color="red"
+                />
+              </label>
               <input
                 {...register("statement_date")}
                 type="date"
@@ -397,7 +481,13 @@ function StoreCard() {
           </div>
           <div className="col-md-3">
             <div className="mb-3">
-              <label className="form-label">Ngày cuối đáo</label>
+              <label className="form-label">
+                Ngày cuối đáo{" "}
+                <FontAwesomeIcon
+                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
+                  color="red"
+                />
+              </label>
               <input
                 {...register("maturity_date")}
                 type="date"
@@ -458,6 +548,7 @@ function StoreCard() {
                 required
                 onChange={handleOnChangeTransaction}
               >
+                <option value>Chọn giao dịch</option>
                 {responseSwipeCardData?.map((swipeCardTransaction) => (
                   <option
                     key={swipeCardTransaction.id}
