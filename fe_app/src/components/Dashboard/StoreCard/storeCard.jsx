@@ -1,13 +1,14 @@
 import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import creditCardApi from "../../../api/creditCardAPI";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import userApi from "../../../api/userAPI";
-import { useNavigate } from "react-router-dom";
 // import Pagination from "../../Pagination/pagination";
 import notebookApi from "../../../api/notebookAPI";
+import { ADMIN, EMPLOYEE } from "../../ConstantUtils/constants";
 import { AuthContext } from "../../Dashboard/dashboard";
 
 function StoreCard() {
@@ -21,12 +22,12 @@ function StoreCard() {
   const [reloadAfterSubmit, setReloadAfterSubmit] = useState(false);
   // const [params, setParams] = useState({ page: 1 });
   const navigate = useNavigate();
-  const { role = "" } = React.useContext(AuthContext);
+  const { role = "" } = useContext(AuthContext);
 
   useEffect(() => {
     async function callAPIInit() {
       try {
-        if (role === "employee") {
+        if (role === EMPLOYEE) {
           const response = await userApi.getInformationDetail();
           console.log("Fetch information detail successfully", response);
 
@@ -41,7 +42,7 @@ function StoreCard() {
             setNotebooks(response.store.notebooks);
             // setRowNotebooks(response.store.notebooks[0].row_notebook);
           }
-        } else if (role === "admin") {
+        } else if (role === ADMIN) {
         }
       } catch (error) {
         console.log("Failed to information detail", error);
@@ -141,7 +142,7 @@ function StoreCard() {
         swipeCardData?.creditcard?.card_number
       );
       setValue("creditcard.card_name", swipeCardData?.creditcard?.card_name);
-      if (role === "admin") {
+      if (role === ADMIN) {
         const response = await notebookApi.getAllFull({
           store_id: swipeCardData?.store_id,
         });

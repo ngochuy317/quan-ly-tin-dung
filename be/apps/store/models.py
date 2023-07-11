@@ -138,6 +138,11 @@ class SwipeCardTransaction(models.Model):
         (1, "Rút tiền"),
         (2, "Đáo thẻ")
     )
+    GENDER_CHOICES = (
+        (1, "Nam"),
+        (2, "Nữ"),
+        (3, "Khác")
+    )
 
     is_creditcard_stored = models.BooleanField(default=False)
     store_id = models.PositiveBigIntegerField()
@@ -148,7 +153,7 @@ class SwipeCardTransaction(models.Model):
     store_phone_number = models.CharField(max_length=20, blank=True, null=True)
     customer_name = models.CharField(max_length=127, blank=True, null=True)
     customer_phone_number = models.CharField(max_length=12, blank=True, null=True)
-    customer_gender = models.CharField(max_length=127, blank=True, null=True)
+    customer_gender = models.PositiveSmallIntegerField(choices=GENDER_CHOICES, default=3)
     customer_account_number = models.CharField(max_length=127, blank=True, null=True)
     customer_id_card_front_image = models.ImageField(upload_to='uploads/customer/', blank=True, null=True)
     customer_id_card_back_image = models.ImageField(upload_to='uploads/customer/', blank=True, null=True)

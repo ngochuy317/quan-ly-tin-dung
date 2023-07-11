@@ -3,15 +3,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import storeApi from "../../../api/storeAPI";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import userApi from "../../../api/userAPI";
-import { transactionType } from "../../ConstantUtils/constants";
+import { ADMIN, EMPLOYEE, transactionType } from "../../ConstantUtils/constants";
+import { AuthContext } from "../../Dashboard/dashboard";
 import Pagination from "../../Pagination/pagination";
 import SwipeCardInput from "./swipeCardInput";
 
 function SwipeCard() {
-  const { register, getValues, reset } = useForm();
+  const { register, getValues, setValue, reset } = useForm();
 
+  const [stores, setStores] = useState([]);
   const [responseSwipeCardData, setResponseSwipeCardData] = useState([]);
   const [formInput, setFormInput] = useState([]);
   const [params, setParams] = useState({ page: 1 });
@@ -19,32 +22,42 @@ function SwipeCard() {
   const [posMachine, setPOSMachine] = useState([]);
   const [initData, setInitData] = useState({});
   const [canAddForm, setCanAddForm] = useState(false);
+  const posMachineRef = useRef();
+  posMachineRef.current = posMachine;
 
   const formInputRef = useRef();
   formInputRef.current = formInput;
 
-  useEffect(() => {
-    async function fetchEmployeeDetail() {
-      try {
-        const response = await userApi.getInformationDetail();
-        console.log("Fetch information detail successfully", response);
+  const { role = "" } = React.useContext(AuthContext);
 
-        let initValues = {};
-        initValues.store_name = response.store.name;
-        initValues.store_code = response.store.code;
-        initValues.store_id = response.store.id;
-        initValues.store_phone_number = response.store.phone_number;
-        initValues.store_address = response.store.address;
-        setPOSMachine(response.store.poses);
-        setInitData({ ...initValues });
-        reset({ ...initValues });
+  useEffect(() => {
+    async function initData() {
+      try {
+        if (role === EMPLOYEE) {
+          const response = await userApi.getInformationDetail();
+          console.log("Fetch information detail successfully", response);
+
+          let initValues = {};
+          initValues.store_name = response.store.name;
+          initValues.store_code = response.store.code;
+          initValues.store_id = response.store.id;
+          initValues.store_phone_number = response.store.phone_number;
+          initValues.store_address = response.store.address;
+          setPOSMachine(response.store.poses);
+          setInitData({ ...initValues });
+          reset({ ...initValues });
+        } else if (role === ADMIN) {
+          const response = await storeApi.getAllFull();
+          console.log("Fetch store data full successfully", response);
+          setStores(response);
+        }
       } catch (error) {
         console.log("Failed to information detail", error);
       }
     }
 
-    fetchEmployeeDetail();
-  }, []); // eslint-disable-line
+    initData();
+  }, [role]); // eslint-disable-line
 
   useEffect(() => {
     async function fetchTransactionHistory() {
@@ -101,21 +114,58 @@ function SwipeCard() {
     setCurrentPage(currentPage + direction);
   };
 
+  const handleOnChangeStore = async (e) => {
+    let val = parseInt(e.target.value);
+    if (val) {
+      let store = stores.find((c) => c.id === val);
+      let initDataStore = {};
+      initDataStore.store_name = store.name;
+      initDataStore.store_code = store.code;
+      initDataStore.store_id = store.id;
+      initDataStore.store_phone_number = store.phone_number;
+      initDataStore.store_address = store.address;
+      setInitData({ ...initDataStore });
+      setValue("store_address", store?.address);
+      setValue("store_phone_number", store?.phone_number);
+      setPOSMachine(store?.poses);
+    } else {
+      setValue("store_address");
+      setValue("store_phone_number");
+      setPOSMachine([]);
+    }
+  };
+
   return (
     <div>
       <h2 className="text-center">Quẹt thẻ</h2>
-      {/* <form onSubmit={handleSubmit(onSubmit)}> */}
       <h5>Cửa hàng</h5>
       <div className="row">
         <div className="col-md-3">
           <div className="mb-3">
             <label className="form-label">Tên cửa hàng</label>
-            <input
-              {...register("store_name")}
-              type="text"
-              className="form-control"
-              disabled
-            />
+            {role === ADMIN ? (
+              <select
+                {...register("store_name")}
+                className="form-select"
+                onChange={handleOnChangeStore}
+                disabled={stores.length > 0 ? null : true}
+                required
+              >
+                <option value="">Chọn cửa hàng</option>
+                {stores?.map((store) => (
+                  <option key={store.id} value={store.id}>
+                    {store.name}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                {...register("store_name")}
+                type="text"
+                className="form-control"
+                disabled
+              />
+            )}
           </div>
         </div>
         <div className="col-md-4">
@@ -202,6 +252,7 @@ function SwipeCard() {
               <th scope="col">Ngày quẹt thẻ</th>
               <th scope="col">NV quẹt thẻ</th>
               <th scope="col">Ngày chỉnh sửa</th>
+              {role === ADMIN ? <th scope="col">Tiền về</th> : null}
               <th scope="col">Thao tác</th>
             </tr>
           </thead>
@@ -232,6 +283,9 @@ function SwipeCard() {
                 <td>{swipeCard.transaction_datetime_created}</td>
                 <td>{swipeCard.username}</td>
                 <td>{swipeCard.transaction_datetime_updated}</td>
+                {role === ADMIN ? (
+                  <td>{swipeCard.is_payment_received ? "Đã về" : "Chưa về"}</td>
+                ) : null}
                 <td>
                   <Link to={swipeCard.id + "/"}>Chỉnh sửa</Link>
                 </td>

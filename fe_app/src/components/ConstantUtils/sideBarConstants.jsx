@@ -104,7 +104,7 @@ export const dataItemSideBarForAdmin = [
     id: 8,
     name: "Quẹt thẻ",
     icon: "credit-card",
-    path: "/dashboard/swipecardadm",
+    path: "/dashboard/swipecard",
     role: ["admin", "employee"],
   },
   {

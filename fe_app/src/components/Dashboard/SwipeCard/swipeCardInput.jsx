@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import { useForm } from "react-hook-form";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
+import { useNavigate } from "react-router-dom";
 import { transactionType } from "../../ConstantUtils/constants";
 
 SwipeCardInput.propTypes = {
@@ -15,9 +16,10 @@ SwipeCardInput.propTypes = {
 
 function SwipeCardInput(props) {
   const { initData, deleteFormInput, posData, posId } = props;
-  const { register, handleSubmit, formState } = useForm();
+  const { register, handleSubmit, formState, getValues } = useForm();
   const { isSubmitting } = formState;
-  const constTransactionType = transactionType;
+
+  const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     console.log("data", data);
@@ -30,6 +32,13 @@ function SwipeCardInput(props) {
     } catch (error) {
       console.log("Failed to create swipe card transaction", error);
     }
+  };
+
+  const handleNavigateSwipecardDetail = () => {
+    let path = "/dashboard/swipecarddetail";
+    let filledData = getValues();
+    navigate(path, { state: { ...filledData, posData: posData } });
+    localStorage.setItem("activeTab", path);
   };
 
   return (
@@ -80,7 +89,7 @@ function SwipeCardInput(props) {
               className="form-select"
               required
             >
-              {constTransactionType?.map((ele) => (
+              {transactionType?.map((ele) => (
                 <option key={ele.value} value={ele.value}>
                   {ele.label}
                 </option>
@@ -180,7 +189,7 @@ function SwipeCardInput(props) {
             </label>
             <button
               disabled={isSubmitting}
-              type="submit"
+              onClick={() => handleNavigateSwipecardDetail()}
               className="btn btn-outline-primary form-control"
             >
               {isSubmitting && (

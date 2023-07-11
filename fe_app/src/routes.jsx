@@ -13,8 +13,8 @@ import NotebooksList from "./components/Dashboard/Notebooks/notebooksList";
 import NotebookDetail from "./components/Dashboard/Notebooks/notebookDetail";
 import NewNotebook from "./components/Dashboard/Notebooks/addNewNotebook";
 import SwipeCard from "./components/Dashboard/SwipeCard/swipeCard";
-import SwipeCardAdm from "./components/Dashboard/SwipeCard/swipeCardAdm";
 import SwipeCardDetail from "./components/Dashboard/SwipeCard/swipeCardDetail";
+import SwipeCardMoreDetail from "./components/Dashboard/SwipeCard/swipeCardMoreDetail";
 import StoreCard from "./components/Dashboard/StoreCard/storeCard";
 import UnsaveCard from "./components/Dashboard/StoreCard/unsaveCard";
 import SavedCardList from "./components/Dashboard/StoreCard/savedCardList";
@@ -40,9 +40,8 @@ function RoutesApp() {
       <Route path="/employees/add" element={<NewEmployee />} />
       <Route path="/employees/:id" element={<EmployeeDetail />} />
       <Route path="/swipecard" element={<SwipeCard />} />
+      <Route path="/swipecarddetail" element={<SwipeCardMoreDetail />} />
       <Route path="/swipecard/:id" element={<SwipeCardDetail />} />
-      <Route path="/swipecardadm" element={<SwipeCardAdm />} />
-      <Route path="/swipecardadm/:id" element={<SwipeCardDetail />} />
       <Route path="/storecard" element={<StoreCard />} />
       <Route path="/unsavedcard" element={<UnsaveCard />} />
       <Route path="/savedcard" element={<SavedCardList />} />
