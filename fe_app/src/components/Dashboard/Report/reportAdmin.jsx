@@ -183,7 +183,7 @@ function ReportAdmin() {
                 <option value="">Tất cả</option>
                 {poses?.map((pos) => (
                   <option key={pos.id} value={pos.id}>
-                    {pos.pos_id}
+                    {pos.id}
                   </option>
                 ))}
               </select>

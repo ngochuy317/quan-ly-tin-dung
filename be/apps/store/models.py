@@ -53,7 +53,7 @@ class POS(models.Model):
         ordering = ['-id']
 
     def __str__(self) -> str:
-        return f"{self.pos_id} in {self.store}"
+        return f"{self.id} in {self.store}"
 
     def update(self, commit=False, **kwargs):
         for key, value in kwargs.items():
@@ -102,7 +102,7 @@ class RowNotebook(models.Model):
 
 class CreditCard(models.Model):
 
-    card_number = models.CharField(max_length=127, blank=True, null=True)
+    card_number = models.CharField(max_length=127, unique=True)
     card_bank_name = models.CharField(max_length=127, blank=True, null=True)
     card_name = models.CharField(max_length=127, blank=True, null=True)
     card_issued_date = models.DateField(blank=True, null=True)
@@ -119,9 +119,6 @@ class CreditCard(models.Model):
         related_name="creditcards",
         null=True, blank=True
     )
-
-    class Meta:
-        ordering = ['-id']
 
 
 class Customer(models.Model):
@@ -163,7 +160,7 @@ class SwipeCardTransaction(models.Model):
     customer_bank_account = models.CharField(max_length=127, blank=True, null=True)
     line_of_credit = models.PositiveBigIntegerField(default=0)
     fee = models.PositiveBigIntegerField(default=0)
-    creditcard = models.OneToOneField(
+    creditcard = models.ForeignKey(
         CreditCard,
         on_delete=models.CASCADE,
         related_name="swipe_card_transaction",

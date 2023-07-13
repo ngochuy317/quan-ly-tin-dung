@@ -48,8 +48,14 @@ from .serializers import (
     CreateRowNotebookSerializer,
     GetRowNotebookSerializer,
     StoreInformationDetailSerializer,
+    CreditCardManagementSerializer,
+    AllTransaction4CreditCardSerializer,
 )
-from .pagination import CustomPageNumberPagination, SwipeCardTransactionPageNumberPagination
+from .pagination import (
+    CustomPageNumberPagination,
+    CustomPageNumberPaginationPageSize15,
+    SwipeCardTransactionPageNumberPagination,
+)
 
 
 class SwipeCardView(View):
@@ -182,6 +188,50 @@ class SwipeCardTransactionAPIView(ListAPIView):
         if self.request.user.role != "admin":
             qs = qs.filter(user=self.request.user.id)
         return qs
+
+
+class AllTransaction4CreditCardAPIView(APIView):
+
+    # permission_classes = [IsAdmin]
+
+    def get(self, request, *args, **kwargs):
+        card_number = kwargs.get("card_number")
+        if card_number:
+            data = SwipeCardTransaction.objects.filter(creditcard__card_number=card_number).values(
+                'store_name',
+                'customer_money_needed',
+                'transaction_datetime_created'
+            )
+
+            serializer = AllTransaction4CreditCardSerializer(data, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class CreditCardManagementAPIView(APIView):
+
+    permission_classes = [IsAdmin]
+
+    def get(self, request, *args, **kwargs):
+        sw_ids = SwipeCardTransaction.objects\
+            .exclude(creditcard__isnull=True)\
+            .order_by('creditcard', '-transaction_datetime_created')\
+            .distinct('creditcard')\
+            .values('id')
+        sw_list = SwipeCardTransaction.objects.filter(id__in=sw_ids)\
+            .order_by('-transaction_datetime_created')\
+            .values(
+                'id',
+                'store_name',
+                'creditcard__card_number',
+                'customer_money_needed',
+                'transaction_datetime_created'
+            )
+
+        pagination = CustomPageNumberPaginationPageSize15()
+        data = pagination.paginate_queryset(sw_list, request, view=self)
+        serializer = CreditCardManagementSerializer(data, many=True)
+        return pagination.get_paginated_response(serializer.data)
 
 
 class CreditCardAPIView(APIView):

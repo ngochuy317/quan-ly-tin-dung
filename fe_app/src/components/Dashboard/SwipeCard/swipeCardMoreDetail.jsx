@@ -1,18 +1,16 @@
 import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import { genderChoices, transactionType } from "../../ConstantUtils/constants";
-import { AuthContext } from "../../Dashboard/dashboard";
 
 function SwipeCardMoreDetail() {
   const { register, handleSubmit, reset, formState } = useForm();
   const { isSubmitting } = formState;
 
   const navigate = useNavigate();
-  const { role = "" } = useContext(AuthContext);
 
   const { state } = useLocation();
 
@@ -22,14 +20,17 @@ function SwipeCardMoreDetail() {
     }
 
     initData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const onSubmit = async (data) => {
     try {
       data.bill_pos_image = data.bill_pos_image[0];
       data.customer_id_card_front_image = data.customer_id_card_front_image[0];
       data.customer_id_card_back_image = data.customer_id_card_back_image[0];
-      data.creditcard.credit_card_front_image = data.creditcard.credit_card_front_image[0];
-      data.creditcard.credit_card_back_image = data.creditcard.credit_card_back_image[0];
+      data.creditcard.credit_card_front_image =
+        data.creditcard.credit_card_front_image[0];
+      data.creditcard.credit_card_back_image =
+        data.creditcard.credit_card_back_image[0];
 
       const response = await swipeCardTransactionAPI.createOne(data);
       console.log("Create Swipecard successfully", response);

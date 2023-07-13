@@ -314,3 +314,19 @@ class StoreCostSerializer(serializers.ModelSerializer):
     class Meta:
         model = StoreCost
         fields = '__all__'
+
+
+class CreditCardManagementSerializer(serializers.Serializer):
+
+    id = serializers.IntegerField()
+    creditcard__card_number = serializers.CharField()
+    store_name = serializers.CharField()
+    customer_money_needed = serializers.IntegerField()
+    transaction_datetime_created = serializers.DateTimeField(format="%Y-%m-%d %H:%M")
+
+
+class AllTransaction4CreditCardSerializer(serializers.Serializer):
+
+    store_name = serializers.CharField()
+    customer_money_needed = serializers.IntegerField()
+    transaction_datetime_created = serializers.DateTimeField(format="%Y-%m-%d %H:%M")

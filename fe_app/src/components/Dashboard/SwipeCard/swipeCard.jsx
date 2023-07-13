@@ -71,7 +71,7 @@ function SwipeCard() {
         );
         setResponseSwipeCardData(responseHistorySwipeCard);
       } catch (error) {
-        console.log("Failed to swipe card history", error);
+        console.log("Failed to fetch swipe card history", error);
       }
     }
     fetchTransactionHistory();

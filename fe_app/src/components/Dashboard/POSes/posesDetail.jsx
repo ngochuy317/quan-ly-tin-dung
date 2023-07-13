@@ -21,7 +21,6 @@ function POSesDetail() {
         console.log("Fetch store list successfully", responseJSONStore);
 
         let initValues = {};
-        initValues.pos_id = response.pos_id;
         initValues.mid = response.mid;
         initValues.tid = response.tid;
         initValues.note = response.note;

@@ -15,6 +15,10 @@ class CustomPageNumberPagination(pagination.PageNumberPagination):
         )
 
 
+class CustomPageNumberPaginationPageSize15(CustomPageNumberPagination):
+    page_size = 15
+
+
 class SwipeCardTransactionPageNumberPagination(CustomPageNumberPagination):
 
     def get_paginated_response(self, data):
