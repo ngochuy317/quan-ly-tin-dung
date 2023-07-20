@@ -1,15 +1,18 @@
-import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import storeApi from "../../../api/storeAPI";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import userApi from "../../../api/userAPI";
-import { ADMIN, EMPLOYEE, transactionType } from "../../ConstantUtils/constants";
+import {
+  ADMIN,
+  EMPLOYEE,
+  transactionType,
+} from "../../ConstantUtils/constants";
 import { AuthContext } from "../../Dashboard/dashboard";
 import Pagination from "../../Pagination/pagination";
 import SwipeCardInput from "./swipeCardInput";
+import SelectField from "../../Common/selectField";
 
 function SwipeCard() {
   const { register, getValues, setValue, reset } = useForm();
@@ -78,28 +81,24 @@ function SwipeCard() {
   }, [params]);
 
   const onAddForm = (event) => {
-    let posData = getValues("pos_dropdown");
-    let posId = posData.split("-")[0];
-
     setFormInput([
       ...formInput,
       <SwipeCardInput
         key={formInput.length}
-        posData={posData}
-        posId={parseInt(posId)}
         deleteFormInput={() => deleteFormInput(formInput.length)}
         initData={{ ...initData }}
+        requiredPosMachine={posMachine}
       />,
     ]);
   };
 
-  const handleOnChangePOS = (e) => {
-    if (e.target.value) {
-      setCanAddForm(true);
-    } else {
-      setCanAddForm(false);
-    }
-  };
+  // const handleOnChangePOS = (e) => {
+  //   if (e.target.value) {
+  //     setCanAddForm(true);
+  //   } else {
+  //     setCanAddForm(false);
+  //   }
+  // };
 
   const deleteFormInput = (key) => {
     let newFormInput = formInputRef.current.filter(
@@ -132,6 +131,11 @@ function SwipeCard() {
       setValue("store_address");
       setValue("store_phone_number");
       setPOSMachine([]);
+    }
+    if (e.target.value) {
+      setCanAddForm(true);
+    } else {
+      setCanAddForm(false);
     }
   };
 
@@ -191,35 +195,7 @@ function SwipeCard() {
           </div>
         </div>
       </div>
-      <h5>Máy POS</h5>
-      <div className="col-md-2">
-        <div className="mb-3">
-          <label className="form-label">
-            POS Mid-Tid-Ngân hàng{" "}
-            <FontAwesomeIcon
-              icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-              color="red"
-            />
-          </label>
-          <select
-            {...register("pos_dropdown")}
-            className="form-select"
-            required
-            onChange={handleOnChangePOS}
-            disabled={posMachine.length > 0 ? null : true}
-          >
-            <option value="">Chọn máy POS</option>
-            {posMachine?.map((pos) => (
-              <option
-                key={pos.id}
-                value={`${pos.id}-${pos.mid}-${pos.tid}-${pos.bank_name}`}
-              >
-                {pos.id}-{pos.mid}-{pos.tid}-{pos.bank_name}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
+
       <h5>Quẹt thẻ</h5>
 
       {formInput?.map((formInp, index) => formInp)}
@@ -234,7 +210,6 @@ function SwipeCard() {
           Thêm
         </button>
       </div>
-      {/* </form> */}
       <h2 className="text-center">Lịch sử quẹt thẻ</h2>
       <div className="table-responsive">
         <table className="table">
@@ -266,9 +241,9 @@ function SwipeCard() {
                     Xem
                   </Link>
                 </td>
-                <td>{swipeCard.creditcard?.card_name}</td>
+                <td>{swipeCard?.customer?.credit_card?.card_name}</td>
                 <td>
-                  <Link>{swipeCard.creditcard?.card_number}</Link>
+                  <Link>{swipeCard?.customer?.credit_card?.card_number}</Link>
                 </td>
                 <td>{swipeCard.customer_money_needed}</td>
                 <td>{swipeCard.customer_name}</td>

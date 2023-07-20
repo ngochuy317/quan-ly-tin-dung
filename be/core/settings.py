@@ -40,9 +40,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # apps
     'apps.user',
     'apps.store',
     'apps.home',
+    'apps.customer',
+    # 3rd lib
     'rest_framework',
     'corsheaders',
     'django_filters',

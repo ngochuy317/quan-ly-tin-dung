@@ -1,16 +1,17 @@
 from rest_framework import serializers
 
 from apps.user.models import User, InfomationDetail
+from apps.customer.models import CreditCard, Customer
+from apps.customer.serializers import CreditCardSerializer
 from apps.store.models import (
     Store,
     StoreCost,
     POS,
     NoteBook,
     RowNotebook,
-    Customer,
-    CreditCard,
     Product,
     SwipeCardTransaction,
+    BillPos,
 )
 
 
@@ -92,36 +93,6 @@ class POSSerializer(serializers.ModelSerializer):
             setattr(instance, attr, value)
         instance.save()
         return instance
-
-
-class CreditCardSerializer(serializers.ModelSerializer):
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-
-        try:
-            if self.context['request'].method in ['GET']:
-                self.fields['credit_card_front_image'] = serializers.SerializerMethodField()
-                self.fields['credit_card_back_image'] = serializers.SerializerMethodField()
-            if self.context['request'].method in ['PUT']:
-                self.fields['credit_card_front_image'] = serializers.CharField()
-                self.fields['credit_card_back_image'] = serializers.CharField()
-        except KeyError:
-            pass
-
-    class Meta:
-        model = CreditCard
-        fields = "__all__"
-
-    def get_credit_card_front_image(self, obj):
-        if obj.credit_card_front_image:
-            return self.context['request'].build_absolute_uri(obj.credit_card_front_image.url)
-        return ""
-
-    def get_credit_card_back_image(self, obj):
-        if obj.credit_card_back_image:
-            return self.context['request'].build_absolute_uri(obj.credit_card_back_image.url)
-        return ""
 
 
 class GetRowNotebookSerializer(serializers.ModelSerializer):
@@ -212,11 +183,11 @@ class StoreSerializer(serializers.ModelSerializer):
         read_only_fields = ('id', )
 
 
-class CustomerSerializer(serializers.ModelSerializer):
+class BillPosSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Customer
-        fields = ('name', 'phone_number', 'account_number', 'id_card_image')
+        model = BillPos
+        fields = '__all__'
 
 
 class SwipeCardTransactionReportSerializer(serializers.ModelSerializer):
@@ -236,10 +207,21 @@ class SwipeCardTransactionReportSerializer(serializers.ModelSerializer):
             'pos',
         )
 
+class CreditCardCustomerSerializer(serializers.Serializer):
+    
+    card_number = serializers.CharField(read_only=True)
+
+
+class SwipeCardTransactionCustomerSerializer(serializers.Serializer):
+    
+    credit_card = CreditCardCustomerSerializer(read_only=True)
+    phone_number = serializers.CharField(write_only=True)
+
 
 class SwipeCardTransactionSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
-    creditcard = CreditCardSerializer(required=False)
+    creditcard = CreditCardSerializer(write_only=True)
+    customer = SwipeCardTransactionCustomerSerializer(read_only=True)
     transaction_datetime_created = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
     transaction_datetime_updated = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
     username = serializers.CharField(source='user.username', read_only=True)
@@ -249,14 +231,14 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
 
         try:
             if self.context['request'].method in ['GET']:
-                self.fields['creditcard'] = serializers.SerializerMethodField()
+                # self.fields['creditcard'] = serializers.SerializerMethodField()
                 # self.fields['transaction_type'] = serializers.SerializerMethodField()
                 self.fields['customer_id_card_front_image'] = serializers.SerializerMethodField()
                 self.fields['customer_id_card_back_image'] = serializers.SerializerMethodField()
-                self.fields['bill_pos_image'] = serializers.SerializerMethodField()
-                self.fields['pos'] = serializers.SerializerMethodField()
         except KeyError:
             pass
+        except Exception as ex:
+            print("Exception SwipeCardTransactionSerializer", ex)
 
     class Meta:
         model = SwipeCardTransaction
@@ -264,20 +246,26 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
 
     def get_creditcard(self, obj):
         serializer_context = {'request': self.context.get('request')}
-        serializer = CreditCardSerializer(obj.creditcard, context=serializer_context)
-        return serializer.data
-
-    def get_pos(self, obj):
-        serializer = POSSerializer(obj.pos)
-        return serializer.data
-
-    # def get_transaction_type(self, obj):
-    #     return obj.get_transaction_type_display()
+        return serializer_context
+        # serializer = CreditCardSerializer(obj.creditcard, context=serializer_context)
+        # return serializer.data
 
     def create(self, validated_data):
+        customer = validated_data.pop('customer')
+        phone_number = customer.pop('phone_number')
         creditcard_data = validated_data.pop('creditcard')
-        creditcard_instance = CreditCard.objects.create(**creditcard_data)
-        instance = SwipeCardTransaction.objects.create(**validated_data, creditcard=creditcard_instance)
+        card_number = creditcard_data.pop("card_number")
+        creditcard_obj, _ = CreditCard.objects.get_or_create(
+            card_number=card_number
+        )
+        for attr, val in creditcard_data:
+            setattr(creditcard_obj, attr, val)
+        creditcard_obj.save()
+        customer_obj, _ = Customer.objects.get_or_create(
+            phone_number=phone_number,
+            credit_card=creditcard_obj,
+        )
+        instance = SwipeCardTransaction.objects.create(**validated_data, customer=customer_obj)
         return instance
 
     def update(self, instance: SwipeCardTransaction, validated_data):
@@ -301,11 +289,6 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
     def get_customer_id_card_back_image(self, obj):
         if obj.customer_id_card_back_image:
             return self.context['request'].build_absolute_uri(obj.customer_id_card_back_image.url)
-        return ""
-
-    def get_bill_pos_image(self, obj):
-        if obj.bill_pos_image:
-            return self.context['request'].build_absolute_uri(obj.bill_pos_image.url)
         return ""
 
 

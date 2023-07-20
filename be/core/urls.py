@@ -23,6 +23,7 @@ urlpatterns = [
     path('_notadmin/', admin.site.urls),
     path('', include('apps.home.urls')),
     path('api/user/', include('apps.user.urls')),
+    path('api/customer/', include('apps.customer.urls')),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

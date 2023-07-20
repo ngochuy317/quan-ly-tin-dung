@@ -4,9 +4,9 @@ from .models import (
     Store,
     POS,
     SwipeCardTransaction,
-    CreditCard,
     NoteBook,
     RowNotebook,
+    BillPos,
 )
 
 
@@ -15,8 +15,8 @@ class SwipeCardTransactionAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Store)
+admin.site.register(BillPos)
 admin.site.register(POS)
 admin.site.register(SwipeCardTransaction, SwipeCardTransactionAdmin)
-admin.site.register(CreditCard)
 admin.site.register(NoteBook)
 admin.site.register(RowNotebook)

@@ -13,7 +13,7 @@ function LoginForm() {
   const onSubmit = async (data) => {
     try {
       const response = await authApi.login(data);
-      console.log("Login successfully", response);
+      console.log("Login successfully");
       localStorage.setItem("access_token", response.access_token);
       let access_token = jwtDecode(response.access_token);
       if (access_token.role === "admin") {

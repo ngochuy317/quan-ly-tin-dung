@@ -100,33 +100,25 @@ class RowNotebook(models.Model):
         ordering = ['-storage_datetime']
 
 
-class CreditCard(models.Model):
+# class CreditCard(models.Model):
 
-    card_number = models.CharField(max_length=127, unique=True)
-    card_bank_name = models.CharField(max_length=127, blank=True, null=True)
-    card_name = models.CharField(max_length=127, blank=True, null=True)
-    card_issued_date = models.DateField(blank=True, null=True)
-    card_expire_date = models.DateField(blank=True, null=True)
-    card_ccv = models.CharField(max_length=127, blank=True, null=True)
-    statement_date = models.DateField(blank=True, null=True)
-    maturity_date = models.DateField(blank=True, null=True)
-    credit_card_front_image = models.ImageField(upload_to='uploads/creditcards/', blank=True, null=True)
-    credit_card_back_image = models.ImageField(upload_to='uploads/creditcards/', blank=True, null=True)
-    note = models.TextField(blank=True, null=True)
-    notebook = models.OneToOneField(
-        RowNotebook,
-        on_delete=models.CASCADE,
-        related_name="creditcards",
-        null=True, blank=True
-    )
-
-
-class Customer(models.Model):
-    name = models.CharField(max_length=127, blank=True, null=True)
-    phone_number = models.CharField(max_length=12, blank=True, null=True)
-    gender = models.CharField(max_length=127, blank=True, null=True)
-    account_number = models.CharField(max_length=127, blank=True, null=True)
-    id_card_image = models.ImageField(upload_to='uploads/customer/')
+#     card_number = models.CharField(max_length=127, unique=True)
+#     card_bank_name = models.CharField(max_length=127, blank=True, null=True)
+#     card_name = models.CharField(max_length=127, blank=True, null=True)
+#     card_issued_date = models.DateField(blank=True, null=True)
+#     card_expire_date = models.DateField(blank=True, null=True)
+#     card_ccv = models.CharField(max_length=127, blank=True, null=True)
+#     statement_date = models.DateField(blank=True, null=True)
+#     maturity_date = models.DateField(blank=True, null=True)
+#     credit_card_front_image = models.ImageField(upload_to='uploads/creditcards/', blank=True, null=True)
+#     credit_card_back_image = models.ImageField(upload_to='uploads/creditcards/', blank=True, null=True)
+#     note = models.TextField(blank=True, null=True)
+#     notebook = models.OneToOneField(
+#         RowNotebook,
+#         on_delete=models.CASCADE,
+#         related_name="creditcards",
+#         null=True, blank=True
+#     )
 
 
 class SwipeCardTransaction(models.Model):
@@ -154,14 +146,13 @@ class SwipeCardTransaction(models.Model):
     customer_account_number = models.CharField(max_length=127, blank=True, null=True)
     customer_id_card_front_image = models.ImageField(upload_to='uploads/customer/', blank=True, null=True)
     customer_id_card_back_image = models.ImageField(upload_to='uploads/customer/', blank=True, null=True)
-    bill_pos_image = models.ImageField(upload_to='uploads/pos/')
     customer_money_needed = models.PositiveBigIntegerField(default=0)
     customer_account = models.CharField(max_length=127, blank=True, null=True)
     customer_bank_account = models.CharField(max_length=127, blank=True, null=True)
     line_of_credit = models.PositiveBigIntegerField(default=0)
     fee = models.PositiveBigIntegerField(default=0)
-    creditcard = models.ForeignKey(
-        CreditCard,
+    customer = models.ForeignKey(
+        "customer.Customer",
         on_delete=models.CASCADE,
         related_name="swipe_card_transaction",
         blank=True,
@@ -177,7 +168,6 @@ class SwipeCardTransaction(models.Model):
     )
     transaction_datetime_created = models.DateTimeField(auto_now_add=True)
     transaction_datetime_updated = models.DateTimeField(auto_now=True)
-    pos = models.ForeignKey(POS, on_delete=models.CASCADE, related_name="swipe_card_transaction")
     transaction_type = models.SmallIntegerField(choices=TRANSACTION_TYPE_CHOICES, default=1)
     is_payment_received = models.BooleanField(default=False)
 
@@ -194,12 +184,12 @@ class Product(models.Model):
 
 class BillPos(models.Model):
 
-    transaction_id = models.PositiveBigIntegerField()
+    transaction = models.ForeignKey(SwipeCardTransaction, on_delete=models.CASCADE, related_name="billposes")
+    pos = models.ForeignKey(POS, on_delete=models.CASCADE, related_name="billposes")
     bill_image = models.ImageField(upload_to='uploads/billpos/')
-    total_money = models.PositiveBigIntegerField()
-    batch = models.CharField(max_length=128, blank=True, null=True)
-    invoice = models.CharField(max_length=128, blank=True, null=True)
+    total_money = models.PositiveBigIntegerField(blank=True, null=True)
     ref_no = models.CharField(max_length=128, blank=True, null=True)
-    approve_code = models.CharField(max_length=128, blank=True, null=True)
-    datetime_bill = models.DateTimeField()
-    note = models.TextField()
+    invoice_no = models.CharField(max_length=128, blank=True, null=True)
+    batch = models.CharField(max_length=128, blank=True, null=True)
+    authorization_code = models.CharField(max_length=128, blank=True, null=True)
+    datetime = models.DateTimeField(auto_now_add=True)

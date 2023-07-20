@@ -1,6 +1,6 @@
 import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
@@ -9,6 +9,8 @@ import { genderChoices, transactionType } from "../../ConstantUtils/constants";
 function SwipeCardMoreDetail() {
   const { register, handleSubmit, reset, formState } = useForm();
   const { isSubmitting } = formState;
+
+  const [isManualInput, setIsManualInput] = useState(false);
 
   const navigate = useNavigate();
 
@@ -38,6 +40,11 @@ function SwipeCardMoreDetail() {
     } catch (error) {
       console.log("Failed to create swipecard", error);
     }
+  };
+
+  const handleOnChangeManualInput = (e) => {
+    let check = e.target.checked;
+    setIsManualInput(check);
   };
 
   return (
@@ -105,35 +112,18 @@ function SwipeCardMoreDetail() {
         <div className="row">
           <div className="col-md-2">
             <div className="mb-3">
-              <label className="form-label">
-                Tên{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
+              <label className="form-label">Tên </label>
               <input
                 {...register("customer_name")}
                 type="text"
                 className="form-control"
-                required
               />
             </div>
           </div>
           <div className="col-md-1">
             <div className="mb-3">
-              <label className="form-label">
-                Giới tính{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <select
-                {...register("customer_gender")}
-                className="form-select"
-                required
-              >
+              <label className="form-label">Giới tính </label>
+              <select {...register("customer_gender")} className="form-select">
                 {genderChoices?.map((gender) => (
                   <option key={gender.value} value={gender.value}>
                     {gender.label}
@@ -152,7 +142,7 @@ function SwipeCardMoreDetail() {
                 />
               </label>
               <input
-                {...register("customer_phone_number")}
+                {...register("customer.phone_number")}
                 type="tel"
                 className="form-control"
                 required
@@ -179,35 +169,21 @@ function SwipeCardMoreDetail() {
           </div>
           <div className="col-md-2">
             <div className="mb-3">
-              <label className="form-label">
-                Số TK nhận tiền{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
+              <label className="form-label">Số TK nhận tiền </label>
               <input
                 {...register("customer_account")}
                 type="text"
                 className="form-control"
-                required
               />
             </div>
           </div>
           <div className="col-md-2">
             <div className="mb-3">
-              <label className="form-label">
-                Ngân hàng{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
+              <label className="form-label">Ngân hàng </label>
               <input
                 {...register("customer_bank_account")}
                 type="text"
                 className="form-control"
-                required
               />
             </div>
           </div>
@@ -215,35 +191,21 @@ function SwipeCardMoreDetail() {
         <div className="row">
           <div className="col-md-4">
             <div className="mb-3">
-              <label className="form-label">
-                Ảnh mặt trước cmnd/cccd{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
+              <label className="form-label">Ảnh mặt trước cmnd/cccd</label>
               <input
                 {...register("customer_id_card_front_image")}
                 type="file"
                 className="form-control"
-                required
               />
             </div>
           </div>
           <div className="col-md-4">
             <div className="mb-3">
-              <label className="form-label">
-                Ảnh mặt sau cmnd/cccd{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
+              <label className="form-label">Ảnh mặt sau cmnd/cccd</label>
               <input
                 {...register("customer_id_card_back_image")}
                 type="file"
                 className="form-control"
-                required
               />
             </div>
           </div>
@@ -267,6 +229,20 @@ function SwipeCardMoreDetail() {
         </div>
         <div className="row"></div>
         <h5>Thông tin thẻ</h5>
+        <div className="form-check form-switch">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            id="flexSwitchCheckManualInput"
+            onChange={handleOnChangeManualInput}
+          />
+          <label
+            className="form-check-label"
+            htmlFor="flexSwitchCheckManualInput"
+          >
+            Nhập bằng tay
+          </label>
+        </div>
         <div className="row">
           <div className="col-md-4">
             <div className="mb-3">
@@ -298,6 +274,7 @@ function SwipeCardMoreDetail() {
                 {...register("creditcard.card_bank_name")}
                 type="text"
                 className="form-control"
+                disabled={!isManualInput}
                 required
               />
             </div>
@@ -316,6 +293,7 @@ function SwipeCardMoreDetail() {
                 type="number"
                 className="form-control"
                 required
+                disabled={!isManualInput}
               />
             </div>
           </div>
@@ -333,6 +311,7 @@ function SwipeCardMoreDetail() {
                 type="number"
                 className="form-control"
                 required
+                disabled={!isManualInput}
               />
             </div>
           </div>
@@ -352,6 +331,7 @@ function SwipeCardMoreDetail() {
                 type="text"
                 className="form-control"
                 required
+                disabled={!isManualInput}
               />
             </div>
           </div>
@@ -369,6 +349,7 @@ function SwipeCardMoreDetail() {
                 type="date"
                 className="form-control"
                 required
+                disabled={!isManualInput}
               />
             </div>
           </div>
@@ -386,6 +367,7 @@ function SwipeCardMoreDetail() {
                 type="date"
                 className="form-control"
                 required
+                disabled={!isManualInput}
               />
             </div>
           </div>
@@ -404,6 +386,7 @@ function SwipeCardMoreDetail() {
                 maxLength="3"
                 className="form-control"
                 required
+                disabled={!isManualInput}
               />
             </div>
           </div>
@@ -423,6 +406,7 @@ function SwipeCardMoreDetail() {
                 type="date"
                 className="form-control"
                 required
+                disabled={!isManualInput}
               />
             </div>
           </div>
@@ -440,6 +424,7 @@ function SwipeCardMoreDetail() {
                 type="date"
                 className="form-control"
                 required
+                disabled={!isManualInput}
               />
             </div>
           </div>
@@ -486,6 +471,7 @@ function SwipeCardMoreDetail() {
                 type="file"
                 className="form-control"
                 required
+                disabled={!isManualInput}
               />
             </div>
           </div>
@@ -504,6 +490,7 @@ function SwipeCardMoreDetail() {
                 type="file"
                 className="form-control"
                 required
+                disabled={!isManualInput}
               />
             </div>
           </div>

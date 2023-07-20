@@ -1,6 +1,14 @@
 import { CDBBtn } from "cdbreact";
 import React from "react";
 import Modal from "react-bootstrap/Modal";
+import PropTypes from "prop-types";
+
+HistoryCreditCardModal.propTypes = {
+  show: PropTypes.bool,
+  handleClose: PropTypes.func,
+  title: PropTypes.string,
+  dataTableHistoryCreditCard: PropTypes.array,
+};
 
 function HistoryCreditCardModal(props) {
   const { show, handleClose, title, dataTableHistoryCreditCard } = props;

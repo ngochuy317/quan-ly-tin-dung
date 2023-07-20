@@ -16,6 +16,8 @@ function StoreCard() {
   const { isSubmitting } = formState;
   const [notebooks, setNotebooks] = useState([]);
   const [responseSwipeCardData, setResponseSwipeCardData] = useState([]);
+  const [dataListCardNumber, setDataListCardNumber] = useState([]);
+  const [isManualInput, setIsManualInput] = useState(false);
   const [rowNotebooks, setRowNotebooks] = useState([]);
   // const [currentPage, setCurrentPage] = useState(1);
   const [maxLengthOrderInNotebook, setMaxLengthOrderInNotebook] = useState(0);
@@ -52,32 +54,70 @@ function StoreCard() {
     callAPIInit();
   }, [role]); // eslint-disable-line
 
-  useEffect(() => {
-    async function fetchTransactionHistory() {
-      try {
-        const responseHistorySwipeCard = await swipeCardTransactionAPI.getAll();
+  const handleOnChangeCardNumber = async (e) => {
+    let event = e.nativeEvent.inputType ? "input" : "option selected";
+    if (event === "input") {
+      let val = e.target.value;
+      if (val.length > 2) {
+        const result = await creditCardApi.search({ card_number: val });
         console.log(
-          "Fetch swipe card history list successfully",
-          responseHistorySwipeCard
+          "🚀 ~ file: swipeCardInput.jsx:44 ~ handleOnChangeCardNumber ~ result:",
+          result
         );
-        setResponseSwipeCardData(responseHistorySwipeCard.results);
-        if (responseHistorySwipeCard.results.length > 0) {
-          setValue(
-            "creditcard.card_number",
-            responseHistorySwipeCard.results[0].creditcard?.card_number
-          );
-          setValue(
-            "creditcard.card_name",
-            responseHistorySwipeCard.results[0].creditcard?.card_name
-          );
-        }
-      } catch (error) {
-        console.log("Failed to swipe card history", error);
+        setDataListCardNumber([...result]);
       }
+    } else if (event === "option selected") {
+      const card = dataListCardNumber.find(
+        (c) => c.card_number === e.target.value
+      );
+      setValue("creditcard.card_bank_name", card.card_bank_name);
+      setValue("creditcard.card_expire_date", card.card_expire_date);
+      setValue("creditcard.card_issued_date", card.card_issued_date);
+      setValue("creditcard.card_name", card.card_name);
+      setValue(
+        "creditcard.credit_card_back_image",
+        card.credit_card_back_image
+      );
+      setValue(
+        "creditcard.credit_card_front_image",
+        card.credit_card_front_image
+      );
+      setValue("creditcard.maturity_date", card.maturity_date);
+      setValue("creditcard.statement_date", card.statement_date);
     }
-    fetchTransactionHistory();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reloadAfterSubmit]);
+  };
+
+  const handleOnChangeManualInput = (e) => {
+    let check = e.target.checked;
+    setIsManualInput(check);
+  };
+
+  // useEffect(() => {
+  //   async function fetchTransactionHistory() {
+  //     try {
+  //       const responseHistorySwipeCard = await swipeCardTransactionAPI.getAll();
+  //       console.log(
+  //         "Fetch swipe card history list successfully",
+  //         responseHistorySwipeCard
+  //       );
+  //       setResponseSwipeCardData(responseHistorySwipeCard.results);
+  //       if (responseHistorySwipeCard.results.length > 0) {
+  //         setValue(
+  //           "creditcard.card_number",
+  //           responseHistorySwipeCard.results[0].creditcard?.card_number
+  //         );
+  //         setValue(
+  //           "creditcard.card_name",
+  //           responseHistorySwipeCard.results[0].creditcard?.card_name
+  //         );
+  //       }
+  //     } catch (error) {
+  //       console.log("Failed to swipe card history", error);
+  //     }
+  //   }
+  //   fetchTransactionHistory();
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [reloadAfterSubmit]);
 
   const onSubmit = async (data) => {
     try {
@@ -321,6 +361,20 @@ function StoreCard() {
           </div>
         </div>
         <h5>Thông tin thẻ</h5>
+        <div className="form-check form-switch">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            id="flexSwitchCheckManualInput"
+            onChange={handleOnChangeManualInput}
+          />
+          <label
+            className="form-check-label"
+            htmlFor="flexSwitchCheckManualInput"
+          >
+            Nhập bằng tay
+          </label>
+        </div>
         <div className="row">
           <div className="col-md-4">
             <div className="mb-3">
@@ -336,7 +390,16 @@ function StoreCard() {
                 type="text"
                 className="form-control"
                 required
+                list="cardNumbers"
+                id="myBrowser"
+                placeholder="Nhập 3 số đầu để tìm"
+                onChange={handleOnChangeCardNumber}
               />
+              <datalist id="cardNumbers">
+                {dataListCardNumber?.map((data, index) => (
+                  <option value={data.card_number} key={index}></option>
+                ))}
+              </datalist>
             </div>
           </div>
           <div className="col-md-4">
@@ -353,6 +416,7 @@ function StoreCard() {
                 type="text"
                 className="form-control"
                 required
+                disabled={!isManualInput}
               />
             </div>
           </div>
@@ -370,6 +434,7 @@ function StoreCard() {
                 type="number"
                 className="form-control"
                 required
+                disabled={!isManualInput}
               />
             </div>
           </div>
@@ -387,6 +452,7 @@ function StoreCard() {
                 type="number"
                 className="form-control"
                 required
+                disabled={!isManualInput}
               />
             </div>
           </div>
@@ -406,6 +472,7 @@ function StoreCard() {
                 type="text"
                 className="form-control"
                 required
+                disabled={!isManualInput}
               />
             </div>
           </div>
@@ -423,6 +490,7 @@ function StoreCard() {
                 type="date"
                 className="form-control"
                 required
+                disabled={!isManualInput}
               />
             </div>
           </div>
@@ -440,6 +508,7 @@ function StoreCard() {
                 type="date"
                 className="form-control"
                 required
+                disabled={!isManualInput}
               />
             </div>
           </div>
@@ -458,6 +527,7 @@ function StoreCard() {
                 maxLength="3"
                 className="form-control"
                 required
+                disabled={!isManualInput}
               />
             </div>
           </div>
@@ -477,6 +547,7 @@ function StoreCard() {
                 type="date"
                 className="form-control"
                 required
+                disabled={!isManualInput}
               />
             </div>
           </div>
@@ -494,6 +565,7 @@ function StoreCard() {
                 type="date"
                 className="form-control"
                 required
+                disabled={!isManualInput}
               />
             </div>
           </div>
@@ -511,6 +583,7 @@ function StoreCard() {
                 type="file"
                 className="form-control"
                 required
+                disabled={!isManualInput}
               />
             </div>
           </div>
@@ -528,40 +601,12 @@ function StoreCard() {
                 type="file"
                 className="form-control"
                 required
+                disabled={!isManualInput}
               />
             </div>
           </div>
         </div>
         <div className="row">
-          <div className="col-md-5">
-            <div className="mb-3">
-              <label className="form-label">
-                Giao dịch{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <select
-                {...register("transaction_id")}
-                className="form-select"
-                disabled={responseSwipeCardData.length > 0 ? null : true}
-                required
-                onChange={handleOnChangeTransaction}
-              >
-                <option value>Chọn giao dịch</option>
-                {responseSwipeCardData?.map((swipeCardTransaction) => (
-                  <option
-                    key={swipeCardTransaction.id}
-                    value={swipeCardTransaction.id}
-                  >
-                    {swipeCardTransaction.transaction_datetime_created}--
-                    {swipeCardTransaction.customer_name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
           <div className="col-md-1">
             <div className="mb-3">
               <label className="form-label">
