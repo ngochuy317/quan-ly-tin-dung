@@ -49,6 +49,16 @@ function SwipeCardInput(props) {
 
   const onSubmit = async (data) => {
     console.log("data", data);
+    if (typeof data.creditcard.credit_card_back_image === "string") {
+      delete data.creditcard.credit_card_back_image;
+    } else {
+      data.creditcard.credit_card_back_image = data.creditcard.credit_card_back_image[0];
+    }
+    if (typeof data.creditcard.credit_card_front_image === "string") {
+      delete data.creditcard.credit_card_front_image;
+    } else {
+      data.creditcard.credit_card_front_image = data.creditcard.credit_card_front_image[0];
+    }
     try {
       const response = await swipeCardTransactionAPI.createOne(data);
       console.log("Create swipe card transaction successfully", response);
