@@ -167,27 +167,27 @@ class SwipeCardTransactionAPIView(ListAPIView):
 
     def post(self, request, *args, **kwargs):
 
-        try:
-            parser = NestedParser(request.data)
-            if parser.is_valid():
-                data = parser.validate_data
-                data["user"] = request.user.id
-                billpos_datas = data.pop("billpos")
-                serializer = SwipeCardTransactionSerializer(data=data)
-                serializer.is_valid(raise_exception=True)
-                serializer.save()
+        # try:
+        parser = NestedParser(request.data)
+        if parser.is_valid():
+            data = parser.validate_data
+            data["user"] = request.user.id
+            billpos_datas = data.pop("billpos")
+            serializer = SwipeCardTransactionSerializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
 
-                swipe_card_transaction_id = serializer.data.get("id")
-                for billpos_data in billpos_datas:
-                    billpos_data["transaction"] = swipe_card_transaction_id
-                billpos_serializer = BillPosSerializer(data=billpos_datas, many=True)
-                billpos_serializer.is_valid(raise_exception=True)
-                billpos_serializer.save()
-                return Response(status=status.HTTP_201_CREATED)
-            return Response("Parser error", status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            print("Exception SwipeCardTransactionAPIView", e)
-            return Response(e, status=status.HTTP_400_BAD_REQUEST)
+            swipe_card_transaction_id = serializer.data.get("id")
+            for billpos_data in billpos_datas:
+                billpos_data["transaction"] = swipe_card_transaction_id
+            billpos_serializer = BillPosSerializer(data=billpos_datas, many=True)
+            billpos_serializer.is_valid(raise_exception=True)
+            billpos_serializer.save()
+            return Response(status=status.HTTP_201_CREATED)
+        return Response("Parser error", status=status.HTTP_400_BAD_REQUEST)
+        # except Exception as e:
+        #     print("Exception SwipeCardTransactionAPIView", e)
+        #     return Response(e, status=status.HTTP_400_BAD_REQUEST)
 
     def get_queryset(self):
         qs = super().get_queryset()

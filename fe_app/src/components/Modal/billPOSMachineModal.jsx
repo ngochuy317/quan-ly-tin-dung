@@ -1,6 +1,6 @@
 import { CDBBtn } from "cdbreact";
 import PropTypes from "prop-types";
-import React from "react";
+import React, {useEffect} from "react";
 import Modal from "react-bootstrap/Modal";
 import FileInputField from "../Common/fileInputField";
 import InputField from "../Common/inputField";
@@ -50,7 +50,6 @@ function BillPOSMachineModal(props) {
               requiredType="number"
               requiredRegister={requiredRegister}
               requiredName={`billpos[${index}].total_money`}
-              optionalDefaultValue={0}
             />
             <InputField
               requiredColWidth={4}

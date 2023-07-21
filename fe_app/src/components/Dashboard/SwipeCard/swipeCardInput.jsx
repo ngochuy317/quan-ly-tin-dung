@@ -1,7 +1,10 @@
+import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import creditCardApi from "../../../api/creditCardAPI";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import InputField from "../../Common/inputField";
 import { transactionType } from "../../ConstantUtils/constants";
@@ -24,6 +27,7 @@ function SwipeCardInput(props) {
   });
   const { isSubmitting } = formState;
 
+  const [dataListCardNumber, setDataListCardNumber] = useState([]);
   const [show, setShow] = useState(false);
   const [indexModal, setIndexModal] = useState(0);
 
@@ -65,8 +69,46 @@ function SwipeCardInput(props) {
   const handleNavigateSwipecardDetail = () => {
     let path = "/dashboard/swipecarddetail";
     let filledData = getValues();
-    navigate(path, { state: { ...filledData } });
+    navigate(path, {
+      state: { ...filledData,  posMachineData: requiredPosMachine, },
+    });
     localStorage.setItem("activeTab", path);
+  };
+
+  const handleOnChangeCardNumber = async (e) => {
+    let event = e.nativeEvent.inputType ? "input" : "option selected";
+    if (event === "input") {
+      let val = e.target.value;
+      if (val.length > 2) {
+        const result = await creditCardApi.search({ card_number: val });
+        console.log(
+          "🚀 ~ file: swipeCardInput.jsx:44 ~ handleOnChangeCardNumber ~ result:",
+          result
+        );
+        setDataListCardNumber([...result]);
+      }
+    } else if (event === "option selected") {
+      const card = dataListCardNumber.find(
+        (c) => c.card_number === e.target.value
+      );
+      setValue("customer.phone_number", card.customer.phone_number);
+      setValue("customer.name", card.customer.name);
+      setValue("customer.gender", card.customer.gender);
+      setValue("creditcard.card_bank_name", card.card_bank_name);
+      setValue("creditcard.card_expire_date", card.card_expire_date);
+      setValue("creditcard.card_issued_date", card.card_issued_date);
+      setValue("creditcard.card_name", card.card_name);
+      setValue(
+        "creditcard.credit_card_back_image",
+        card.credit_card_back_image
+      );
+      setValue(
+        "creditcard.credit_card_front_image",
+        card.credit_card_front_image
+      );
+      setValue("creditcard.maturity_date", card.maturity_date);
+      setValue("creditcard.statement_date", card.statement_date);
+    }
   };
 
   return (
@@ -123,14 +165,42 @@ function SwipeCardInput(props) {
           requiredName="customer_money_needed"
           requiredIsRequired={true}
         />
-        <InputField
-          requiredColWidth={2}
+        {/* <InputField
+          requiredColWidth={3}
           requiredLbl="Số thẻ"
           requiredType="text"
           requiredRegister={register}
           requiredName="creditcard.card_number"
           requiredIsRequired={true}
-        />
+          optionalPlaceholder="Nhập 3 số đầu để tìm"
+          optionalOnChange={handleOnChangeCardNumber}
+        /> */}
+        <div className="col-md-3">
+          <div className="mb-3">
+            <label className="form-label">
+              Số thẻ{" "}
+              <FontAwesomeIcon
+                icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
+                color="red"
+              />
+            </label>
+            <input
+              {...register("creditcard.card_number")}
+              type="text"
+              className="form-control"
+              required
+              list="cardNumbers"
+              id="myBrowser"
+              placeholder="Nhập 3 số đầu để tìm"
+              onChange={handleOnChangeCardNumber}
+            />
+            <datalist id="cardNumbers">
+              {dataListCardNumber?.map((data, index) => (
+                <option value={data.card_number} key={index}></option>
+              ))}
+            </datalist>
+          </div>
+        </div>
         {fields.map((item, index) => (
           <div key={item.id} className="col-md-2">
             <div className="mb-3">

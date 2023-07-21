@@ -6,17 +6,17 @@ from rest_framework.generics import ListAPIView
 
 from .filters import CreditCardFilter
 from .models import CreditCard
-from .serializers import CreditCardSerializer
+from .serializers import CreditCardSerializer, CreditCardCustomSerializer
 
 
 class CreditCardAPIView(ListAPIView):
     parser_classes = [MultiPartParser, FileUploadParser]
     filterset_class = CreditCardFilter
-    serializer_class = CreditCardSerializer
+    serializer_class = CreditCardCustomSerializer
     queryset = CreditCard.objects.all()
 
     def post(self, request, *args, **kwargs):
-        serializer = CreditCardSerializer(data=request.data)
+        serializer = CreditCardCustomSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(status=status.HTTP_201_CREATED)

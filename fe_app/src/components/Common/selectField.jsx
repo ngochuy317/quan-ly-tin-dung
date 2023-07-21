@@ -1,17 +1,22 @@
-import React from "react";
 import PropTypes from "prop-types";
+import React from "react";
 import RequiredSymbol from "./requiredSymbol";
 
 SelectField.propTypes = {
   requiredColWidth: PropTypes.number.isRequired,
+
   requiredLbl: PropTypes.string.isRequired,
-  requiredRegister: PropTypes.func.isRequired,
   requiredName: PropTypes.string.isRequired,
-  requiredIsRequired: PropTypes.bool.isRequired,
   requiredLblSelect: PropTypes.string.isRequired,
+
+  requiredIsRequired: PropTypes.bool.isRequired,
+
   requiredDataOption: PropTypes.array.isRequired,
+
+  requiredRegister: PropTypes.func.isRequired,
   requiredValueOption: PropTypes.func.isRequired,
   requiredLblOption: PropTypes.func.isRequired,
+
   optionalOnChangeSelect: PropTypes.array,
 };
 
@@ -47,11 +52,8 @@ function SelectField(props) {
             onChange={optionalOnChangeSelect}
           >
             <option value="">{requiredLblSelect}</option>
-            {requiredDataOption?.map((ele) => (
-              <option
-                key={ele.id}
-                value={requiredValueOption(ele)}
-              >
+            {requiredDataOption?.map((ele, index) => (
+              <option key={index} value={requiredValueOption(ele)}>
                 {requiredLblOption(ele)}
               </option>
             ))}

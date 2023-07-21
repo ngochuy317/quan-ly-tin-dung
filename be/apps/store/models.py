@@ -147,9 +147,6 @@ class SwipeCardTransaction(models.Model):
     customer_id_card_front_image = models.ImageField(upload_to='uploads/customer/', blank=True, null=True)
     customer_id_card_back_image = models.ImageField(upload_to='uploads/customer/', blank=True, null=True)
     customer_money_needed = models.PositiveBigIntegerField(default=0)
-    customer_account = models.CharField(max_length=127, blank=True, null=True)
-    customer_bank_account = models.CharField(max_length=127, blank=True, null=True)
-    line_of_credit = models.PositiveBigIntegerField(default=0)
     fee = models.PositiveBigIntegerField(default=0)
     customer = models.ForeignKey(
         "customer.Customer",

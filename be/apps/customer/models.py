@@ -26,15 +26,22 @@ class CreditCard(models.Model):
         related_name="creditcards",
         null=True, blank=True
     )
+    line_of_credit = models.PositiveBigIntegerField(default=0)
 
     def __str__(self) -> str:
         return self.card_number
 
 
 class Customer(models.Model):
+    GENDER_CHOICES = (
+        (1, "Nam"),
+        (2, "Nữ"),
+        (3, "Khác")
+    )
+
     name = models.CharField(max_length=127, blank=True, null=True)
     phone_number = models.CharField(max_length=12, unique=True)
-    gender = models.CharField(max_length=127, blank=True, null=True)
+    gender = models.PositiveSmallIntegerField(choices=GENDER_CHOICES, default=3)
     bank_account = models.ForeignKey(
         BankAccount,
         on_delete=models.CASCADE,
@@ -48,3 +55,6 @@ class Customer(models.Model):
         on_delete=models.CASCADE,
         related_name="customer",
     )
+
+    def __str__(self) -> str:
+        return f"Name: {self.name} Phone number: {self.phone_number}"

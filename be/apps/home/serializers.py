@@ -185,9 +185,19 @@ class StoreSerializer(serializers.ModelSerializer):
 
 class BillPosSerializer(serializers.ModelSerializer):
 
+    total_money = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+
     class Meta:
         model = BillPos
         fields = '__all__'
+    
+    def validate_total_money(self, value):
+        if not value:
+            return 0
+        try:
+            return int(value)
+        except ValueError:
+            raise serializers.ValidationError('You must supply an integer')
 
 
 class SwipeCardTransactionReportSerializer(serializers.ModelSerializer):
@@ -221,7 +231,7 @@ class SwipeCardTransactionCustomerSerializer(serializers.Serializer):
 class SwipeCardTransactionSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     creditcard = CreditCardSerializer(write_only=True)
-    customer = SwipeCardTransactionCustomerSerializer(read_only=True)
+    customer = SwipeCardTransactionCustomerSerializer()
     transaction_datetime_created = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
     transaction_datetime_updated = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
     username = serializers.CharField(source='user.username', read_only=True)
@@ -253,12 +263,14 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         customer = validated_data.pop('customer')
         phone_number = customer.pop('phone_number')
-        creditcard_data = validated_data.pop('creditcard')
+        creditcard_data: dict = validated_data.pop('creditcard')
         card_number = creditcard_data.pop("card_number")
+        creditcard_data.pop("credit_card_front_image", None)
+        creditcard_data.pop("credit_card_back_image", None)
         creditcard_obj, _ = CreditCard.objects.get_or_create(
             card_number=card_number
         )
-        for attr, val in creditcard_data:
+        for attr, val in creditcard_data.items():
             setattr(creditcard_obj, attr, val)
         creditcard_obj.save()
         customer_obj, _ = Customer.objects.get_or_create(

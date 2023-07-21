@@ -4,11 +4,23 @@ import RequiredSymbol from "./requiredSymbol";
 
 InputField.propTypes = {
   requiredColWidth: PropTypes.number.isRequired,
+
   requiredLbl: PropTypes.string.isRequired,
   requiredType: PropTypes.string.isRequired,
-  requiredRegister: PropTypes.func.isRequired,
   requiredName: PropTypes.string.isRequired,
+
+  requiredRegister: PropTypes.func.isRequired,
+
   requiredIsRequired: PropTypes.bool.isRequired,
+
+  optionalPlaceholder: PropTypes.string,
+
+  optionalOnChange: PropTypes.func,
+
+  optionalMaxForNumberType: PropTypes.number,
+  optionalMaxLengthForTextType: PropTypes.number,
+
+  optionalDisabled: PropTypes.bool,
   optionalDefaultValue: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
@@ -17,6 +29,7 @@ InputField.propTypes = {
 
 InputField.defaultProps = {
   requiredIsRequired: false,
+  optionalDisabled: false,
 };
 
 function InputField(props) {
@@ -28,6 +41,11 @@ function InputField(props) {
     requiredName,
     requiredIsRequired,
     optionalDefaultValue,
+    optionalDisabled,
+    optionalMaxForNumberType,
+    optionalMaxLengthForTextType,
+    optionalPlaceholder,
+    optionalOnChange,
   } = props;
   return (
     <div className={`col-md-${requiredColWidth}`}>
@@ -42,6 +60,11 @@ function InputField(props) {
           className="form-control"
           required={requiredIsRequired}
           value={optionalDefaultValue}
+          disabled={optionalDisabled}
+          max={optionalMaxForNumberType}
+          maxLength={optionalMaxLengthForTextType}
+          placeholder={optionalPlaceholder}
+          onChange={optionalOnChange}
         />
       </div>
     </div>

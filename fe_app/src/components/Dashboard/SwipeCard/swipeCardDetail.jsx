@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
+import InputField from "../../Common/inputField";
+import SelectField from "../../Common/selectField";
 import { genderChoices, transactionType } from "../../ConstantUtils/constants";
 
 function SwipeCardDetail() {
@@ -67,43 +69,34 @@ function SwipeCardDetail() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <h5>Cửa hàng</h5>
         <div className="row">
-          <div className="col-md-3">
-            <div className="mb-3">
-              <label className="form-label">Tên cửa hàng</label>
-              <input
-                {...register("store_name")}
-                type="text"
-                className="form-control"
-                disabled
-              />
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="mb-3">
-              <label className="form-label">Địa chỉ</label>
-              <input
-                {...register("store_address")}
-                type="text"
-                className="form-control"
-                disabled
-              />
-            </div>
-          </div>
-          <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">Số điện thoại</label>
-              <input
-                {...register("store_phone_number")}
-                type="text"
-                className="form-control"
-                disabled
-              />
-            </div>
-          </div>
+          <InputField
+            requiredColWidth={3}
+            requiredLbl="Tên cửa hàng"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName={"store_name"}
+            optionalDisabled={true}
+          />
+          <InputField
+            requiredColWidth={4}
+            requiredLbl="Địa chỉ"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName={"store_address"}
+            optionalDisabled={true}
+          />
+          <InputField
+            requiredColWidth={2}
+            requiredLbl="Số điện thoại"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName={"store_phone_number"}
+            optionalDisabled={true}
+          />
         </div>
         <h5>Máy POS</h5>
         <div className="row">
-          <div className="col-md-6">
+          {/* <div className="col-md-6">
             <div className="mb-3">
               <label className="form-label">Id-Mid-Tid-Tên ngân hàng</label>
               <input
@@ -117,7 +110,7 @@ function SwipeCardDetail() {
                 disabled
               />
             </div>
-          </div>
+          </div> */}
         </div>
         <h5>Khách hàng</h5>
         <div className="row">
@@ -131,7 +124,18 @@ function SwipeCardDetail() {
               />
             </div>
           </div>
-          <div className="col-md-1">
+          <SelectField
+            requiredColWidth={1}
+            requiredLbl="Giới tính"
+            requiredIsRequired={true}
+            requiredRegister={register}
+            requiredName={"customer_gender"}
+            requiredDataOption={genderChoices}
+            requiredLblSelect="Chọn giới tính"
+            requiredValueOption={(ele) => `${ele.value}`}
+            requiredLblOption={(ele) => `${ele.label}`}
+          />
+          {/* <div className="col-md-1">
             <div className="mb-3">
               <label className="form-label">Giới tính</label>
               <select
@@ -146,8 +150,15 @@ function SwipeCardDetail() {
                 ))}
               </select>
             </div>
-          </div>
-          <div className="col-sm-2">
+          </div> */}
+          <InputField
+            requiredColWidth={2}
+            requiredLbl="Số điện thoại"
+            requiredType="tel"
+            requiredRegister={register}
+            requiredName={"customer_phone_number"}
+          />
+          {/* <div className="col-sm-2">
             <div className="mb-3">
               <label className="form-label">Số điện thoại</label>
               <input
@@ -156,8 +167,16 @@ function SwipeCardDetail() {
                 className="form-control"
               />
             </div>
-          </div>
-          <div className="col-md-2">
+          </div> */}
+          <InputField
+            requiredColWidth={2}
+            requiredLbl="Số tiền cần"
+            requiredType="number"
+            requiredRegister={register}
+            requiredName={"customer_money_needed"}
+            optionalMaxForNumberType={999999999}
+          />
+          {/* <div className="col-md-2">
             <div className="mb-3">
               <label className="form-label">Số tiền cần</label>
               <input
@@ -167,8 +186,15 @@ function SwipeCardDetail() {
                 max="999999999"
               />
             </div>
-          </div>
-          <div className="col-md-2">
+          </div> */}
+          <InputField
+            requiredColWidth={2}
+            requiredLbl="Số TK nhận tiền"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName={"customer_account"}
+          />
+          {/* <div className="col-md-2">
             <div className="mb-3">
               <label className="form-label">Số TK nhận tiền</label>
               <input
@@ -177,8 +203,15 @@ function SwipeCardDetail() {
                 className="form-control"
               />
             </div>
-          </div>
-          <div className="col-md-2">
+          </div> */}
+          <InputField
+            requiredColWidth={2}
+            requiredLbl="Ngân hàng"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName={"customer_bank_account"}
+          />
+          {/* <div className="col-md-2">
             <div className="mb-3">
               <label className="form-label">Ngân hàng</label>
               <input
@@ -187,7 +220,7 @@ function SwipeCardDetail() {
                 className="form-control"
               />
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="row">
           <div className="col-md-4">
@@ -248,7 +281,15 @@ function SwipeCardDetail() {
         <div className="row"></div>
         <h5>Thông tin thẻ</h5>
         <div className="row">
-          <div className="col-md-4">
+          <InputField
+            requiredColWidth={4}
+            requiredLbl="Số thẻ"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName={"creditcard.card_number"}
+            optionalPlaceholder="Nhập 3 số đầu để tìm"
+          />
+          {/* <div className="col-md-4">
             <div className="mb-3">
               <label className="form-label">Số thẻ</label>
               <input
@@ -257,8 +298,15 @@ function SwipeCardDetail() {
                 className="form-control"
               />
             </div>
-          </div>
-          <div className="col-md-4">
+          </div> */}
+          <InputField
+            requiredColWidth={4}
+            requiredLbl="Ngân hàng"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName={"creditcard.card_bank_name"}
+          />
+          {/* <div className="col-md-4">
             <div className="mb-3">
               <label className="form-label">Ngân hàng</label>
               <input
@@ -267,8 +315,15 @@ function SwipeCardDetail() {
                 className="form-control"
               />
             </div>
-          </div>
-          <div className="col-md-2">
+          </div> */}
+          <InputField
+            requiredColWidth={2}
+            requiredLbl="Hạn mức thẻ"
+            requiredType="number"
+            requiredRegister={register}
+            requiredName={"line_of_credit"}
+          />
+          {/* <div className="col-md-2">
             <div className="mb-3">
               <label className="form-label">Hạn mức thẻ</label>
               <input
@@ -277,8 +332,15 @@ function SwipeCardDetail() {
                 className="form-control"
               />
             </div>
-          </div>
-          <div className="col-md-2">
+          </div> */}
+          <InputField
+            requiredColWidth={2}
+            requiredLbl="Phí"
+            requiredType="number"
+            requiredRegister={register}
+            requiredName={"fee"}
+          />
+          {/* <div className="col-md-2">
             <div className="mb-3">
               <label className="form-label">Phí</label>
               <input
@@ -287,10 +349,17 @@ function SwipeCardDetail() {
                 className="form-control"
               />
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="row">
-          <div className="col-md-4">
+          <InputField
+            requiredColWidth={4}
+            requiredLbl="Tên trên thẻ"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName={"creditcard.card_name"}
+          />
+          {/* <div className="col-md-4">
             <div className="mb-3">
               <label className="form-label">Tên trên thẻ</label>
               <input
@@ -299,8 +368,15 @@ function SwipeCardDetail() {
                 className="form-control"
               />
             </div>
-          </div>
-          <div className="col-md-3">
+          </div> */}
+          <InputField
+            requiredColWidth={3}
+            requiredLbl="Ngày mở thẻ"
+            requiredType="date"
+            requiredRegister={register}
+            requiredName={"creditcard.card_issued_date"}
+          />
+          {/* <div className="col-md-3">
             <div className="mb-3">
               <label className="form-label">Ngày mở thẻ</label>
               <input
@@ -309,8 +385,15 @@ function SwipeCardDetail() {
                 className="form-control"
               />
             </div>
-          </div>
-          <div className="col-md-3">
+          </div> */}
+          <InputField
+            requiredColWidth={3}
+            requiredLbl="Ngày hết hạn"
+            requiredType="date"
+            requiredRegister={register}
+            requiredName={"creditcard.card_expire_date"}
+          />
+          {/* <div className="col-md-3">
             <div className="mb-3">
               <label className="form-label">Ngày hết hạn</label>
               <input
@@ -319,8 +402,16 @@ function SwipeCardDetail() {
                 className="form-control"
               />
             </div>
-          </div>
-          <div className="col-md-2">
+          </div> */}
+          <InputField
+            requiredColWidth={2}
+            requiredLbl="CCV"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName={"creditcard.card_ccv"}
+            optionalMaxLengthForTextType={3}
+          />
+          {/* <div className="col-md-2">
             <div className="mb-3">
               <label className="form-label">CCV</label>
               <input
@@ -330,10 +421,17 @@ function SwipeCardDetail() {
                 className="form-control"
               />
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="row">
-          <div className="col-md-2">
+        <InputField
+            requiredColWidth={2}
+            requiredLbl="Ngày sao kê"
+            requiredType="date"
+            requiredRegister={register}
+            requiredName={"creditcard.statement_date"}
+          />
+          {/* <div className="col-md-2">
             <div className="mb-3">
               <label className="form-label">Ngày sao kê</label>
               <input
@@ -342,8 +440,15 @@ function SwipeCardDetail() {
                 className="form-control"
               />
             </div>
-          </div>
-          <div className="col-md-2">
+          </div> */}
+          <InputField
+            requiredColWidth={2}
+            requiredLbl="Ngày cuối đáo"
+            requiredType="date"
+            requiredRegister={register}
+            requiredName={"creditcard.maturity_date"}
+          />
+          {/* <div className="col-md-2">
             <div className="mb-3">
               <label className="form-label">Ngày cuối đáo</label>
               <input
@@ -352,7 +457,7 @@ function SwipeCardDetail() {
                 className="form-control"
               />
             </div>
-          </div>
+          </div> */}
           <div className="col-md-2">
             <div className="mb-3">
               <label className="form-label">Hoạt động</label>
