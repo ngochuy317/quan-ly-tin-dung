@@ -29,6 +29,7 @@ function SwipeCardInput(props) {
 
   const [dataListCardNumber, setDataListCardNumber] = useState([]);
   const [show, setShow] = useState(false);
+  const [showNegativeMoney, setShowNegativeMoney] = useState(false);
   const [indexModal, setIndexModal] = useState(0);
 
   useEffect(() => {
@@ -70,9 +71,18 @@ function SwipeCardInput(props) {
     let path = "/dashboard/swipecarddetail";
     let filledData = getValues();
     navigate(path, {
-      state: { ...filledData,  posMachineData: requiredPosMachine, },
+      state: { ...filledData, posMachineData: requiredPosMachine },
     });
     localStorage.setItem("activeTab", path);
+  };
+
+  const handleOnChangeTransactionType = (e) => {
+    let val = e.target.value;
+    console.log(
+      "🚀 ~ file: swipeCardInput.jsx:81 ~ handleOnChangeTransactionType ~ val:",
+      val, typeof(val)
+    );
+    setShowNegativeMoney(parseInt(val) === 2);
   };
 
   const handleOnChangeCardNumber = async (e) => {
@@ -140,6 +150,7 @@ function SwipeCardInput(props) {
               {...register("transaction_type")}
               className="form-select"
               required
+              onChange={handleOnChangeTransactionType}
             >
               {transactionType?.map((ele) => (
                 <option key={ele.value} value={ele.value}>
@@ -149,32 +160,6 @@ function SwipeCardInput(props) {
             </select>
           </div>
         </div>
-        <InputField
-          requiredColWidth={2}
-          requiredLbl="Sđt khách hàng"
-          requiredType="tel"
-          requiredRegister={register}
-          requiredName="customer.phone_number"
-          requiredIsRequired={true}
-        />
-        <InputField
-          requiredColWidth={2}
-          requiredLbl="Số tiền cần"
-          requiredType="text"
-          requiredRegister={register}
-          requiredName="customer_money_needed"
-          requiredIsRequired={true}
-        />
-        {/* <InputField
-          requiredColWidth={3}
-          requiredLbl="Số thẻ"
-          requiredType="text"
-          requiredRegister={register}
-          requiredName="creditcard.card_number"
-          requiredIsRequired={true}
-          optionalPlaceholder="Nhập 3 số đầu để tìm"
-          optionalOnChange={handleOnChangeCardNumber}
-        /> */}
         <div className="col-md-3">
           <div className="mb-3">
             <label className="form-label">
@@ -201,6 +186,49 @@ function SwipeCardInput(props) {
             </datalist>
           </div>
         </div>
+        <InputField
+          requiredColWidth={2}
+          requiredLbl="Tên khách hàng"
+          requiredType="text"
+          requiredRegister={register}
+          requiredName="customer.name"
+          // requiredIsRequired={true}
+        />
+        <InputField
+          requiredColWidth={2}
+          requiredLbl="Sđt khách hàng"
+          requiredType="tel"
+          requiredRegister={register}
+          requiredName="customer.phone_number"
+          requiredIsRequired={true}
+        />
+        <InputField
+          requiredColWidth={2}
+          requiredLbl="Số tiền cần"
+          requiredType="text"
+          requiredRegister={register}
+          requiredName="customer_money_needed"
+          requiredIsRequired={true}
+        />
+        {showNegativeMoney ? (
+          <InputField
+            requiredColWidth={2}
+            requiredLbl="Âm tiền"
+            requiredType="number"
+            requiredRegister={register}
+            requiredName="negative_money"
+          />
+        ) : null}
+        {/* <InputField
+          requiredColWidth={3}
+          requiredLbl="Số thẻ"
+          requiredType="text"
+          requiredRegister={register}
+          requiredName="creditcard.card_number"
+          requiredIsRequired={true}
+          optionalPlaceholder="Nhập 3 số đầu để tìm"
+          optionalOnChange={handleOnChangeCardNumber}
+        /> */}
         {fields.map((item, index) => (
           <div key={item.id} className="col-md-2">
             <div className="mb-3">

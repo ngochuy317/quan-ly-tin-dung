@@ -95,23 +95,7 @@ function SwipeCardDetail() {
           />
         </div>
         <h5>Máy POS</h5>
-        <div className="row">
-          {/* <div className="col-md-6">
-            <div className="mb-3">
-              <label className="form-label">Id-Mid-Tid-Tên ngân hàng</label>
-              <input
-                value={
-                  dataSwipCardDetail
-                    ? `${dataSwipCardDetail.pos.id}-${dataSwipCardDetail.pos.mid}-${dataSwipCardDetail.pos.tid}-${dataSwipCardDetail.pos.bank_name}`
-                    : ``
-                }
-                type="text"
-                className="form-control"
-                disabled
-              />
-            </div>
-          </div> */}
-        </div>
+        <div className="row"></div>
         <h5>Khách hàng</h5>
         <div className="row">
           <div className="col-md-2">
@@ -135,22 +119,7 @@ function SwipeCardDetail() {
             requiredValueOption={(ele) => `${ele.value}`}
             requiredLblOption={(ele) => `${ele.label}`}
           />
-          {/* <div className="col-md-1">
-            <div className="mb-3">
-              <label className="form-label">Giới tính</label>
-              <select
-                {...register("customer_gender")}
-                className="form-select"
-                required
-              >
-                {genderChoices?.map((gender) => (
-                  <option key={gender.value} value={gender.value}>
-                    {gender.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div> */}
+
           <InputField
             requiredColWidth={2}
             requiredLbl="Số điện thoại"
@@ -158,16 +127,7 @@ function SwipeCardDetail() {
             requiredRegister={register}
             requiredName={"customer_phone_number"}
           />
-          {/* <div className="col-sm-2">
-            <div className="mb-3">
-              <label className="form-label">Số điện thoại</label>
-              <input
-                {...register("customer_phone_number")}
-                type="tel"
-                className="form-control"
-              />
-            </div>
-          </div> */}
+
           <InputField
             requiredColWidth={2}
             requiredLbl="Số tiền cần"
@@ -176,17 +136,7 @@ function SwipeCardDetail() {
             requiredName={"customer_money_needed"}
             optionalMaxForNumberType={999999999}
           />
-          {/* <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">Số tiền cần</label>
-              <input
-                {...register("customer_money_needed")}
-                type="number"
-                className="form-control"
-                max="999999999"
-              />
-            </div>
-          </div> */}
+
           <InputField
             requiredColWidth={2}
             requiredLbl="Số TK nhận tiền"
@@ -194,16 +144,7 @@ function SwipeCardDetail() {
             requiredRegister={register}
             requiredName={"customer_account"}
           />
-          {/* <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">Số TK nhận tiền</label>
-              <input
-                {...register("customer_account")}
-                type="text"
-                className="form-control"
-              />
-            </div>
-          </div> */}
+
           <InputField
             requiredColWidth={2}
             requiredLbl="Ngân hàng"
@@ -211,16 +152,6 @@ function SwipeCardDetail() {
             requiredRegister={register}
             requiredName={"customer_bank_account"}
           />
-          {/* <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">Ngân hàng</label>
-              <input
-                {...register("customer_bank_account")}
-                type="text"
-                className="form-control"
-              />
-            </div>
-          </div> */}
         </div>
         <div className="row">
           <div className="col-md-4">
@@ -289,16 +220,7 @@ function SwipeCardDetail() {
             requiredName={"creditcard.card_number"}
             optionalPlaceholder="Nhập 3 số đầu để tìm"
           />
-          {/* <div className="col-md-4">
-            <div className="mb-3">
-              <label className="form-label">Số thẻ</label>
-              <input
-                {...register("creditcard.card_number")}
-                type="text"
-                className="form-control"
-              />
-            </div>
-          </div> */}
+
           <InputField
             requiredColWidth={4}
             requiredLbl="Ngân hàng"
@@ -306,16 +228,7 @@ function SwipeCardDetail() {
             requiredRegister={register}
             requiredName={"creditcard.card_bank_name"}
           />
-          {/* <div className="col-md-4">
-            <div className="mb-3">
-              <label className="form-label">Ngân hàng</label>
-              <input
-                {...register("creditcard.card_bank_name")}
-                type="text"
-                className="form-control"
-              />
-            </div>
-          </div> */}
+
           <InputField
             requiredColWidth={2}
             requiredLbl="Hạn mức thẻ"
@@ -323,16 +236,7 @@ function SwipeCardDetail() {
             requiredRegister={register}
             requiredName={"line_of_credit"}
           />
-          {/* <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">Hạn mức thẻ</label>
-              <input
-                {...register("line_of_credit")}
-                type="number"
-                className="form-control"
-              />
-            </div>
-          </div> */}
+
           <InputField
             requiredColWidth={2}
             requiredLbl="Phí"
@@ -340,16 +244,6 @@ function SwipeCardDetail() {
             requiredRegister={register}
             requiredName={"fee"}
           />
-          {/* <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">Phí</label>
-              <input
-                {...register("fee")}
-                type="number"
-                className="form-control"
-              />
-            </div>
-          </div> */}
         </div>
         <div className="row">
           <InputField
@@ -359,16 +253,7 @@ function SwipeCardDetail() {
             requiredRegister={register}
             requiredName={"creditcard.card_name"}
           />
-          {/* <div className="col-md-4">
-            <div className="mb-3">
-              <label className="form-label">Tên trên thẻ</label>
-              <input
-                {...register("creditcard.card_name")}
-                type="text"
-                className="form-control"
-              />
-            </div>
-          </div> */}
+
           <InputField
             requiredColWidth={3}
             requiredLbl="Ngày mở thẻ"
@@ -376,16 +261,7 @@ function SwipeCardDetail() {
             requiredRegister={register}
             requiredName={"creditcard.card_issued_date"}
           />
-          {/* <div className="col-md-3">
-            <div className="mb-3">
-              <label className="form-label">Ngày mở thẻ</label>
-              <input
-                {...register("creditcard.card_issued_date")}
-                type="date"
-                className="form-control"
-              />
-            </div>
-          </div> */}
+
           <InputField
             requiredColWidth={3}
             requiredLbl="Ngày hết hạn"
@@ -393,16 +269,7 @@ function SwipeCardDetail() {
             requiredRegister={register}
             requiredName={"creditcard.card_expire_date"}
           />
-          {/* <div className="col-md-3">
-            <div className="mb-3">
-              <label className="form-label">Ngày hết hạn</label>
-              <input
-                {...register("creditcard.card_expire_date")}
-                type="date"
-                className="form-control"
-              />
-            </div>
-          </div> */}
+
           <InputField
             requiredColWidth={2}
             requiredLbl="CCV"
@@ -411,53 +278,22 @@ function SwipeCardDetail() {
             requiredName={"creditcard.card_ccv"}
             optionalMaxLengthForTextType={3}
           />
-          {/* <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">CCV</label>
-              <input
-                {...register("creditcard.card_ccv")}
-                type="text"
-                maxLength="3"
-                className="form-control"
-              />
-            </div>
-          </div> */}
         </div>
         <div className="row">
-        <InputField
+          <InputField
             requiredColWidth={2}
             requiredLbl="Ngày sao kê"
             requiredType="date"
             requiredRegister={register}
             requiredName={"creditcard.statement_date"}
           />
-          {/* <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">Ngày sao kê</label>
-              <input
-                {...register("creditcard.statement_date")}
-                type="date"
-                className="form-control"
-              />
-            </div>
-          </div> */}
-          <InputField
+          {/* <InputField
             requiredColWidth={2}
             requiredLbl="Ngày cuối đáo"
             requiredType="date"
             requiredRegister={register}
             requiredName={"creditcard.maturity_date"}
-          />
-          {/* <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">Ngày cuối đáo</label>
-              <input
-                {...register("creditcard.maturity_date")}
-                type="date"
-                className="form-control"
-              />
-            </div>
-          </div> */}
+          /> */}
           <div className="col-md-2">
             <div className="mb-3">
               <label className="form-label">Hoạt động</label>

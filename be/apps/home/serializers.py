@@ -235,6 +235,7 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
     transaction_datetime_created = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
     transaction_datetime_updated = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
     username = serializers.CharField(source='user.username', read_only=True)
+    negative_money = serializers.CharField(required=False, allow_null=True, allow_blank=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -253,6 +254,14 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = SwipeCardTransaction
         fields = '__all__'
+    
+    def validate_negative_money(self, value):
+        if not value:
+            return 0
+        try:
+            return int(value)
+        except ValueError:
+            raise serializers.ValidationError('You must supply an integer')
 
     def get_creditcard(self, obj):
         serializer_context = {'request': self.context.get('request')}

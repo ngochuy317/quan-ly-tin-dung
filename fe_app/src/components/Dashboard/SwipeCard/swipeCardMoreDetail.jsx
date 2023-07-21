@@ -5,9 +5,9 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import creditCardApi from "../../../api/creditCardAPI";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
+import InputField from "../../Common/inputField";
 import { genderChoices, transactionType } from "../../ConstantUtils/constants";
 import BillPOSMachineModal from "../../Modal/billPOSMachineModal";
-import InputField from "../../Common/inputField";
 
 function SwipeCardMoreDetail() {
   const {
@@ -180,17 +180,7 @@ function SwipeCardMoreDetail() {
             requiredName={"store_name"}
             optionalDisabled={true}
           />
-          {/* <div className="col-md-3">
-            <div className="mb-3">
-              <label className="form-label">Tên cửa hàng</label>
-              <input
-                {...register("store_name")}
-                type="text"
-                className="form-control"
-                disabled
-              />
-            </div>
-          </div> */}
+
           <InputField
             requiredColWidth={4}
             requiredLbl="Địa chỉ"
@@ -199,17 +189,7 @@ function SwipeCardMoreDetail() {
             requiredName={"store_address"}
             optionalDisabled={true}
           />
-          {/* <div className="col-md-4">
-            <div className="mb-3">
-              <label className="form-label">Địa chỉ</label>
-              <input
-                {...register("store_address")}
-                type="text"
-                className="form-control"
-                disabled
-              />
-            </div>
-          </div> */}
+
           <InputField
             requiredColWidth={2}
             requiredLbl="Số điện thoại"
@@ -218,17 +198,6 @@ function SwipeCardMoreDetail() {
             requiredName={"store_phone_number"}
             optionalDisabled={true}
           />
-          {/* <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">Số điện thoại</label>
-              <input
-                {...register("store_phone_number")}
-                type="text"
-                className="form-control"
-                disabled
-              />
-            </div>
-          </div> */}
         </div>
         <h5>Máy POS</h5>
         <div className="row">
@@ -262,46 +231,17 @@ function SwipeCardMoreDetail() {
             Thêm bill pos
           </button>
         </div>
-        {/* <h5>Máy POS</h5>
-        <div className="row">
-          <div className="col-md-6">
-            <div className="mb-3">
-              <label className="form-label">Id-Mid-Tid-Tên ngân hàng</label>
-              <input
-                type="text"
-                className="form-control"
-                value={state.posData}
-                disabled
-              />
-              <input
-                {...register("pos")}
-                type="number"
-                className="form-control"
-                value={state.pos}
-                hidden
-              />
-            </div>
-          </div>
-        </div> */}
+
         <h5>Khách hàng</h5>
         <div className="row">
-        <InputField
+          <InputField
             requiredColWidth={2}
             requiredLbl="Tên"
             requiredType="text"
             requiredRegister={register}
             requiredName={"customer.name"}
           />
-          {/* <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">Tên </label>
-              <input
-                {...register("customer.name")}
-                type="text"
-                className="form-control"
-              />
-            </div>
-          </div> */}
+
           <div className="col-md-1">
             <div className="mb-3">
               <label className="form-label">Giới tính </label>
@@ -322,23 +262,7 @@ function SwipeCardMoreDetail() {
             requiredName={"customer.phone_number"}
             requiredIsRequired={true}
           />
-          {/* <div className="col-sm-2">
-            <div className="mb-3">
-              <label className="form-label">
-                Số điện thoại{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("customer.phone_number")}
-                type="tel"
-                className="form-control"
-                required
-              />
-            </div>
-          </div> */}
+
           <InputField
             requiredColWidth={2}
             requiredLbl="Số tiền cần"
@@ -347,24 +271,7 @@ function SwipeCardMoreDetail() {
             requiredName={"customer_money_needed"}
             requiredIsRequired={true}
           />
-          {/* <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">
-                Số tiền cần{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("customer_money_needed")}
-                type="number"
-                className="form-control"
-                max="999999999"
-                required
-              />
-            </div>
-          </div> */}
+
           <InputField
             requiredColWidth={2}
             requiredLbl="Số TK nhận tiền"
@@ -372,16 +279,7 @@ function SwipeCardMoreDetail() {
             requiredRegister={register}
             requiredName={"customer.bank_account.account_number"}
           />
-          {/* <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">Số TK nhận tiền </label>
-              <input
-                {...register("customer.bank_account.account_number")}
-                type="text"
-                className="form-control"
-              />
-            </div>
-          </div> */}
+
           <InputField
             requiredColWidth={2}
             requiredLbl="Ngân hàng"
@@ -389,17 +287,7 @@ function SwipeCardMoreDetail() {
             requiredRegister={register}
             requiredName={"customer.bank_account.bank_name"}
           />
-          {/* <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">Ngân hàng </label>
-              <input
-                {...register("customer.bank_account.bank_name")}
-                type="text"
-                className="form-control"
-              />
-            </div>
-          </div>*/}
-        </div> 
+        </div>
         <div className="row">
           <div className="col-md-4">
             <div className="mb-3">
@@ -421,23 +309,6 @@ function SwipeCardMoreDetail() {
               />
             </div>
           </div>
-          {/* <div className="col-md-4">
-            <div className="mb-3">
-              <label className="form-label">
-                Hình bill máy pos{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("bill_pos_image")}
-                type="file"
-                className="form-control"
-                required
-              />
-            </div>
-          </div> */}
         </div>
         <div className="row"></div>
         <h5>Thông tin thẻ</h5>
@@ -489,24 +360,7 @@ function SwipeCardMoreDetail() {
             requiredName={"creditcard.card_bank_name"}
             requiredIsRequired={true}
           />
-          {/* <div className="col-md-4">
-            <div className="mb-3">
-              <label className="form-label">
-                Ngân hàng{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("creditcard.card_bank_name")}
-                type="text"
-                className="form-control"
-                disabled={!isManualInput}
-                required
-              />
-            </div>
-          </div> */}
+
           <InputField
             requiredColWidth={2}
             requiredLbl="Hạn mức thẻ"
@@ -516,24 +370,7 @@ function SwipeCardMoreDetail() {
             requiredIsRequired={true}
             optionalDisabled={!isManualInput}
           />
-          {/* <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">
-                Hạn mức thẻ{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("line_of_credit")}
-                type="number"
-                className="form-control"
-                required
-                disabled={!isManualInput}
-              />
-            </div>
-          </div> */}
+
           <InputField
             requiredColWidth={2}
             requiredLbl="Phí"
@@ -543,27 +380,9 @@ function SwipeCardMoreDetail() {
             requiredIsRequired={true}
             optionalDisabled={!isManualInput}
           />
-          {/* <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">
-                Phí{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("fee")}
-                type="number"
-                className="form-control"
-                required
-                disabled={!isManualInput}
-              />
-            </div>
-          </div> */}
         </div>
         <div className="row">
-        <InputField
+          <InputField
             requiredColWidth={4}
             requiredLbl="Tên trên thẻ"
             requiredType="text"
@@ -572,25 +391,8 @@ function SwipeCardMoreDetail() {
             requiredIsRequired={true}
             optionalDisabled={!isManualInput}
           />
-          {/* <div className="col-md-4">
-            <div className="mb-3">
-              <label className="form-label">
-                Tên trên thẻ{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("creditcard.card_name")}
-                type="text"
-                className="form-control"
-                required
-                disabled={!isManualInput}
-              />
-            </div>
-          </div> */}
-           <InputField
+
+          <InputField
             requiredColWidth={3}
             requiredLbl="Ngày mở thẻ"
             requiredType="date"
@@ -599,24 +401,7 @@ function SwipeCardMoreDetail() {
             requiredIsRequired={true}
             optionalDisabled={!isManualInput}
           />
-          {/* <div className="col-md-3">
-            <div className="mb-3">
-              <label className="form-label">
-                Ngày mở thẻ{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("creditcard.card_issued_date")}
-                type="date"
-                className="form-control"
-                required
-                disabled={!isManualInput}
-              />
-            </div>
-          </div> */}
+
           <InputField
             requiredColWidth={3}
             requiredLbl="Ngày hết hạn"
@@ -626,24 +411,7 @@ function SwipeCardMoreDetail() {
             requiredIsRequired={true}
             optionalDisabled={!isManualInput}
           />
-          {/* <div className="col-md-3">
-            <div className="mb-3">
-              <label className="form-label">
-                Ngày hết hạn{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("creditcard.card_expire_date")}
-                type="date"
-                className="form-control"
-                required
-                disabled={!isManualInput}
-              />
-            </div>
-          </div> */}
+
           <InputField
             requiredColWidth={2}
             requiredLbl="CCV"
@@ -654,28 +422,9 @@ function SwipeCardMoreDetail() {
             optionalDisabled={!isManualInput}
             optionalMaxLengthForTextType={3}
           />
-          {/* <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">
-                CCV{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("creditcard.card_ccv")}
-                type="text"
-                maxLength="3"
-                className="form-control"
-                required
-                disabled={!isManualInput}
-              />
-            </div>
-          </div> */}
         </div>
         <div className="row">
-        <InputField
+          <InputField
             requiredColWidth={3}
             requiredLbl="Ngày sao kê"
             requiredType="date"
@@ -684,25 +433,8 @@ function SwipeCardMoreDetail() {
             requiredIsRequired={true}
             optionalDisabled={!isManualInput}
           />
-          {/* <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">
-                Ngày sao kê{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("creditcard.statement_date")}
-                type="date"
-                className="form-control"
-                required
-                disabled={!isManualInput}
-              />
-            </div>
-          </div> */}
-          <InputField
+
+          {/* <InputField
             requiredColWidth={2}
             requiredLbl="Ngày cuối đáo"
             requiredType="date"
@@ -710,25 +442,8 @@ function SwipeCardMoreDetail() {
             requiredName={"creditcard.maturity_date"}
             requiredIsRequired={true}
             optionalDisabled={!isManualInput}
-          />
-          {/* <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">
-                Ngày cuối đáo{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("creditcard.maturity_date")}
-                type="date"
-                className="form-control"
-                required
-                disabled={!isManualInput}
-              />
-            </div>
-          </div> */}
+          /> */}
+
           <div className="col-md-2">
             <div className="mb-3">
               <label className="form-label">Hoạt động</label>
