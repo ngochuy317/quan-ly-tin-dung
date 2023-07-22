@@ -10,7 +10,7 @@ export const dataItemSideBarForEmployee = [
     id: 6,
     name: "Bill máy POS",
     icon: "money-bill",
-    path: "/dashboard/stores2",
+    path: "/dashboard/billposmanage",
     role: ["admin", "employee"],
   },
   {
@@ -90,7 +90,7 @@ export const dataItemSideBarForAdmin = [
     id: 6,
     name: "Bill máy POS",
     icon: "receipt",
-    path: "/dashboard/stores2",
+    path: "/dashboard/billposmanage",
     role: ["admin", "employee"],
   },
   {

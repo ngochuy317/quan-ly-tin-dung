@@ -226,7 +226,7 @@ class CreditCardCustomerSerializer(serializers.Serializer):
 class SwipeCardTransactionCustomerSerializer(serializers.Serializer):
     
     credit_card = CreditCardCustomerSerializer(read_only=True)
-    phone_number = serializers.CharField(write_only=True)
+    phone_number = serializers.CharField()
     name = serializers.CharField(read_only=True)
 
 

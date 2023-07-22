@@ -41,12 +41,12 @@ function SwipeCard() {
           console.log("Fetch information detail successfully", response);
 
           let initValues = {};
-          initValues.store_name = response.store.name;
-          initValues.store_code = response.store.code;
-          initValues.store_id = response.store.id;
-          initValues.store_phone_number = response.store.phone_number;
-          initValues.store_address = response.store.address;
-          setPOSMachine(response.store.poses);
+          initValues.store_name = response.store?.name;
+          initValues.store_code = response.store?.code;
+          initValues.store_id = response.store?.id;
+          initValues.store_phone_number = response.store?.phone_number;
+          initValues.store_address = response.store?.address;
+          setPOSMachine(response.store?.poses);
           setInitData({ ...initValues });
           reset({ ...initValues });
         } else if (role === ADMIN) {
@@ -158,7 +158,7 @@ function SwipeCard() {
                 <option value="">Chọn cửa hàng</option>
                 {stores?.map((store) => (
                   <option key={store.id} value={store.id}>
-                    {store.name}
+                    {store?.name}
                   </option>
                 ))}
               </select>
@@ -246,8 +246,8 @@ function SwipeCard() {
                   <Link>{swipeCard?.customer?.credit_card?.card_number}</Link>
                 </td>
                 <td>{swipeCard.customer_money_needed}</td>
-                <td>{swipeCard.customer.name}</td>
-                <td>{swipeCard.customer_phone_number}</td>
+                <td>{swipeCard.customer?.name}</td>
+                <td>{swipeCard.customer?.phone_number}</td>
                 <td>
                   {
                     transactionType.find(
