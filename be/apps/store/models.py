@@ -167,7 +167,6 @@ class SwipeCardTransaction(models.Model):
     transaction_datetime_created = models.DateTimeField(auto_now_add=True)
     transaction_datetime_updated = models.DateTimeField(auto_now=True)
     transaction_type = models.SmallIntegerField(choices=TRANSACTION_TYPE_CHOICES, default=1)
-    is_payment_received = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-id']
@@ -190,4 +189,7 @@ class BillPos(models.Model):
     invoice_no = models.CharField(max_length=128, blank=True, null=True)
     batch = models.CharField(max_length=128, blank=True, null=True)
     authorization_code = models.CharField(max_length=128, blank=True, null=True)
-    datetime = models.DateTimeField(auto_now_add=True)
+    datetime_created = models.DateTimeField(auto_now_add=True)
+    datetime_updated = models.DateTimeField(auto_now=True)
+    is_payment_received = models.BooleanField(default=False)
+

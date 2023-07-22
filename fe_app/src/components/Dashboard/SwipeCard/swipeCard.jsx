@@ -12,10 +12,9 @@ import {
 import { AuthContext } from "../../Dashboard/dashboard";
 import Pagination from "../../Pagination/pagination";
 import SwipeCardInput from "./swipeCardInput";
-import SelectField from "../../Common/selectField";
 
 function SwipeCard() {
-  const { register, getValues, setValue, reset } = useForm();
+  const { register, setValue, reset } = useForm();
 
   const [stores, setStores] = useState([]);
   const [responseSwipeCardData, setResponseSwipeCardData] = useState([]);
@@ -217,7 +216,6 @@ function SwipeCard() {
             <tr>
               <th scope="col">#</th>
               <th scope="col">Ngày giao dịch</th>
-              <th scope="col">Hình bill</th>
               <th scope="col">Tên trên thẻ</th>
               <th scope="col">Số thẻ</th>
               <th scope="col">Số tiền KH cần</th>
@@ -227,7 +225,7 @@ function SwipeCard() {
               <th scope="col">Ngày quẹt thẻ</th>
               <th scope="col">NV quẹt thẻ</th>
               <th scope="col">Ngày chỉnh sửa</th>
-              {role === ADMIN ? <th scope="col">Tiền về</th> : null}
+              {/* {role === ADMIN ? <th scope="col">Tiền về</th> : null} */}
               <th scope="col">Thao tác</th>
             </tr>
           </thead>
@@ -236,11 +234,6 @@ function SwipeCard() {
               <tr key={swipeCard.id}>
                 <th scope="row">{index + 1}</th>
                 <td>{swipeCard.transaction_datetime_created}</td>
-                <td>
-                  <Link to={swipeCard.bill_pos_image} target="_blank">
-                    Xem
-                  </Link>
-                </td>
                 <td>{swipeCard?.customer?.credit_card?.card_name}</td>
                 <td>
                   <Link>{swipeCard?.customer?.credit_card?.card_number}</Link>
@@ -258,9 +251,9 @@ function SwipeCard() {
                 <td>{swipeCard.transaction_datetime_created}</td>
                 <td>{swipeCard.username}</td>
                 <td>{swipeCard.transaction_datetime_updated}</td>
-                {role === ADMIN ? (
+                {/* {role === ADMIN ? (
                   <td>{swipeCard.is_payment_received ? "Đã về" : "Chưa về"}</td>
-                ) : null}
+                ) : null} */}
                 <td>
                   <Link to={swipeCard.id + "/"}>Chỉnh sửa</Link>
                 </td>

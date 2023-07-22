@@ -1,12 +1,11 @@
 from rest_framework import status
-from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.parsers import FileUploadParser, MultiPartParser
 from rest_framework.generics import ListAPIView
 
 from .filters import CreditCardFilter
 from .models import CreditCard
-from .serializers import CreditCardSerializer, CreditCardCustomSerializer
+from .serializers import CreditCardCustomSerializer
 
 
 class CreditCardAPIView(ListAPIView):

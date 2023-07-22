@@ -21,13 +21,12 @@ function SwipeCardMoreDetail() {
   } = useForm();
   const { isSubmitting } = formState;
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append } = useFieldArray({
     control,
     name: "billpos", // unique name for your Field Array
     // keyName: "id", default to "id", you can change the key name
   });
 
-  const [posMachine, setPOSMachine] = useState([]);
   const [dataListCardNumber, setDataListCardNumber] = useState([]);
 
   const [isManualInput, setIsManualInput] = useState(false);
@@ -495,7 +494,7 @@ function SwipeCardMoreDetail() {
               </select>
             </div>
           </div>
-          <div className="col-md-2">
+          {/* <div className="col-md-2">
             <div className="mb-3">
               <input
                 {...register("is_payment_received")}
@@ -505,7 +504,7 @@ function SwipeCardMoreDetail() {
               />
               <label className="form-check-label">Tiền về</label>
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="row">
           <div className="col-md-6">

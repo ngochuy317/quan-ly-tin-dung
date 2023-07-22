@@ -24,6 +24,7 @@ urlpatterns = [
     path('', include('apps.home.urls')),
     path('api/user/', include('apps.user.urls')),
     path('api/customer/', include('apps.customer.urls')),
+    path('api/store/', include('apps.store.urls')),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

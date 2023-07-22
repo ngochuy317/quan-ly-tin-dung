@@ -2,7 +2,11 @@ from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.views import View
 
-from .models import SwipeCardTransaction
+from rest_framework.generics import ListAPIView
+
+from .filters import BillPosFilter
+from .models import SwipeCardTransaction, BillPos
+from .serializers import BillPosSerializer
 
 
 class TransactionHistory(View):
@@ -22,3 +26,9 @@ class TransactionHistory(View):
             "sidebar": "transaction-history",
         }
         return render(request, "home/transaction_history.html", context)
+
+
+class BillPosListAPIView(ListAPIView):
+    filterset_class = BillPosFilter
+    serializer_class = BillPosSerializer
+    queryset = BillPos.objects.all()

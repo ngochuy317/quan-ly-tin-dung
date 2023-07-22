@@ -1,5 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
+import BillPOSMachineMangement from "./components/Dashboard/BillPos/billPOSMachineManagement";
+import CardManagement from "./components/Dashboard/CardManagement/cardManagement";
 import NewEmployee from "./components/Dashboard/Employees/addNewEmployee";
 import EmployeeDetail from "./components/Dashboard/Employees/employeeDetail";
 import EmployeesList from "./components/Dashboard/Employees/employeesList";
@@ -23,8 +25,6 @@ import StoresList from "./components/Dashboard/Stores/storesList";
 import SwipeCard from "./components/Dashboard/SwipeCard/swipeCard";
 import SwipeCardDetail from "./components/Dashboard/SwipeCard/swipeCardDetail";
 import SwipeCardMoreDetail from "./components/Dashboard/SwipeCard/swipeCardMoreDetail";
-import CardManagement from "./components/Dashboard/CardManagement/cardManagement";
-import BillPOSMachine from "./components/Dashboard/BillPos/billPOSMachine";
 
 function RoutesApp() {
   return (
@@ -53,7 +53,7 @@ function RoutesApp() {
       <Route path="/reportadm" element={<ReportAdmin />} />
       <Route path="/reportemp" element={<ReportEmployee />} />
       <Route path="/creditcarmanage" element={<CardManagement />} />
-      <Route path="/billposmanage" element={<BillPOSMachine />} />
+      <Route path="/billposmanage" element={<BillPOSMachineMangement />} />
     </Routes>
   );
 }

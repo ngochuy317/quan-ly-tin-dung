@@ -88,7 +88,7 @@ export const dataItemSideBarForAdmin = [
   },
   {
     id: 6,
-    name: "Bill máy POS",
+    name: "Q.lý Bill máy POS",
     icon: "receipt",
     path: "/dashboard/billposmanage",
     role: ["admin", "employee"],

@@ -20,7 +20,7 @@ function SwipeCardInput(props) {
   const { initData, deleteFormInput, requiredPosMachine } = props;
   const { control, register, handleSubmit, formState, getValues, setValue } =
     useForm();
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append } = useFieldArray({
     control,
     name: "billpos", // unique name for your Field Array
     // keyName: "id", default to "id", you can change the key name
@@ -37,7 +37,7 @@ function SwipeCardInput(props) {
       append();
     }
     init();
-  }, []);
+  }, []); // eslint-disable-line
 
   const handleClose = (index, imageValue) => {
     setValue(`billpos[${index}].bill_image`, imageValue);
@@ -52,12 +52,14 @@ function SwipeCardInput(props) {
     if (typeof data.creditcard.credit_card_back_image === "string") {
       delete data.creditcard.credit_card_back_image;
     } else {
-      data.creditcard.credit_card_back_image = data.creditcard.credit_card_back_image[0];
+      data.creditcard.credit_card_back_image =
+        data.creditcard.credit_card_back_image[0];
     }
     if (typeof data.creditcard.credit_card_front_image === "string") {
       delete data.creditcard.credit_card_front_image;
     } else {
-      data.creditcard.credit_card_front_image = data.creditcard.credit_card_front_image[0];
+      data.creditcard.credit_card_front_image =
+        data.creditcard.credit_card_front_image[0];
     }
     try {
       const response = await swipeCardTransactionAPI.createOne(data);
@@ -90,7 +92,8 @@ function SwipeCardInput(props) {
     let val = e.target.value;
     console.log(
       "🚀 ~ file: swipeCardInput.jsx:81 ~ handleOnChangeTransactionType ~ val:",
-      val, typeof(val)
+      val,
+      typeof val
     );
     setShowNegativeMoney(parseInt(val) === 2);
   };
