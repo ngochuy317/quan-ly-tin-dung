@@ -1,18 +1,18 @@
-from django.conf import settings
-
-from rest_framework import authentication, permissions, exceptions
-
-import jwt
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import, print_function, unicode_literals
 from datetime import datetime
 
+import jwt
+from django.conf import settings
+from rest_framework import authentication, exceptions, permissions
 from .models import User
 
 
 class CustomAuthentication(authentication.BaseAuthentication):
-    AUTH_HEADER_TYPES = 'Bearer'
+    AUTH_HEADER_TYPES = "Bearer"
 
     def authenticate(self, request):
-        token_input = request.META.get('HTTP_AUTHORIZATION') or ""
+        token_input = request.META.get("HTTP_AUTHORIZATION") or ""
         if not token_input.split():
             return None
         auth_header_type_is_valid = bool(str(token_input.split()[0]) == self.AUTH_HEADER_TYPES)
@@ -26,7 +26,7 @@ class CustomAuthentication(authentication.BaseAuthentication):
             token_payload = jwt.decode(
                 jwt=token,
                 key=settings.SECRET_KEY,
-                algorithms=['HS256'],
+                algorithms=["HS256"],
             )
             expire_time = token_payload.get("expire_time")
             expire_time = datetime.strptime(expire_time, settings.STRPTIME_FORMAT)
@@ -35,7 +35,7 @@ class CustomAuthentication(authentication.BaseAuthentication):
             id = token_payload.get("id")
             user = User.objects.filter(id=id).first()
             if not user:
-                raise exceptions.AuthenticationFailed('Invalid token')
+                raise exceptions.AuthenticationFailed("Invalid token")
             return (user, None)
 
         except (
@@ -43,7 +43,7 @@ class CustomAuthentication(authentication.BaseAuthentication):
             jwt.exceptions.ExpiredSignatureError,
             jwt.exceptions.InvalidSignatureError,
         ) as e:
-            raise exceptions.AuthenticationFailed(f'Invalid token with {e}')
+            raise exceptions.AuthenticationFailed(f"Invalid token with {e}")
 
 
 class IsAdmin(permissions.BasePermission):

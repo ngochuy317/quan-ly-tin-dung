@@ -1,8 +1,10 @@
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.parsers import FileUploadParser, MultiPartParser
-from rest_framework.generics import ListAPIView
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import, print_function, unicode_literals
 
+from rest_framework import status
+from rest_framework.generics import ListAPIView
+from rest_framework.parsers import FileUploadParser, MultiPartParser
+from rest_framework.response import Response
 from .filters import CreditCardFilter
 from .models import CreditCard
 from .serializers import CreditCardCustomSerializer

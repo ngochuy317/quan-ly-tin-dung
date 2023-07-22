@@ -1,10 +1,12 @@
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import, print_function, unicode_literals
+
 from django.contrib.auth.backends import BaseBackend
 from django.contrib.auth.hashers import check_password
 from .models import User
 
 
 class MyCustomBackend(BaseBackend):
-
     def authenticate(self, request, username=None, password=None):
         try:
             user = User.objects.get(username=username)

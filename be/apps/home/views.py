@@ -1,62 +1,47 @@
-from django.shortcuts import render
-from django.views import View
-from django.db.models import Q, Sum
-
-import pytz
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import, print_function, unicode_literals
 from datetime import datetime
 
-from rest_framework import status
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.generics import (
-    ListAPIView,
-    RetrieveAPIView,
-    RetrieveUpdateDestroyAPIView,
-    ListCreateAPIView,
-)
-from rest_framework.permissions import IsAuthenticated
-
-from apps.store.models import (
-    Store,
-    StoreCost,
-    POS,
-    SwipeCardTransaction,
-    NoteBook,
-    RowNotebook,
-    Product,
-)
-from apps.user.models import User
+import pytz
+from apps.customer.models import CreditCard
+from apps.store.models import POS, NoteBook, Product, RowNotebook, Store, StoreCost, SwipeCardTransaction
 from apps.user.authentication import IsAdmin
-
+from apps.user.models import User
+from django.db.models import Q, Sum
+from django.shortcuts import render
+from django.views import View
 from nested_multipart_parser import NestedParser
-
-from .filters import SwipeCardTransactionFilter, NotebookFilter
-from .serializers import (
-    UserSerializer,
-    StoreSerializer,
-    StoreCostSerializer,
-    POSSerializer,
-    NoteBookSerializer,
-    ProductSerializer,
-    SwipeCardTransactionSerializer,
-    SwipeCardTransactionDetailRetrieveUpdateSerializer,
-    SwipeCardTransactionReportSerializer,
-    CreateRowNotebookSerializer,
-    GetRowNotebookSerializer,
-    StoreInformationDetailSerializer,
-    CreditCardManagementSerializer,
-    AllTransaction4CreditCardSerializer,
-    BillPosSerializer,
-)
+from rest_framework import status
+from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .filters import NotebookFilter, SwipeCardTransactionFilter
 from .pagination import (
     CustomPageNumberPagination,
     CustomPageNumberPaginationPageSize15,
     SwipeCardTransactionPageNumberPagination,
 )
+from .serializers import (
+    AllTransaction4CreditCardSerializer,
+    BillPosSerializer,
+    CreateRowNotebookSerializer,
+    CreditCardManagementSerializer,
+    GetRowNotebookSerializer,
+    NoteBookSerializer,
+    POSSerializer,
+    ProductSerializer,
+    StoreCostSerializer,
+    StoreInformationDetailSerializer,
+    StoreSerializer,
+    SwipeCardTransactionDetailRetrieveUpdateSerializer,
+    SwipeCardTransactionReportSerializer,
+    SwipeCardTransactionSerializer,
+    UserSerializer,
+)
 
 
 class SwipeCardView(View):
-
     def get(self, request, *args, **kwargs):
         store_id = request.user.infomation_detail.store.id
         store = Store.objects.filter(id=store_id).first()
@@ -69,9 +54,7 @@ class SwipeCardView(View):
     def post(self, request, *args, **kwargs):
         store_id = request.user.infomation_detail.store.id
         store = Store.objects.filter(id=store_id).first()
-        context = {
-            "sidebar": "swipecard"
-        }
+        context = {"sidebar": "swipecard"}
         data = {
             "customer_code": request.POST.get("customer_code"),
             "customer_name": request.POST.get("customer_name"),
@@ -206,9 +189,7 @@ class AllTransaction4CreditCardAPIView(APIView):
         card_number = kwargs.get("card_number")
         if card_number:
             data = SwipeCardTransaction.objects.filter(creditcard__card_number=card_number).values(
-                'store_name',
-                'customer_money_needed',
-                'transaction_datetime_created'
+                "store_name", "customer_money_needed", "transaction_datetime_created"
             )
 
             serializer = AllTransaction4CreditCardSerializer(data, many=True)
@@ -221,28 +202,24 @@ class CreditCardManagementAPIView(APIView):
     permission_classes = [IsAdmin]
 
     def get(self, request, *args, **kwargs):
-        sw_ids = SwipeCardTransaction.objects\
-            .exclude(creditcard__isnull=True)\
-            .order_by('creditcard', '-transaction_datetime_created')\
-            .distinct('creditcard')\
-            .values('id')
-        sw_list = SwipeCardTransaction.objects.filter(id__in=sw_ids)\
-            .order_by('-transaction_datetime_created')\
+        sw_ids = (
+            SwipeCardTransaction.objects.exclude(creditcard__isnull=True)
+            .order_by("creditcard", "-transaction_datetime_created")
+            .distinct("creditcard")
+            .values("id")
+        )
+        sw_list = (
+            SwipeCardTransaction.objects.filter(id__in=sw_ids)
+            .order_by("-transaction_datetime_created")
             .values(
-                'id',
-                'store_name',
-                'creditcard__card_number',
-                'customer_money_needed',
-                'transaction_datetime_created'
+                "id", "store_name", "creditcard__card_number", "customer_money_needed", "transaction_datetime_created"
             )
+        )
 
         pagination = CustomPageNumberPaginationPageSize15()
         data = pagination.paginate_queryset(sw_list, request, view=self)
         serializer = CreditCardManagementSerializer(data, many=True)
         return pagination.get_paginated_response(serializer.data)
-
-
-
 
 
 class NotebookListCreateAPIView(ListCreateAPIView):
@@ -374,9 +351,7 @@ class InformationDetailAPIView(APIView):
     def get(self, request, *args, **kwargs):
         store = Store.objects.filter(id=request.user.infomation_detail.store.id).first()
         serializer = StoreInformationDetailSerializer(store)
-        context = {
-            "store": serializer.data
-        }
+        context = {"store": serializer.data}
         return Response(context, status=status.HTTP_200_OK)
 
 
@@ -416,8 +391,9 @@ class TotalMoneyTodayAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
         today = datetime.now(tz=pytz.timezone("Asia/Saigon"))
-        total_money = SwipeCardTransaction.objects.filter(transaction_datetime_created__date=today)\
-            .aggregate(Sum('customer_money_needed'))['customer_money_needed__sum']
+        total_money = SwipeCardTransaction.objects.filter(transaction_datetime_created__date=today).aggregate(
+            Sum("customer_money_needed")
+        )["customer_money_needed__sum"]
         context = {
             "total_money": total_money,
         }

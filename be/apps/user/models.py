@@ -1,14 +1,13 @@
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import, print_function, unicode_literals
+from datetime import datetime, timedelta
+
+import jwt
+from apps.base.constants import ROLE_CHOICES
+from apps.store.models import Store
 from django.conf import settings
 from django.db import models
-
-from apps.base.constants import ROLE_CHOICES
-
-from apps.store.models import Store
-
 from .managers import UserManager
-
-from datetime import datetime, timedelta
-import jwt
 
 
 class Permission(models.Model):
@@ -29,11 +28,7 @@ class Group(models.Model):
 
 
 class InfomationDetail(models.Model):
-    GENDER_CHOICES = (
-        (1, "Nam"),
-        (2, "Nữ"),
-        (3, "Khác")
-    )
+    GENDER_CHOICES = ((1, "Nam"), (2, "Nữ"), (3, "Khác"))
     fullname = models.CharField(max_length=511)
     address = models.CharField(max_length=1023)
     phone_number = models.CharField(max_length=10)
@@ -55,7 +50,7 @@ class InfomationDetail(models.Model):
 
 
 class User(models.Model):
-    USERNAME_FIELD = 'username'
+    USERNAME_FIELD = "username"
     REQUIRED_FIELDS = []
 
     objects = UserManager()
@@ -70,7 +65,7 @@ class User(models.Model):
     infomation_detail = models.OneToOneField(InfomationDetail, on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ['-id']
+        ordering = ["-id"]
 
     def __str__(self) -> str:
         return self.username
@@ -97,19 +92,15 @@ class User(models.Model):
 
     def get_access_token(self):
         data = {
-            'id': self.id,
-            'username': self.username,
-            'role': self.role,
-            'expire_time': (datetime.utcnow() + timedelta(hours=4)).strftime(settings.STRPTIME_FORMAT),
-            'create_at': (datetime.utcnow()).strftime(settings.STRPTIME_FORMAT)
+            "id": self.id,
+            "username": self.username,
+            "role": self.role,
+            "expire_time": (datetime.utcnow() + timedelta(hours=4)).strftime(settings.STRPTIME_FORMAT),
+            "create_at": (datetime.utcnow()).strftime(settings.STRPTIME_FORMAT),
         }
         try:
             secret_key = settings.SECRET_KEY
-            encoded_jwt = jwt.encode(
-                data,
-                secret_key,
-                algorithm="HS256"
-            )
+            encoded_jwt = jwt.encode(data, secret_key, algorithm="HS256")
             return encoded_jwt
         except jwt.exceptions.ExpiredSignatureError as e:
             print(e)

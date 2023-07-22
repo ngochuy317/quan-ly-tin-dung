@@ -1,25 +1,25 @@
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import, print_function, unicode_literals
+
 from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.views import View
-
 from rest_framework.generics import ListAPIView
-
 from .filters import BillPosFilter
-from .models import SwipeCardTransaction, BillPos
+from .models import BillPos, SwipeCardTransaction
 from .serializers import BillPosSerializer
 
 
 class TransactionHistory(View):
-
     def get(self, request, *args, **kwargs):
         if request.user.role != "admin":
-            transactions = SwipeCardTransaction.objects.\
-                filter(user__id=request.user.id).\
-                order_by("-transaction_datetime_created")
+            transactions = SwipeCardTransaction.objects.filter(user__id=request.user.id).order_by(
+                "-transaction_datetime_created"
+            )
         else:
             transactions = SwipeCardTransaction.objects.all()
         paginator = Paginator(transactions, 15)
-        page_number = request.GET.get('page')
+        page_number = request.GET.get("page")
         page_obj = paginator.get_page(page_number)
         context = {
             "transactions": page_obj,

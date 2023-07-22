@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import, print_function, unicode_literals
+
 from django.db import models
 from django.utils.timezone import now
 
@@ -11,7 +14,7 @@ class Store(models.Model):
     phone_number = models.CharField(max_length=20, blank=True, null=True)
 
     class Meta:
-        ordering = ['-id']
+        ordering = ["-id"]
 
     def __str__(self) -> str:
         return self.name
@@ -35,11 +38,7 @@ class StoreCost(models.Model):
 
 class POS(models.Model):
 
-    STATUS_POS_CHOICES = (
-        (1, "Đang hoạt động"),
-        (2, "Tạm dừng"),
-        (3, "Đóng")
-    )
+    STATUS_POS_CHOICES = ((1, "Đang hoạt động"), (2, "Tạm dừng"), (3, "Đóng"))
 
     mid = models.CharField(max_length=127)
     tid = models.CharField(max_length=127)
@@ -50,7 +49,7 @@ class POS(models.Model):
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="poses")
 
     class Meta:
-        ordering = ['-id']
+        ordering = ["-id"]
 
     def __str__(self) -> str:
         return f"{self.id} in {self.store}"
@@ -69,7 +68,7 @@ class NoteBook(models.Model):
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="notebooks")
 
     class Meta:
-        ordering = ['-id']
+        ordering = ["-id"]
 
     def update(self, commit=False, **kwargs):
         for key, value in kwargs.items():
@@ -92,12 +91,14 @@ class RowNotebook(models.Model):
     card_location = models.CharField(max_length=256, blank=True, null=True)
 
     def __str__(self):
-        return f"Tên sổ: {self.notebook.name},  "\
-                f"  Trạng thái: {self.status},  "\
-                f"  Giờ lưu: {self.storage_datetime:%m/%d/%Y %H:%M}"
+        return (
+            f"Tên sổ: {self.notebook.name},  "
+            f"  Trạng thái: {self.status},  "
+            f"  Giờ lưu: {self.storage_datetime:%m/%d/%Y %H:%M}"
+        )
 
     class Meta:
-        ordering = ['-storage_datetime']
+        ordering = ["-storage_datetime"]
 
 
 # class CreditCard(models.Model):
@@ -123,15 +124,8 @@ class RowNotebook(models.Model):
 
 class SwipeCardTransaction(models.Model):
 
-    TRANSACTION_TYPE_CHOICES = (
-        (1, "Rút tiền"),
-        (2, "Đáo thẻ")
-    )
-    GENDER_CHOICES = (
-        (1, "Nam"),
-        (2, "Nữ"),
-        (3, "Khác")
-    )
+    TRANSACTION_TYPE_CHOICES = ((1, "Rút tiền"), (2, "Đáo thẻ"))
+    GENDER_CHOICES = ((1, "Nam"), (2, "Nữ"), (3, "Khác"))
 
     is_creditcard_stored = models.BooleanField(default=False)
     store_id = models.PositiveBigIntegerField()
@@ -144,32 +138,24 @@ class SwipeCardTransaction(models.Model):
     customer_phone_number = models.CharField(max_length=12, blank=True, null=True)
     customer_gender = models.PositiveSmallIntegerField(choices=GENDER_CHOICES, default=3)
     customer_account_number = models.CharField(max_length=127, blank=True, null=True)
-    customer_id_card_front_image = models.ImageField(upload_to='uploads/customer/', blank=True, null=True)
-    customer_id_card_back_image = models.ImageField(upload_to='uploads/customer/', blank=True, null=True)
+    customer_id_card_front_image = models.ImageField(upload_to="uploads/customer/", blank=True, null=True)
+    customer_id_card_back_image = models.ImageField(upload_to="uploads/customer/", blank=True, null=True)
     customer_money_needed = models.PositiveBigIntegerField(default=0)
     negative_money = models.PositiveBigIntegerField(default=0)
     fee = models.PositiveBigIntegerField(default=0)
     customer = models.ForeignKey(
-        "customer.Customer",
-        on_delete=models.CASCADE,
-        related_name="swipe_card_transaction",
-        blank=True,
-        null=True
+        "customer.Customer", on_delete=models.CASCADE, related_name="swipe_card_transaction", blank=True, null=True
     )
     user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="swipe_card_transaction")
     at_store = models.ForeignKey(
-        Store,
-        on_delete=models.CASCADE,
-        related_name="swipe_card_transaction",
-        blank=True,
-        null=True
+        Store, on_delete=models.CASCADE, related_name="swipe_card_transaction", blank=True, null=True
     )
     transaction_datetime_created = models.DateTimeField(auto_now_add=True)
     transaction_datetime_updated = models.DateTimeField(auto_now=True)
     transaction_type = models.SmallIntegerField(choices=TRANSACTION_TYPE_CHOICES, default=1)
 
     class Meta:
-        ordering = ['-id']
+        ordering = ["-id"]
 
 
 class Product(models.Model):
@@ -183,7 +169,7 @@ class BillPos(models.Model):
 
     transaction = models.ForeignKey(SwipeCardTransaction, on_delete=models.CASCADE, related_name="billposes")
     pos = models.ForeignKey(POS, on_delete=models.CASCADE, related_name="billposes")
-    bill_image = models.ImageField(upload_to='uploads/billpos/')
+    bill_image = models.ImageField(upload_to="uploads/billpos/")
     total_money = models.PositiveBigIntegerField(blank=True, null=True)
     ref_no = models.CharField(max_length=128, blank=True, null=True)
     invoice_no = models.CharField(max_length=128, blank=True, null=True)
@@ -192,4 +178,3 @@ class BillPos(models.Model):
     datetime_created = models.DateTimeField(auto_now_add=True)
     datetime_updated = models.DateTimeField(auto_now=True)
     is_payment_received = models.BooleanField(default=False)
-

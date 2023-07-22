@@ -20,4 +20,3 @@ run_server() {
 
 migrate;
 run_server;
-

@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import, print_function, unicode_literals
+
 from rest_framework import pagination, status
 from rest_framework.response import Response
 
@@ -20,13 +23,12 @@ class CustomPageNumberPaginationPageSize15(CustomPageNumberPagination):
 
 
 class SwipeCardTransactionPageNumberPagination(CustomPageNumberPagination):
-
     def get_paginated_response(self, data):
 
         try:
-            pos_id = self.request.GET.get("pos")
-            sum_customer_money_needed = 0
-            money_limit_per_day = 0
+            # pos_id = self.request.GET.get("pos")
+            # sum_customer_money_needed = 0
+            # money_limit_per_day = 0
             # for row in data:
             #     sum_customer_money_needed += row.get("customer_money_needed", 0) or 0
             #     if pos_id:

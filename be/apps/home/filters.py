@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import, print_function, unicode_literals
+
 from django_filters import rest_framework as filters
 
 
@@ -15,4 +18,4 @@ class SwipeCardTransactionFilter(filters.FilterSet):
 
 
 class NotebookFilter(filters.FilterSet):
-    store_id = filters.NumberFilter(field_name='store__id')
+    store_id = filters.NumberFilter(field_name="store__id")

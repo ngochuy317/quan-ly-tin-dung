@@ -1,17 +1,15 @@
-from django.contrib import admin
+# -*- coding: utf-8 -*-
+from __future__ import absolute_import, print_function, unicode_literals
 
-from .models import (
-    Store,
-    POS,
-    SwipeCardTransaction,
-    NoteBook,
-    RowNotebook,
-    BillPos,
-)
+from django.contrib import admin
+from .models import POS, BillPos, NoteBook, RowNotebook, Store, SwipeCardTransaction
 
 
 class SwipeCardTransactionAdmin(admin.ModelAdmin):
-    readonly_fields = ('transaction_datetime_created', 'transaction_datetime_updated',)
+    readonly_fields = (
+        "transaction_datetime_created",
+        "transaction_datetime_updated",
+    )
 
 
 admin.site.register(Store)
