@@ -65,7 +65,7 @@ function CardManagement() {
                 <td>
                   {" "}
                   <a
-                    href=""
+                    href="/#"
                     onClick={handleOnClickCreditCard}
                     style={{ cursor: "pointer" }}
                   >

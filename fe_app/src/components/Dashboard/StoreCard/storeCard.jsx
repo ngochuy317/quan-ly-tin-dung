@@ -1,10 +1,9 @@
 import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import React, { useEffect, useState, useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import creditCardApi from "../../../api/creditCardAPI";
-import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import userApi from "../../../api/userAPI";
 // import Pagination from "../../Pagination/pagination";
 import notebookApi from "../../../api/notebookAPI";
@@ -15,7 +14,6 @@ function StoreCard() {
   const { register, handleSubmit, reset, formState, setValue } = useForm();
   const { isSubmitting } = formState;
   const [notebooks, setNotebooks] = useState([]);
-  const [responseSwipeCardData, setResponseSwipeCardData] = useState([]);
   const [dataListCardNumber, setDataListCardNumber] = useState([]);
   const [isManualInput, setIsManualInput] = useState(false);
   const [rowNotebooks, setRowNotebooks] = useState([]);
@@ -162,45 +160,6 @@ function StoreCard() {
     const response = await notebookApi.getDetailRowNotebook(id, { page: 1 });
     console.log("Fetch detail rownotebook successfully", response);
     setRowNotebooks(response?.results);
-  };
-
-  const handleOnChangeTransaction = async (e) => {
-    let val = parseInt(e.target.value);
-    if (val) {
-      let swipeCardData = responseSwipeCardData.find((c) => c.id === val);
-      console.log(
-        "🚀 ~ file: storeCard.jsx:132 ~ handleOnChangeTransaction ~ swipeCardData:",
-        swipeCardData
-      );
-      setValue("store_name", swipeCardData?.store_name);
-      setValue("store_code", swipeCardData?.store_code);
-      setValue("store_id", swipeCardData?.store_id);
-      setValue("store_phone_number", swipeCardData?.store_phone_number);
-      setValue("store_address", swipeCardData?.store_address);
-      setValue(
-        "creditcard.card_number",
-        swipeCardData?.creditcard?.card_number
-      );
-      setValue("creditcard.card_name", swipeCardData?.creditcard?.card_name);
-      if (role === ADMIN) {
-        const response = await notebookApi.getAllFull({
-          store_id: swipeCardData?.store_id,
-        });
-        console.log(
-          `Fetch notebook for store_id: ${swipeCardData?.store_id} successfully`,
-          response
-        );
-        setNotebooks(response);
-      }
-    } else {
-      setValue("store_name");
-      setValue("store_code");
-      setValue("store_id");
-      setValue("store_phone_number");
-      setValue("store_address");
-      setValue("creditcard.card_number");
-      setValue("creditcard.card_name");
-    }
   };
 
   // const handleChangePage = (direction) => {
