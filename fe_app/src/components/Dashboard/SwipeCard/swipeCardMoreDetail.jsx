@@ -7,7 +7,7 @@ import creditCardApi from "../../../api/creditCardAPI";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import InputField from "../../Common/inputField";
 import { genderChoices, transactionType } from "../../ConstantUtils/constants";
-import BillPOSMachineModal from "../../Modal/billPOSMachineModal";
+import AddBillPOSMachineModal from "../../Modal/billPOSMachineModal";
 
 function SwipeCardMoreDetail() {
   const {
@@ -35,6 +35,7 @@ function SwipeCardMoreDetail() {
   const [isCreditCardBackImage, setIsCreditCardBackImage] = useState(false);
   const [isCreditCardFrontImage, setIsCreditCardFrontImage] = useState(false);
   const [indexModal, setIndexModal] = useState(0);
+  const [dataListCardSelect, setDataListCardSelect] = useState(null);
   const handleShow = () => setShow(true);
 
   const navigate = useNavigate();
@@ -82,21 +83,38 @@ function SwipeCardMoreDetail() {
       const card = dataListCardNumber.find(
         (c) => c.card_number === e.target.value
       );
+      setDataListCardSelect(card);
       setValue("customer.phone_number", card.customer.phone_number);
       setValue("customer.name", card.customer.name);
+
+      setValue(
+        "customer.bank_account.account_number",
+        card.customer?.bank_account?.account_number
+      );
+      setValue(
+        "customer.bank_account.bank_name",
+        card.customer?.bank_account?.bank_name
+      );
       setValue("customer.gender", card.customer.gender);
       setValue("creditcard.card_bank_name", card.card_bank_name);
       setValue("creditcard.card_expire_date", card.card_expire_date);
       setValue("creditcard.card_issued_date", card.card_issued_date);
       setValue("creditcard.card_name", card.card_name);
-      setValue(
-        "creditcard.credit_card_back_image",
-        card.credit_card_back_image
-      );
-      setValue(
-        "creditcard.credit_card_front_image",
-        card.credit_card_front_image
-      );
+      setValue("creditcard.line_of_credit", card.line_of_credit);
+      if (card?.credit_card_back_image) {
+        setValue(
+          "creditcard.credit_card_back_image",
+          card.credit_card_back_image
+        );
+        setIsCreditCardBackImage(true);
+      }
+      if (card?.credit_card_front_image) {
+        setValue(
+          "creditcard.credit_card_front_image",
+          card.credit_card_front_image
+        );
+        setIsCreditCardFrontImage(true);
+      }
       setValue("creditcard.maturity_date", card.maturity_date);
       setValue("creditcard.statement_date", card.statement_date);
     }
@@ -110,16 +128,16 @@ function SwipeCardMoreDetail() {
   const onSubmit = async (data) => {
     try {
       // data.bill_pos_image = data.bill_pos_image[0];
-      if (typeof data.customer_id_card_front_image === "string") {
-        delete data.customer_id_card_front_image;
+      if (typeof data.customer.id_card_front_image === "string") {
+        delete data.customer.id_card_front_image;
       } else {
-        data.customer_id_card_front_image =
-          data.customer_id_card_front_image[0];
+        data.customer.id_card_front_image =
+          data.customer.id_card_front_image[0];
       }
-      if (typeof data.customer_id_card_back_image === "string") {
-        delete data.customer_id_card_back_image;
+      if (typeof data.customer.id_card_back_image === "string") {
+        delete data.customer.id_card_back_image;
       } else {
-        data.customer_id_card_back_image = data.customer_id_card_back_image[0];
+        data.customer.id_card_back_image = data.customer.id_card_back_image[0];
       }
       if (typeof data.creditcard.credit_card_front_image === "string") {
         delete data.creditcard.credit_card_front_image;
@@ -292,21 +310,37 @@ function SwipeCardMoreDetail() {
           <div className="col-md-4">
             <div className="mb-3">
               <label className="form-label">Ảnh mặt trước cmnd/cccd</label>
-              <input
-                {...register("customer_id_card_front_image")}
-                type="file"
-                className="form-control"
-              />
+              {dataListCardSelect?.customer?.id_card_front_image ? (
+                <img
+                  src={`${dataListCardSelect?.customer?.id_card_front_image}`}
+                  style={{ maxWidth: "100%", height: "auto" }}
+                  alt=""
+                ></img>
+              ) : (
+                <input
+                  {...register("customer.id_card_front_image")}
+                  type="file"
+                  className="form-control"
+                />
+              )}
             </div>
           </div>
           <div className="col-md-4">
             <div className="mb-3">
               <label className="form-label">Ảnh mặt sau cmnd/cccd</label>
-              <input
-                {...register("customer_id_card_back_image")}
-                type="file"
-                className="form-control"
-              />
+              {dataListCardSelect?.customer?.id_card_back_image ? (
+                <img
+                  src={`${dataListCardSelect?.customer?.id_card_back_image}`}
+                  style={{ maxWidth: "100%", height: "auto" }}
+                  alt=""
+                ></img>
+              ) : (
+                <input
+                  {...register("customer.id_card_back_image")}
+                  type="file"
+                  className="form-control"
+                />
+              )}
             </div>
           </div>
         </div>
@@ -359,6 +393,7 @@ function SwipeCardMoreDetail() {
             requiredRegister={register}
             requiredName={"creditcard.card_bank_name"}
             requiredIsRequired={true}
+            optionalDisabled={!isManualInput}
           />
 
           <InputField
@@ -547,7 +582,7 @@ function SwipeCardMoreDetail() {
             Lưu
           </button>
         </div>
-        <BillPOSMachineModal
+        <AddBillPOSMachineModal
           requiredShow={show}
           requiredHandleClose={handleClose}
           requiredTitle={"Bill máy POS"}
@@ -555,7 +590,7 @@ function SwipeCardMoreDetail() {
           requiredPosMachine={state.posMachineData}
           index={indexModal}
           getValues={getValues}
-        ></BillPOSMachineModal>
+        ></AddBillPOSMachineModal>
       </form>
     </div>
   );

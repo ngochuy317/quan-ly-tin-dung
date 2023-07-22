@@ -8,7 +8,7 @@ import creditCardApi from "../../../api/creditCardAPI";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import InputField from "../../Common/inputField";
 import { transactionType } from "../../ConstantUtils/constants";
-import BillPOSMachineModal from "../../Modal/billPOSMachineModal";
+import AddBillPOSMachineModal from "../../Modal/billPOSMachineModal";
 
 SwipeCardInput.propTypes = {
   deleteFormInput: PropTypes.func,
@@ -327,7 +327,7 @@ function SwipeCardInput(props) {
           </div>
         </div>
       </div>
-      <BillPOSMachineModal
+      <AddBillPOSMachineModal
         requiredShow={show}
         requiredHandleClose={handleClose}
         requiredTitle={"Bill máy POS"}
@@ -335,7 +335,7 @@ function SwipeCardInput(props) {
         requiredPosMachine={requiredPosMachine}
         index={indexModal}
         getValues={getValues}
-      ></BillPOSMachineModal>
+      ></AddBillPOSMachineModal>
     </form>
   );
 }

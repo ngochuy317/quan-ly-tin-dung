@@ -39,6 +39,7 @@ from .serializers import (
     NoteBookSerializer,
     ProductSerializer,
     SwipeCardTransactionSerializer,
+    SwipeCardTransactionDetailRetrieveUpdateSerializer,
     SwipeCardTransactionReportSerializer,
     CreateRowNotebookSerializer,
     GetRowNotebookSerializer,
@@ -132,7 +133,7 @@ class ProductListCreateAPIView(ListCreateAPIView):
 class SwipeCardTransactionDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
     queryset = SwipeCardTransaction.objects.all()
-    serializer_class = SwipeCardTransactionSerializer
+    serializer_class = SwipeCardTransactionDetailRetrieveUpdateSerializer
     permission_classes = [IsAuthenticated]
 
     def patch(self, request, *args, **kwargs):
@@ -142,7 +143,7 @@ class SwipeCardTransactionDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestr
             data = parser.validate_data
             partial = True
             instance = self.get_object()
-            serializer = SwipeCardTransactionSerializer(instance, data=data, partial=partial)
+            serializer = SwipeCardTransactionDetailRetrieveUpdateSerializer(instance, data=data, partial=partial)
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(status=status.HTTP_200_OK)

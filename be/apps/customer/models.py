@@ -6,6 +6,9 @@ class BankAccount(models.Model):
     account_number = models.CharField(max_length=127)
     bank_name = models.CharField(max_length=127)
 
+    def __str__(self) -> str:
+        return f"{self.bank_name} -- {self.account_number[-4:]}"
+
 
 class CreditCard(models.Model):
 

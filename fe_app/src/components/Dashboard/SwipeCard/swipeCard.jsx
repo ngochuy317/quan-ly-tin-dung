@@ -246,7 +246,7 @@ function SwipeCard() {
                   <Link>{swipeCard?.customer?.credit_card?.card_number}</Link>
                 </td>
                 <td>{swipeCard.customer_money_needed}</td>
-                <td>{swipeCard.customer_name}</td>
+                <td>{swipeCard.customer.name}</td>
                 <td>{swipeCard.customer_phone_number}</td>
                 <td>
                   {

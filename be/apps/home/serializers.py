@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.user.models import User, InfomationDetail
-from apps.customer.models import CreditCard, Customer
+from apps.customer.models import CreditCard, Customer, BankAccount
 from apps.customer.serializers import CreditCardSerializer
 from apps.store.models import (
     Store,
@@ -220,12 +220,97 @@ class SwipeCardTransactionReportSerializer(serializers.ModelSerializer):
 class CreditCardCustomerSerializer(serializers.Serializer):
     
     card_number = serializers.CharField(read_only=True)
+    card_name = serializers.CharField(read_only=True)
 
 
 class SwipeCardTransactionCustomerSerializer(serializers.Serializer):
     
     credit_card = CreditCardCustomerSerializer(read_only=True)
     phone_number = serializers.CharField(write_only=True)
+    name = serializers.CharField(read_only=True)
+
+
+class BankAccountSwipeCardTransactionDetailRetrieveUpdateSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = BankAccount
+        fields = '__all__'
+
+
+class CreditCardSwipeCardTransactionDetailRetrieveUpdateSerializer(serializers.ModelSerializer):
+    card_number = serializers.CharField()
+
+    class Meta:
+        model = CreditCard
+        fields = '__all__'
+
+    def validate_card_number(self, value):
+        """
+        Because this serializer only use for update data which is `card_number` can not be modified.
+        """
+        return value
+
+
+class CustomerSwipeCardTransactionDetailRetrieveUpdateSerializer(serializers.ModelSerializer):
+    phone_number = serializers.CharField()
+    bank_account = BankAccountSwipeCardTransactionDetailRetrieveUpdateSerializer()
+    credit_card = CreditCardSwipeCardTransactionDetailRetrieveUpdateSerializer()
+
+    class Meta:
+        model = Customer
+        fields = '__all__'
+    
+
+    def validate_phone_number(self, value):
+        """
+        Because this serializer only use for update data which is `phone_number` can not be modified.
+        """
+        return value
+
+class SwipeCardTransactionDetailRetrieveUpdateSerializer(serializers.ModelSerializer):
+    customer = CustomerSwipeCardTransactionDetailRetrieveUpdateSerializer()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        try:
+            if self.context['request'].method in ['GET']:
+                self.fields['user'] = serializers.CharField(source='user.id')
+                self.fields["billpos"] = BillPosSerializer(source='billposes', many=True)
+        except KeyError:
+            pass
+        except Exception as ex:
+            print("Exception SwipeCardTransactionDetailRetrieveUpdateSerializer", ex)
+
+    class Meta:
+        model = SwipeCardTransaction
+        fields = '__all__'
+        depth = 2
+    
+    def update(self, instance: SwipeCardTransaction, validated_data):
+        customer = validated_data.pop("customer")
+        credit_card = customer.pop("credit_card")
+        bank_account = customer.pop("bank_account", {})
+        credit_card_obj: CreditCard = CreditCard.objects.get(card_number=credit_card.pop("card_number"))
+        for attr, value in credit_card.items():
+            setattr(credit_card_obj, attr, value)
+        customer_obj: Customer = Customer.objects.get(phone_number=customer.pop("phone_number"))
+        for attr, value in customer.items():
+            setattr(customer_obj, attr, value)
+        if customer_obj.bank_account:
+            bank_account_obj: BankAccount = BankAccount.objects.get(id=customer_obj.bank_account.id)
+            for attr, value in bank_account.items():
+                setattr(bank_account_obj, attr, value)
+        else:
+            bank_account_obj: BankAccount = BankAccount.objects.create(
+                **bank_account
+            )
+            customer_obj.bank_account = bank_account_obj
+        bank_account_obj.save()
+        customer_obj.save()
+        credit_card_obj.save()
+        return instance
+
 
 
 class SwipeCardTransactionSerializer(serializers.ModelSerializer):
@@ -289,18 +374,18 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
         instance = SwipeCardTransaction.objects.create(**validated_data, customer=customer_obj)
         return instance
 
-    def update(self, instance: SwipeCardTransaction, validated_data):
-        creditcard = validated_data.pop("creditcard", None)
-        if creditcard:
-            creditcard_instance = CreditCard.objects.filter(id=instance.creditcard.id).first()
-            for attr, value in creditcard.items():
-                setattr(creditcard_instance, attr, value)
-            creditcard_instance.save()
+    # def update(self, instance: SwipeCardTransaction, validated_data):
+    #     creditcard = validated_data.pop("creditcard", None)
+    #     if creditcard:
+    #         creditcard_instance = CreditCard.objects.filter(id=instance.creditcard.id).first()
+    #         for attr, value in creditcard.items():
+    #             setattr(creditcard_instance, attr, value)
+    #         creditcard_instance.save()
 
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
-        instance.save()
-        return instance
+    #     for attr, value in validated_data.items():
+    #         setattr(instance, attr, value)
+    #     instance.save()
+    #     return instance
 
     def get_customer_id_card_front_image(self, obj):
         if obj.customer_id_card_front_image:

@@ -5,11 +5,17 @@ import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import InputField from "../../Common/inputField";
 import SelectField from "../../Common/selectField";
 import { genderChoices, transactionType } from "../../ConstantUtils/constants";
+import ModifiyBillPOSMachineModal from "../../Modal/modifyBillPosMachineModal";
 
 function SwipeCardDetail() {
   const { id } = useParams();
   const [dataSwipCardDetail, setDataSwipCardDetail] = useState();
-  const { register, handleSubmit, reset, formState } = useForm();
+  const [indexModal, setIndexModal] = useState(0);
+  const [show, setShow] = useState(false);
+  const handleShow = () => setShow(true);
+
+  const { register, handleSubmit, reset, formState, getValues, setValue } =
+    useForm();
   const { isSubmitting } = formState;
   const navigate = useNavigate();
 
@@ -30,30 +36,61 @@ function SwipeCardDetail() {
     fetchSwipeCardTransactionDetail();
   }, []); // eslint-disable-line
 
+  const handleClickPosMachine = (index, e) => {
+    setIndexModal(index);
+    console.log(
+      "🚀 ~ file: swipeCardInput.jsx:79 ~ handleClickPosMachine ~ index:",
+      index
+    );
+    console.log(
+      "🚀 ~ file: swipeCardDetail.jsx:47 ~ handleClickPosMachine ~ getValues:",
+      getValues(`billpos[${index}]`)
+    );
+    handleShow();
+  };
+
+  const handleClose = (index, imageValue) => {
+    setValue(`billpos[${index}].bill_image`, imageValue);
+    setShow(false);
+  };
+
   const onSubmit = async (data) => {
     try {
-      if (typeof data.bill_pos_image === "string") {
-        delete data.bill_pos_image;
+      if (typeof data.customer.id_card_front_image === "string") {
+        delete data.customer.id_card_front_image;
       } else {
-        data.bill_pos_image = data.bill_pos_image[0];
+        data.customer.id_card_front_image =
+          data.customer.id_card_front_image[0];
       }
 
-      if (typeof data.customer_id_card_front_image === "string") {
-        delete data.customer_id_card_front_image;
+      if (typeof data.customer.id_card_back_image === "string") {
+        delete data.customer.id_card_back_image;
       } else {
-        data.customer_id_card_front_image =
-          data.customer_id_card_front_image[0];
+        data.customer.id_card_back_image = data.customer.id_card_back_image[0];
       }
 
-      if (typeof data.customer_id_card_back_image === "string") {
-        delete data.customer_id_card_back_image;
+      if (
+        typeof data.customer.credit_card.credit_card_back_image === "string"
+      ) {
+        delete data.customer.credit_card.credit_card_back_image;
       } else {
-        data.customer_id_card_back_image = data.customer_id_card_back_image[0];
+        data.customer.credit_card.credit_card_back_image =
+          data.customer.credit_card.credit_card_back_image[0];
       }
 
-      delete data.creditcard.credit_card_front_image;
-      delete data.creditcard.credit_card_back_image;
-      delete data.pos;
+      if (
+        typeof data.customer.credit_card.credit_card_front_image === "string"
+      ) {
+        delete data.customer.credit_card.credit_card_front_image;
+      } else {
+        data.customer.credit_card.credit_card_front_image =
+          data.customer.credit_card.credit_card_front_image[0];
+      }
+
+      console.log("🚀 ~ file: swipeCardDetail.jsx:34 ~ onSubmit ~ data:", data);
+      // delete data.customer.credit_card.credit_card_front_image;
+      // delete data.credit_card.credit_card_back_image;
+      // delete data.pos;
 
       const response = await swipeCardTransactionAPI.updateOne(id, data);
       console.log("Update Swipecard successfully", response);
@@ -94,7 +131,6 @@ function SwipeCardDetail() {
             optionalDisabled={true}
           />
         </div>
-        <h5>Máy POS</h5>
         <div className="row"></div>
         <h5>Khách hàng</h5>
         <div className="row">
@@ -102,7 +138,7 @@ function SwipeCardDetail() {
             <div className="mb-3">
               <label className="form-label">Tên</label>
               <input
-                {...register("customer_name")}
+                {...register("customer.name")}
                 type="text"
                 className="form-control"
               />
@@ -113,7 +149,7 @@ function SwipeCardDetail() {
             requiredLbl="Giới tính"
             requiredIsRequired={true}
             requiredRegister={register}
-            requiredName={"customer_gender"}
+            requiredName={"customer.gender"}
             requiredDataOption={genderChoices}
             requiredLblSelect="Chọn giới tính"
             requiredValueOption={(ele) => `${ele.value}`}
@@ -125,7 +161,8 @@ function SwipeCardDetail() {
             requiredLbl="Số điện thoại"
             requiredType="tel"
             requiredRegister={register}
-            requiredName={"customer_phone_number"}
+            requiredName={"customer.phone_number"}
+            optionalDisabled={true}
           />
 
           <InputField
@@ -142,7 +179,7 @@ function SwipeCardDetail() {
             requiredLbl="Số TK nhận tiền"
             requiredType="text"
             requiredRegister={register}
-            requiredName={"customer_account"}
+            requiredName={"customer.bank_account.account_number"}
           />
 
           <InputField
@@ -150,22 +187,22 @@ function SwipeCardDetail() {
             requiredLbl="Ngân hàng"
             requiredType="text"
             requiredRegister={register}
-            requiredName={"customer_bank_account"}
+            requiredName={"customer.bank_account.bank_name"}
           />
         </div>
         <div className="row">
           <div className="col-md-4">
             <div className="mb-3">
               <label className="form-label">Ảnh mặt trước cmnd/cccd</label>
-              {dataSwipCardDetail?.customer_id_card_front_image ? (
+              {dataSwipCardDetail?.customer?.id_card_front_image ? (
                 <img
-                  src={`${dataSwipCardDetail?.customer_id_card_front_image}`}
+                  src={`${dataSwipCardDetail?.customer?.id_card_front_image}`}
                   style={{ maxWidth: "100%", height: "auto" }}
                   alt=""
                 ></img>
               ) : (
                 <input
-                  {...register("customer_id_card_front_image")}
+                  {...register("customer.id_card_front_image")}
                   type="file"
                   className="form-control"
                 />
@@ -175,38 +212,40 @@ function SwipeCardDetail() {
           <div className="col-md-4">
             <div className="mb-3">
               <label className="form-label">Ảnh mặt sau cmnd/cccd</label>
-              {dataSwipCardDetail?.customer_id_card_back_image ? (
+              {dataSwipCardDetail?.customer?.id_card_back_image ? (
                 <img
-                  src={`${dataSwipCardDetail?.customer_id_card_back_image}`}
+                  src={`${dataSwipCardDetail?.customer?.id_card_back_image}`}
                   style={{ maxWidth: "100%", height: "auto" }}
                   alt=""
                 ></img>
               ) : (
                 <input
-                  {...register("customer_id_card_back_image")}
+                  {...register("customer.id_card_back_image")}
                   type="file"
                   className="form-control"
                 />
               )}
             </div>
           </div>
-          <div className="col-md-4">
-            <div className="mb-3">
-              <label className="form-label">Ảnh bill máy pos</label>
-              {dataSwipCardDetail?.bill_pos_image ? (
-                <img
-                  src={`${dataSwipCardDetail?.bill_pos_image}`}
-                  style={{ maxWidth: "100%", height: "auto" }}
-                  alt=""
-                ></img>
-              ) : (
-                <input
-                  {...register("customer_id_card_front_image")}
-                  type="file"
-                  className="form-control"
-                />
-              )}
-            </div>
+
+          <h5>Máy POS</h5>
+          <div className="row">
+            {dataSwipCardDetail?.billpos?.map((item, index) => (
+              <div key={item.id} className="col-md-2">
+                <div className="mb-3">
+                  <label className="form-label">Bill Máy Pos {index}</label>
+                  <button
+                    id={`file-upload-${index}`}
+                    disabled={isSubmitting}
+                    className="btn btn-outline-primary form-control"
+                    onClick={() => handleClickPosMachine(index)}
+                    type="button"
+                  >
+                    Xem dữ liệu
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
         <div className="row"></div>
@@ -217,8 +256,8 @@ function SwipeCardDetail() {
             requiredLbl="Số thẻ"
             requiredType="text"
             requiredRegister={register}
-            requiredName={"creditcard.card_number"}
-            optionalPlaceholder="Nhập 3 số đầu để tìm"
+            requiredName={"customer.credit_card.card_number"}
+            optionalDisabled={true}
           />
 
           <InputField
@@ -226,7 +265,7 @@ function SwipeCardDetail() {
             requiredLbl="Ngân hàng"
             requiredType="text"
             requiredRegister={register}
-            requiredName={"creditcard.card_bank_name"}
+            requiredName={"customer.credit_card.card_bank_name"}
           />
 
           <InputField
@@ -234,7 +273,7 @@ function SwipeCardDetail() {
             requiredLbl="Hạn mức thẻ"
             requiredType="number"
             requiredRegister={register}
-            requiredName={"line_of_credit"}
+            requiredName={"customer.credit_card.line_of_credit"}
           />
 
           <InputField
@@ -251,7 +290,7 @@ function SwipeCardDetail() {
             requiredLbl="Tên trên thẻ"
             requiredType="text"
             requiredRegister={register}
-            requiredName={"creditcard.card_name"}
+            requiredName={"customer.credit_card.card_name"}
           />
 
           <InputField
@@ -259,7 +298,7 @@ function SwipeCardDetail() {
             requiredLbl="Ngày mở thẻ"
             requiredType="date"
             requiredRegister={register}
-            requiredName={"creditcard.card_issued_date"}
+            requiredName={"customer.credit_card.card_issued_date"}
           />
 
           <InputField
@@ -267,7 +306,7 @@ function SwipeCardDetail() {
             requiredLbl="Ngày hết hạn"
             requiredType="date"
             requiredRegister={register}
-            requiredName={"creditcard.card_expire_date"}
+            requiredName={"customer.credit_card.card_expire_date"}
           />
 
           <InputField
@@ -275,7 +314,7 @@ function SwipeCardDetail() {
             requiredLbl="CCV"
             requiredType="text"
             requiredRegister={register}
-            requiredName={"creditcard.card_ccv"}
+            requiredName={"customer.credit_card.card_ccv"}
             optionalMaxLengthForTextType={3}
           />
         </div>
@@ -285,7 +324,7 @@ function SwipeCardDetail() {
             requiredLbl="Ngày sao kê"
             requiredType="date"
             requiredRegister={register}
-            requiredName={"creditcard.statement_date"}
+            requiredName={"customer.credit_card.statement_date"}
           />
           {/* <InputField
             requiredColWidth={2}
@@ -326,22 +365,41 @@ function SwipeCardDetail() {
           <div className="col-md-6">
             <div className="mb-3">
               <label className="form-label">Ảnh mặt trước thẻ tín dụng</label>
-              <img
-                src={`${dataSwipCardDetail?.creditcard?.credit_card_front_image}`}
-                style={{ maxWidth: "100%", height: "auto" }}
-                alt=""
-              ></img>
+
+              {dataSwipCardDetail?.customer?.credit_card
+                ?.credit_card_front_image ? (
+                <img
+                  src={`${dataSwipCardDetail.customer.credit_card.credit_card_front_image}`}
+                  style={{ maxWidth: "100%", height: "auto" }}
+                  alt=""
+                ></img>
+              ) : (
+                <input
+                  {...register("customer.credit_card.credit_card_front_image")}
+                  type="file"
+                  className="form-control"
+                />
+              )}
             </div>
           </div>
 
           <div className="col-md-6">
             <div className="mb-3">
               <label className="form-label">Ảnh mặt sau thẻ tín dụng</label>
-              <img
-                src={`${dataSwipCardDetail?.creditcard?.credit_card_back_image}`}
-                style={{ maxWidth: "100%", height: "auto" }}
-                alt=""
-              ></img>
+              {dataSwipCardDetail?.customer?.credit_card
+                ?.credit_card_back_image ? (
+                <img
+                  src={`${dataSwipCardDetail.customer.credit_card.credit_card_back_image}`}
+                  style={{ maxWidth: "100%", height: "auto" }}
+                  alt=""
+                ></img>
+              ) : (
+                <input
+                  {...register("customer.credit_card.credit_card_back_image")}
+                  type="file"
+                  className="form-control"
+                />
+              )}
             </div>
           </div>
         </div>
@@ -365,6 +423,14 @@ function SwipeCardDetail() {
             Lưu
           </button>
         </div>
+        <ModifiyBillPOSMachineModal
+          requiredShow={show}
+          requiredHandleClose={handleClose}
+          requiredTitle={"Bill máy POS"}
+          requiredRegister={register}
+          index={indexModal}
+          getValues={getValues}
+        ></ModifiyBillPOSMachineModal>
       </form>
     </div>
   );

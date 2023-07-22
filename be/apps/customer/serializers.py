@@ -44,5 +44,16 @@ class CreditCardCustomSerializer(CreditCardSerializer):
         data["customer"]["name"] =  customer.name
         data["customer"]["gender"] =  customer.gender
         data["customer"]["phone_number"] =  customer.phone_number
-        # data["customer"]["bank_account"] =  customer.bank_account.id
+        if customer.bank_account:
+            data["customer"]["bank_account"] =  {}
+            data["customer"]["bank_account"]["account_number"] =  customer.bank_account.account_number
+            data["customer"]["bank_account"]["bank_name"] =  customer.bank_account.bank_name
+        if customer.id_card_front_image:
+            data["customer"]["id_card_front_image"] = self.context['request'].build_absolute_uri(customer.id_card_front_image.url)
+        if customer.id_card_back_image:
+            data["customer"]["id_card_back_image"] = self.context['request'].build_absolute_uri(customer.id_card_back_image.url)
+        if data.get("credit_card_back_image"):
+            data["credit_card_back_image"] = self.context['request'].build_absolute_uri(data["credit_card_back_image"])
+        if data.get("credit_card_front_image"):
+            data["credit_card_front_image"] = self.context['request'].build_absolute_uri(data["credit_card_front_image"])
         return data

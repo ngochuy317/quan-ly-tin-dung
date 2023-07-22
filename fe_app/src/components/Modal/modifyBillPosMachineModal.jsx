@@ -2,28 +2,22 @@ import { CDBBtn } from "cdbreact";
 import PropTypes from "prop-types";
 import React from "react";
 import Modal from "react-bootstrap/Modal";
-import FileInputField from "../Common/fileInputField";
 import InputField from "../Common/inputField";
-import SelectField from "../Common/selectField";
 
-BillPOSMachineModal.propTypes = {
+ModifiyBillPOSMachineModal.propTypes = {
   requiredShow: PropTypes.bool.isRequired,
   requiredHandleClose: PropTypes.func.isRequired,
   requiredTitle: PropTypes.string.isRequired,
   requiredRegister: PropTypes.func.isRequired,
-  requiredPosMachine: PropTypes.array.isRequired,
   index: PropTypes.number.isRequired,
-  optionalHandleOnChangePOS: PropTypes.func,
 };
 
-function BillPOSMachineModal(props) {
+function ModifiyBillPOSMachineModal(props) {
   const {
     requiredShow,
     requiredHandleClose,
     requiredTitle,
     requiredRegister,
-    requiredPosMachine,
-    optionalHandleOnChangePOS,
     index,
     getValues,
   } = props;
@@ -81,29 +75,28 @@ function BillPOSMachineModal(props) {
               requiredRegister={requiredRegister}
               requiredName={`billpos[${index}].batch`}
             />
-            <SelectField
+            <InputField
               requiredColWidth={2}
-              requiredLbl="MáyPOS"
-              requiredIsRequired={true}
+              requiredLbl="Máy POS"
+              requiredType="text"
               requiredRegister={requiredRegister}
               requiredName={`billpos[${index}].pos`}
-              requiredDataOption={requiredPosMachine}
-              OptionalOnChangeSelect={optionalHandleOnChangePOS}
-              requiredLblSelect="Chọn máy POS"
-              requiredValueOption={(ele) => `${ele.id}`}
-              requiredLblOption={(ele) =>
-                `${ele.id}-${ele.mid}-${ele.tid}-${ele.bank_name}`
-              }
+              optionalDisabled={true}
             />
           </div>
           <div className="row">
-            <FileInputField
-              requiredColWidth={4}
-              requiredLbl="Hình bill máy POS"
-              requiredIsRequired={true}
-              requiredRegister={requiredRegister}
-              requiredName={`billpos[${index}].bill_image`}
-            />
+            {getValues(`billpos[${index}].bill_image`) && (
+              <div className="col-md-4">
+                <div className="mb-3">
+                  <label className="form-label">Hình bill máy POS</label>
+                  <img
+                    src={getValues(`billpos[${index}].bill_image`)}
+                    style={{ maxWidth: "100%", height: "auto" }}
+                    alt=""
+                  ></img>
+                </div>
+              </div>
+            )}
           </div>
         </Modal.Body>
         <Modal.Footer>
@@ -116,4 +109,4 @@ function BillPOSMachineModal(props) {
   );
 }
 
-export default BillPOSMachineModal;
+export default ModifiyBillPOSMachineModal;

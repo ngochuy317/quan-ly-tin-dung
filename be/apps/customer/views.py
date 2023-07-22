@@ -15,6 +15,11 @@ class CreditCardAPIView(ListAPIView):
     serializer_class = CreditCardCustomSerializer
     queryset = CreditCard.objects.all()
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context["request"] = self.request
+        return context
+
     def post(self, request, *args, **kwargs):
         serializer = CreditCardCustomSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
