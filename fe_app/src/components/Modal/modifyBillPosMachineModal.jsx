@@ -10,6 +10,7 @@ ModifiyBillPOSMachineModal.propTypes = {
   requiredTitle: PropTypes.string.isRequired,
   requiredRegister: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired,
+  getValues: PropTypes.func.isRequired,
 };
 
 function ModifiyBillPOSMachineModal(props) {
@@ -75,28 +76,6 @@ function ModifiyBillPOSMachineModal(props) {
               requiredRegister={requiredRegister}
               requiredName={`billpos[${index}].batch`}
             />
-            <InputField
-              requiredColWidth={2}
-              requiredLbl="Máy POS"
-              requiredType="text"
-              requiredRegister={requiredRegister}
-              requiredName={`billpos[${index}].pos`}
-              optionalDisabled={true}
-            />
-          </div>
-          <div className="row">
-            {getValues(`billpos[${index}].bill_image`) && (
-              <div className="col-md-4">
-                <div className="mb-3">
-                  <label className="form-label">Hình bill máy POS</label>
-                  <img
-                    src={getValues(`billpos[${index}].bill_image`)}
-                    style={{ maxWidth: "100%", height: "auto" }}
-                    alt=""
-                  ></img>
-                </div>
-              </div>
-            )}
           </div>
         </Modal.Body>
         <Modal.Footer>

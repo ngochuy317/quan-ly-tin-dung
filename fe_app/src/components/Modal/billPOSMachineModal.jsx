@@ -2,18 +2,15 @@ import { CDBBtn } from "cdbreact";
 import PropTypes from "prop-types";
 import React from "react";
 import Modal from "react-bootstrap/Modal";
-import FileInputField from "../Common/fileInputField";
 import InputField from "../Common/inputField";
-import SelectField from "../Common/selectField";
 
 BillPOSMachineModal.propTypes = {
   requiredShow: PropTypes.bool.isRequired,
   requiredHandleClose: PropTypes.func.isRequired,
   requiredTitle: PropTypes.string.isRequired,
   requiredRegister: PropTypes.func.isRequired,
-  requiredPosMachine: PropTypes.array.isRequired,
   index: PropTypes.number.isRequired,
-  optionalHandleOnChangePOS: PropTypes.func,
+  getValues: PropTypes.func.isRequired
 };
 
 function BillPOSMachineModal(props) {
@@ -22,8 +19,6 @@ function BillPOSMachineModal(props) {
     requiredHandleClose,
     requiredTitle,
     requiredRegister,
-    requiredPosMachine,
-    optionalHandleOnChangePOS,
     index,
     getValues,
   } = props;
@@ -80,29 +75,6 @@ function BillPOSMachineModal(props) {
               requiredType="text"
               requiredRegister={requiredRegister}
               requiredName={`billpos[${index}].batch`}
-            />
-            <SelectField
-              requiredColWidth={2}
-              requiredLbl="MáyPOS"
-              requiredIsRequired={true}
-              requiredRegister={requiredRegister}
-              requiredName={`billpos[${index}].pos`}
-              requiredDataOption={requiredPosMachine}
-              OptionalOnChangeSelect={optionalHandleOnChangePOS}
-              requiredLblSelect="Chọn máy POS"
-              requiredValueOption={(ele) => `${ele.id}`}
-              requiredLblOption={(ele) =>
-                `${ele.id}-${ele.mid}-${ele.tid}-${ele.bank_name}`
-              }
-            />
-          </div>
-          <div className="row">
-            <FileInputField
-              requiredColWidth={4}
-              requiredLbl="Hình bill máy POS"
-              requiredIsRequired={true}
-              requiredRegister={requiredRegister}
-              requiredName={`billpos[${index}].bill_image`}
             />
           </div>
         </Modal.Body>

@@ -229,9 +229,29 @@ function SwipeCardDetail() {
           </div>
 
           <h5>Máy POS</h5>
-          <div className="row">
-            {dataSwipCardDetail?.billpos?.map((item, index) => (
-              <div key={item.id} className="col-md-2">
+          {dataSwipCardDetail?.billpos?.map((item, index) => (
+            <div key={item.id} className="row">
+              <InputField
+                requiredColWidth={2}
+                requiredLbl="Máy POS"
+                requiredType="text"
+                requiredRegister={register}
+                requiredName={`billpos[${index}].pos`}
+                optionalDisabled={true}
+              />
+              {getValues(`billpos[${index}].bill_image`) && (
+                <div className="col-md-4">
+                  <div className="mb-3">
+                    <label className="form-label">Hình bill máy POS</label>
+                    <img
+                      src={getValues(`billpos[${index}].bill_image`)}
+                      style={{ maxWidth: "100%", height: "auto" }}
+                      alt=""
+                    ></img>
+                  </div>
+                </div>
+              )}
+              <div className="col-md-2">
                 <div className="mb-3">
                   <label className="form-label">Bill Máy Pos {index}</label>
                   <button
@@ -245,9 +265,10 @@ function SwipeCardDetail() {
                   </button>
                 </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
+
         <div className="row"></div>
         <h5>Thông tin thẻ</h5>
         <div className="row">

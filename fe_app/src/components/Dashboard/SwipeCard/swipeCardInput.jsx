@@ -6,7 +6,9 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import creditCardApi from "../../../api/creditCardAPI";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
+import FileInputField from "../../Common/fileInputField";
 import InputField from "../../Common/inputField";
+import SelectField from "../../Common/selectField";
 import { transactionType } from "../../ConstantUtils/constants";
 import AddBillPOSMachineModal from "../../Modal/billPOSMachineModal";
 
@@ -31,6 +33,7 @@ function SwipeCardInput(props) {
   const [show, setShow] = useState(false);
   const [showNegativeMoney, setShowNegativeMoney] = useState(false);
   const [indexModal, setIndexModal] = useState(0);
+  const [searchCreditCard, setSearchCreditCard] = useState("");
 
   useEffect(() => {
     function init() {
@@ -49,18 +52,18 @@ function SwipeCardInput(props) {
 
   const onSubmit = async (data) => {
     console.log("data", data);
-    if (typeof data.creditcard.credit_card_back_image === "string") {
-      delete data.creditcard.credit_card_back_image;
-    } else {
-      data.creditcard.credit_card_back_image =
-        data.creditcard.credit_card_back_image[0];
-    }
-    if (typeof data.creditcard.credit_card_front_image === "string") {
-      delete data.creditcard.credit_card_front_image;
-    } else {
-      data.creditcard.credit_card_front_image =
-        data.creditcard.credit_card_front_image[0];
-    }
+    // if (typeof data.creditcard?.credit_card_back_image === "string") {
+    //   delete data.creditcard.credit_card_back_image;
+    // } else {
+    //   data.creditcard.credit_card_back_image =
+    //     data.creditcard?.credit_card_back_image[0];
+    // }
+    // if (typeof data.creditcard.credit_card_front_image === "string") {
+    //   delete data.creditcard.credit_card_front_image;
+    // } else {
+    //   data.creditcard.credit_card_front_image =
+    //     data.creditcard.credit_card_front_image[0];
+    // }
     try {
       const response = await swipeCardTransactionAPI.createOne(data);
       console.log("Create swipe card transaction successfully", response);
@@ -98,17 +101,29 @@ function SwipeCardInput(props) {
     setShowNegativeMoney(parseInt(val) === 2);
   };
 
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(async () => {
+      // Send Axios request here
+      const result = await creditCardApi.search({
+        card_number: searchCreditCard,
+      });
+      console.log(
+        "🚀 ~ file: swipeCardInput.jsx:112 ~ delayDebounceFn ~ result:",
+        result
+      );
+
+      setDataListCardNumber([...result]);
+    }, 2000);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchCreditCard]);
+
   const handleOnChangeCardNumber = async (e) => {
     let event = e.nativeEvent.inputType ? "input" : "option selected";
     if (event === "input") {
       let val = e.target.value;
       if (val.length > 2) {
-        const result = await creditCardApi.search({ card_number: val });
-        console.log(
-          "🚀 ~ file: swipeCardInput.jsx:44 ~ handleOnChangeCardNumber ~ result:",
-          result
-        );
-        setDataListCardNumber([...result]);
+        setSearchCreditCard(val);
       }
     } else if (event === "option selected") {
       const card = dataListCardNumber.find(
@@ -242,10 +257,33 @@ function SwipeCardInput(props) {
           optionalPlaceholder="Nhập 3 số đầu để tìm"
           optionalOnChange={handleOnChangeCardNumber}
         /> */}
-        {fields.map((item, index) => (
-          <div key={item.id} className="col-md-2">
+      </div>
+      {fields.map((item, index) => (
+        <div className="row" key={item.id}>
+          <SelectField
+            requiredColWidth={2}
+            requiredLbl={`Máy POS ${index}`}
+            requiredIsRequired={true}
+            requiredRegister={register}
+            requiredName={`billpos[${index}].pos`}
+            requiredDataOption={requiredPosMachine}
+            // OptionalOnChangeSelect={optionalHandleOnChangePOS}
+            requiredLblSelect="Chọn máy POS"
+            requiredValueOption={(ele) => `${ele.id}`}
+            requiredLblOption={(ele) =>
+              `${ele.id}-${ele.mid}-${ele.tid}-${ele.bank_name}`
+            }
+          />
+          <FileInputField
+            requiredColWidth={4}
+            requiredLbl={`Hình bill máy POS ${index}`}
+            requiredIsRequired={true}
+            requiredRegister={register}
+            requiredName={`billpos[${index}].bill_image`}
+          />
+          <div className="col-md-2">
             <div className="mb-3">
-              <label className="form-label">Bill Máy Pos{index}</label>
+              <label className="form-label">Bill Máy Pos {index}</label>
               <button
                 id={`file-upload-${index}`}
                 disabled={isSubmitting}
@@ -257,8 +295,9 @@ function SwipeCardInput(props) {
               </button>
             </div>
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
+
       <div className="row">
         <div className="col-md-1">
           <div className="mb-3">
@@ -335,7 +374,6 @@ function SwipeCardInput(props) {
         requiredHandleClose={handleClose}
         requiredTitle={"Bill máy POS"}
         requiredRegister={register}
-        requiredPosMachine={requiredPosMachine}
         index={indexModal}
         getValues={getValues}
       ></AddBillPOSMachineModal>

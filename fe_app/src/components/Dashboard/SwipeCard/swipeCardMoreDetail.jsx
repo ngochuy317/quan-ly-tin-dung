@@ -5,7 +5,9 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import creditCardApi from "../../../api/creditCardAPI";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
+import FileInputField from "../../Common/fileInputField";
 import InputField from "../../Common/inputField";
+import SelectField from "../../Common/selectField";
 import { genderChoices, transactionType } from "../../ConstantUtils/constants";
 import AddBillPOSMachineModal from "../../Modal/billPOSMachineModal";
 
@@ -219,18 +221,41 @@ function SwipeCardMoreDetail() {
         <h5>Máy POS</h5>
         <div className="row">
           {fields.map((item, index) => (
-            <div key={item.id} className="col-md-2">
-              <div className="mb-3">
-                <label className="form-label">Bill Máy Pos {index}</label>
-                <button
-                  id={`file-upload-${index}`}
-                  disabled={isSubmitting}
-                  className="btn btn-outline-primary form-control"
-                  onClick={() => handleClickPosMachine(index)}
-                  type="button"
-                >
-                  Thêm dữ liệu
-                </button>
+            <div key={item.id} className="row">
+              <SelectField
+                requiredColWidth={2}
+                requiredLbl={`Máy POS ${index}`}
+                requiredIsRequired={true}
+                requiredRegister={register}
+                requiredName={`billpos[${index}].pos`}
+                requiredDataOption={state.posMachineData}
+                // OptionalOnChangeSelect={optionalHandleOnChangePOS}
+                requiredLblSelect="Chọn máy POS"
+                requiredValueOption={(ele) => `${ele.id}`}
+                requiredLblOption={(ele) =>
+                  `${ele.id}-${ele.mid}-${ele.tid}-${ele.bank_name}`
+                }
+              />
+              <FileInputField
+                requiredColWidth={4}
+                requiredLbl={`Hình bill máy POS ${index}`}
+                requiredIsRequired={true}
+                requiredRegister={register}
+                requiredName={`billpos[${index}].bill_image`}
+              />
+              <div className="col-md-2">
+                <div className="mb-3">
+                  <label className="form-label">Bill Máy Pos {index}</label>
+                  <button
+                    id={`file-upload-${index}`}
+                    disabled={isSubmitting}
+                    className="btn btn-outline-primary form-control"
+                    onClick={() => handleClickPosMachine(index)}
+                    type="button"
+                  >
+                    Thêm dữ liệu
+                  </button>
+                </div>
               </div>
             </div>
           ))}
@@ -586,7 +611,6 @@ function SwipeCardMoreDetail() {
           requiredHandleClose={handleClose}
           requiredTitle={"Bill máy POS"}
           requiredRegister={register}
-          requiredPosMachine={state.posMachineData}
           index={indexModal}
           getValues={getValues}
         ></AddBillPOSMachineModal>
