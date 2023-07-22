@@ -148,7 +148,7 @@ function BillPOSMachineMangement(props) {
                     Xem
                   </Link>
                 </td>
-                <td>{billPos.total_money.toLocaleString("vn")}</td>
+                <td>{billPos.total_money?.toLocaleString("vn")}</td>
                 <td>{billPos.is_payment_received ? "Đã về" : "Chưa về"}</td>
                 <td>{billPos.authorization_code}</td>
                 <td>{billPos.ref_no}</td>

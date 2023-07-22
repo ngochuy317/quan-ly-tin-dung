@@ -129,7 +129,7 @@ function ReportEmployee() {
                 <td>{swipeCard.transaction_datetime_created}</td>
                 <td>{swipeCard.customer_name}</td>
                 <td>{swipeCard.customer_phone_number}</td>
-                <td>{swipeCard.customer_money_needed.toLocaleString("vn")}</td>
+                <td>{swipeCard.customer_money_needed?.toLocaleString("vn")}</td>
                 <td>{swipeCard.fee}</td>
                 {/* <td>
                     <Link to={swipeCard.id + "/"}>Chỉnh sửa</Link>
@@ -142,7 +142,7 @@ function ReportEmployee() {
       {responseSwipeCardData.results ? (
         <div className="d-flex justify-content-end">
           Tổng tiền:{" "}
-          {responseSwipeCardData.sum_customer_money_needed.toLocaleString("vn")}
+          {responseSwipeCardData.sum_customer_money_needed?.toLocaleString("vn")}
         </div>
       ) : (
         <div></div>
