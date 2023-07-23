@@ -79,7 +79,7 @@ function BillPOSMachineModal(props) {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <CDBBtn variant="secondary" onClick={() => clickClose(index)}>
+          <CDBBtn variant="secondary" onClick={requiredHandleClose}>
             OK
           </CDBBtn>
         </Modal.Footer>

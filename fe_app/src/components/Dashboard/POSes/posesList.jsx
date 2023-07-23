@@ -62,7 +62,7 @@ function POSesList() {
                 <th scope="row">{index + 1}</th>
                 <td>{pos.mid}</td>
                 <td>{pos.tid}</td>
-                <td>{pos.note}</td>
+                <td>{pos.note.substring(0, 20)} {pos.note.length >= 20 && '...'}</td>
                 <td>{posStatus.find((c) => c.value === pos.status)?.label}</td>
                 <td>{pos.bank_name}</td>
                 <td>{pos.store_name}</td>
@@ -84,6 +84,7 @@ function POSesList() {
         </table>
       </div>
       <Pagination
+      canBedisabled={responseData?.results?.length ? false : true}
         currentPage={currentPage}
         totalPages={responseData.total_pages}
         handleChangePage={handleChangePage}

@@ -22,7 +22,7 @@ function SwipeCardInput(props) {
   const { initData, deleteFormInput, requiredPosMachine } = props;
   const { control, register, handleSubmit, formState, getValues, setValue } =
     useForm();
-  const { fields, append } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: "billpos", // unique name for your Field Array
     // keyName: "id", default to "id", you can change the key name
@@ -42,8 +42,7 @@ function SwipeCardInput(props) {
     init();
   }, []); // eslint-disable-line
 
-  const handleClose = (index, imageValue) => {
-    setValue(`billpos[${index}].bill_image`, imageValue);
+  const handleClose = (index) => {
     setShow(false);
   };
   const handleShow = () => setShow(true);
@@ -52,6 +51,10 @@ function SwipeCardInput(props) {
 
   const onSubmit = async (data) => {
     console.log("data", data);
+
+    for (const i in data.billpos) {
+      data.billpos[i].bill_image = data.billpos[i].bill_image[0];
+    }
     // if (typeof data.creditcard?.credit_card_back_image === "string") {
     //   delete data.creditcard.credit_card_back_image;
     // } else {
@@ -146,6 +149,8 @@ function SwipeCardInput(props) {
       );
       setValue("creditcard.maturity_date", card.maturity_date);
       setValue("creditcard.statement_date", card.statement_date);
+      setValue("creditcard.line_of_credit", card.line_of_credit);
+      setValue("creditcard.card_ccv", card.card_ccv);
     }
   };
 
@@ -267,7 +272,6 @@ function SwipeCardInput(props) {
             requiredRegister={register}
             requiredName={`billpos[${index}].pos`}
             requiredDataOption={requiredPosMachine}
-            // OptionalOnChangeSelect={optionalHandleOnChangePOS}
             requiredLblSelect="Chọn máy POS"
             requiredValueOption={(ele) => `${ele.id}`}
             requiredLblOption={(ele) =>
@@ -292,6 +296,25 @@ function SwipeCardInput(props) {
                 type="button"
               >
                 Thêm dữ liệu
+              </button>
+            </div>
+          </div>
+          <div className="col-md-1">
+            <div className="mb-3">
+              <label className="form-label" style={{ color: "white" }}>
+                White
+              </label>
+              <button
+                disabled={isSubmitting}
+                onClick={() => {
+                  remove(index);
+                }}
+                className="btn btn-outline-danger form-control"
+              >
+                {isSubmitting && (
+                  <span className="spinner-border spinner-border-sm mr-1"></span>
+                )}
+                Xoá
               </button>
             </div>
           </div>

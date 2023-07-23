@@ -59,34 +59,40 @@ function EmployeesList(props) {
           </thead>
           <tbody className="table-group-divider">
             {responseData?.results?.map((user, index) => (
-                  <tr key={user.id}>
-                    <th scope="row">{index + 1}</th>
-                    <td>{user.infomation_detail.fullname}</td>
-                    <td>{user.infomation_detail.phone_number}</td>
-                    <td>{user.infomation_detail.identity_card}</td>
-                    <td>{genderChoices.find((c) => c.value === user.infomation_detail.gender)?.label}</td>
-                    <td>{user.infomation_detail.dob}</td>
-                    <td>{user.infomation_detail.salary}</td>
-                    <td>{user.infomation_detail.store}</td>
-                    <td>
-                      <Link to={user.id + "/"}>Chỉnh sửa</Link>
-                    </td>
-                    <td>
-                      <button
-                        type="button"
-                        onClick={() => onDelete(user.id)}
-                        className="btn btn-outline-danger mx-3"
-                      >
-                        Xoá
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              }
+              <tr key={user.id}>
+                <th scope="row">{index + 1}</th>
+                <td>{user.infomation_detail.fullname}</td>
+                <td>{user.infomation_detail.phone_number}</td>
+                <td>{user.infomation_detail.identity_card}</td>
+                <td>
+                  {
+                    genderChoices.find(
+                      (c) => c.value === user.infomation_detail.gender
+                    )?.label
+                  }
+                </td>
+                <td>{user.infomation_detail.dob}</td>
+                <td>{user.infomation_detail.salary}</td>
+                <td>{user.infomation_detail.store}</td>
+                <td>
+                  <Link to={user.id + "/"}>Chỉnh sửa</Link>
+                </td>
+                <td>
+                  <button
+                    type="button"
+                    onClick={() => onDelete(user.id)}
+                    className="btn btn-outline-danger mx-3"
+                  >
+                    Xoá
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
       <Pagination
+        canBedisabled={responseData?.results?.length ? false : true}
         currentPage={currentPage}
         totalPages={responseData.total_pages}
         handleChangePage={handleChangePage}

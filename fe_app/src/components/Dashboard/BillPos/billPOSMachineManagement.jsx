@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import billPOSApi from "../../../api/billPOSAPI";
 import storeApi from "../../../api/storeAPI";
 import { ADMIN } from "../../ConstantUtils/constants";
+import Pagination from "../../Pagination/pagination";
 import { AuthContext } from "../dashboard";
 
 function BillPOSMachineMangement(props) {
@@ -12,6 +13,7 @@ function BillPOSMachineMangement(props) {
   const { register, handleSubmit, getValues } = useForm();
   const [stores, setStores] = useState([]);
   const [poses, setPoses] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
   const [params, setParams] = useState({ page: 1 });
   const [responseBillPOSMachine, setResponseBillPOSMachine] = useState([]);
 
@@ -44,6 +46,22 @@ function BillPOSMachineMangement(props) {
     } catch (error) {
       console.log("Failed to Get Bill POS machine", error);
     }
+  };
+
+  const handleChangePage = async (direction) => {
+    let dataForm = getValues();
+    try {
+      const response = await billPOSApi.getAll({
+        page: currentPage + direction,
+        ...dataForm,
+      });
+      console.log("Get Bill POS machine successfully", response);
+      setResponseBillPOSMachine(response);
+    } catch (error) {
+      console.log("Failed to Get Bill POS machine", error);
+    }
+    setParams({ page: currentPage + direction });
+    setCurrentPage(currentPage + direction);
   };
 
   const handleOnChange = (e) => {
@@ -139,7 +157,7 @@ function BillPOSMachineMangement(props) {
             </tr>
           </thead>
           <tbody className="table-group-divider">
-            {responseBillPOSMachine?.map((billPos, index) => (
+            {responseBillPOSMachine?.results?.map((billPos, index) => (
               <tr key={billPos.id}>
                 <th scope="row">{index + 1}</th>
                 <td>{billPos.datetime_created}</td>
@@ -159,6 +177,12 @@ function BillPOSMachineMangement(props) {
           </tbody>
         </table>
       </div>
+      <Pagination
+        canBedisabled={responseBillPOSMachine?.results?.length ? false : true}
+        currentPage={currentPage}
+        totalPages={responseBillPOSMachine?.total_pages}
+        handleChangePage={handleChangePage}
+      />
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import CurrencyFormat from "react-currency-format";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import posApi from "../../../api/posAPI";
@@ -7,7 +8,7 @@ import { posStatus } from "../../ConstantUtils/constants";
 
 function NewPos() {
   const [stores, setStores] = useState([]);
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, setValue } = useForm();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,8 +25,14 @@ function NewPos() {
     fetchListStore();
   }, []);
 
+  const handleOnChangeMoneyLimitPerDay = (e) => {
+    let val = e.target.value?.replaceAll(",", "");
+    setValue("money_limit_per_day", val);
+  };
+
   const onSubmit = async (data) => {
     try {
+      console.log("🚀 ~ file: addNewPos.jsx:29 ~ onSubmit ~ data:", data);
       const response = await posApi.createOne(data);
       console.log("Create pos successfully", response);
       navigate("./..");
@@ -66,7 +73,7 @@ function NewPos() {
           <div className="col-md-6">
             <div className="mb-3">
               <label className="form-label">Ghi chú</label>
-              <input
+              <textarea
                 {...register("note")}
                 type="text"
                 className="form-control"
@@ -76,11 +83,12 @@ function NewPos() {
           <div className="col-md-3">
             <div className="mb-3">
               <label className="form-label">Giới hạn quẹt tiền mỗi ngày</label>
-              <input
-                {...register("money_limit_per_day")}
-                type="number"
+              <CurrencyFormat
+                type="text"
                 className="form-control"
                 required
+                thousandSeparator={true}
+                onChange={handleOnChangeMoneyLimitPerDay}
               />
             </div>
           </div>

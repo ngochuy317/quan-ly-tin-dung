@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import CurrencyFormat from "react-currency-format";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import posApi from "../../../api/posAPI";
@@ -7,7 +8,7 @@ import { posStatus } from "../../ConstantUtils/constants";
 
 function POSesDetail() {
   const [stores, setStores] = useState([]);
-  const { register, handleSubmit, reset } = useForm();
+  const { register, handleSubmit, reset, setValue, getValues } = useForm();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -46,6 +47,11 @@ function POSesDetail() {
     } catch (error) {
       console.log("Failed to update pos", error);
     }
+  };
+
+  const handleOnChangeMoneyLimitPerDay = (e) => {
+    let val = e.target.value?.replaceAll(",", "");
+    setValue("money_limit_per_day", val);
   };
 
   const onDelete = async () => {
@@ -88,8 +94,8 @@ function POSesDetail() {
           <div className="col-md-6">
             <div className="mb-3">
               <label className="form-label">Ghi chú</label>
-              <input
-                {...register("note", { required: true })}
+              <textarea
+                {...register("note")}
                 type="text"
                 className="form-control"
               />
@@ -98,10 +104,13 @@ function POSesDetail() {
           <div className="col-md-3">
             <div className="mb-3">
               <label className="form-label">Giới hạn quẹt tiền mỗi ngày</label>
-              <input
-                {...register("money_limit_per_day", { required: true })}
-                type="number"
+              <CurrencyFormat
+                type="text"
                 className="form-control"
+                value={getValues("money_limit_per_day")}
+                required
+                thousandSeparator={true}
+                onChange={handleOnChangeMoneyLimitPerDay}
               />
             </div>
           </div>

@@ -4,9 +4,9 @@ import { CDBBtn } from "cdbreact";
 
 Pagination.propTypes = {
   totalPages: PropTypes.number,
-  currentPage: PropTypes.number,
-  handleChangePage: PropTypes.func,
-  canBedisabled: PropTypes.bool,
+  currentPage: PropTypes.number.isRequired,
+  handleChangePage: PropTypes.func.isRequired,
+  canBedisabled: PropTypes.bool.isRequired,
 };
 
 function Pagination(props) {
@@ -18,64 +18,66 @@ function Pagination(props) {
 
   return (
     <div>
-      <div className="container p-4">
-        <div className="pagination justify-content-center">
-          <div className="btn-group">
-            <div className="btn-group me-1" role="group">
-              <CDBBtn
-                color="primary"
-                circle
-                disabled={canBedisabled || currentPage <= 1}
-                onClick={() => {
-                  handleChangePageClick(1 - currentPage);
-                }}
-              >
-                &laquo;&laquo;
-              </CDBBtn>
-            </div>
-            <div className="btn-group me-1" role="group">
-              <CDBBtn
-                color="primary"
-                circle
-                disabled={canBedisabled || currentPage <= 1}
-                onClick={() => {
-                  handleChangePageClick(-1);
-                }}
-              >
-                &laquo;
-              </CDBBtn>
-            </div>
+      {!canBedisabled && (
+        <div className="container p-4">
+          <div className="pagination justify-content-center">
+            <div className="btn-group">
+              <div className="btn-group me-1" role="group">
+                <CDBBtn
+                  color="primary"
+                  circle
+                  disabled={canBedisabled || currentPage <= 1}
+                  onClick={() => {
+                    handleChangePageClick(1 - currentPage);
+                  }}
+                >
+                  &laquo;&laquo;
+                </CDBBtn>
+              </div>
+              <div className="btn-group me-1" role="group">
+                <CDBBtn
+                  color="primary"
+                  circle
+                  disabled={canBedisabled || currentPage <= 1}
+                  onClick={() => {
+                    handleChangePageClick(-1);
+                  }}
+                >
+                  &laquo;
+                </CDBBtn>
+              </div>
 
-            <span className="current">
-              &nbsp; {currentPage} / {totalPages} &nbsp;
-            </span>
-            <div className="btn-group me-1" role="group">
-              <CDBBtn
-                color="primary"
-                circle
-                disabled={canBedisabled || currentPage >= totalPages}
-                onClick={() => {
-                  handleChangePageClick(1);
-                }}
-              >
-                &raquo;
-              </CDBBtn>
-            </div>
-            <div className="btn-group me-1" role="group">
-              <CDBBtn
-                color="primary"
-                circle
-                disabled={canBedisabled || currentPage >= totalPages}
-                onClick={() => {
-                  handleChangePageClick(totalPages - currentPage);
-                }}
-              >
-                &raquo;&raquo;
-              </CDBBtn>
+              <span className="current">
+                &nbsp; {currentPage} / {totalPages} &nbsp;
+              </span>
+              <div className="btn-group me-1" role="group">
+                <CDBBtn
+                  color="primary"
+                  circle
+                  disabled={canBedisabled || currentPage >= totalPages}
+                  onClick={() => {
+                    handleChangePageClick(1);
+                  }}
+                >
+                  &raquo;
+                </CDBBtn>
+              </div>
+              <div className="btn-group me-1" role="group">
+                <CDBBtn
+                  color="primary"
+                  circle
+                  disabled={canBedisabled || currentPage >= totalPages}
+                  onClick={() => {
+                    handleChangePageClick(totalPages - currentPage);
+                  }}
+                >
+                  &raquo;&raquo;
+                </CDBBtn>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

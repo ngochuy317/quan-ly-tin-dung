@@ -15,12 +15,12 @@ class BankAccount(models.Model):
 
 class CreditCard(models.Model):
 
-    card_number = models.CharField(max_length=127, unique=True)
+    card_number = models.CharField(max_length=20, unique=True)
     card_bank_name = models.CharField(max_length=127, blank=True, null=True)
     card_name = models.CharField(max_length=127, blank=True, null=True)
     card_issued_date = models.DateField(blank=True, null=True)
     card_expire_date = models.DateField(blank=True, null=True)
-    card_ccv = models.CharField(max_length=127, blank=True, null=True)
+    card_ccv = models.CharField(max_length=3, blank=True, null=True)
     statement_date = models.DateField(blank=True, null=True)
     maturity_date = models.DateField(blank=True, null=True)
     credit_card_front_image = models.ImageField(upload_to="uploads/creditcards/", blank=True, null=True)

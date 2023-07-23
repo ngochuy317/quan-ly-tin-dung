@@ -202,22 +202,19 @@ class CreditCardManagementAPIView(APIView):
     permission_classes = [IsAdmin]
 
     def get(self, request, *args, **kwargs):
-        sw_ids = (
-            SwipeCardTransaction.objects.exclude(creditcard__isnull=True)
-            .order_by("creditcard", "-transaction_datetime_created")
-            .distinct("creditcard")
+        swipe_card_ids = (
+            SwipeCardTransaction.objects.order_by("credit_card_number", "-transaction_datetime_created")
+            .distinct("credit_card_number")
             .values("id")
         )
-        sw_list = (
-            SwipeCardTransaction.objects.filter(id__in=sw_ids)
+        swipe_card_list = (
+            SwipeCardTransaction.objects.filter(id__in=swipe_card_ids)
             .order_by("-transaction_datetime_created")
-            .values(
-                "id", "store_name", "creditcard__card_number", "customer_money_needed", "transaction_datetime_created"
-            )
+            .values("id", "store_name", "credit_card_number", "customer_money_needed", "transaction_datetime_created")
         )
 
         pagination = CustomPageNumberPaginationPageSize15()
-        data = pagination.paginate_queryset(sw_list, request, view=self)
+        data = pagination.paginate_queryset(swipe_card_list, request, view=self)
         serializer = CreditCardManagementSerializer(data, many=True)
         return pagination.get_paginated_response(serializer.data)
 

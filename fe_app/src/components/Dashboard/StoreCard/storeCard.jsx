@@ -11,15 +11,19 @@ import { ADMIN, EMPLOYEE } from "../../ConstantUtils/constants";
 import { AuthContext } from "../../Dashboard/dashboard";
 
 function StoreCard() {
-  const { register, handleSubmit, reset, formState, setValue } = useForm();
+  const { register, handleSubmit, reset, formState, setValue, getValues } = useForm();
   const { isSubmitting } = formState;
   const [notebooks, setNotebooks] = useState([]);
   const [dataListCardNumber, setDataListCardNumber] = useState([]);
-  const [isManualInput, setIsManualInput] = useState(false);
   const [rowNotebooks, setRowNotebooks] = useState([]);
+
+  const [isManualInput, setIsManualInput] = useState(false);
+  const [isCreditCardBackImage, setIsCreditCardBackImage] = useState(false);
+  const [isCreditCardFrontImage, setIsCreditCardFrontImage] = useState(false);
+  const [reloadAfterSubmit, setReloadAfterSubmit] = useState(false);
+  const [searchCreditCard, setSearchCreditCard] = useState("");
   // const [currentPage, setCurrentPage] = useState(1);
   const [maxLengthOrderInNotebook, setMaxLengthOrderInNotebook] = useState(0);
-  const [reloadAfterSubmit, setReloadAfterSubmit] = useState(false);
   // const [params, setParams] = useState({ page: 1 });
   const navigate = useNavigate();
   const { role = "" } = useContext(AuthContext);
@@ -52,17 +56,29 @@ function StoreCard() {
     callAPIInit();
   }, [role]); // eslint-disable-line
 
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(async () => {
+      // Send Axios request here
+      const result = await creditCardApi.search({
+        card_number: searchCreditCard,
+      });
+      console.log(
+        "🚀 ~ file: swipeCardInput.jsx:112 ~ delayDebounceFn ~ result:",
+        result
+      );
+
+      setDataListCardNumber([...result]);
+    }, 2000);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchCreditCard]);
+
   const handleOnChangeCardNumber = async (e) => {
     let event = e.nativeEvent.inputType ? "input" : "option selected";
     if (event === "input") {
       let val = e.target.value;
       if (val.length > 2) {
-        const result = await creditCardApi.search({ card_number: val });
-        console.log(
-          "🚀 ~ file: swipeCardInput.jsx:44 ~ handleOnChangeCardNumber ~ result:",
-          result
-        );
-        setDataListCardNumber([...result]);
+        setSearchCreditCard(val);
       }
     } else if (event === "option selected") {
       const card = dataListCardNumber.find(
@@ -82,6 +98,23 @@ function StoreCard() {
       );
       setValue("creditcard.maturity_date", card.maturity_date);
       setValue("creditcard.statement_date", card.statement_date);
+      setValue("creditcard.line_of_credit", card.line_of_credit);
+      setValue("creditcard.card_ccv", card.card_ccv);
+
+      if (card?.credit_card_back_image) {
+        setValue(
+          "creditcard.credit_card_back_image",
+          card.credit_card_back_image
+        );
+        setIsCreditCardBackImage(true);
+      }
+      if (card?.credit_card_front_image) {
+        setValue(
+          "creditcard.credit_card_front_image",
+          card.credit_card_front_image
+        );
+        setIsCreditCardFrontImage(true);
+      }
     }
   };
 
@@ -89,33 +122,6 @@ function StoreCard() {
     let check = e.target.checked;
     setIsManualInput(check);
   };
-
-  // useEffect(() => {
-  //   async function fetchTransactionHistory() {
-  //     try {
-  //       const responseHistorySwipeCard = await swipeCardTransactionAPI.getAll();
-  //       console.log(
-  //         "Fetch swipe card history list successfully",
-  //         responseHistorySwipeCard
-  //       );
-  //       setResponseSwipeCardData(responseHistorySwipeCard.results);
-  //       if (responseHistorySwipeCard.results.length > 0) {
-  //         setValue(
-  //           "creditcard.card_number",
-  //           responseHistorySwipeCard.results[0].creditcard?.card_number
-  //         );
-  //         setValue(
-  //           "creditcard.card_name",
-  //           responseHistorySwipeCard.results[0].creditcard?.card_name
-  //         );
-  //       }
-  //     } catch (error) {
-  //       console.log("Failed to swipe card history", error);
-  //     }
-  //   }
-  //   fetchTransactionHistory();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [reloadAfterSubmit]);
 
   const onSubmit = async (data) => {
     try {
@@ -537,13 +543,21 @@ function StoreCard() {
                   color="red"
                 />
               </label>
-              <input
-                {...register("creditcard.credit_card_front_image")}
-                type="file"
-                className="form-control"
-                required
-                disabled={!isManualInput}
-              />
+              {isCreditCardFrontImage ? (
+                <img
+                  src={`${getValues("creditcard.credit_card_front_image")}`}
+                  style={{ maxWidth: "100%", height: "auto" }}
+                  alt=""
+                ></img>
+              ) : (
+                <input
+                  {...register("creditcard.credit_card_front_image")}
+                  type="file"
+                  className="form-control"
+                  required
+                  disabled={!isManualInput}
+                />
+              )}
             </div>
           </div>
           <div className="col-md-3">
@@ -555,13 +569,21 @@ function StoreCard() {
                   color="red"
                 />
               </label>
-              <input
-                {...register("creditcard.credit_card_back_image")}
-                type="file"
-                className="form-control"
-                required
-                disabled={!isManualInput}
-              />
+              {isCreditCardBackImage ? (
+                <img
+                  src={`${getValues("creditcard.credit_card_back_image")}`}
+                  style={{ maxWidth: "100%", height: "auto" }}
+                  alt=""
+                ></img>
+              ) : (
+                <input
+                  {...register("creditcard.credit_card_back_image")}
+                  type="file"
+                  className="form-control"
+                  required
+                  disabled={!isManualInput}
+                />
+              )}
             </div>
           </div>
         </div>

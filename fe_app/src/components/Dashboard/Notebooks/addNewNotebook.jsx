@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import notebookAPI from "../../../api/notebookAPI";
 import storeApi from "../../../api/storeAPI";
-import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import InputField from "../../Common/inputField";
+import SelectField from "../../Common/selectField";
 
 function NewNotebook() {
   const [stores, setStores] = useState([]);
@@ -41,52 +41,41 @@ function NewNotebook() {
       <h2 className="text-center"> Sổ lưu</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="row">
-          <div className="col-md-4">
-            <div className="mb-3">
-              <label className="form-label">Tên</label>
-              <input
-                {...register("name")}
-                type="text"
-                className="form-control"
-                required
-              />
-            </div>
-          </div>
-          <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">Số lượng lưu trữ</label>
-              <input
-                {...register("capacity")}
-                type="number"
-                className="form-control"
-                required
-              />
-            </div>
-          </div>
-          <div className="col-md-6">
-            <div className="mb-3">
-              <label className="form-label">
-                Cửa hàng{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <select
-                {...register("store")}
-                className="form-select"
-                defaultValue={{ label: "Select Dept", value: 0 }}
-                required
-              >
-                <option value="">Chọn cửa hàng</option>
-                {stores?.map((store) => (
-                  <option key={store.id} value={store.id}>
-                    {store.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+        <InputField
+              requiredColWidth={4}
+              requiredLbl="Tên"
+              requiredType="text"
+              requiredRegister={register}
+              requiredName={"name"}
+              requiredIsRequired={true}
+            />
+          <InputField
+              requiredColWidth={2}
+              requiredLbl="Số trang"
+              requiredType="number"
+              requiredRegister={register}
+              requiredName={"pages"}
+              requiredIsRequired={true}
+            />
+          <InputField
+              requiredColWidth={2}
+              requiredLbl="Số thẻ mỗi trang"
+              requiredType="number"
+              requiredRegister={register}
+              requiredName={"capacity_per_page"}
+              requiredIsRequired={true}
+            />
+            <SelectField
+            requiredColWidth={4}
+            requiredLbl={"Cửa hàng"}
+            requiredIsRequired={true}
+            requiredRegister={register}
+            requiredName={"store"}
+            requiredDataOption={stores}
+            requiredLblSelect="Chọn cửa hàng"
+            requiredValueOption={(ele) => `${ele.id}`}
+            requiredLblOption={(ele) => `${ele.name}`}
+          />
         </div>
         <div className="d-flex justify-content-end">
           <button type="submit" className="btn btn-outline-primary mx-3">

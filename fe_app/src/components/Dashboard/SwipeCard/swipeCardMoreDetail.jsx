@@ -23,7 +23,7 @@ function SwipeCardMoreDetail() {
   } = useForm();
   const { isSubmitting } = formState;
 
-  const { fields, append } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: "billpos", // unique name for your Field Array
     // keyName: "id", default to "id", you can change the key name
@@ -118,6 +118,8 @@ function SwipeCardMoreDetail() {
       }
       setValue("creditcard.maturity_date", card.maturity_date);
       setValue("creditcard.statement_date", card.statement_date);
+      setValue("creditcard.line_of_credit", card.line_of_credit);
+      setValue("creditcard.card_ccv", card.card_ccv);
     }
   };
 
@@ -158,7 +160,9 @@ function SwipeCardMoreDetail() {
       //   data.creditcard.credit_card_front_image[0];
       // data.creditcard.credit_card_back_image =
       //   data.creditcard.credit_card_back_image[0];
-
+      for (const i in data.billpos) {
+        data.billpos[i].bill_image = data.billpos[i].bill_image[0];
+      }
       console.log(
         "🚀 ~ file: swipeCardMoreDetail.jsx:140 ~ onSubmit ~ data:",
         data
@@ -254,6 +258,25 @@ function SwipeCardMoreDetail() {
                     type="button"
                   >
                     Thêm dữ liệu
+                  </button>
+                </div>
+              </div>
+              <div className="col-md-1">
+                <div className="mb-3">
+                  <label className="form-label" style={{ color: "white" }}>
+                    White
+                  </label>
+                  <button
+                    disabled={isSubmitting}
+                    onClick={() => {
+                      remove(index);
+                    }}
+                    className="btn btn-outline-danger form-control"
+                  >
+                    {isSubmitting && (
+                      <span className="spinner-border spinner-border-sm mr-1"></span>
+                    )}
+                    Xoá
                   </button>
                 </div>
               </div>

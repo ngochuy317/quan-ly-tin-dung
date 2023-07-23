@@ -34,13 +34,13 @@ export const dataItemSideBarForEmployee = [
     path: "/dashboard/storecard",
     role: ["admin", "employee"],
   },
-  {
-    id: 10,
-    name: "Danh sách thẻ đã lưu",
-    icon: "list",
-    path: "/dashboard/savedcard",
-    role: ["admin", "employee"],
-  },
+  // {
+  //   id: 10,
+  //   name: "Danh sách thẻ đã lưu",
+  //   icon: "list",
+  //   path: "/dashboard/savedcard",
+  //   role: ["admin", "employee"],
+  // },
   // {
   //   id: 11,
   //   name: "Lịch sử quẹt thẻ",
@@ -114,13 +114,13 @@ export const dataItemSideBarForAdmin = [
     path: "/dashboard/storecard",
     role: ["admin", "employee"],
   },
-  {
-    id: 10,
-    name: "Thẻ đã lưu",
-    icon: "list",
-    path: "/dashboard/savedcard",
-    role: ["admin", "employee"],
-  },
+  // {
+  //   id: 10,
+  //   name: "Thẻ đã lưu",
+  //   icon: "list",
+  //   path: "/dashboard/savedcard",
+  //   role: ["admin", "employee"],
+  // },
   {
     id: 12,
     name: "Sản phẩm",

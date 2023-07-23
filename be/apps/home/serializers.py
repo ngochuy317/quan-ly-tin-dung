@@ -314,6 +314,7 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
     transaction_datetime_updated = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
     username = serializers.CharField(source="user.username", read_only=True)
     negative_money = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+    credit_card_number = serializers.CharField(required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -362,7 +363,9 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
             phone_number=phone_number,
             credit_card=creditcard_obj,
         )
-        instance = SwipeCardTransaction.objects.create(**validated_data, customer=customer_obj)
+        instance = SwipeCardTransaction.objects.create(
+            **validated_data, customer=customer_obj, credit_card_number=card_number
+        )
         return instance
 
     # def update(self, instance: SwipeCardTransaction, validated_data):
@@ -398,7 +401,7 @@ class StoreCostSerializer(serializers.ModelSerializer):
 class CreditCardManagementSerializer(serializers.Serializer):
 
     id = serializers.IntegerField()
-    creditcard__card_number = serializers.CharField()
+    credit_card_number = serializers.CharField()
     store_name = serializers.CharField()
     customer_money_needed = serializers.IntegerField()
     transaction_datetime_created = serializers.DateTimeField(format="%Y-%m-%d %H:%M")

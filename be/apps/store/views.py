@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 
+from apps.home.pagination import CustomPageNumberPagination
 from django.core.paginator import Paginator
 from django.shortcuts import render
 from django.views import View
@@ -31,4 +32,5 @@ class TransactionHistory(View):
 class BillPosListAPIView(ListAPIView):
     filterset_class = BillPosFilter
     serializer_class = BillPosSerializer
+    pagination_class = CustomPageNumberPagination
     queryset = BillPos.objects.all()

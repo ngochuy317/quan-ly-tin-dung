@@ -263,6 +263,7 @@ function SwipeCard() {
         </table>
       </div>
       <Pagination
+      canBedisabled={responseSwipeCardData?.results?.length ? false : true}
         currentPage={currentPage}
         totalPages={responseSwipeCardData.total_pages}
         handleChangePage={handleChangePage}

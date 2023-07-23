@@ -64,7 +64,8 @@ class POS(models.Model):
 class NoteBook(models.Model):
 
     name = models.CharField(max_length=127, default="Cửa hàng")
-    capacity = models.IntegerField(default=0)
+    capacity_per_page = models.IntegerField(default=0)
+    pages = models.IntegerField(default=0)
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="notebooks")
 
     class Meta:
@@ -129,6 +130,7 @@ class SwipeCardTransaction(models.Model):
 
     is_creditcard_stored = models.BooleanField(default=False)
     store_id = models.PositiveBigIntegerField()
+    credit_card_number = models.CharField(max_length=20, db_index=True)
     store_code = models.CharField(max_length=127)
     store_name = models.CharField(max_length=127)
     store_note = models.TextField(blank=True, null=True)
@@ -178,3 +180,6 @@ class BillPos(models.Model):
     datetime_created = models.DateTimeField(auto_now_add=True)
     datetime_updated = models.DateTimeField(auto_now=True)
     is_payment_received = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ["-datetime_created"]
