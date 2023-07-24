@@ -1,27 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import employeeApi from "../../../api/employeeAPI";
-import { GENDERCHOICES } from "../../ConstantUtils/constants";
+import storeMakePOSApi from "../../../api/storeMakePOSAPI";
 import Pagination from "../../Pagination/pagination";
 
-function EmployeesList(props) {
+function StoresList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [responseData, setResponseData] = useState({});
   const [params, setParams] = useState({ page: 1 });
 
   useEffect(() => {
-    const fetchEmployeeList = async () => {
+    const fetchStoreList = async () => {
       try {
-        const response = await employeeApi.getAll(params);
-        console.log("Fetch employees list successfully", response);
+        const response = await storeMakePOSApi.getAll(params);
+        console.log("Fetch stores list successfully", response);
 
         setResponseData(response);
       } catch (error) {
-        console.log("Failed to fetch employees list", error);
+        console.log("Failed to fetch stores list", error);
       }
     };
 
-    fetchEmployeeList();
+    fetchStoreList();
   }, [params]);
 
   const handleChangePage = (direction) => {
@@ -31,56 +30,46 @@ function EmployeesList(props) {
 
   const onDelete = async (id) => {
     try {
-      const response = await employeeApi.deleteOne(id);
-      console.log("Delete employee successfully", response);
+      const response = await storeMakePOSApi.deleteOne(id);
+      console.log("Delete store successfully", response);
       setParams({ ...params });
     } catch (error) {
-      console.log("Failed to delete employee", error);
+      console.log("Failed to delete store", error);
     }
   };
 
   return (
     <div>
-      <h2 className="text-center">Danh sách nhân viên</h2>
+      <h2 className="text-center">Danh sách cửa hàng làm ra máy POS</h2>
       <div className="table-responsive">
         <table className="table">
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Họ và Tên</th>
+              <th scope="col">Mã cửa hàng</th>
+              <th scope="col">Tên ghi nhớ</th>
+              <th scope="col">Ghi chú</th>
+              <th scope="col">Địa chỉ</th>
               <th scope="col">Số điện thoại</th>
-              <th scope="col">CMND</th>
-              <th scope="col">Giới tính</th>
-              <th scope="col">Ngày sinh</th>
-              <th scope="col">Lương</th>
-              <th scope="col">Cửa hàng</th>
               <th scope="col">Thao tác</th>
             </tr>
           </thead>
           <tbody className="table-group-divider">
-            {responseData?.results?.map((user, index) => (
-              <tr key={user.id}>
+            {responseData?.results?.map((store, index) => (
+              <tr key={store.id}>
                 <th scope="row">{index + 1}</th>
-                <td>{user.infomation_detail.fullname}</td>
-                <td>{user.infomation_detail.phone_number}</td>
-                <td>{user.infomation_detail.identity_card}</td>
+                <td>{store.code}</td>
+                <td>{store.name}</td>
+                <td>{store.note}</td>
+                <td>{store.address}</td>
+                <td>{store.phone_number}</td>
                 <td>
-                  {
-                    GENDERCHOICES.find(
-                      (c) => c.value === user.infomation_detail.gender
-                    )?.label
-                  }
-                </td>
-                <td>{user.infomation_detail.dob}</td>
-                <td>{user.infomation_detail.salary}</td>
-                <td>{user.infomation_detail.store}</td>
-                <td>
-                  <Link to={user.id + "/"}>Chỉnh sửa</Link>
+                  <Link to={store.id + "/"}>Chỉnh sửa</Link>
                 </td>
                 <td>
                   <button
                     type="button"
-                    onClick={() => onDelete(user.id)}
+                    onClick={() => onDelete(store.id)}
                     className="btn btn-outline-danger mx-3"
                   >
                     Xoá
@@ -108,4 +97,4 @@ function EmployeesList(props) {
   );
 }
 
-export default EmployeesList;
+export default StoresList;

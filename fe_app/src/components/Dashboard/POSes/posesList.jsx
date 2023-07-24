@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import posApi from "../../../api/posAPI";
 import Pagination from "../../Pagination/pagination";
-import { posStatus } from "../../ConstantUtils/constants";
+import { POSSTATUS } from "../../ConstantUtils/constants";
 import Spinner from "../../Common/spinner";
 
 function POSesList() {
@@ -46,22 +46,22 @@ function POSesList() {
     <div>
       <h2 className="text-center">Danh sách máy POS</h2>
       <div className="table-responsive">
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Mid</th>
-              <th scope="col">Tid</th>
-              <th scope="col">Ghi chú</th>
-              <th scope="col">Trạng thái</th>
-              <th scope="col">Ngân hàng</th>
-              <th scope="col">Cửa hàng</th>
-              <th scope="col">Thao tác</th>
-            </tr>
-          </thead>
-          {spinner ? (
-            <Spinner />
-          ) : (
+        {spinner ? (
+          <Spinner />
+        ) : (
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Mid</th>
+                <th scope="col">Tid</th>
+                <th scope="col">Ghi chú</th>
+                <th scope="col">Trạng thái</th>
+                <th scope="col">Ngân hàng</th>
+                <th scope="col">Cửa hàng</th>
+                <th scope="col">Thao tác</th>
+              </tr>
+            </thead>
             <tbody className="table-group-divider">
               {responseData?.results?.map((pos, index) => (
                 <tr key={pos.id}>
@@ -72,7 +72,7 @@ function POSesList() {
                     {pos.note.substring(0, 20)} {pos.note.length >= 20 && "..."}
                   </td>
                   <td>
-                    {posStatus.find((c) => c.value === pos.status)?.label}
+                    {POSSTATUS.find((c) => c.value === pos.status)?.label}
                   </td>
                   <td>{pos.bank_name}</td>
                   <td>{pos.store_name}</td>
@@ -91,8 +91,8 @@ function POSesList() {
                 </tr>
               ))}
             </tbody>
-          )}
-        </table>
+          </table>
+        )}
       </div>
       <Pagination
         canBedisabled={responseData?.results?.length ? false : true}

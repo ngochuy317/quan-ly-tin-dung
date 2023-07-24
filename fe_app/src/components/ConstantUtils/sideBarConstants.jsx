@@ -55,6 +55,14 @@ export const dataItemSideBarForEmployee = [
 ];
 export const dataItemSideBarForAdmin = [
   {
+    id: 0,
+    name: "CH máy POS",
+    icon: "store",
+    path: "/dashboard/storesmakepos",
+    role: ["admin"],
+    private: true,
+  },
+  {
     id: 1,
     name: "Cửa hàng ",
     icon: "store",

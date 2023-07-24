@@ -2,7 +2,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from django.contrib import admin
-from .models import POS, BillPos, NoteBook, RowNotebook, Store, SwipeCardTransaction
+from .models import POS, BillPos, NoteBook, RowNotebook, Store, StoreMakePOS, SwipeCardTransaction
 
 
 class SwipeCardTransactionAdmin(admin.ModelAdmin):
@@ -13,6 +13,7 @@ class SwipeCardTransactionAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Store)
+admin.site.register(StoreMakePOS)
 admin.site.register(BillPos)
 admin.site.register(POS)
 admin.site.register(SwipeCardTransaction, SwipeCardTransactionAdmin)

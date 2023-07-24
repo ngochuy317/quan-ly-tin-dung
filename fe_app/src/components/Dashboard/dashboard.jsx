@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import RoutesApp from "../../routes";
 import NavBar from "../NavBar/navBar";
 import SideBarNew from "../Sidebar/sideBarNew";
+import SideBar from "../Sidebar/sideBar";
 
 export const AuthContext = createContext();
 

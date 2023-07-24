@@ -9,7 +9,7 @@ import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import FileInputField from "../../Common/fileInputField";
 import InputField from "../../Common/inputField";
 import SelectField from "../../Common/selectField";
-import { transactionType } from "../../ConstantUtils/constants";
+import { TRANSACTIONTYPE } from "../../ConstantUtils/constants";
 import AddBillPOSMachineModal from "../../Modal/billPOSMachineModal";
 
 SwipeCardInput.propTypes = {
@@ -185,7 +185,7 @@ function SwipeCardInput(props) {
               required
               onChange={handleOnChangeTransactionType}
             >
-              {transactionType?.map((ele) => (
+              {TRANSACTIONTYPE?.map((ele) => (
                 <option key={ele.value} value={ele.value}>
                   {ele.label}
                 </option>

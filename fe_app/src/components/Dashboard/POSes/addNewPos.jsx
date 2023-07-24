@@ -8,7 +8,7 @@ import InputField from "../../Common/inputField";
 import InputTextareaField from "../../Common/inputTextareaField";
 import RequiredSymbol from "../../Common/requiredSymbol";
 import SelectField from "../../Common/selectField";
-import { posStatus } from "../../ConstantUtils/constants";
+import { POSSTATUS } from "../../ConstantUtils/constants";
 
 function NewPos() {
   const [stores, setStores] = useState([]);
@@ -94,7 +94,7 @@ function NewPos() {
             requiredIsRequired={true}
             requiredRegister={register}
             requiredName={"status"}
-            requiredDataOption={posStatus}
+            requiredDataOption={POSSTATUS}
             requiredLblSelect="Chọn trạng thái"
             requiredValueOption={(ele) => `${ele.value}`}
             requiredLblOption={(ele) => `${ele.label}`}

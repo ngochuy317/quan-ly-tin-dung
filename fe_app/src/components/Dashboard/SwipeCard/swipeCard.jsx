@@ -7,7 +7,7 @@ import userApi from "../../../api/userAPI";
 import {
   ADMIN,
   EMPLOYEE,
-  transactionType,
+  TRANSACTIONTYPE,
 } from "../../ConstantUtils/constants";
 import { AuthContext } from "../../Dashboard/dashboard";
 import Pagination from "../../Pagination/pagination";
@@ -243,7 +243,7 @@ function SwipeCard() {
                 <td>{swipeCard.customer?.phone_number}</td>
                 <td>
                   {
-                    transactionType.find(
+                    TRANSACTIONTYPE.find(
                       (c) => c.value === swipeCard.transaction_type
                     )?.label
                   }

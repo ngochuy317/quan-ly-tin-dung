@@ -4,7 +4,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import InputField from "../../Common/inputField";
 import SelectField from "../../Common/selectField";
-import { genderChoices, transactionType } from "../../ConstantUtils/constants";
+import { GENDERCHOICES, TRANSACTIONTYPE } from "../../ConstantUtils/constants";
 import ModifiyBillPOSMachineModal from "../../Modal/modifyBillPosMachineModal";
 
 function SwipeCardDetail() {
@@ -150,7 +150,7 @@ function SwipeCardDetail() {
             requiredIsRequired={true}
             requiredRegister={register}
             requiredName={"customer.gender"}
-            requiredDataOption={genderChoices}
+            requiredDataOption={GENDERCHOICES}
             requiredLblSelect="Chọn giới tính"
             requiredValueOption={(ele) => `${ele.value}`}
             requiredLblOption={(ele) => `${ele.label}`}
@@ -362,7 +362,7 @@ function SwipeCardDetail() {
                 className="form-select"
                 required
               >
-                {transactionType?.map((ele) => (
+                {TRANSACTIONTYPE?.map((ele) => (
                   <option key={ele.value} value={ele.value}>
                     {ele.label}
                   </option>

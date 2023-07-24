@@ -4,13 +4,15 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import posApi from "../../../api/posAPI";
 import storeApi from "../../../api/storeAPI";
+import storeMakePOSApi from "../../../api/storeMakePOSAPI";
 import InputField from "../../Common/inputField";
 import InputTextareaField from "../../Common/inputTextareaField";
 import SelectField from "../../Common/selectField";
-import { posStatus } from "../../ConstantUtils/constants";
+import { POSSTATUS } from "../../ConstantUtils/constants";
 
 function POSesDetail() {
   const [stores, setStores] = useState([]);
+  const [storeMakePOS, setStoreMakePOSApi] = useState([]);
   const { register, handleSubmit, reset, setValue, getValues } = useForm();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -24,7 +26,11 @@ function POSesDetail() {
         const responseJSONStore = await storeApi.getAllFull();
         console.log("Fetch store list successfully", responseJSONStore);
 
+        const responseJSONStoreMakePOSApi = await storeMakePOSApi.getAllFull();
+        console.log("Fetch store make POS list successfully", responseJSONStoreMakePOSApi);
+
         setStores(responseJSONStore);
+        setStoreMakePOSApi(responseJSONStoreMakePOSApi);
         reset({ ...response });
       } catch (error) {
         console.log("Failed to fetch pos detail", error);
@@ -108,7 +114,7 @@ function POSesDetail() {
             requiredIsRequired={true}
             requiredRegister={register}
             requiredName={"status"}
-            requiredDataOption={posStatus}
+            requiredDataOption={POSSTATUS}
             requiredLblSelect="Chọn trạng thái"
             requiredValueOption={(ele) => `${ele.value}`}
             requiredLblOption={(ele) => `${ele.label}`}
@@ -142,7 +148,7 @@ function POSesDetail() {
             requiredIsRequired={true}
             requiredRegister={register}
             requiredName={"from_store"}
-            requiredDataOption={stores}
+            requiredDataOption={storeMakePOS}
             requiredLblSelect="Chọn cửa hàng"
             requiredValueOption={(ele) => `${ele.id}`}
             requiredLblOption={(ele) => `${ele.name}`}

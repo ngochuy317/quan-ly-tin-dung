@@ -4,7 +4,7 @@ export const formatDataFileField = (orignalData, listFileField) => {
     if (newData[fileField]) {
       if (typeof newData[fileField] === "string") {
         newData[fileField] = null;
-      } else {
+      } else if (newData[fileField]) {
         newData[fileField] = newData[fileField][0];
       }
     }

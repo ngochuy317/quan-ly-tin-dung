@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
+import datetime
 
 from django.db import models
 from django.utils.timezone import now
 
 
-class Store(models.Model):
+class StoreMakePOS(models.Model):
+
+    WORKING_STATUS_CHOICES = ((1, "Đang hoạt động"), (2, "Tạm dừng"), (3, "Đóng"))
 
     code = models.CharField(max_length=127)
     name = models.CharField(max_length=127)
@@ -15,10 +18,31 @@ class Store(models.Model):
     tax_code = models.CharField(max_length=127, blank=True)
     representative_s_name = models.CharField(max_length=127, blank=True)
     representative_s_phone_number = models.CharField(max_length=127, blank=True)
-    working_status = models.CharField(max_length=127, blank=True)
+    working_status = models.SmallIntegerField(choices=WORKING_STATUS_CHOICES, default=1)
     business_license_image = models.ImageField(upload_to="uploads/store/", blank=True, null=True)
     representative_id_card_front_image = models.ImageField(upload_to="uploads/store/", blank=True, null=True)
     representative_id_card_back_image = models.ImageField(upload_to="uploads/store/", blank=True, null=True)
+
+    class Meta:
+        ordering = ["-id"]
+
+    def __str__(self) -> str:
+        return self.name
+
+    def update(self, commit=False, **kwargs):
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+        if commit:
+            self.save()
+
+
+class Store(models.Model):
+
+    code = models.CharField(max_length=127)
+    name = models.CharField(max_length=127)
+    note = models.TextField(blank=True)
+    address = models.CharField(max_length=1023)
+    phone_number = models.CharField(max_length=20, default="")
 
     class Meta:
         ordering = ["-id"]
@@ -53,7 +77,7 @@ class POS(models.Model):
     status = models.PositiveSmallIntegerField(choices=STATUS_POS_CHOICES, default=1)
     bank_name = models.CharField(max_length=127)
     money_limit_per_day = models.PositiveBigIntegerField(default=0)
-    from_store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="provide_poses")
+    from_store = models.ForeignKey(StoreMakePOS, on_delete=models.CASCADE, related_name="poses", blank=True, null=True)
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="poses")
 
     class Meta:
@@ -90,9 +114,12 @@ class NoteBook(models.Model):
 
 
 class RowNotebook(models.Model):
+    STATUS_CHOICES = ((1, "Đang lưu thẻ"), (2, "Đã trả thẻ"))
     notebook = models.ForeignKey(NoteBook, on_delete=models.CASCADE, related_name="row_notebook")
+    card_given_date = models.DateField(default=datetime.date.today)
+    card_taken_date = models.DateField(default=datetime.date.today)
     order_in_notebook = models.IntegerField(default=1)
-    status = models.CharField(max_length=128)
+    status = models.SmallIntegerField(choices=STATUS_CHOICES, default=1)
     storage_datetime = models.DateTimeField(default=now)
     closing_balance = models.BigIntegerField(blank=True, null=True)
     last_date = models.IntegerField(default=0)

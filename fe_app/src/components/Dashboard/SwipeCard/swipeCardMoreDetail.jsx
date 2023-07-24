@@ -8,7 +8,7 @@ import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import FileInputField from "../../Common/fileInputField";
 import InputField from "../../Common/inputField";
 import SelectField from "../../Common/selectField";
-import { genderChoices, transactionType } from "../../ConstantUtils/constants";
+import { GENDERCHOICES, TRANSACTIONTYPE } from "../../ConstantUtils/constants";
 import AddBillPOSMachineModal from "../../Modal/billPOSMachineModal";
 
 function SwipeCardMoreDetail() {
@@ -311,7 +311,7 @@ function SwipeCardMoreDetail() {
             <div className="mb-3">
               <label className="form-label">Giới tính </label>
               <select {...register("customer.gender")} className="form-select">
-                {genderChoices?.map((gender) => (
+                {GENDERCHOICES?.map((gender) => (
                   <option key={gender.value} value={gender.value}>
                     {gender.label}
                   </option>
@@ -534,7 +534,7 @@ function SwipeCardMoreDetail() {
                 className="form-select"
                 required
               >
-                {transactionType?.map((ele) => (
+                {TRANSACTIONTYPE?.map((ele) => (
                   <option key={ele.value} value={ele.value}>
                     {ele.label}
                   </option>

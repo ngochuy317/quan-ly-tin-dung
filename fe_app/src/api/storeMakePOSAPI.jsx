@@ -1,21 +1,27 @@
 import axiosClient from "./axiosClient";
 
-class EmployeeApi {
+class StoreMakePOSApi {
   constructor() {
-    this.employeesBaseUrl = "/employees/";
+    this.storeMakePOSBaseUrl = "/store/stores-make-pos/";
   }
+
   getAll = (params) => {
-    const url = this.employeesBaseUrl;
+    const url = this.storeMakePOSBaseUrl;
     return axiosClient.get(url, { params });
   };
 
+  getAllFull = () => {
+    const url = this.storeMakePOSBaseUrl + "nopagination/";
+    return axiosClient.get(url);
+  };
+
   getDetail = (id) => {
-    const url = this.employeesBaseUrl + id + "/";
+    const url = this.storeMakePOSBaseUrl + id + "/";
     return axiosClient.get(url);
   };
 
   createOne = (data) => {
-    const url = this.employeesBaseUrl;
+    const url = this.storeMakePOSBaseUrl;
     return axiosClient.post(url, data, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -24,12 +30,12 @@ class EmployeeApi {
   };
 
   deleteOne = (id) => {
-    const url = this.employeesBaseUrl + id + "/";
+    const url = this.storeMakePOSBaseUrl + id + "/";
     return axiosClient.delete(url);
   };
 
   updateOne = (id, data) => {
-    const url = this.employeesBaseUrl + id + "/";
+    const url = this.storeMakePOSBaseUrl + id + "/";
     return axiosClient.put(url, data, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -38,5 +44,5 @@ class EmployeeApi {
   };
 }
 
-const employeeApi = new EmployeeApi();
-export default employeeApi;
+const storeMakePOSApi = new StoreMakePOSApi();
+export default storeMakePOSApi;

@@ -3,7 +3,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 from apps.base.constants import Y_M_D_H_M_FORMAT
 from rest_framework import serializers
-from .models import BillPos
+from .models import BillPos, StoreMakePOS
 
 
 class BillPosSerializer(serializers.ModelSerializer):
@@ -12,4 +12,10 @@ class BillPosSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BillPos
+        fields = "__all__"
+
+
+class StoreMakePOSSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StoreMakePOS
         fields = "__all__"

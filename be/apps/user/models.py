@@ -24,6 +24,10 @@ class InfomationDetail(models.Model):
     salary = models.IntegerField()
     transaction_discount = models.FloatField(default=0)
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="users", blank=True, null=True)
+    user_image = models.ImageField(upload_to="uploads/user/", blank=True, null=True)
+    identity_card_front_image = models.ImageField(upload_to="uploads/user/", blank=True, null=True)
+    identity_card_back_image = models.ImageField(upload_to="uploads/user/", blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
 
     def update(self, commit=False, **kwargs):
         for key, value in kwargs.items():

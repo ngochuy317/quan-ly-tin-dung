@@ -342,6 +342,17 @@ class EmployeesListCreateAPIView(ListCreateAPIView):
     pagination_class = CustomPageNumberPagination
     permission_classes = [IsAdmin]
 
+    def post(self, request, *args, **kwargs):
+
+        parser = NestedParser(request.data)
+        if parser.is_valid():
+            data = parser.validate_data
+            serializer = UserSerializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(status=status.HTTP_201_CREATED)
+        return Response(PARSE_ERROR_MSG, status=status.HTTP_400_BAD_REQUEST)
+
 
 class EmployeeDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
@@ -350,12 +361,16 @@ class EmployeeDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdmin]
 
     def put(self, request, *args, **kwargs):
-        _id = kwargs.get("pk")
-        obj = User.objects.filter(id=_id).first()
-        serializer = UserSerializer(obj, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        parser = NestedParser(request.data)
+        if parser.is_valid():
+            data = parser.validate_data
+            _id = kwargs.get("pk")
+            obj = User.objects.filter(id=_id).first()
+            serializer = UserSerializer(obj, data=data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(PARSE_ERROR_MSG, status=status.HTTP_400_BAD_REQUEST)
 
 
 class InformationDetailAPIView(APIView):

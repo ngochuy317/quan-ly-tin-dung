@@ -2,10 +2,8 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import storeApi from "../../../api/storeAPI";
-import FileInputField from "../../Common/fileInputField";
 import InputField from "../../Common/inputField";
 import InputTextareaField from "../../Common/inputTextareaField";
-import { formatDataFileField } from "../../Utilities/fileField";
 
 function NewStore() {
   const { register, handleSubmit } = useForm();
@@ -13,15 +11,7 @@ function NewStore() {
 
   const onSubmit = async (data) => {
     try {
-      let newData;
-      newData = formatDataFileField(data, [
-        "business_license_image",
-        "representative_id_card_front_image",
-        "representative_id_card_back_image",
-      ]);
-      console.log("🚀 ~ file: storeDetail.jsx:35 ~ onSubmit ~ data:", newData);
-
-      const response = await storeApi.createOne(newData);
+      const response = await storeApi.createOne(data);
       console.log("Create store successfully", response);
       navigate("./..");
     } catch (error) {
@@ -73,56 +63,6 @@ function NewStore() {
             requiredType="text"
             requiredRegister={register}
             requiredName="address"
-          />
-        </div>
-        <div className="row">
-          <InputField
-            requiredColWidth={3}
-            requiredLbl="Mã số thuế"
-            requiredType="text"
-            requiredRegister={register}
-            requiredName="tax_code"
-          />
-          <InputField
-            requiredColWidth={3}
-            requiredLbl="Tên người đại diện"
-            requiredType="text"
-            requiredRegister={register}
-            requiredName="representative_s_name"
-          />
-          <InputField
-            requiredColWidth={3}
-            requiredLbl="SĐT người đại diện"
-            requiredType="text"
-            requiredRegister={register}
-            requiredName="representative_s_phone_number"
-          />
-          <InputField
-            requiredColWidth={3}
-            requiredLbl="Trạng thái hoạt động"
-            requiredType="text"
-            requiredRegister={register}
-            requiredName="working_status"
-          />
-        </div>
-        <div className="row">
-          <FileInputField
-            requiredColWidth={4}
-            requiredLbl={"Hình GPKD"}
-            requiredRegister={register}
-            requiredName={"business_license_image"}
-          />
-          <FileInputField
-            requiredColWidth={4}
-            requiredLbl={"Mặt trước CCCD người đại diện"}
-            requiredRegister={register}
-            requiredName={"representative_id_card_front_image"}
-          />
-          <FileInputField
-            requiredColWidth={4}
-            requiredLbl={"Mặt sau CCCD người đại diện"}
-            requiredRegister={register}
-            requiredName={"representative_id_card_back_image"}
           />
         </div>
         <div className="d-flex justify-content-end">

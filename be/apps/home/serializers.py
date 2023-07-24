@@ -40,7 +40,7 @@ class ShortInfomationDetailSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     infomation_detail = InfomationDetailSerializer()
-    password = serializers.CharField(allow_blank=True, required=False)
+    password = serializers.CharField(allow_blank=True, required=False, write_only=True)
 
     class Meta:
         model = User

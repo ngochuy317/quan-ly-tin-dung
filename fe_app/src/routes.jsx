@@ -20,16 +20,22 @@ import SavedCardList from "./components/Dashboard/StoreCard/savedCardList";
 import StoreCard from "./components/Dashboard/StoreCard/storeCard";
 import UnsaveCard from "./components/Dashboard/StoreCard/unsaveCard";
 import NewStore from "./components/Dashboard/Stores/addNewStore";
+import NewStoresMakePOS from "./components/Dashboard/Stores/addNewStoresMakePOS";
 import StoreDetail from "./components/Dashboard/Stores/storeDetail";
 import StoresList from "./components/Dashboard/Stores/storesList";
+import StoresMakePOSList from "./components/Dashboard/Stores/storesMakePOSList";
 import SwipeCard from "./components/Dashboard/SwipeCard/swipeCard";
 import SwipeCardDetail from "./components/Dashboard/SwipeCard/swipeCardDetail";
 import SwipeCardMoreDetail from "./components/Dashboard/SwipeCard/swipeCardMoreDetail";
+import StoreMakePOSDetail from "./components/Dashboard/Stores/storeMakePOSDetail";
 
 function RoutesApp() {
   return (
     <Routes>
       <Route path="/stores" element={<StoresList />} />
+      <Route path="/storesmakepos" element={<StoresMakePOSList />} />
+      <Route path="/storesmakepos/add" element={<NewStoresMakePOS />} />
+      <Route path="/storesmakepos/:id" element={<StoreMakePOSDetail />} />
       <Route path="/stores/add" element={<NewStore />} />
       <Route path="/stores/:id" element={<StoreDetail />} />
       <Route path="/notebooks" element={<NotebooksList />} />

@@ -7,11 +7,13 @@ import creditCardApi from "../../../api/creditCardAPI";
 import userApi from "../../../api/userAPI";
 // import Pagination from "../../Pagination/pagination";
 import notebookApi from "../../../api/notebookAPI";
-import { ADMIN, EMPLOYEE } from "../../ConstantUtils/constants";
+import SelectField from "../../Common/selectField";
+import { ADMIN, EMPLOYEE, STATUSOFCARD } from "../../ConstantUtils/constants";
 import { AuthContext } from "../../Dashboard/dashboard";
 
 function StoreCard() {
-  const { register, handleSubmit, reset, formState, setValue, getValues } = useForm();
+  const { register, handleSubmit, reset, formState, setValue, getValues } =
+    useForm();
   const { isSubmitting } = formState;
   const [notebooks, setNotebooks] = useState([]);
   const [dataListCardNumber, setDataListCardNumber] = useState([]);
@@ -240,23 +242,17 @@ function StoreCard() {
               </select>
             </div>
           </div>
-          <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">
-                Trạng thái{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("status")}
-                type="text"
-                className="form-control"
-                required
-              />
-            </div>
-          </div>
+          <SelectField
+            requiredColWidth={2}
+            requiredLbl={"Trạng thái"}
+            requiredIsRequired={true}
+            requiredRegister={register}
+            requiredName={"status"}
+            requiredDataOption={STATUSOFCARD}
+            requiredLblSelect="Chọn trạng thái"
+            requiredValueOption={(ele) => `${ele.value}`}
+            requiredLblOption={(ele) => `${ele.label}`}
+          />
           <div className="col-md-2">
             <div className="mb-3">
               <label className="form-label">

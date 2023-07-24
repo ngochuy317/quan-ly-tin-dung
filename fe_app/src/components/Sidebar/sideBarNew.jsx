@@ -1,19 +1,19 @@
-import React from "react";
 import {
+  CDBBadge,
   CDBSidebar,
   CDBSidebarContent,
   CDBSidebarHeader,
   CDBSidebarMenu,
   CDBSidebarMenuItem,
-  CDBBadge,
 } from "cdbreact";
-import { AuthContext } from "../Dashboard/dashboard";
-import { Roles } from "../../components/ConstantUtils/constants";
+import React from "react";
 import { NavLink } from "react-router-dom";
+import { ROLES } from "../../components/ConstantUtils/constants";
 import {
   dataItemSideBarForAdmin,
   dataItemSideBarForEmployee,
 } from "../ConstantUtils/sideBarConstants";
+import { AuthContext } from "../Dashboard/dashboard";
 
 function SideBarNew() {
   const { role, username } = React.useContext(AuthContext);
@@ -25,7 +25,7 @@ function SideBarNew() {
     <CDBSidebar className="min-vh-100" textColor="#fff" backgroundColor="#333">
       <CDBSidebarHeader prefix={<i className="fa fa-bars" />}>
         <div>{username}</div>
-        <div>{Roles.find((c) => c.roleKey === role)?.roleName}</div>
+        <div>{ROLES.find((c) => c.roleKey === role)?.roleName}</div>
       </CDBSidebarHeader>
       <CDBSidebarContent>
         <CDBSidebarMenu>
