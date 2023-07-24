@@ -129,3 +129,6 @@ dmypy.json
 .pyre/
 
 fe_app/node_modules/*
+
+# SonarQube
+*.scannerwork/

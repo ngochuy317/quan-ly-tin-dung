@@ -4,6 +4,10 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import posApi from "../../../api/posAPI";
 import storeApi from "../../../api/storeAPI";
+import InputField from "../../Common/inputField";
+import InputTextareaField from "../../Common/inputTextareaField";
+import RequiredSymbol from "../../Common/requiredSymbol";
+import SelectField from "../../Common/selectField";
 import { posStatus } from "../../ConstantUtils/constants";
 
 function NewPos() {
@@ -46,43 +50,35 @@ function NewPos() {
       <h2 className="text-center">Thêm Máy POS</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="row">
-          <div className="col-md-4">
-            <div className="mb-3">
-              <label className="form-label">Merchant ID(MID)</label>
-              <input
-                {...register("mid")}
-                type="text"
-                className="form-control"
-                required
-              />
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="mb-3">
-              <label className="form-label">Terminal ID(TID)</label>
-              <input
-                {...register("tid")}
-                type="tel"
-                className="form-control"
-                required
-              />
-            </div>
-          </div>
+          <InputField
+            requiredColWidth={4}
+            requiredLbl="Merchant ID(MID)"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName="mid"
+            requiredIsRequired={true}
+          />
+          <InputField
+            requiredColWidth={4}
+            requiredLbl="Terminal ID(TID)"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName="tid"
+            requiredIsRequired={true}
+          />
         </div>
         <div className="row">
-          <div className="col-md-6">
-            <div className="mb-3">
-              <label className="form-label">Ghi chú</label>
-              <textarea
-                {...register("note")}
-                type="text"
-                className="form-control"
-              />
-            </div>
-          </div>
+          <InputTextareaField
+            requiredColWidth={6}
+            requiredLbl="Ghi chú"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName="note"
+          />
           <div className="col-md-3">
             <div className="mb-3">
               <label className="form-label">Giới hạn quẹt tiền mỗi ngày</label>
+              <RequiredSymbol/>
               <CurrencyFormat
                 type="text"
                 className="form-control"
@@ -92,51 +88,50 @@ function NewPos() {
               />
             </div>
           </div>
-          <div className="col-md-3">
-            <div className="mb-3">
-              <label className="form-label">Trạng thái</label>
-              <select
-                {...register("status", { required: true })}
-                className="form-select"
-              >
-                {posStatus?.map((pos) => (
-                  <option key={pos.value} value={pos.value}>
-                    {pos.label}
-                  </option>
-                ))}
-              </select>
-              {/* {errors.status && <p style={{ color: "red"}}>This is required.</p>} */}
-            </div>
-          </div>
+          <SelectField
+            requiredColWidth={3}
+            requiredLbl={"Trạng thái"}
+            requiredIsRequired={true}
+            requiredRegister={register}
+            requiredName={"status"}
+            requiredDataOption={posStatus}
+            requiredLblSelect="Chọn trạng thái"
+            requiredValueOption={(ele) => `${ele.value}`}
+            requiredLblOption={(ele) => `${ele.label}`}
+          />
         </div>
         <div className="row">
-          <div className="col-md-6">
-            <div className="mb-3">
-              <label className="form-label">Ngân hàng</label>
-              <input
-                {...register("bank_name")}
-                type="text"
-                className="form-control"
-                required
-              />
-            </div>
-          </div>
-          <div className="col-md-6">
-            <div className="mb-3">
-              <label className="form-label">Cửa hàng</label>
-              <select
-                {...register("store", { required: true })}
-                className="form-select"
-                required
-              >
-                <option value="">Chọn cửa hàng</option>
-                {stores?.map((store) => (
-                  <option key={store.id} value={store.id}>
-                    {store.name}
-                  </option>
-                ))}
-              </select>
-            </div>
+          <InputField
+            requiredColWidth={6}
+            requiredLbl="Ngân hàng"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName="bank_name"
+            requiredIsRequired={true}
+          />
+          <SelectField
+            requiredColWidth={6}
+            requiredLbl={"Cửa hàng"}
+            requiredIsRequired={true}
+            requiredRegister={register}
+            requiredName={"store"}
+            requiredDataOption={stores}
+            requiredLblSelect="Chọn cửa hàng"
+            requiredValueOption={(ele) => `${ele.id}`}
+            requiredLblOption={(ele) => `${ele.name}`}
+          />
+          <div className="row">
+          <SelectField
+            requiredColWidth={6}
+            requiredLbl={"Cửa hàng làm ra máy POS"}
+            requiredIsRequired={true}
+            requiredRegister={register}
+            requiredName={"from_store"}
+            requiredDataOption={stores}
+            requiredLblSelect="Chọn cửa hàng"
+            requiredValueOption={(ele) => `${ele.id}`}
+            requiredLblOption={(ele) => `${ele.name}`}
+          />
           </div>
         </div>
         <div className="d-flex justify-content-end">

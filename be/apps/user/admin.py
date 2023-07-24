@@ -3,7 +3,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 from django.contrib import admin
 from django.contrib.auth.hashers import make_password
-from .models import InfomationDetail, Permission, User
+from .models import InfomationDetail, User
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -13,5 +13,4 @@ class UserAdmin(admin.ModelAdmin):
 
 
 admin.site.register(User, UserAdmin)
-admin.site.register(Permission)
 admin.site.register(InfomationDetail)

@@ -32,7 +32,7 @@ function StoresList() {
     try {
       const response = await storeApi.deleteOne(id);
       console.log("Delete store successfully", response);
-      setParams({...params});
+      setParams({ ...params });
     } catch (error) {
       console.log("Failed to delete store", error);
     }
@@ -81,6 +81,7 @@ function StoresList() {
         </table>
       </div>
       <Pagination
+        canBedisabled={responseData?.results?.length ? false : true}
         currentPage={currentPage}
         totalPages={responseData.total_pages}
         handleChangePage={handleChangePage}

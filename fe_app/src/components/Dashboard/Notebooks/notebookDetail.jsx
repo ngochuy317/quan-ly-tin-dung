@@ -24,7 +24,7 @@ function NotebookDetail() {
 
         let initValues = {};
         initValues.name = response.name;
-        initValues.pages = response.pages;
+        initValues.capacity = response.capacity;
         initValues.capacity_per_page = response.capacity_per_page;
         initValues.store = response.store;
         reset({ ...initValues });
@@ -72,10 +72,10 @@ function NotebookDetail() {
           />
           <InputField
             requiredColWidth={2}
-            requiredLbl="Số trang"
+            requiredLbl="Số lượng lưu trữ"
             requiredType="number"
             requiredRegister={register}
-            requiredName={"pages"}
+            requiredName={"capacity"}
             requiredIsRequired={true}
           />
           <InputField

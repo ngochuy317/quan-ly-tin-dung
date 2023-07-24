@@ -21,7 +21,11 @@ class StoreApi {
 
   createOne = (data) => {
     const url = this.storeBaseUrl;
-    return axiosClient.post(url, data);
+    return axiosClient.post(url, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   };
 
   deleteOne = (id) => {
@@ -31,7 +35,11 @@ class StoreApi {
 
   updateOne = (id, data) => {
     const url = this.storeBaseUrl + id + "/";
-    return axiosClient.put(url, data);
+    return axiosClient.put(url, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   };
 }
 

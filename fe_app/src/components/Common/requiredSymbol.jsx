@@ -2,7 +2,7 @@ import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 
-function RequiredSymbol(props) {
+function RequiredSymbol() {
   return (
     <>
       {" "}

@@ -9,3 +9,8 @@ ROLE_CHOICES = (
     ("employee", "Nhân viên"),
     ("collaborators", "Cộng tác viên"),
 )
+
+Y_M_D_FORMAT = "%Y-%m-%d"
+Y_M_D_H_M_FORMAT = "%Y-%m-%d %H:%M"
+
+PARSE_ERROR_MSG = "Parser error"

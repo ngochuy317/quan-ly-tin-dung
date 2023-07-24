@@ -51,10 +51,10 @@ function NewNotebook() {
             />
           <InputField
               requiredColWidth={2}
-              requiredLbl="Số trang"
+              requiredLbl="Số lượng lưu trữ"
               requiredType="number"
               requiredRegister={register}
-              requiredName={"pages"}
+              requiredName={"capacity"}
               requiredIsRequired={true}
             />
           <InputField

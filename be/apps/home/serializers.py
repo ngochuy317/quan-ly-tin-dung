@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 
+from apps.base.constants import Y_M_D_H_M_FORMAT
 from apps.customer.models import BankAccount, CreditCard, Customer
 from apps.customer.serializers import CreditCardSerializer
 from apps.store.models import POS, BillPos, NoteBook, Product, RowNotebook, Store, StoreCost, SwipeCardTransaction
@@ -16,7 +17,6 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class InfomationDetailSerializer(serializers.ModelSerializer):
     store_name = serializers.ReadOnlyField(source="store.name")
-    # store = serializers.IntegerField(required=True)
 
     class Meta:
         model = InfomationDetail
@@ -94,7 +94,7 @@ class GetRowNotebookSerializer(serializers.ModelSerializer):
     For Get method
     """
 
-    storage_datetime = serializers.DateTimeField(format="%Y-%m-%d %H:%M")
+    storage_datetime = serializers.DateTimeField(format=Y_M_D_H_M_FORMAT)
     creditcard = serializers.CharField(source="creditcards.card_number")
 
     class Meta:
@@ -164,7 +164,6 @@ class StoreInformationDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Store
         fields = "__all__"
-        # read_only_fields = ('id', )
 
 
 class StoreSerializer(serializers.ModelSerializer):
@@ -310,8 +309,8 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(read_only=True)
     creditcard = CreditCardSerializer(write_only=True)
     customer = SwipeCardTransactionCustomerSerializer()
-    transaction_datetime_created = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
-    transaction_datetime_updated = serializers.DateTimeField(read_only=True, format="%Y-%m-%d %H:%M")
+    transaction_datetime_created = serializers.DateTimeField(read_only=True, format=Y_M_D_H_M_FORMAT)
+    transaction_datetime_updated = serializers.DateTimeField(read_only=True, format=Y_M_D_H_M_FORMAT)
     username = serializers.CharField(source="user.username", read_only=True)
     negative_money = serializers.CharField(required=False, allow_null=True, allow_blank=True)
     credit_card_number = serializers.CharField(required=False)
@@ -404,11 +403,11 @@ class CreditCardManagementSerializer(serializers.Serializer):
     credit_card_number = serializers.CharField()
     store_name = serializers.CharField()
     customer_money_needed = serializers.IntegerField()
-    transaction_datetime_created = serializers.DateTimeField(format="%Y-%m-%d %H:%M")
+    transaction_datetime_created = serializers.DateTimeField(format=Y_M_D_H_M_FORMAT)
 
 
 class AllTransaction4CreditCardSerializer(serializers.Serializer):
 
     store_name = serializers.CharField()
     customer_money_needed = serializers.IntegerField()
-    transaction_datetime_created = serializers.DateTimeField(format="%Y-%m-%d %H:%M")
+    transaction_datetime_created = serializers.DateTimeField(format=Y_M_D_H_M_FORMAT)

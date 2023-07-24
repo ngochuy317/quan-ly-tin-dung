@@ -3,6 +3,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 from datetime import datetime
 
 import pytz
+from apps.base.constants import PARSE_ERROR_MSG, Y_M_D_FORMAT
 from apps.customer.models import CreditCard
 from apps.store.models import POS, NoteBook, Product, RowNotebook, Store, StoreCost, SwipeCardTransaction
 from apps.user.authentication import IsAdmin
@@ -80,10 +81,10 @@ class SwipeCardView(View):
                 "statement_date": "",
                 "maturity_date": "",
             }
-            card_issued_date_datetime_object = datetime.strptime(request.POST.get("card_issued_date"), "%Y-%m-%d")
-            card_expire_date_datetime_object = datetime.strptime(request.POST.get("card_expire_date"), "%Y-%m-%d")
-            statement_date_datetime_object = datetime.strptime(request.POST.get("statement_date"), "%Y-%m-%d")
-            maturity_date_datetime_object = datetime.strptime(request.POST.get("maturity_date"), "%Y-%m-%d")
+            card_issued_date_datetime_object = datetime.strptime(request.POST.get("card_issued_date"), Y_M_D_FORMAT)
+            card_expire_date_datetime_object = datetime.strptime(request.POST.get("card_expire_date"), Y_M_D_FORMAT)
+            statement_date_datetime_object = datetime.strptime(request.POST.get("statement_date"), Y_M_D_FORMAT)
+            maturity_date_datetime_object = datetime.strptime(request.POST.get("maturity_date"), Y_M_D_FORMAT)
             credit_card_data["card_issued_date"] = card_issued_date_datetime_object
             credit_card_data["card_expire_date"] = card_expire_date_datetime_object
             credit_card_data["statement_date"] = statement_date_datetime_object
@@ -130,7 +131,7 @@ class SwipeCardTransactionDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestr
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(status=status.HTTP_200_OK)
-        return Response("Parser error", status=status.HTTP_400_BAD_REQUEST)
+        return Response(PARSE_ERROR_MSG, status=status.HTTP_400_BAD_REQUEST)
 
 
 class SwipeCardTransactionReportAPIView(ListAPIView):
@@ -168,7 +169,7 @@ class SwipeCardTransactionAPIView(ListAPIView):
             billpos_serializer.is_valid(raise_exception=True)
             billpos_serializer.save()
             return Response(status=status.HTTP_201_CREATED)
-        return Response("Parser error", status=status.HTTP_400_BAD_REQUEST)
+        return Response(PARSE_ERROR_MSG, status=status.HTTP_400_BAD_REQUEST)
         # except Exception as e:
         #     print("Exception SwipeCardTransactionAPIView", e)
         #     return Response(e, status=status.HTTP_400_BAD_REQUEST)
@@ -243,8 +244,8 @@ class NoteBookDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdmin]
 
     def put(self, request, *args, **kwargs):
-        id = kwargs.get("pk")
-        obj = NoteBook.objects.filter(id=id).first()
+        _id = kwargs.get("pk")
+        obj = NoteBook.objects.filter(id=_id).first()
         serializer = NoteBookSerializer(obj, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -266,8 +267,8 @@ class POSDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdmin]
 
     def put(self, request, *args, **kwargs):
-        id = kwargs.get("pk")
-        obj = POS.objects.filter(id=id).first()
+        _id = kwargs.get("pk")
+        obj = POS.objects.filter(id=_id).first()
         serializer = POSSerializer(obj, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -296,6 +297,17 @@ class StoreListCreateAPIView(ListCreateAPIView):
     pagination_class = CustomPageNumberPagination
     permission_classes = [IsAdmin]
 
+    def post(self, request, *args, **kwargs):
+
+        parser = NestedParser(request.data)
+        if parser.is_valid():
+            data = parser.validate_data
+            serializer = StoreSerializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(status=status.HTTP_200_OK)
+        return Response(PARSE_ERROR_MSG, status=status.HTTP_400_BAD_REQUEST)
+
 
 class StoreListAPIViewNoPagination(ListAPIView):
 
@@ -311,12 +323,16 @@ class StoreDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdmin]
 
     def put(self, request, *args, **kwargs):
-        id = kwargs.get("pk")
-        obj = Store.objects.filter(id=id).first()
-        serializer = StoreSerializer(obj, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        parser = NestedParser(request.data)
+        if parser.is_valid():
+            data = parser.validate_data
+            _id = kwargs.get("pk")
+            obj = Store.objects.filter(id=_id).first()
+            serializer = StoreSerializer(obj, data=data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(PARSE_ERROR_MSG, status=status.HTTP_400_BAD_REQUEST)
 
 
 class EmployeesListCreateAPIView(ListCreateAPIView):
@@ -334,8 +350,8 @@ class EmployeeDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAdmin]
 
     def put(self, request, *args, **kwargs):
-        id = kwargs.get("pk")
-        obj = User.objects.filter(id=id).first()
+        _id = kwargs.get("pk")
+        obj = User.objects.filter(id=_id).first()
         serializer = UserSerializer(obj, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -364,7 +380,7 @@ class RowNotebookAPIView(APIView):
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(status=status.HTTP_201_CREATED)
-        return Response("Parser error", status=status.HTTP_400_BAD_REQUEST)
+        return Response(PARSE_ERROR_MSG, status=status.HTTP_400_BAD_REQUEST)
 
 
 class RowNotebookListAPIView(APIView):
@@ -372,9 +388,9 @@ class RowNotebookListAPIView(APIView):
     # permission_classes = [IsAdmin]
 
     def get(self, request, *args, **kwargs):
-        id = kwargs.get("pk")
-        if id:
-            data = RowNotebook.objects.filter(notebook__id=id)
+        _id = kwargs.get("pk")
+        if _id:
+            data = RowNotebook.objects.filter(notebook__id=_id)
             pagination = CustomPageNumberPagination()
             data = pagination.paginate_queryset(data, request, view=self)
             serializer = GetRowNotebookSerializer(data, many=True)
