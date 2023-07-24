@@ -34,7 +34,7 @@ class Migration(migrations.Migration):
             model_name="pos",
             name="from_store",
             field=models.ForeignKey(
-                default=1, on_delete=django.db.models.deletion.CASCADE, related_name="provide_poses", to="store.store"
+                default=9, on_delete=django.db.models.deletion.CASCADE, related_name="provide_poses", to="store.store"
             ),
         ),
         migrations.AlterField(
