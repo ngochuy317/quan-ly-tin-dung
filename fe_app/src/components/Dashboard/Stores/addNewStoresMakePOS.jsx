@@ -10,8 +10,9 @@ import { WORKINGSTATUSOFSTOREMAKEPOS } from "../../ConstantUtils/constants";
 import SelectField from "../../Common/selectField";
 
 function NewStoreMakePOS() {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, formState } = useForm();
   const navigate = useNavigate();
+  const { isSubmitting } = formState;
 
   const onSubmit = async (data) => {
     try {
@@ -133,10 +134,24 @@ function NewStoreMakePOS() {
           />
         </div>
         <div className="d-flex justify-content-end">
-          <button type="submit" className="btn btn-outline-primary mx-3">
+          <button
+            disabled={isSubmitting}
+            type="submit"
+            className="btn btn-outline-primary mx-3"
+          >
+            {isSubmitting && (
+              <span className="spinner-border spinner-border-sm mr-1"></span>
+            )}
             Lưu
           </button>
-          <button type="button" className="btn btn-outline-primary mx-3">
+          <button
+            disabled={isSubmitting}
+            type="button"
+            className="btn btn-outline-primary mx-3"
+          >
+            {isSubmitting && (
+              <span className="spinner-border spinner-border-sm mr-1"></span>
+            )}
             <Link
               to="./.."
               style={{ textDecoration: "none", color: "inherit" }}

@@ -48,10 +48,14 @@ INSTALLED_APPS = [
     "apps.store",
     "apps.home",
     "apps.customer",
+    "apps.base",
     # 3rd lib
     "rest_framework",
     "corsheaders",
     "django_filters",
+    "storages",
+    # clean up file when delete instance
+    "django_cleanup.apps.CleanupConfig",
 ]
 
 MIDDLEWARE = [
@@ -141,14 +145,34 @@ USE_TZ = True
 #     os.path.join(BASE_DIR, "static"),
 # )
 
-# STATIC_ROOT = BASE_DIR / 'static/'
-# STATIC_URL = '/static/'
-STATIC_URL = "/static_backend/"
-STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+USE_SPACES = os.getenv("USE_SPACES") == "TRUE"
 
-MEDIA_ROOT = BASE_DIR / "media/"
-MEDIA_URL = "/media/"
+if USE_SPACES:
+    # settings
+    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+    AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
+    AWS_DEFAULT_ACL = "public-read"
+    AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL")
+    AWS_S3_SIGNATURE_VERSION = "s3v4"
+    AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
+    # static settings
+    AWS_STATIC_LOCATION = "static"
+    STATIC_URL = f"https://{AWS_S3_ENDPOINT_URL}/{AWS_STATIC_LOCATION}/"
+    STATICFILES_STORAGE = "apps.base.storage_backends.StaticStorage"
+
+    AWS_PUBLIC_MEDIA_LOCATION = "media/public"
+    DEFAULT_FILE_STORAGE = "apps.base.storage_backends.PublicMediaStorage"
+
+    AWS_PRIVATE_MEDIA_LOCATION = "media/private"
+    PRIVATE_FILE_STORAGE = "mysite.storage_backends.PrivateMediaStorage"
+
+else:
+    STATIC_URL = "/static_backend/"
+    STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+    MEDIA_ROOT = BASE_DIR / "media/"
+    MEDIA_URL = "/media/"
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
 
 
 # Default primary key field type
