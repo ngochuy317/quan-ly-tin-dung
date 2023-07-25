@@ -2,11 +2,16 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import storeMakePOSApi from "../../../api/storeMakePOSAPI";
+import DisplayImageFileInputField from "../../Common/displayImageFileInputField";
+import DownloadFileInputField from "../../Common/downloadFileInputField";
 import FileInputField from "../../Common/fileInputField";
 import InputField from "../../Common/inputField";
-import InputTextareaField from "../../Common/inputTextareaField";
 import SelectField from "../../Common/selectField";
-import { WORKINGSTATUSOFSTOREMAKEPOS } from "../../ConstantUtils/constants";
+import {
+  INPUTIMAGETYPEACCEPT,
+  INPUTPDFFILETYPEACCEPT,
+  WORKINGSTATUSOFSTOREMAKEPOS,
+} from "../../ConstantUtils/constants";
 import { formatDataFileField } from "../../Utilities/fileField";
 
 function StoreMakePOSDetail() {
@@ -32,7 +37,8 @@ function StoreMakePOSDetail() {
     try {
       let newData;
       newData = formatDataFileField(data, [
-        "business_license_image",
+        "tax_code_file",
+        "business_license_file",
         "representative_id_card_front_image",
         "representative_id_card_back_image",
       ]);
@@ -63,15 +69,7 @@ function StoreMakePOSDetail() {
         <div className="row">
           <InputField
             requiredColWidth={4}
-            requiredLbl="Mã địa điểm"
-            requiredType="text"
-            requiredRegister={register}
-            requiredName="code"
-            requiredIsRequired={true}
-          />
-          <InputField
-            requiredColWidth={4}
-            requiredLbl="Tên ghi nhớ"
+            requiredLbl="Tên cửa hàng hộ kinh doanh"
             requiredType="text"
             requiredRegister={register}
             requiredName="name"
@@ -79,54 +77,107 @@ function StoreMakePOSDetail() {
           />
           <InputField
             requiredColWidth={4}
-            requiredLbl="Số điện thoại"
-            requiredType="tel"
-            requiredRegister={register}
-            requiredName="phone_number"
-            requiredIsRequired={true}
-          />
-        </div>
-        <div className="row">
-          <InputTextareaField
-            requiredColWidth={6}
-            requiredLbl="Ghi chú"
-            requiredType="tel"
-            requiredRegister={register}
-            requiredName="note"
-          />
-          <InputField
-            requiredColWidth={6}
-            requiredLbl="Địa chỉ"
-            requiredType="tel"
-            requiredRegister={register}
-            requiredName="address"
-            requiredIsRequired={true}
-          />
-        </div>
-        <div className="row">
-          <InputField
-            requiredColWidth={3}
-            requiredLbl="Mã số thuế"
-            requiredType="text"
-            requiredRegister={register}
-            requiredName="tax_code"
-          />
-          <InputField
-            requiredColWidth={3}
             requiredLbl="Tên người đại diện"
             requiredType="text"
             requiredRegister={register}
             requiredName="representative_s_name"
+            requiredIsRequired={true}
           />
           <InputField
-            requiredColWidth={3}
-            requiredLbl="SĐT người đại diện"
-            requiredType="text"
+            requiredColWidth={4}
+            requiredLbl="SĐT đăng ký"
+            requiredType="tel"
             requiredRegister={register}
             requiredName="representative_s_phone_number"
+            requiredIsRequired={true}
           />
+        </div>
+        <div className="row">
+          <InputField
+            requiredColWidth={6}
+            requiredLbl="Địa chỉ"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName="address"
+            requiredIsRequired={true}
+          />
+          {getValues("business_license_file") ? (
+            <DownloadFileInputField
+              requiredColWidth={3}
+              requiredLbl={"Giấy phép kinh doanh(PDF)"}
+              requiredHref={`${getValues("business_license_file")}`}
+              requiredLblHref={"Xem"}
+            />
+          ) : (
+            <FileInputField
+              requiredColWidth={3}
+              requiredLbl={"Giấy phép kinh doanh(PDF)"}
+              requiredRegister={register}
+              requiredName={"business_license_file"}
+              optionalAccept={INPUTPDFFILETYPEACCEPT}
+            />
+          )}
+          {getValues("tax_code_file") ? (
+            <DownloadFileInputField
+              requiredColWidth={3}
+              requiredLbl={"Mã số thuế(PDF)"}
+              requiredHref={`${getValues("tax_code_file")}`}
+              requiredLblHref={"Xem"}
+            />
+          ) : (
+            <FileInputField
+              requiredColWidth={3}
+              requiredLbl={"Mã số thuế(PDF)"}
+              requiredRegister={register}
+              requiredName={"tax_code_file"}
+              optionalAccept={INPUTPDFFILETYPEACCEPT}
+            />
+          )}
+          {/* <InputTextareaField
+            requiredColWidth={6}
+            requiredLbl="Ghi chú"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName="note"
+          /> */}
+        </div>
+        <div className="row">
+          {getValues("representative_id_card_front_image") ? (
+            <DisplayImageFileInputField
+              requiredColWidth={4}
+              requiredLbl={"Mặt trước CCCD người đại diện"}
+              requiredImageUrl={`${getValues(
+                "representative_id_card_front_image"
+              )}`}
+            />
+          ) : (
+            <FileInputField
+              requiredColWidth={4}
+              requiredLbl={"Mặt trước CCCD người đại diện"}
+              requiredRegister={register}
+              requiredName={"representative_id_card_front_image"}
+              optionalAccept={INPUTIMAGETYPEACCEPT}
+            />
+          )}
+          {getValues("representative_id_card_front_image") ? (
+            <DisplayImageFileInputField
+              requiredColWidth={4}
+              requiredLbl={"Mặt sau CCCD người đại diện"}
+              requiredImageUrl={`${getValues(
+                "representative_id_card_back_image"
+              )}`}
+            />
+          ) : (
+            <FileInputField
+              requiredColWidth={4}
+              requiredLbl={"Mặt sau CCCD người đại diện"}
+              requiredRegister={register}
+              requiredName={"representative_id_card_back_image"}
+              optionalAccept={INPUTIMAGETYPEACCEPT}
+            />
+          )}
           <SelectField
-            requiredColWidth={3}
+            requiredColWidth={4}
             requiredLbl={"Trạng thái hoạt động"}
             requiredIsRequired={true}
             requiredRegister={register}
@@ -136,69 +187,6 @@ function StoreMakePOSDetail() {
             requiredValueOption={(ele) => `${ele.value}`}
             requiredLblOption={(ele) => `${ele.label}`}
           />
-        </div>
-        <div className="row">
-          {getValues("business_license_image") ? (
-            <div className="col-md-4">
-              <div className="mb-3">
-                <label className="form-label">Ảnh mặt trước thẻ tín dụng</label>
-                <img
-                  src={`${getValues("business_license_image")}`}
-                  style={{ maxWidth: "100%", height: "auto" }}
-                  alt=""
-                ></img>
-              </div>
-            </div>
-          ) : (
-            <FileInputField
-              requiredColWidth={4}
-              requiredLbl={"Hình GPKD"}
-              requiredRegister={register}
-              requiredName={"business_license_image"}
-            />
-          )}
-          {getValues("representative_id_card_front_image") ? (
-            <div className="col-md-4">
-              <div className="mb-3">
-                <label className="form-label">
-                  Mặt trước CCCD người đại diện
-                </label>
-                <img
-                  src={`${getValues("representative_id_card_front_image")}`}
-                  style={{ maxWidth: "100%", height: "auto" }}
-                  alt=""
-                ></img>
-              </div>
-            </div>
-          ) : (
-            <FileInputField
-              requiredColWidth={4}
-              requiredLbl={"Mặt trước CCCD người đại diện"}
-              requiredRegister={register}
-              requiredName={"representative_id_card_front_image"}
-            />
-          )}
-          {getValues("representative_id_card_back_image") ? (
-            <div className="col-md-4">
-              <div className="mb-3">
-                <label className="form-label">
-                  Mặt sau CCCD người đại diện
-                </label>
-                <img
-                  src={`${getValues("representative_id_card_back_image")}`}
-                  style={{ maxWidth: "100%", height: "auto" }}
-                  alt=""
-                ></img>
-              </div>
-            </div>
-          ) : (
-            <FileInputField
-              requiredColWidth={4}
-              requiredLbl={"Mặt sau CCCD người đại diện"}
-              requiredRegister={register}
-              requiredName={"representative_id_card_back_image"}
-            />
-          )}
         </div>
         <div className="d-flex justify-content-end">
           <button

@@ -1,13 +1,12 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import storeMakePOSApi from "../../../api/storeMakePOSAPI";
 import FileInputField from "../../Common/fileInputField";
 import InputField from "../../Common/inputField";
-import InputTextareaField from "../../Common/inputTextareaField";
-import { formatDataFileField } from "../../Utilities/fileField";
-import storeMakePOSApi from "../../../api/storeMakePOSAPI";
-import { WORKINGSTATUSOFSTOREMAKEPOS } from "../../ConstantUtils/constants";
 import SelectField from "../../Common/selectField";
+import { INPUTIMAGETYPEACCEPT, INPUTPDFFILETYPEACCEPT, WORKINGSTATUSOFSTOREMAKEPOS } from "../../ConstantUtils/constants";
+import { formatDataFileField } from "../../Utilities/fileField";
 
 function NewStoreMakePOS() {
   const { register, handleSubmit, formState } = useForm();
@@ -18,7 +17,8 @@ function NewStoreMakePOS() {
     try {
       let newData;
       newData = formatDataFileField(data, [
-        "business_license_image",
+        "tax_code_file",
+        "business_license_file",
         "representative_id_card_front_image",
         "representative_id_card_back_image",
       ]);
@@ -39,15 +39,7 @@ function NewStoreMakePOS() {
         <div className="row">
           <InputField
             requiredColWidth={4}
-            requiredLbl="Mã địa điểm"
-            requiredType="text"
-            requiredRegister={register}
-            requiredName="code"
-            requiredIsRequired={true}
-          />
-          <InputField
-            requiredColWidth={4}
-            requiredLbl="Tên ghi nhớ"
+            requiredLbl="Tên cửa hàng hộ kinh doanh"
             requiredType="text"
             requiredRegister={register}
             requiredName="name"
@@ -55,21 +47,22 @@ function NewStoreMakePOS() {
           />
           <InputField
             requiredColWidth={4}
-            requiredLbl="Số điện thoại"
+            requiredLbl="Tên người đại diện"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName="representative_s_name"
+            requiredIsRequired={true}
+          />
+          <InputField
+            requiredColWidth={4}
+            requiredLbl="SĐT đăng ký"
             requiredType="tel"
             requiredRegister={register}
-            requiredName="phone_number"
+            requiredName="representative_s_phone_number"
             requiredIsRequired={true}
           />
         </div>
         <div className="row">
-          <InputTextareaField
-            requiredColWidth={6}
-            requiredLbl="Ghi chú"
-            requiredType="text"
-            requiredRegister={register}
-            requiredName="note"
-          />
           <InputField
             requiredColWidth={6}
             requiredLbl="Địa chỉ"
@@ -78,31 +71,45 @@ function NewStoreMakePOS() {
             requiredName="address"
             requiredIsRequired={true}
           />
+          <FileInputField
+            requiredColWidth={3}
+            requiredLbl={"Giấy phép kinh doanh(PDF)"}
+            requiredRegister={register}
+            requiredName={"business_license_file"}
+            optionalAccept={INPUTPDFFILETYPEACCEPT}
+          />
+          <FileInputField
+            requiredColWidth={3}
+            requiredLbl={"Mã số thuế(PDF)"}
+            requiredRegister={register}
+            requiredName={"tax_code_file"}
+            optionalAccept={INPUTPDFFILETYPEACCEPT}
+          />
+          {/* <InputTextareaField
+            requiredColWidth={6}
+            requiredLbl="Ghi chú"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName="note"
+          /> */}
         </div>
         <div className="row">
-          <InputField
-            requiredColWidth={3}
-            requiredLbl="Mã số thuế"
-            requiredType="text"
+        <FileInputField
+            requiredColWidth={4}
+            requiredLbl={"Mặt trước CCCD người đại diện"}
             requiredRegister={register}
-            requiredName="tax_code"
+            requiredName={"representative_id_card_front_image"}
+            optionalAccept={INPUTIMAGETYPEACCEPT}
           />
-          <InputField
-            requiredColWidth={3}
-            requiredLbl="Tên người đại diện"
-            requiredType="text"
+          <FileInputField
+            requiredColWidth={4}
+            requiredLbl={"Mặt sau CCCD người đại diện"}
             requiredRegister={register}
-            requiredName="representative_s_name"
-          />
-          <InputField
-            requiredColWidth={3}
-            requiredLbl="SĐT người đại diện"
-            requiredType="text"
-            requiredRegister={register}
-            requiredName="representative_s_phone_number"
+            requiredName={"representative_id_card_back_image"}
+            optionalAccept={INPUTIMAGETYPEACCEPT}
           />
           <SelectField
-            requiredColWidth={3}
+            requiredColWidth={4}
             requiredLbl={"Trạng thái hoạt động"}
             requiredIsRequired={true}
             requiredRegister={register}
@@ -111,26 +118,6 @@ function NewStoreMakePOS() {
             requiredLblSelect="Chọn trạng thái"
             requiredValueOption={(ele) => `${ele.value}`}
             requiredLblOption={(ele) => `${ele.label}`}
-          />
-        </div>
-        <div className="row">
-          <FileInputField
-            requiredColWidth={4}
-            requiredLbl={"Hình GPKD"}
-            requiredRegister={register}
-            requiredName={"business_license_image"}
-          />
-          <FileInputField
-            requiredColWidth={4}
-            requiredLbl={"Mặt trước CCCD người đại diện"}
-            requiredRegister={register}
-            requiredName={"representative_id_card_front_image"}
-          />
-          <FileInputField
-            requiredColWidth={4}
-            requiredLbl={"Mặt sau CCCD người đại diện"}
-            requiredRegister={register}
-            requiredName={"representative_id_card_back_image"}
           />
         </div>
         <div className="d-flex justify-content-end">

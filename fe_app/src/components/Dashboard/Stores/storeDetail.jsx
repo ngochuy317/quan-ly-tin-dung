@@ -4,6 +4,9 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import storeApi from "../../../api/storeAPI";
 import InputField from "../../Common/inputField";
 import InputTextareaField from "../../Common/inputTextareaField";
+import FileInputField from "../../Common/fileInputField";
+import { INPUTPDFFILETYPEACCEPT } from "../../ConstantUtils/constants";
+import DownloadFileInputField from "../../Common/downloadFileInputField";
 
 function StoreDetail() {
   const { register, handleSubmit, reset, getValues } = useForm();
@@ -50,15 +53,7 @@ function StoreDetail() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="row">
           <InputField
-            requiredColWidth={4}
-            requiredLbl="Mã địa điểm"
-            requiredType="text"
-            requiredRegister={register}
-            requiredName="code"
-            requiredIsRequired={true}
-          />
-          <InputField
-            requiredColWidth={4}
+            requiredColWidth={3}
             requiredLbl="Tên ghi nhớ"
             requiredType="text"
             requiredRegister={register}
@@ -66,7 +61,14 @@ function StoreDetail() {
             requiredIsRequired={true}
           />
           <InputField
-            requiredColWidth={4}
+            requiredColWidth={6}
+            requiredLbl="Địa chỉ"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName="address"
+          />
+          <InputField
+            requiredColWidth={3}
             requiredLbl="Số điện thoại"
             requiredType="tel"
             requiredRegister={register}
@@ -75,19 +77,60 @@ function StoreDetail() {
           />
         </div>
         <div className="row">
+        {getValues("contract_of_house_renting_file") ? (
+            <DownloadFileInputField
+              requiredColWidth={3}
+              requiredLbl={"Hợp đồng thuê nhà(PDF)"}
+              requiredHref={`${getValues("contract_of_house_renting_file")}`}
+              requiredLblHref={"Xem"}
+            />
+          ) : (
+          <FileInputField
+            requiredColWidth={3}
+            requiredLbl={"Hợp đồng thuê nhà(PDF)"}
+            requiredRegister={register}
+            requiredName={"contract_of_house_renting_file"}
+            optionalAccept={INPUTPDFFILETYPEACCEPT}
+          />)}
+          <InputField
+            requiredColWidth={3}
+            requiredLbl="Tiền thuê nhà"
+            requiredType="number"
+            requiredRegister={register}
+            requiredName="rent"
+            requiredIsRequired={true}
+          />
+          <InputField
+            requiredColWidth={3}
+            requiredLbl="Tiền điện"
+            requiredType="number"
+            requiredRegister={register}
+            requiredName="electric_bill"
+            requiredIsRequired={true}
+          />
+          <InputField
+            requiredColWidth={3}
+            requiredLbl="Tiền nước"
+            requiredType="number"
+            requiredRegister={register}
+            requiredName="water_bill"
+            requiredIsRequired={true}
+          />
+        </div>
+        <div className="row">
+          <InputField
+            requiredColWidth={3}
+            requiredLbl="Phụ phí"
+            requiredType="number"
+            requiredRegister={register}
+            requiredName="surcharge"
+          />
           <InputTextareaField
             requiredColWidth={6}
             requiredLbl="Ghi chú"
-            requiredType="tel"
+            requiredType="text"
             requiredRegister={register}
             requiredName="note"
-          />
-          <InputField
-            requiredColWidth={6}
-            requiredLbl="Địa chỉ"
-            requiredType="tel"
-            requiredRegister={register}
-            requiredName="address"
           />
         </div>
         <div className="d-flex justify-content-end">

@@ -46,9 +46,8 @@ function StoresList() {
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Mã cửa hàng</th>
-              <th scope="col">Tên ghi nhớ</th>
-              <th scope="col">Ghi chú</th>
+              <th scope="col">Tên</th>
+              <th scope="col">Tên người đại diện</th>
               <th scope="col">Địa chỉ</th>
               <th scope="col">Số điện thoại</th>
               <th scope="col">Thao tác</th>
@@ -58,11 +57,10 @@ function StoresList() {
             {responseData?.results?.map((store, index) => (
               <tr key={store.id}>
                 <th scope="row">{index + 1}</th>
-                <td>{store.code}</td>
                 <td>{store.name}</td>
-                <td>{store.note}</td>
+                <td>{store.representative_s_name}</td>
                 <td>{store.address}</td>
-                <td>{store.phone_number}</td>
+                <td>{store.representative_s_phone_number}</td>
                 <td>
                   <Link to={store.id + "/"}>Chỉnh sửa</Link>
                 </td>

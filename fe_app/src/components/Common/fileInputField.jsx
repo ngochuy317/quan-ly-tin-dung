@@ -9,6 +9,7 @@ FileInputField.propTypes = {
   requiredName: PropTypes.string.isRequired,
   requiredIsRequired: PropTypes.bool.isRequired,
   optionalOnChangeInputFile: PropTypes.func,
+  optionalAccept: PropTypes.string,
 };
 
 FileInputField.defaultProps = {
@@ -23,6 +24,7 @@ function FileInputField(props) {
     requiredName,
     requiredIsRequired,
     optionalOnChangeInputFile,
+    optionalAccept
   } = props;
   return (
     <div className={`col-md-${requiredColWidth}`}>
@@ -37,6 +39,7 @@ function FileInputField(props) {
           className="form-control"
           required={requiredIsRequired}
           onChange={optionalOnChangeInputFile}
+          accept={optionalAccept}
         />
       </div>
     </div>

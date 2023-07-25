@@ -34,16 +34,12 @@ export const POSSTATUS = [
 export const WORKINGSTATUSOFSTOREMAKEPOS = [
     {
         value: 1,
-        label: "Đang hoạt động",
+        label: "Đã đóng GPKD",
     },
     {
         value: 2,
-        label: "Tạm dừng",
+        label: "Chưa đóng GPKD",
     },
-    {
-        value: 3,
-        label: "Đóng",
-    }
 ]
 
 export const STATUSOFCARD = [
@@ -82,3 +78,6 @@ export const TRANSACTIONTYPE = [
         label: "Đáo thẻ",
     }
 ]
+
+export const INPUTIMAGETYPEACCEPT =".jpg, .png, .jpeg"
+export const INPUTPDFFILETYPEACCEPT ="application/pdf"

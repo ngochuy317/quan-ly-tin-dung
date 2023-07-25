@@ -8,20 +8,18 @@ from django.utils.timezone import now
 
 class StoreMakePOS(models.Model):
 
-    WORKING_STATUS_CHOICES = ((1, "Đang hoạt động"), (2, "Tạm dừng"), (3, "Đóng"))
+    WORKING_STATUS_CHOICES = ((1, "Đã đóng GPKD"), (2, "Chưa đóng GPKD"))
 
-    code = models.CharField(max_length=127)
     name = models.CharField(max_length=127)
     note = models.TextField(blank=True)
     address = models.CharField(max_length=1023)
-    phone_number = models.CharField(max_length=20, default="")
-    tax_code = models.CharField(max_length=127, blank=True)
+    tax_code_file = models.FileField(upload_to="uploads/storemakepos/", blank=True, null=True)
     representative_s_name = models.CharField(max_length=127, blank=True)
     representative_s_phone_number = models.CharField(max_length=127, blank=True)
-    working_status = models.SmallIntegerField(choices=WORKING_STATUS_CHOICES, default=1)
-    business_license_image = models.ImageField(upload_to="uploads/store/", blank=True, null=True)
-    representative_id_card_front_image = models.ImageField(upload_to="uploads/store/", blank=True, null=True)
-    representative_id_card_back_image = models.ImageField(upload_to="uploads/store/", blank=True, null=True)
+    working_status = models.SmallIntegerField(choices=WORKING_STATUS_CHOICES, default=2)
+    business_license_file = models.FileField(upload_to="uploads/storemakepos/", blank=True, null=True)
+    representative_id_card_front_image = models.ImageField(upload_to="uploads/storemakepos/", blank=True, null=True)
+    representative_id_card_back_image = models.ImageField(upload_to="uploads/storemakepos/", blank=True, null=True)
 
     class Meta:
         ordering = ["-id"]
@@ -38,11 +36,15 @@ class StoreMakePOS(models.Model):
 
 class Store(models.Model):
 
-    code = models.CharField(max_length=127)
     name = models.CharField(max_length=127)
     note = models.TextField(blank=True)
     address = models.CharField(max_length=1023)
     phone_number = models.CharField(max_length=20, default="")
+    contract_of_house_renting_file = models.FileField(upload_to="uploads/store/", blank=True, null=True)
+    rent = models.IntegerField(default=0)
+    electric_bill = models.IntegerField(default=0)
+    water_bill = models.IntegerField(default=0)
+    surcharge = models.IntegerField(default=0)
 
     class Meta:
         ordering = ["-id"]
