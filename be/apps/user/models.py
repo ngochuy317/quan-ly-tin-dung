@@ -67,7 +67,7 @@ class User(models.Model):
             "id": self.id,
             "username": self.username,
             "role": self.role,
-            "expire_time": (datetime.utcnow() + timedelta(hours=4)).strftime(settings.STRPTIME_FORMAT),
+            "expire_time": (datetime.utcnow() + timedelta(hours=12)).strftime(settings.STRPTIME_FORMAT),
             "create_at": (datetime.utcnow()).strftime(settings.STRPTIME_FORMAT),
         }
         try:

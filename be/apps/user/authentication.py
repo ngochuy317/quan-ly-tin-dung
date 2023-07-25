@@ -30,8 +30,8 @@ class CustomAuthentication(authentication.BaseAuthentication):
             )
             expire_time = token_payload.get("expire_time")
             expire_time = datetime.strptime(expire_time, settings.STRPTIME_FORMAT)
-            # if not expire_time or datetime.utcnow() >= expire_time:
-            #     raise exceptions.AuthenticationFailed('Token expired')
+            if datetime.utcnow() >= expire_time:
+                raise exceptions.AuthenticationFailed("Token expired")
             _id = token_payload.get("id")
             user = User.objects.filter(id=_id).first()
             if not user:

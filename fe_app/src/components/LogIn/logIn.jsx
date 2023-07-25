@@ -1,5 +1,5 @@
 import jwtDecode from "jwt-decode";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import authApi from "../../api/authAPI";
@@ -10,19 +10,37 @@ function LoginForm() {
 
   const { register, handleSubmit } = useForm();
 
+  const navigateToDashBoard = (access_token) => {
+    if (access_token?.role === "admin") {
+      localStorage.setItem("activeTab", "/dashboard/reportadm");
+      navigate("/dashboard/reportadm");
+    } else {
+      localStorage.setItem("activeTab", "/dashboard/swipecard");
+      navigate("/dashboard/swipecard");
+    }
+  };
+
+  useEffect(() => {
+    const getDecodedToken = () => {
+      try {
+        let access_token = jwtDecode(localStorage.getItem("access_token"));
+        navigateToDashBoard(access_token);
+      } catch (error) {
+        console.log(error);
+        localStorage.removeItem("access_token");
+        navigate("/login");
+      }
+    };
+    getDecodedToken();
+  }, []); // eslint-disable-line
+
   const onSubmit = async (data) => {
     try {
       const response = await authApi.login(data);
       console.log("Login successfully");
       localStorage.setItem("access_token", response.access_token);
       let access_token = jwtDecode(response.access_token);
-      if (access_token.role === "admin") {
-        localStorage.setItem("activeTab", "/dashboard/report");
-        navigate("/dashboard/reportadm");
-      } else {
-        localStorage.setItem("activeTab", "/dashboard/swipecard");
-        navigate("/dashboard/swipecard");
-      }
+      navigateToDashBoard(access_token);
     } catch (error) {
       console.log("Failed to login", error);
       if (error?.response?.status === 400) {
