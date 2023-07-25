@@ -7,6 +7,8 @@ import creditCardApi from "../../../api/creditCardAPI";
 import userApi from "../../../api/userAPI";
 // import Pagination from "../../Pagination/pagination";
 import notebookApi from "../../../api/notebookAPI";
+import InputField from "../../Common/inputField";
+import InputTextareaField from "../../Common/inputTextareaField";
 import SelectField from "../../Common/selectField";
 import { ADMIN, EMPLOYEE, STATUSOFCARD } from "../../ConstantUtils/constants";
 import { AuthContext } from "../../Dashboard/dashboard";
@@ -187,7 +189,15 @@ function StoreCard() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <h5>Cửa hàng</h5>
         <div className="row">
-          <div className="col-md-3">
+          <InputField
+            requiredColWidth={3}
+            requiredLbl="Tên cửa hàng"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName="store_name"
+            optionalDisabled={true}
+          />
+          {/* <div className="col-md-3">
             <div className="mb-3">
               <label className="form-label">Tên cửa hàng</label>
               <input
@@ -197,51 +207,37 @@ function StoreCard() {
                 disabled
               />
             </div>
-          </div>
-          <div className="col-md-4">
-            <div className="mb-3">
-              <label className="form-label">Địa chỉ</label>
-              <input
-                {...register("store_address")}
-                type="text"
-                className="form-control"
-                disabled
-              />
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="mb-3">
-              <label className="form-label">Số điện thoại</label>
-              <input
-                {...register("store_phone_number")}
-                type="text"
-                className="form-control"
-                disabled
-              />
-            </div>
-          </div>
+          </div> */}
+          <InputField
+            requiredColWidth={4}
+            requiredLbl="Địa chỉ"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName="store_address"
+            optionalDisabled={true}
+          />
+          <InputField
+            requiredColWidth={3}
+            requiredLbl="Số điện thoại"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName="store_phone_number"
+            optionalDisabled={true}
+          />
         </div>
         <h5>Sổ lưu thẻ</h5>
         <div className="row">
-          <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">Sổ lưu thẻ</label>
-              <select
-                {...register("notebook")}
-                className="form-select"
-                disabled={notebooks.length > 0 ? null : true}
-                onChange={handleOnChangeNotebook}
-                required
-              >
-                <option value="">Chọn Sổ lưu</option>
-                {notebooks?.map((notebook) => (
-                  <option key={notebook.id} value={notebook.id}>
-                    {notebook.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+          <SelectField
+            requiredColWidth={2}
+            requiredLbl={"Sổ lưu thẻ"}
+            requiredIsRequired={true}
+            requiredRegister={register}
+            requiredName={"notebook"}
+            requiredDataOption={notebooks}
+            requiredLblSelect="Chọn Sổ lưu"
+            requiredValueOption={(ele) => `${ele.id}`}
+            requiredLblOption={(ele) => `${ele.name}`}
+          />
           <SelectField
             requiredColWidth={2}
             requiredLbl={"Trạng thái"}
@@ -253,50 +249,29 @@ function StoreCard() {
             requiredValueOption={(ele) => `${ele.value}`}
             requiredLblOption={(ele) => `${ele.label}`}
           />
-          <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">
-                Số dư cuối kì{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("closing_balance")}
-                type="number"
-                className="form-control"
-                required
-              />
-            </div>
-          </div>
-          <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">Ghi chú</label>
-              <input
-                {...register("note")}
-                type="text"
-                className="form-control"
-              />
-            </div>
-          </div>
-          <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">
-                Ngăn chứa thẻ{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("card_location")}
-                type="text"
-                className="form-control"
-                required
-              />
-            </div>
-          </div>
+          <InputField
+            requiredColWidth={2}
+            requiredLbl="Số dư cuối kì"
+            requiredType="number"
+            requiredRegister={register}
+            requiredName="closing_balance"
+            requiredIsRequired={true}
+          />
+          <InputTextareaField
+            requiredColWidth={2}
+            requiredLbl="Ghi chú"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName="note"
+          />
+          <InputField
+            requiredColWidth={2}
+            requiredLbl="Ngăn chứa thẻ"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName="card_location"
+            requiredIsRequired={true}
+          />
           <div className="col-md-2">
             <div className="mb-3">
               <label className="form-label">
@@ -363,173 +338,91 @@ function StoreCard() {
               </datalist>
             </div>
           </div>
-          <div className="col-md-4">
-            <div className="mb-3">
-              <label className="form-label">
-                Ngân hàng{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("creditcard.card_bank_name")}
-                type="text"
-                className="form-control"
-                required
-                disabled={!isManualInput}
-              />
-            </div>
-          </div>
-          <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">
-                Hạn mức thẻ{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("creditcard.line_of_credit")}
-                type="number"
-                className="form-control"
-                required
-                disabled={!isManualInput}
-              />
-            </div>
-          </div>
-          <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">
-                Phí{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("fee")}
-                type="number"
-                className="form-control"
-                required
-                disabled={!isManualInput}
-              />
-            </div>
-          </div>
+          <InputField
+            requiredColWidth={4}
+            requiredLbl="Ngân hàng"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName="creditcard.card_bank_name"
+            requiredIsRequired={true}
+            optionalDisabled={!isManualInput}
+          />
+          <InputField
+            requiredColWidth={2}
+            requiredLbl="Hạn mức thẻ"
+            requiredType="number"
+            requiredRegister={register}
+            requiredName="creditcard.line_of_credit"
+            requiredIsRequired={true}
+            optionalDisabled={!isManualInput}
+          />
+          <InputField
+            requiredColWidth={2}
+            requiredLbl="Phí"
+            requiredType="number"
+            requiredRegister={register}
+            requiredName="fee"
+            requiredIsRequired={true}
+            optionalDisabled={!isManualInput}
+          />
         </div>
         <div className="row">
-          <div className="col-md-4">
-            <div className="mb-3">
-              <label className="form-label">
-                Tên trên thẻ{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("creditcard.card_name")}
-                type="text"
-                className="form-control"
-                required
-                disabled={!isManualInput}
-              />
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="mb-3">
-              <label className="form-label">
-                Ngày mở thẻ{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("creditcard.card_issued_date")}
-                type="date"
-                className="form-control"
-                required
-                disabled={!isManualInput}
-              />
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="mb-3">
-              <label className="form-label">
-                Ngày hết hạn{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("creditcard.card_expire_date")}
-                type="date"
-                className="form-control"
-                required
-                disabled={!isManualInput}
-              />
-            </div>
-          </div>
-          <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">
-                CCV{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("creditcard.card_ccv")}
-                type="text"
-                maxLength="3"
-                className="form-control"
-                required
-                disabled={!isManualInput}
-              />
-            </div>
-          </div>
+          <InputField
+            requiredColWidth={4}
+            requiredLbl="Tên trên thẻ"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName="creditcard.card_name"
+            requiredIsRequired={true}
+            optionalDisabled={!isManualInput}
+          />
+          <InputField
+            requiredColWidth={3}
+            requiredLbl="Ngày mở thẻ"
+            requiredType="date"
+            requiredRegister={register}
+            requiredName="creditcard.card_issued_date"
+            requiredIsRequired={true}
+            optionalDisabled={!isManualInput}
+          />
+          <InputField
+            requiredColWidth={3}
+            requiredLbl="Ngày mở thẻ"
+            requiredType="date"
+            requiredRegister={register}
+            requiredName="creditcard.card_expire_date"
+            requiredIsRequired={true}
+            optionalDisabled={!isManualInput}
+          />
+          <InputField
+            requiredColWidth={2}
+            requiredLbl="CCV"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName="creditcard.card_ccv"
+            requiredIsRequired={true}
+            optionalDisabled={!isManualInput}
+          />
         </div>
         <div className="row">
-          <div className="col-md-3">
-            <div className="mb-3">
-              <label className="form-label">
-                Ngày sao kê{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("statement_date")}
-                type="date"
-                className="form-control"
-                required
-                disabled={!isManualInput}
-              />
-            </div>
-          </div>
-          <div className="col-md-3">
-            <div className="mb-3">
-              <label className="form-label">
-                Ngày cuối đáo{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
-              </label>
-              <input
-                {...register("maturity_date")}
-                type="date"
-                className="form-control"
-                required
-                disabled={!isManualInput}
-              />
-            </div>
-          </div>
+        <InputField
+            requiredColWidth={3}
+            requiredLbl="Ngày sao kê"
+            requiredType="date"
+            requiredRegister={register}
+            requiredName="statement_date"
+            requiredIsRequired={true}
+            optionalDisabled={!isManualInput}
+          />
+           <InputField
+            requiredColWidth={3}
+            requiredLbl="Ngày cuối đáo"
+            requiredType="date"
+            requiredRegister={register}
+            requiredName="maturity_date"
+            requiredIsRequired={true}
+            optionalDisabled={!isManualInput}
+          />
           <div className="col-md-3">
             <div className="mb-3">
               <label className="form-label">

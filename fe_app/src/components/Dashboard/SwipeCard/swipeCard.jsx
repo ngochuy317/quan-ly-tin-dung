@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import storeApi from "../../../api/storeAPI";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import userApi from "../../../api/userAPI";
+import InputField from "../../Common/inputField";
 import {
   ADMIN,
   EMPLOYEE,
@@ -171,28 +172,22 @@ function SwipeCard() {
             )}
           </div>
         </div>
-        <div className="col-md-4">
-          <div className="mb-3">
-            <label className="form-label">Địa chỉ</label>
-            <input
-              {...register("store_address")}
-              type="text"
-              className="form-control"
-              disabled
-            />
-          </div>
-        </div>
-        <div className="col-md-2">
-          <div className="mb-3">
-            <label className="form-label">Số điện thoại</label>
-            <input
-              {...register("store_phone_number")}
-              type="text"
-              className="form-control"
-              disabled
-            />
-          </div>
-        </div>
+        <InputField
+          requiredColWidth={4}
+          requiredLbl="Địa chỉ"
+          requiredType="text"
+          requiredRegister={register}
+          requiredName="store_address"
+          optionalDisabled={true}
+        />
+        <InputField
+          requiredColWidth={4}
+          requiredLbl="Số điện thoại"
+          requiredType="text"
+          requiredRegister={register}
+          requiredName="store_phone_number"
+          optionalDisabled={true}
+        />
       </div>
 
       <h5>Quẹt thẻ</h5>
@@ -263,7 +258,7 @@ function SwipeCard() {
         </table>
       </div>
       <Pagination
-      canBedisabled={responseSwipeCardData?.results?.length ? false : true}
+        canBedisabled={responseSwipeCardData?.results?.length ? false : true}
         currentPage={currentPage}
         totalPages={responseSwipeCardData.total_pages}
         handleChangePage={handleChangePage}

@@ -62,7 +62,7 @@ function NotebooksList() {
                 <td>{notebook.capacity}</td>
                 <td>{notebook.capacity_per_page}</td>
                 <td>
-                  <Link to={"/dashboard/stores/" + notebook.store.id}>
+                  <Link to={`/dashboard/stores/${notebook.store}`}>
                     {notebook.store_name}
                   </Link>
                 </td>
