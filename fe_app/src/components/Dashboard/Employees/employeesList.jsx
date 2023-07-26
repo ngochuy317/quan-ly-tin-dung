@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import employeeApi from "../../../api/employeeAPI";
-import { GENDERCHOICES } from "../../ConstantUtils/constants";
+import { GENDERCHOICES, ROLES } from "../../ConstantUtils/constants";
 import Pagination from "../../Pagination/pagination";
 
 function EmployeesList(props) {
@@ -49,10 +49,10 @@ function EmployeesList(props) {
               <th scope="col">#</th>
               <th scope="col">Họ và Tên</th>
               <th scope="col">Số điện thoại</th>
-              <th scope="col">CMND</th>
               <th scope="col">Giới tính</th>
               <th scope="col">Ngày sinh</th>
               <th scope="col">Lương</th>
+              <th scope="col">Cấp bậc</th>
               <th scope="col">Cửa hàng</th>
               <th scope="col">Thao tác</th>
             </tr>
@@ -63,7 +63,6 @@ function EmployeesList(props) {
                 <th scope="row">{index + 1}</th>
                 <td>{user.infomation_detail.fullname}</td>
                 <td>{user.infomation_detail.phone_number}</td>
-                <td>{user.infomation_detail.identity_card}</td>
                 <td>
                   {
                     GENDERCHOICES.find(
@@ -73,6 +72,9 @@ function EmployeesList(props) {
                 </td>
                 <td>{user.infomation_detail.dob}</td>
                 <td>{user.infomation_detail.salary}</td>
+                <td>{ROLES.find(
+                      (c) => c.roleKey === user.role
+                    )?.roleName}</td>
                 <td>{user.infomation_detail.store}</td>
                 <td>
                   <Link to={user.id + "/"}>Chỉnh sửa</Link>

@@ -2,12 +2,14 @@ import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import PropTypes from "prop-types";
 import React, { useEffect, useState } from "react";
+import CurrencyFormat from "react-currency-format";
 import { useFieldArray, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import creditCardApi from "../../../api/creditCardAPI";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import FileInputField from "../../Common/fileInputField";
 import InputField from "../../Common/inputField";
+import RequiredSymbol from "../../Common/requiredSymbol";
 import SelectField from "../../Common/selectField";
 import { TRANSACTIONTYPE } from "../../ConstantUtils/constants";
 import AddBillPOSMachineModal from "../../Modal/billPOSMachineModal";
@@ -34,6 +36,10 @@ function SwipeCardInput(props) {
   const [showNegativeMoney, setShowNegativeMoney] = useState(false);
   const [indexModal, setIndexModal] = useState(0);
   const [searchCreditCard, setSearchCreditCard] = useState("");
+  const moneyInputFieldFormat = (e) => {
+    let val = e.target.value?.replaceAll(",", "");
+    setValue("customer_money_needed", val);
+  };
 
   useEffect(() => {
     function init() {
@@ -89,18 +95,17 @@ function SwipeCardInput(props) {
     let path = "/dashboard/swipecarddetail";
     let filledData = getValues();
     navigate(path, {
-      state: { ...filledData, posMachineData: requiredPosMachine },
+      state: {
+        ...filledData,
+        posMachineData: requiredPosMachine,
+        showNegativeMoney: showNegativeMoney,
+      },
     });
     localStorage.setItem("activeTab", path);
   };
 
   const handleOnChangeTransactionType = (e) => {
     let val = e.target.value;
-    console.log(
-      "🚀 ~ file: swipeCardInput.jsx:81 ~ handleOnChangeTransactionType ~ val:",
-      val,
-      typeof val
-    );
     setShowNegativeMoney(parseInt(val) === 2);
   };
 
@@ -110,10 +115,6 @@ function SwipeCardInput(props) {
       const result = await creditCardApi.search({
         card_number: searchCreditCard,
       });
-      console.log(
-        "🚀 ~ file: swipeCardInput.jsx:112 ~ delayDebounceFn ~ result:",
-        result
-      );
 
       setDataListCardNumber([...result]);
     }, 2000);
@@ -158,10 +159,6 @@ function SwipeCardInput(props) {
     <form onSubmit={handleSubmit(onSubmit)}>
       <input
         {...register("store_name", { value: initData.store_name })}
-        hidden
-      />
-      <input
-        {...register("store_code", { value: initData.store_code })}
         hidden
       />
       <input {...register("store_id", { value: initData.store_id })} hidden />
@@ -235,14 +232,22 @@ function SwipeCardInput(props) {
           requiredName="customer.phone_number"
           requiredIsRequired={true}
         />
-        <InputField
-          requiredColWidth={2}
-          requiredLbl="Số tiền cần"
-          requiredType="text"
-          requiredRegister={register}
-          requiredName="customer_money_needed"
-          requiredIsRequired={true}
-        />
+        <div className="col-md-2">
+          <div className="mb-3">
+            <label className="form-label">
+              Số tiền cần
+              <RequiredSymbol />{" "}
+            </label>
+            <CurrencyFormat
+              type="text"
+              className="form-control"
+              value={getValues("customer_money_needed")}
+              required
+              thousandSeparator={true}
+              onChange={moneyInputFieldFormat}
+            />
+          </div>
+        </div>
         {showNegativeMoney ? (
           <InputField
             requiredColWidth={2}
@@ -320,8 +325,25 @@ function SwipeCardInput(props) {
           </div>
         </div>
       ))}
-
       <div className="row">
+        <div className="col-md-2">
+          <div className="mb-3">
+            <label className="form-label" style={{ color: "white" }}>
+              White
+            </label>
+            <button
+              type="button"
+              disabled={isSubmitting}
+              onClick={() => append({})}
+              className="btn btn-outline-primary form-control"
+            >
+              {isSubmitting && (
+                <span className="spinner-border spinner-border-sm mr-1"></span>
+              )}
+              Thêm bill pos
+            </button>
+          </div>
+        </div>
         <div className="col-md-1">
           <div className="mb-3">
             <label className="form-label" style={{ color: "white" }}>
@@ -370,24 +392,6 @@ function SwipeCardInput(props) {
                 <span className="spinner-border spinner-border-sm mr-1"></span>
               )}
               Chi tiết
-            </button>
-          </div>
-        </div>
-        <div className="col-md-2">
-          <div className="mb-3">
-            <label className="form-label" style={{ color: "white" }}>
-              White
-            </label>
-            <button
-              type="button"
-              disabled={isSubmitting}
-              onClick={() => append({})}
-              className="btn btn-outline-primary form-control"
-            >
-              {isSubmitting && (
-                <span className="spinner-border spinner-border-sm mr-1"></span>
-              )}
-              Thêm bill pos
             </button>
           </div>
         </div>

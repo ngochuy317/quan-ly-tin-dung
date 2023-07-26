@@ -1,6 +1,7 @@
 import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
+import CurrencyFormat from "react-currency-format";
 import { useFieldArray, useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import creditCardApi from "../../../api/creditCardAPI";
@@ -10,6 +11,7 @@ import InputField from "../../Common/inputField";
 import SelectField from "../../Common/selectField";
 import { GENDERCHOICES, TRANSACTIONTYPE } from "../../ConstantUtils/constants";
 import AddBillPOSMachineModal from "../../Modal/billPOSMachineModal";
+import RequiredSymbol from "../../Common/requiredSymbol";
 
 function SwipeCardMoreDetail() {
   const {
@@ -33,6 +35,7 @@ function SwipeCardMoreDetail() {
 
   const [isManualInput, setIsManualInput] = useState(false);
   const [show, setShow] = useState(false);
+  const [showNegativeMoney, setShowNegativeMoney] = useState(false);
   const [isCreditCardBackImage, setIsCreditCardBackImage] = useState(false);
   const [isCreditCardFrontImage, setIsCreditCardFrontImage] = useState(false);
   const [indexModal, setIndexModal] = useState(0);
@@ -46,6 +49,8 @@ function SwipeCardMoreDetail() {
   useEffect(() => {
     function initData() {
       reset({ ...state });
+      setShowNegativeMoney(state.showNegativeMoney);
+      console.log("🚀 ~ file: swipeCardMoreDetail.jsx:53 ~ initData ~ state:", state)
       console.log(
         "🚀 ~ file: swipeCardMoreDetail.jsx:44 ~ initData ~ state:",
         state
@@ -67,6 +72,11 @@ function SwipeCardMoreDetail() {
     initData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleOnChangeTransactionType = (e) => {
+    let val = e.target.value;
+    setShowNegativeMoney(parseInt(val) === 2);
+  };
 
   const handleOnChangeCardNumber = async (e) => {
     let event = e.nativeEvent.inputType ? "input" : "option selected";
@@ -126,6 +136,11 @@ function SwipeCardMoreDetail() {
   const handleClose = (index, imageValue) => {
     setValue(`billpos[${index}].bill_image`, imageValue);
     setShow(false);
+  };
+
+  const moneyInputFieldFormat = (e) => {
+    let val = e.target.value?.replaceAll(",", "");
+    setValue("customer_money_needed", val);
   };
 
   const onSubmit = async (data) => {
@@ -327,16 +342,22 @@ function SwipeCardMoreDetail() {
             requiredName={"customer.phone_number"}
             requiredIsRequired={true}
           />
-
-          <InputField
-            requiredColWidth={2}
-            requiredLbl="Số tiền cần"
-            requiredType="text"
-            requiredRegister={register}
-            requiredName={"customer_money_needed"}
-            requiredIsRequired={true}
-          />
-
+          <div className="col-md-2">
+            <div className="mb-3">
+              <label className="form-label">
+                Số tiền cần
+                <RequiredSymbol />
+              </label>
+              <CurrencyFormat
+                type="text"
+                className="form-control"
+                value={getValues("customer_money_needed")}
+                required
+                thousandSeparator={true}
+                onChange={moneyInputFieldFormat}
+              />
+            </div>
+          </div>
           <InputField
             requiredColWidth={2}
             requiredLbl="Số TK nhận tiền"
@@ -533,6 +554,7 @@ function SwipeCardMoreDetail() {
                 {...register("transaction_type")}
                 className="form-select"
                 required
+                onChange={handleOnChangeTransactionType}
               >
                 {TRANSACTIONTYPE?.map((ele) => (
                   <option key={ele.value} value={ele.value}>
@@ -542,17 +564,15 @@ function SwipeCardMoreDetail() {
               </select>
             </div>
           </div>
-          {/* <div className="col-md-2">
-            <div className="mb-3">
-              <input
-                {...register("is_payment_received")}
-                type="checkbox"
-                className="form-check-input"
-                // checked
-              />
-              <label className="form-check-label">Tiền về</label>
-            </div>
-          </div> */}
+          {showNegativeMoney ? (
+            <InputField
+              requiredColWidth={2}
+              requiredLbl="Âm tiền"
+              requiredType="number"
+              requiredRegister={register}
+              requiredName="negative_money"
+            />
+          ) : null}
         </div>
         <div className="row">
           <div className="col-md-6">

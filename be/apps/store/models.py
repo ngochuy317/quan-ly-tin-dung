@@ -147,7 +147,6 @@ class SwipeCardTransaction(models.Model):
     is_creditcard_stored = models.BooleanField(default=False)
     store_id = models.PositiveBigIntegerField()
     credit_card_number = models.CharField(max_length=20, db_index=True)
-    store_code = models.CharField(max_length=127)
     store_name = models.CharField(max_length=127)
     store_note = models.TextField(default="")
     store_address = models.CharField(max_length=1023)
