@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import authApi from "../../api/authAPI";
+import { ADMIN } from "../ConstantUtils/constants";
 
 function LoginForm() {
   const [error, setError] = useState();
@@ -11,7 +12,7 @@ function LoginForm() {
   const { register, handleSubmit } = useForm();
 
   const navigateToDashBoard = (access_token) => {
-    if (access_token?.role === "admin") {
+    if (access_token?.role === ADMIN) {
       localStorage.setItem("activeTab", "/dashboard/reportadm");
       navigate("/dashboard/reportadm");
     } else {

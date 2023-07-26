@@ -10,7 +10,8 @@ import FileInputField from "../../Common/fileInputField";
 
 function NewEmployee() {
   const [stores, setStores] = useState([]);
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, formState } = useForm();
+  const { isSubmitting } = formState;
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -233,10 +234,24 @@ function NewEmployee() {
           />
         </div>
         <div className="d-flex justify-content-end">
-          <button type="submit" className="btn btn-outline-primary mx-3">
+          <button
+            type="submit"
+            className="btn btn-outline-primary mx-3"
+            disabled={isSubmitting}
+          >
+            {isSubmitting && (
+              <span className="spinner-border spinner-border-sm mr-1"></span>
+            )}
             Lưu
           </button>
-          <button type="button" className="btn btn-outline-primary mx-3">
+          <button
+            type="button"
+            className="btn btn-outline-primary mx-3"
+            disabled={isSubmitting}
+          >
+            {isSubmitting && (
+              <span className="spinner-border spinner-border-sm mr-1"></span>
+            )}
             <Link
               to="./.."
               style={{ textDecoration: "none", color: "inherit" }}

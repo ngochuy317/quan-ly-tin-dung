@@ -10,7 +10,8 @@ import { GENDERCHOICES, ROLES } from "../../ConstantUtils/constants";
 
 function EmployeeDetail() {
   const [stores, setStores] = useState([]);
-  const { register, handleSubmit, reset, getValues } = useForm();
+  const { register, handleSubmit, reset, getValues, formState } = useForm();
+  const { isSubmitting } = formState;
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -294,13 +295,31 @@ function EmployeeDetail() {
             type="button"
             onClick={() => onDelete()}
             className="btn btn-outline-danger mx-3"
+            disabled={isSubmitting}
           >
+            {isSubmitting && (
+              <span className="spinner-border spinner-border-sm mr-1"></span>
+            )}
             Xoá
           </button>
-          <button type="submit" className="btn btn-outline-primary mx-3">
+          <button
+            type="submit"
+            className="btn btn-outline-primary mx-3"
+            disabled={isSubmitting}
+          >
+            {isSubmitting && (
+              <span className="spinner-border spinner-border-sm mr-1"></span>
+            )}
             Lưu
           </button>
-          <button type="button" className="btn btn-outline-primary mx-3">
+          <button
+            type="button"
+            className="btn btn-outline-primary mx-3"
+            disabled={isSubmitting}
+          >
+            {isSubmitting && (
+              <span className="spinner-border spinner-border-sm mr-1"></span>
+            )}
             <Link
               to="./.."
               style={{ textDecoration: "none", color: "inherit" }}

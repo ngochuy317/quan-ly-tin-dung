@@ -1,18 +1,24 @@
-export const ADMIN = "admin"
-export const EMPLOYEE = "employee"
+export const ADMIN = 1
+export const EMPLOYEE = 2
+export const MAMANGER = 3
+export const ACCOUNTANT = 4
 
 export const ROLES = [
     {
-        roleKey: "admin",
+        roleKey: ADMIN,
         roleName: "Admin",
     },
     {
-        roleKey: "employee",
+        roleKey: EMPLOYEE,
         roleName: "Nhân viên",
     },
     {
-        roleKey: "collaborators",
-        roleName: "Cộng tác viên",
+        roleKey: MAMANGER,
+        roleName: "Quản lý",
+    },
+    {
+        roleKey: ACCOUNTANT,
+        roleName: "Kế toán",
     }
 ]
 

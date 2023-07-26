@@ -3,7 +3,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 from datetime import datetime
 
 import pytz
-from apps.base.constants import PARSE_ERROR_MSG, Y_M_D_FORMAT
+from apps.base.constants import ADMIN, PARSE_ERROR_MSG, Y_M_D_FORMAT
 from apps.customer.models import CreditCard
 from apps.store.models import POS, NoteBook, Product, RowNotebook, Store, StoreCost, SwipeCardTransaction
 from apps.user.authentication import IsAdmin
@@ -177,7 +177,7 @@ class SwipeCardTransactionAPIView(ListAPIView):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(is_creditcard_stored=False)
-        if self.request.user.role != "admin":
+        if self.request.user.role != ADMIN:
             qs = qs.filter(user=self.request.user.id)
         return qs
 
@@ -337,7 +337,7 @@ class StoreDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
 class EmployeesListCreateAPIView(ListCreateAPIView):
 
-    queryset = User.objects.filter(~Q(role="admin"))
+    queryset = User.objects.filter(~Q(role=ADMIN))
     serializer_class = UserSerializer
     pagination_class = CustomPageNumberPagination
     permission_classes = [IsAdmin]
@@ -356,7 +356,7 @@ class EmployeesListCreateAPIView(ListCreateAPIView):
 
 class EmployeeDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
-    queryset = User.objects.filter(~Q(role="admin"))
+    queryset = User.objects.filter(~Q(role=ADMIN))
     serializer_class = UserSerializer
     permission_classes = [IsAdmin]
 

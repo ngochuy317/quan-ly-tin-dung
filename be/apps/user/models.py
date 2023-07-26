@@ -44,7 +44,7 @@ class User(models.Model):
 
     username = models.CharField(max_length=255, unique=True)
     password = models.CharField(max_length=255)
-    role = models.CharField(max_length=127, choices=ROLE_CHOICES)
+    role = models.PositiveSmallIntegerField(choices=ROLE_CHOICES, default=2)
     last_login = models.DateTimeField(blank=True, null=True)
     is_authenticated = models.BooleanField(default=True)
     infomation_detail = models.OneToOneField(InfomationDetail, on_delete=models.CASCADE)

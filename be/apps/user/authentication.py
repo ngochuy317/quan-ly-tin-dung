@@ -3,6 +3,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 from datetime import datetime
 
 import jwt
+from apps.base.constants import ADMIN
 from django.conf import settings
 from rest_framework import authentication, exceptions, permissions
 from .models import User
@@ -53,5 +54,5 @@ class IsAdmin(permissions.BasePermission):
 
     def has_permission(self, request, view):
         if hasattr(request, "user") and hasattr(request.user, "role"):
-            return request.user.role == "admin"
+            return request.user.role == ADMIN
         return False

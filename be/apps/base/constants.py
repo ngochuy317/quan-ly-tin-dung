@@ -3,11 +3,15 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 
 # -*- coding: utf-8 -*-
-
+ADMIN = 1
+EMPLOYEE = 2
+MAMANGER = 3
+ACCOUNTANT = 4
 ROLE_CHOICES = (
-    ("admin", "Admin"),
-    ("employee", "Nhân viên"),
-    ("collaborators", "Cộng tác viên"),
+    (ADMIN, "Admin"),
+    (EMPLOYEE, "Nhân viên"),
+    (MAMANGER, "Quản lý"),
+    (ACCOUNTANT, "Kế toán"),
 )
 
 Y_M_D_FORMAT = "%Y-%m-%d"

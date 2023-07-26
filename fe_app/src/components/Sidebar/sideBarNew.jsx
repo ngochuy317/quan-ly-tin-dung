@@ -18,8 +18,8 @@ import { AuthContext } from "../Dashboard/dashboard";
 function SideBarNew() {
   const { role, username } = React.useContext(AuthContext);
   const dataItemSideBar = {
-    admin: dataItemSideBarForAdmin,
-    employee: dataItemSideBarForEmployee,
+    1: dataItemSideBarForAdmin,
+    2: dataItemSideBarForEmployee,
   };
   return (
     <CDBSidebar className="min-vh-100" textColor="#fff" backgroundColor="#333">
