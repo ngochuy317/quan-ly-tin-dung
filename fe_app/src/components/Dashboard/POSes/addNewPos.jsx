@@ -153,8 +153,18 @@ function NewPos() {
             requiredName="bank_account"
             requiredIsRequired={true}
           />
-          <SelectField
+          <InputField
             requiredColWidth={3}
+            requiredLbl="SĐT đăng ký"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName="phone_number"
+            requiredIsRequired={true}
+          />
+        </div>
+        <div className="row">
+          <SelectField
+            requiredColWidth={6}
             requiredLbl={"Cửa hàng"}
             requiredIsRequired={true}
             requiredRegister={register}
@@ -164,19 +174,17 @@ function NewPos() {
             requiredValueOption={(ele) => `${ele.id}`}
             requiredLblOption={(ele) => `${ele.name}`}
           />
-          <div className="row">
-            <SelectField
-              requiredColWidth={6}
-              requiredLbl={"Cửa hàng làm ra máy POS"}
-              requiredIsRequired={true}
-              requiredRegister={register}
-              requiredName={"from_store"}
-              requiredDataOption={storeMakePOS}
-              requiredLblSelect="Chọn cửa hàng"
-              requiredValueOption={(ele) => `${ele.id}`}
-              requiredLblOption={(ele) => `${ele.name}`}
-            />
-          </div>
+          <SelectField
+            requiredColWidth={6}
+            requiredLbl={"Cửa hàng làm ra máy POS"}
+            requiredIsRequired={true}
+            requiredRegister={register}
+            requiredName={"from_store"}
+            requiredDataOption={storeMakePOS}
+            requiredLblSelect="Chọn cửa hàng"
+            requiredValueOption={(ele) => `${ele.id}`}
+            requiredLblOption={(ele) => `${ele.name}`}
+          />
         </div>
         <div className="d-flex justify-content-end">
           <button type="submit" className="btn btn-outline-primary mx-3">

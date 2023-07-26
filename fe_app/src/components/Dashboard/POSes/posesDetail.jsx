@@ -132,6 +132,7 @@ function POSesDetail() {
               <CurrencyFormat
                 type="text"
                 className="form-control"
+                value={getValues("money_limit_per_time")}
                 required
                 thousandSeparator={true}
                 onChange={handleOnChangeMoneyLimitPerTime}
@@ -167,8 +168,18 @@ function POSesDetail() {
             requiredName="bank_account"
             requiredIsRequired={true}
           />
-          <SelectField
+          <InputField
             requiredColWidth={3}
+            requiredLbl="SĐT đăng ký"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName="phone_number"
+            requiredIsRequired={true}
+          />
+        </div>
+        <div className="row">
+          <SelectField
+            requiredColWidth={6}
             requiredLbl={"Cửa hàng"}
             requiredIsRequired={true}
             requiredRegister={register}
@@ -178,8 +189,6 @@ function POSesDetail() {
             requiredValueOption={(ele) => `${ele.id}`}
             requiredLblOption={(ele) => `${ele.name}`}
           />
-        </div>
-        <div className="row">
           <SelectField
             requiredColWidth={6}
             requiredLbl={"Cửa hàng làm ra máy POS"}

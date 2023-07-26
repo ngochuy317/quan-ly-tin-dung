@@ -82,7 +82,6 @@ class POS(models.Model):
     mid = models.CharField(max_length=127)
     tid = models.CharField(max_length=127)
     name = models.CharField(max_length=127)
-    account_number = models.CharField(max_length=24)
     phone_number = models.CharField(max_length=24)
     note = models.TextField(blank=True)
     status = models.PositiveSmallIntegerField(choices=STATUS_POS_CHOICES, default=1)
