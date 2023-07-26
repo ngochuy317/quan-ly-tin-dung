@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import posApi from "../../../api/posAPI";
 import storeApi from "../../../api/storeAPI";
+import storeMakePOSApi from "../../../api/storeMakePOSAPI";
 import InputField from "../../Common/inputField";
 import InputTextareaField from "../../Common/inputTextareaField";
 import RequiredSymbol from "../../Common/requiredSymbol";
@@ -12,6 +13,7 @@ import { POSSTATUS } from "../../ConstantUtils/constants";
 
 function NewPos() {
   const [stores, setStores] = useState([]);
+  const [storeMakePOS, setStoreMakePOSApi] = useState([]);
   const { register, handleSubmit, setValue } = useForm();
   const navigate = useNavigate();
 
@@ -20,7 +22,15 @@ function NewPos() {
       try {
         const responseJSONStore = await storeApi.getAllFull();
         console.log("Fetch store list successfully", responseJSONStore);
+
+        const responseJSONStoreMakePOSApi = await storeMakePOSApi.getAllFull();
+        console.log(
+          "Fetch store make POS list successfully",
+          responseJSONStoreMakePOSApi
+        );
+
         setStores(responseJSONStore);
+        setStoreMakePOSApi(responseJSONStoreMakePOSApi);
       } catch (error) {
         console.log("Failed to fetch pos detail", error);
       }
@@ -78,7 +88,7 @@ function NewPos() {
           <div className="col-md-3">
             <div className="mb-3">
               <label className="form-label">Giới hạn quẹt tiền mỗi ngày</label>
-              <RequiredSymbol/>
+              <RequiredSymbol />
               <CurrencyFormat
                 type="text"
                 className="form-control"
@@ -121,17 +131,17 @@ function NewPos() {
             requiredLblOption={(ele) => `${ele.name}`}
           />
           <div className="row">
-          <SelectField
-            requiredColWidth={6}
-            requiredLbl={"Cửa hàng làm ra máy POS"}
-            requiredIsRequired={true}
-            requiredRegister={register}
-            requiredName={"from_store"}
-            requiredDataOption={stores}
-            requiredLblSelect="Chọn cửa hàng"
-            requiredValueOption={(ele) => `${ele.id}`}
-            requiredLblOption={(ele) => `${ele.name}`}
-          />
+            <SelectField
+              requiredColWidth={6}
+              requiredLbl={"Cửa hàng làm ra máy POS"}
+              requiredIsRequired={true}
+              requiredRegister={register}
+              requiredName={"from_store"}
+              requiredDataOption={storeMakePOS}
+              requiredLblSelect="Chọn cửa hàng"
+              requiredValueOption={(ele) => `${ele.id}`}
+              requiredLblOption={(ele) => `${ele.name}`}
+            />
           </div>
         </div>
         <div className="d-flex justify-content-end">
