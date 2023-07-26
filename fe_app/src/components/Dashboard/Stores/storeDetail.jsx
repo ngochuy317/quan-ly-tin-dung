@@ -2,11 +2,12 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import storeApi from "../../../api/storeAPI";
+import DownloadFileInputField from "../../Common/downloadFileInputField";
+import FileInputField from "../../Common/fileInputField";
 import InputField from "../../Common/inputField";
 import InputTextareaField from "../../Common/inputTextareaField";
-import FileInputField from "../../Common/fileInputField";
 import { INPUTPDFFILETYPEACCEPT } from "../../ConstantUtils/constants";
-import DownloadFileInputField from "../../Common/downloadFileInputField";
+import { formatDataFileField } from "../../Utilities/fileField";
 
 function StoreDetail() {
   const { register, handleSubmit, reset, getValues } = useForm();
@@ -29,7 +30,9 @@ function StoreDetail() {
 
   const onSubmit = async (data) => {
     try {
-      const response = await storeApi.updateOne(id, data);
+      let newData;
+      newData = formatDataFileField(data, ["contract_of_house_renting_file"]);
+      const response = await storeApi.updateOne(id, newData);
       console.log("Update store successfully", response);
       navigate("./..");
     } catch (error) {
@@ -66,6 +69,7 @@ function StoreDetail() {
             requiredType="text"
             requiredRegister={register}
             requiredName="address"
+            requiredIsRequired={true}
           />
           <InputField
             requiredColWidth={3}
@@ -77,7 +81,7 @@ function StoreDetail() {
           />
         </div>
         <div className="row">
-        {getValues("contract_of_house_renting_file") ? (
+          {getValues("contract_of_house_renting_file") ? (
             <DownloadFileInputField
               requiredColWidth={3}
               requiredLbl={"Hợp đồng thuê nhà(PDF)"}
@@ -85,13 +89,14 @@ function StoreDetail() {
               requiredLblHref={"Xem"}
             />
           ) : (
-          <FileInputField
-            requiredColWidth={3}
-            requiredLbl={"Hợp đồng thuê nhà(PDF)"}
-            requiredRegister={register}
-            requiredName={"contract_of_house_renting_file"}
-            optionalAccept={INPUTPDFFILETYPEACCEPT}
-          />)}
+            <FileInputField
+              requiredColWidth={3}
+              requiredLbl={"Hợp đồng thuê nhà(PDF)"}
+              requiredRegister={register}
+              requiredName={"contract_of_house_renting_file"}
+              optionalAccept={INPUTPDFFILETYPEACCEPT}
+            />
+          )}
           <InputField
             requiredColWidth={3}
             requiredLbl="Tiền thuê nhà"

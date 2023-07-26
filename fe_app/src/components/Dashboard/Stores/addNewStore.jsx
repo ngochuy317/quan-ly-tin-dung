@@ -43,6 +43,7 @@ function NewStore() {
             requiredType="text"
             requiredRegister={register}
             requiredName="address"
+            requiredIsRequired={true}
           />
           <InputField
             requiredColWidth={3}

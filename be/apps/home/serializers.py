@@ -171,11 +171,20 @@ class StoreSerializer(serializers.ModelSerializer):
     poses = POSSerializer(many=True, read_only=True)
     notebooks = NoteBookSerializer(many=True, read_only=True)
     users = ShortInfomationDetailSerializer(many=True, read_only=True)
+    surcharge = serializers.CharField(required=False, allow_null=True, allow_blank=True)
 
     class Meta:
         model = Store
         fields = "__all__"
         read_only_fields = ("id",)
+
+    def validate_surcharge(self, value):
+        if not value:
+            return 0
+        try:
+            return int(value)
+        except ValueError:
+            raise serializers.ValidationError("You must supply an integer")
 
 
 class BillPosSerializer(serializers.ModelSerializer):

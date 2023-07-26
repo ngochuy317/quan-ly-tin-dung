@@ -46,7 +46,6 @@ function StoresList() {
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Mã cửa hàng</th>
               <th scope="col">Tên ghi nhớ</th>
               <th scope="col">Ghi chú</th>
               <th scope="col">Địa chỉ</th>
@@ -58,7 +57,6 @@ function StoresList() {
             {responseData?.results?.map((store, index) => (
               <tr key={store.id}>
                 <th scope="row">{index + 1}</th>
-                <td>{store.code}</td>
                 <td>{store.name}</td>
                 <td>{store.note}</td>
                 <td>{store.address}</td>
