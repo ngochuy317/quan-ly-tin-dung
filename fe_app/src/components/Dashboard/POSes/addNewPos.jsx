@@ -44,6 +44,11 @@ function NewPos() {
     setValue("money_limit_per_day", val);
   };
 
+  const handleOnChangeMoneyLimitPerTime = (e) => {
+    let val = e.target.value?.replaceAll(",", "");
+    setValue("money_limit_per_time", val);
+  };
+
   const onSubmit = async (data) => {
     try {
       console.log("🚀 ~ file: addNewPos.jsx:29 ~ onSubmit ~ data:", data);
@@ -62,7 +67,7 @@ function NewPos() {
         <div className="row">
           <InputField
             requiredColWidth={4}
-            requiredLbl="Merchant ID(MID)"
+            requiredLbl="MID"
             requiredType="text"
             requiredRegister={register}
             requiredName="mid"
@@ -70,10 +75,18 @@ function NewPos() {
           />
           <InputField
             requiredColWidth={4}
-            requiredLbl="Terminal ID(TID)"
+            requiredLbl="TID"
             requiredType="text"
             requiredRegister={register}
             requiredName="tid"
+            requiredIsRequired={true}
+          />
+          <InputField
+            requiredColWidth={4}
+            requiredLbl="Tên máy POS"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName="name"
             requiredIsRequired={true}
           />
         </div>
@@ -98,6 +111,21 @@ function NewPos() {
               />
             </div>
           </div>
+          <div className="col-md-3">
+            <div className="mb-3">
+              <label className="form-label">Giới hạn quẹt tiền mỗi lần</label>
+              <RequiredSymbol />
+              <CurrencyFormat
+                type="text"
+                className="form-control"
+                required
+                thousandSeparator={true}
+                onChange={handleOnChangeMoneyLimitPerTime}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="row">
           <SelectField
             requiredColWidth={3}
             requiredLbl={"Trạng thái"}
@@ -109,18 +137,24 @@ function NewPos() {
             requiredValueOption={(ele) => `${ele.value}`}
             requiredLblOption={(ele) => `${ele.label}`}
           />
-        </div>
-        <div className="row">
           <InputField
-            requiredColWidth={6}
+            requiredColWidth={3}
             requiredLbl="Ngân hàng"
             requiredType="text"
             requiredRegister={register}
             requiredName="bank_name"
             requiredIsRequired={true}
           />
+          <InputField
+            requiredColWidth={3}
+            requiredLbl="Số tài khoản tiền về"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName="bank_account"
+            requiredIsRequired={true}
+          />
           <SelectField
-            requiredColWidth={6}
+            requiredColWidth={3}
             requiredLbl={"Cửa hàng"}
             requiredIsRequired={true}
             requiredRegister={register}

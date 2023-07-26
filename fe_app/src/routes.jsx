@@ -5,6 +5,7 @@ import CardManagement from "./components/Dashboard/CardManagement/cardManagement
 import NewEmployee from "./components/Dashboard/Employees/addNewEmployee";
 import EmployeeDetail from "./components/Dashboard/Employees/employeeDetail";
 import EmployeesList from "./components/Dashboard/Employees/employeesList";
+import FeePos4CreditCardList from "./components/Dashboard/FeePos4CreditCard/feePos4CreditCardList";
 import NewNotebook from "./components/Dashboard/Notebooks/addNewNotebook";
 import NotebookDetail from "./components/Dashboard/Notebooks/notebookDetail";
 import NotebooksList from "./components/Dashboard/Notebooks/notebooksList";
@@ -22,12 +23,12 @@ import UnsaveCard from "./components/Dashboard/StoreCard/unsaveCard";
 import NewStore from "./components/Dashboard/Stores/addNewStore";
 import NewStoresMakePOS from "./components/Dashboard/Stores/addNewStoresMakePOS";
 import StoreDetail from "./components/Dashboard/Stores/storeDetail";
+import StoreMakePOSDetail from "./components/Dashboard/Stores/storeMakePOSDetail";
 import StoresList from "./components/Dashboard/Stores/storesList";
 import StoresMakePOSList from "./components/Dashboard/Stores/storesMakePOSList";
 import SwipeCard from "./components/Dashboard/SwipeCard/swipeCard";
 import SwipeCardDetail from "./components/Dashboard/SwipeCard/swipeCardDetail";
 import SwipeCardMoreDetail from "./components/Dashboard/SwipeCard/swipeCardMoreDetail";
-import StoreMakePOSDetail from "./components/Dashboard/Stores/storeMakePOSDetail";
 
 function RoutesApp() {
   return (
@@ -60,6 +61,7 @@ function RoutesApp() {
       <Route path="/reportemp" element={<ReportEmployee />} />
       <Route path="/creditcarmanage" element={<CardManagement />} />
       <Route path="/billposmanage" element={<BillPOSMachineMangement />} />
+      <Route path="/feepos4creditcard" element={<FeePos4CreditCardList />} />
     </Routes>
   );
 }

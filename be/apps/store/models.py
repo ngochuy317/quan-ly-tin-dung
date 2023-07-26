@@ -69,16 +69,28 @@ class StoreCost(models.Model):
     date = models.DateField()
 
 
+class FeePos4CreditCard(models.Model):
+
+    type = models.CharField(max_length=127)
+    fee = models.FloatField()
+
+
 class POS(models.Model):
 
     STATUS_POS_CHOICES = ((1, "Đang hoạt động"), (2, "Tạm dừng"), (3, "Đóng"))
 
     mid = models.CharField(max_length=127)
     tid = models.CharField(max_length=127)
+    name = models.CharField(max_length=127)
+    account_number = models.CharField(max_length=24)
+    phone_number = models.CharField(max_length=24)
     note = models.TextField(blank=True)
     status = models.PositiveSmallIntegerField(choices=STATUS_POS_CHOICES, default=1)
     bank_name = models.CharField(max_length=127)
+    bank_account = models.CharField(max_length=127)
     money_limit_per_day = models.PositiveBigIntegerField(default=0)
+    money_limit_per_time = models.PositiveBigIntegerField(default=0)
+    fee = models.OneToOneField(FeePos4CreditCard, on_delete=models.CASCADE, related_name="pos", null=True, blank=True)
     from_store = models.ForeignKey(StoreMakePOS, on_delete=models.CASCADE, related_name="poses", blank=True, null=True)
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="poses")
 

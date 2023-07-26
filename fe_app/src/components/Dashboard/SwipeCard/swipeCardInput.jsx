@@ -294,25 +294,27 @@ function SwipeCardInput(props) {
               </button>
             </div>
           </div>
-          <div className="col-md-1">
-            <div className="mb-3">
-              <label className="form-label" style={{ color: "white" }}>
-                White
-              </label>
-              <button
-                disabled={isSubmitting}
-                onClick={() => {
-                  remove(index);
-                }}
-                className="btn btn-outline-danger form-control"
-              >
-                {isSubmitting && (
-                  <span className="spinner-border spinner-border-sm mr-1"></span>
-                )}
-                Xoá
-              </button>
+          {fields?.length > 1 && (
+            <div className="col-md-1">
+              <div className="mb-3">
+                <label className="form-label" style={{ color: "white" }}>
+                  White
+                </label>
+                <button
+                  disabled={isSubmitting}
+                  onClick={() => {
+                    remove(index);
+                  }}
+                  className="btn btn-outline-danger form-control"
+                >
+                  {isSubmitting && (
+                    <span className="spinner-border spinner-border-sm mr-1"></span>
+                  )}
+                  Xoá
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       ))}
       <div className="row">
