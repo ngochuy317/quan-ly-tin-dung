@@ -56,35 +56,44 @@ function SwipeCardDetail() {
 
   const onSubmit = async (data) => {
     try {
-      if (typeof data.customer.id_card_front_image === "string") {
-        delete data.customer.id_card_front_image;
-      } else {
-        data.customer.id_card_front_image =
-          data.customer.id_card_front_image[0];
+      if (data.customer.id_card_front_image) {
+        if (typeof data.customer.id_card_front_image === "string") {
+          delete data.customer.id_card_front_image;
+        } else {
+          data.customer.id_card_front_image =
+            data.customer.id_card_front_image[0];
+        }
       }
 
-      if (typeof data.customer.id_card_back_image === "string") {
-        delete data.customer.id_card_back_image;
-      } else {
-        data.customer.id_card_back_image = data.customer.id_card_back_image[0];
+      if (data.customer.id_card_back_image) {
+        if (typeof data.customer.id_card_back_image === "string") {
+          delete data.customer.id_card_back_image;
+        } else {
+          data.customer.id_card_back_image =
+            data.customer.id_card_back_image[0];
+        }
       }
 
-      if (
-        typeof data.customer.credit_card.credit_card_back_image === "string"
-      ) {
-        delete data.customer.credit_card.credit_card_back_image;
-      } else {
-        data.customer.credit_card.credit_card_back_image =
-          data.customer.credit_card.credit_card_back_image[0];
+      if (data.customer.credit_card.credit_card_back_image) {
+        if (
+          typeof data.customer.credit_card.credit_card_back_image === "string"
+        ) {
+          delete data.customer.credit_card.credit_card_back_image;
+        } else {
+          data.customer.credit_card.credit_card_back_image =
+            data.customer.credit_card.credit_card_back_image[0];
+        }
       }
 
-      if (
-        typeof data.customer.credit_card.credit_card_front_image === "string"
-      ) {
-        delete data.customer.credit_card.credit_card_front_image;
-      } else {
-        data.customer.credit_card.credit_card_front_image =
-          data.customer.credit_card.credit_card_front_image[0];
+      if (data.customer.credit_card.credit_card_front_image) {
+        if (
+          typeof data.customer.credit_card.credit_card_front_image === "string"
+        ) {
+          delete data.customer.credit_card.credit_card_front_image;
+        } else {
+          data.customer.credit_card.credit_card_front_image =
+            data.customer.credit_card.credit_card_front_image[0];
+        }
       }
 
       console.log("🚀 ~ file: swipeCardDetail.jsx:34 ~ onSubmit ~ data:", data);
@@ -425,7 +434,14 @@ function SwipeCardDetail() {
           </div>
         </div>
         <div className="d-flex justify-content-end">
-          <button type="button" className="btn btn-outline-danger mx-3">
+          <button
+            disabled={isSubmitting}
+            type="button"
+            className="btn btn-outline-danger mx-3"
+          >
+            {isSubmitting && (
+              <span className="spinner-border spinner-border-sm mr-1"></span>
+            )}
             <Link
               to="./.."
               style={{ textDecoration: "none", color: "inherit" }}

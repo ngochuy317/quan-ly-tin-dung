@@ -236,6 +236,10 @@ class SwipeCardTransactionCustomerSerializer(serializers.Serializer):
 
 
 class BankAccountSwipeCardTransactionDetailRetrieveUpdateSerializer(serializers.ModelSerializer):
+
+    account_number = serializers.CharField(max_length=127, allow_null=True, allow_blank=True)
+    bank_name = serializers.CharField(max_length=127, allow_null=True, allow_blank=True)
+
     class Meta:
         model = BankAccount
         fields = "__all__"
@@ -305,12 +309,17 @@ class SwipeCardTransactionDetailRetrieveUpdateSerializer(serializers.ModelSerial
             bank_account_obj: BankAccount = BankAccount.objects.get(id=customer_obj.bank_account.id)
             for attr, value in bank_account.items():
                 setattr(bank_account_obj, attr, value)
+            bank_account_obj.save()
         else:
-            bank_account_obj: BankAccount = BankAccount.objects.create(**bank_account)
-            customer_obj.bank_account = bank_account_obj
-        bank_account_obj.save()
+            if any(bank_account.values()):
+                bank_account_obj: BankAccount = BankAccount.objects.create(**bank_account)
+                customer_obj.bank_account = bank_account_obj
+        # update SwipeCardTransaction data
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
         customer_obj.save()
         credit_card_obj.save()
+        instance.save()
         return instance
 
 

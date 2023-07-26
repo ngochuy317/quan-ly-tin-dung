@@ -16,11 +16,11 @@ class BankAccount(models.Model):
 class CreditCard(models.Model):
 
     card_number = models.CharField(max_length=20, unique=True)
-    card_bank_name = models.CharField(max_length=127, default="")
-    card_name = models.CharField(max_length=127, default="")
+    card_bank_name = models.CharField(max_length=127, blank=True)
+    card_name = models.CharField(max_length=127, blank=True)
     card_issued_date = models.DateField(blank=True, null=True)
     card_expire_date = models.DateField(blank=True, null=True)
-    card_ccv = models.CharField(max_length=3, default="")
+    card_ccv = models.CharField(max_length=3, blank=True)
     statement_date = models.DateField(blank=True, null=True)
     maturity_date = models.DateField(blank=True, null=True)
     credit_card_front_image = models.ImageField(upload_to="uploads/creditcards/", blank=True, null=True)
@@ -38,7 +38,7 @@ class CreditCard(models.Model):
 class Customer(models.Model):
     GENDER_CHOICES = ((1, "Nam"), (2, "Nữ"), (3, "Khác"))
 
-    name = models.CharField(max_length=127, default="")
+    name = models.CharField(max_length=127, blank=True)
     phone_number = models.CharField(max_length=12, unique=True)
     gender = models.PositiveSmallIntegerField(choices=GENDER_CHOICES, default=3)
     bank_account = models.ForeignKey(

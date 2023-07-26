@@ -56,24 +56,14 @@ function SwipeCardInput(props) {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    console.log("data", data);
+    delete data.creditcard?.credit_card_back_image;
+    delete data.creditcard?.credit_card_front_image;
 
     for (const i in data.billpos) {
       data.billpos[i].bill_image = data.billpos[i].bill_image[0];
     }
-    // if (typeof data.creditcard?.credit_card_back_image === "string") {
-    //   delete data.creditcard.credit_card_back_image;
-    // } else {
-    //   data.creditcard.credit_card_back_image =
-    //     data.creditcard?.credit_card_back_image[0];
-    // }
-    // if (typeof data.creditcard.credit_card_front_image === "string") {
-    //   delete data.creditcard.credit_card_front_image;
-    // } else {
-    //   data.creditcard.credit_card_front_image =
-    //     data.creditcard.credit_card_front_image[0];
-    // }
     try {
+      console.log("data", data);
       const response = await swipeCardTransactionAPI.createOne(data);
       console.log("Create swipe card transaction successfully", response);
       deleteFormInput();

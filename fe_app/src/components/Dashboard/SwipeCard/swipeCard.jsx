@@ -217,7 +217,6 @@ function SwipeCard() {
               <th scope="col">Tên khách hàng</th>
               <th scope="col">SDT khách hàng</th>
               <th scope="col">Hoạt động</th>
-              <th scope="col">Ngày quẹt thẻ</th>
               <th scope="col">NV quẹt thẻ</th>
               <th scope="col">Ngày chỉnh sửa</th>
               {/* {role === ADMIN ? <th scope="col">Tiền về</th> : null} */}
@@ -243,7 +242,6 @@ function SwipeCard() {
                     )?.label
                   }
                 </td>
-                <td>{swipeCard.transaction_datetime_created}</td>
                 <td>{swipeCard.username}</td>
                 <td>{swipeCard.transaction_datetime_updated}</td>
                 {/* {role === ADMIN ? (
