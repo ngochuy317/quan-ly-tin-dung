@@ -8,10 +8,10 @@ import creditCardApi from "../../../api/creditCardAPI";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import FileInputField from "../../Common/fileInputField";
 import InputField from "../../Common/inputField";
+import RequiredSymbol from "../../Common/requiredSymbol";
 import SelectField from "../../Common/selectField";
 import { GENDERCHOICES, TRANSACTIONTYPE } from "../../ConstantUtils/constants";
 import AddBillPOSMachineModal from "../../Modal/billPOSMachineModal";
-import RequiredSymbol from "../../Common/requiredSymbol";
 
 function SwipeCardMoreDetail() {
   const {
@@ -36,6 +36,10 @@ function SwipeCardMoreDetail() {
   const [isManualInput, setIsManualInput] = useState(false);
   const [show, setShow] = useState(false);
   const [showNegativeMoney, setShowNegativeMoney] = useState(false);
+  const [
+    showImageTransactionWithCustomer,
+    setShowImageTransactionWithCustomer,
+  ] = useState(true);
   const [isCreditCardBackImage, setIsCreditCardBackImage] = useState(false);
   const [isCreditCardFrontImage, setIsCreditCardFrontImage] = useState(false);
   const [indexModal, setIndexModal] = useState(0);
@@ -50,7 +54,13 @@ function SwipeCardMoreDetail() {
     function initData() {
       reset({ ...state });
       setShowNegativeMoney(state.showNegativeMoney);
-      console.log("🚀 ~ file: swipeCardMoreDetail.jsx:53 ~ initData ~ state:", state)
+      setShowImageTransactionWithCustomer(
+        state.showImageTransactionWithCustomer
+      );
+      console.log(
+        "🚀 ~ file: swipeCardMoreDetail.jsx:53 ~ initData ~ state:",
+        state
+      );
       console.log(
         "🚀 ~ file: swipeCardMoreDetail.jsx:44 ~ initData ~ state:",
         state
@@ -76,6 +86,7 @@ function SwipeCardMoreDetail() {
   const handleOnChangeTransactionType = (e) => {
     let val = e.target.value;
     setShowNegativeMoney(parseInt(val) === 2);
+    setShowImageTransactionWithCustomer(parseInt(val) === 1);
   };
 
   const handleOnChangeCardNumber = async (e) => {
@@ -152,22 +163,32 @@ function SwipeCardMoreDetail() {
         data.customer.id_card_front_image =
           data.customer.id_card_front_image[0];
       }
+
       if (typeof data.customer.id_card_back_image === "string") {
         delete data.customer.id_card_back_image;
       } else {
         data.customer.id_card_back_image = data.customer.id_card_back_image[0];
       }
+
       if (typeof data.creditcard.credit_card_front_image === "string") {
         delete data.creditcard.credit_card_front_image;
       } else {
         data.creditcard.credit_card_front_image =
           data.creditcard.credit_card_front_image[0];
       }
+
       if (typeof data.creditcard.credit_card_back_image === "string") {
         delete data.creditcard.credit_card_back_image;
       } else {
         data.creditcard.credit_card_back_image =
           data.creditcard.credit_card_back_image[0];
+      }
+
+      if (typeof data.transaction_with_customer_image === "string") {
+        delete data.transaction_with_customer_image;
+      } else {
+        data.transaction_with_customer_image =
+          data.transaction_with_customer_image[0];
       }
       // data.customer_id_card_front_image = data.customer_id_card_front_image[0];
       // data.customer_id_card_back_image = data.customer_id_card_back_image[0];
@@ -411,6 +432,15 @@ function SwipeCardMoreDetail() {
               )}
             </div>
           </div>
+          {showImageTransactionWithCustomer && (
+            <FileInputField
+              requiredColWidth={4}
+              requiredLbl={`Hình GD với khách`}
+              requiredIsRequired={true}
+              requiredRegister={register}
+              requiredName={"transaction_with_customer_image"}
+            />
+          )}
         </div>
         <div className="row"></div>
         <h5>Thông tin thẻ</h5>

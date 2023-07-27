@@ -34,6 +34,10 @@ function SwipeCardInput(props) {
   const [dataListCardNumber, setDataListCardNumber] = useState([]);
   const [show, setShow] = useState(false);
   const [showNegativeMoney, setShowNegativeMoney] = useState(false);
+  const [
+    showImageTransactionWithCustomer,
+    setShowImageTransactionWithCustomer,
+  ] = useState(true);
   const [indexModal, setIndexModal] = useState(0);
   const [searchCreditCard, setSearchCreditCard] = useState("");
   const moneyInputFieldFormat = (e) => {
@@ -62,6 +66,12 @@ function SwipeCardInput(props) {
     for (const i in data.billpos) {
       data.billpos[i].bill_image = data.billpos[i].bill_image[0];
     }
+    if (typeof data.transaction_with_customer_image === "string") {
+      delete data.transaction_with_customer_image;
+    } else {
+      data.transaction_with_customer_image =
+        data.transaction_with_customer_image[0];
+    }
     try {
       console.log("data", data);
       const response = await swipeCardTransactionAPI.createOne(data);
@@ -89,6 +99,7 @@ function SwipeCardInput(props) {
         ...filledData,
         posMachineData: requiredPosMachine,
         showNegativeMoney: showNegativeMoney,
+        showImageTransactionWithCustomer: showImageTransactionWithCustomer,
       },
     });
     localStorage.setItem("activeTab", path);
@@ -97,6 +108,7 @@ function SwipeCardInput(props) {
   const handleOnChangeTransactionType = (e) => {
     let val = e.target.value;
     setShowNegativeMoney(parseInt(val) === 2);
+    setShowImageTransactionWithCustomer(parseInt(val) === 1);
   };
 
   useEffect(() => {
@@ -180,6 +192,15 @@ function SwipeCardInput(props) {
             </select>
           </div>
         </div>
+        {showImageTransactionWithCustomer && (
+          <FileInputField
+            requiredColWidth={2}
+            requiredLbl={"Hình GD với khách"}
+            requiredIsRequired={true}
+            requiredRegister={register}
+            requiredName={"transaction_with_customer_image"}
+          />
+        )}
         <div className="col-md-3">
           <div className="mb-3">
             <label className="form-label">

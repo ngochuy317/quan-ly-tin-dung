@@ -150,10 +150,10 @@ function BillPOSMachineMangement(props) {
               <th scope="col">Hình bill</th>
               <th scope="col">Số tiền</th>
               <th scope="col">Tiền về</th>
-              <th scope="col">Mã chuẩn chi</th>
               <th scope="col">Số tham chiếu</th>
               <th scope="col">Số hoá đơn</th>
               <th scope="col">Số lô</th>
+              <th scope="col">Trạng thái</th>
             </tr>
           </thead>
           <tbody className="table-group-divider">
@@ -168,10 +168,10 @@ function BillPOSMachineMangement(props) {
                 </td>
                 <td>{billPos.total_money?.toLocaleString("vn")}</td>
                 <td>{billPos.is_payment_received ? "Đã về" : "Chưa về"}</td>
-                <td>{billPos.authorization_code}</td>
                 <td>{billPos.ref_no}</td>
                 <td>{billPos.invoice_no}</td>
                 <td>{billPos.batch}</td>
+                <td>{billPos.active? "Hoạt động" : "Đã xoá"}</td>
               </tr>
             ))}
           </tbody>

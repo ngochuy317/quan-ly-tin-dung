@@ -338,10 +338,9 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
 
         try:
             if self.context["request"].method in ["GET"]:
+                ...
                 # self.fields['creditcard'] = serializers.SerializerMethodField()
                 # self.fields['transaction_type'] = serializers.SerializerMethodField()
-                self.fields["customer_id_card_front_image"] = serializers.SerializerMethodField()
-                self.fields["customer_id_card_back_image"] = serializers.SerializerMethodField()
         except KeyError:
             pass
         except Exception as ex:

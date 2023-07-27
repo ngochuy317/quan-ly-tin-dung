@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
+import DisplayImageFileInputField from "../../Common/displayImageFileInputField";
 import InputField from "../../Common/inputField";
 import SelectField from "../../Common/selectField";
 import { GENDERCHOICES, TRANSACTIONTYPE } from "../../ConstantUtils/constants";
@@ -236,6 +237,15 @@ function SwipeCardDetail() {
               )}
             </div>
           </div>
+          {getValues("transaction_with_customer_image") && (
+            <DisplayImageFileInputField
+              requiredColWidth={4}
+              requiredLbl={"Hình GD với khách"}
+              requiredImageUrl={`${getValues(
+                "transaction_with_customer_image"
+              )}`}
+            />
+          )}
 
           <h5>Máy POS</h5>
           {dataSwipCardDetail?.billpos?.map((item, index) => (
@@ -370,6 +380,7 @@ function SwipeCardDetail() {
                 {...register("transaction_type")}
                 className="form-select"
                 required
+                disabled
               >
                 {TRANSACTIONTYPE?.map((ele) => (
                   <option key={ele.value} value={ele.value}>

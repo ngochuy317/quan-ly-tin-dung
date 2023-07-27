@@ -58,6 +58,7 @@ function ProductList() {
         </table>
       </div>
       <Pagination
+        canBedisabled={responseData?.results?.length ? false : true}
         currentPage={currentPage}
         totalPages={responseData.total_pages}
         handleChangePage={handleChangePage}

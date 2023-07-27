@@ -161,11 +161,12 @@ class SwipeCardTransaction(models.Model):
     store_name = models.CharField(max_length=127)
     store_address = models.CharField(max_length=1023)
     store_phone_number = models.CharField(max_length=20, default="")
-    customer_id_card_front_image = models.ImageField(upload_to="uploads/customer/", blank=True, null=True)
-    customer_id_card_back_image = models.ImageField(upload_to="uploads/customer/", blank=True, null=True)
     customer_money_needed = models.PositiveBigIntegerField(default=0)
     negative_money = models.PositiveBigIntegerField(default=0)
     fee = models.PositiveBigIntegerField(default=0)
+    transaction_with_customer_image = models.ImageField(
+        upload_to="uploads/swipecard_transaction/", blank=True, null=True
+    )
     customer = models.ForeignKey(
         "customer.Customer", on_delete=models.CASCADE, related_name="swipe_card_transaction", blank=True, null=True
     )
@@ -201,6 +202,7 @@ class BillPos(models.Model):
     datetime_created = models.DateTimeField(auto_now_add=True)
     datetime_updated = models.DateTimeField(auto_now=True)
     is_payment_received = models.BooleanField(default=False)
+    active = models.BooleanField(default=True)
 
     class Meta:
         ordering = ["-datetime_created"]
