@@ -11,6 +11,7 @@ x-common-variables: &common-variables
   AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
   AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME}
   AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL}
+  SECRET_KEY: ${SECRET_KEY}
 
 services:
   django-qltd:
