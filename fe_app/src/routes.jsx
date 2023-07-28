@@ -5,6 +5,7 @@ import CardManagement from "./components/Dashboard/CardManagement/cardManagement
 import NewEmployee from "./components/Dashboard/Employees/addNewEmployee";
 import EmployeeDetail from "./components/Dashboard/Employees/employeeDetail";
 import EmployeesList from "./components/Dashboard/Employees/employeesList";
+import FeePos4CreditCardDetail from "./components/Dashboard/FeePos4CreditCard/feePos4CreditCardDetail";
 import FeePos4CreditCardList from "./components/Dashboard/FeePos4CreditCard/feePos4CreditCardList";
 import NewNotebook from "./components/Dashboard/Notebooks/addNewNotebook";
 import NotebookDetail from "./components/Dashboard/Notebooks/notebookDetail";
@@ -29,6 +30,7 @@ import StoresMakePOSList from "./components/Dashboard/Stores/storesMakePOSList";
 import SwipeCard from "./components/Dashboard/SwipeCard/swipeCard";
 import SwipeCardDetail from "./components/Dashboard/SwipeCard/swipeCardDetail";
 import SwipeCardMoreDetail from "./components/Dashboard/SwipeCard/swipeCardMoreDetail";
+import AddFeePos4CreditCard from "./components/Dashboard/FeePos4CreditCard/addFeePos4CreditCard";
 
 function RoutesApp() {
   return (
@@ -62,6 +64,8 @@ function RoutesApp() {
       <Route path="/creditcarmanage" element={<CardManagement />} />
       <Route path="/billposmanage" element={<BillPOSMachineMangement />} />
       <Route path="/feepos4creditcard" element={<FeePos4CreditCardList />} />
+      <Route path="/feepos4creditcard/add" element={<AddFeePos4CreditCard />} />
+      <Route path="/feepos4creditcard/:id" element={<FeePos4CreditCardDetail />} />
     </Routes>
   );
 }

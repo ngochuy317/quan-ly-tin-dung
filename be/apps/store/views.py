@@ -8,9 +8,15 @@ from nested_multipart_parser import NestedParser
 from rest_framework import status
 from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from .filters import BillPosFilter
-from .models import BillPos, StoreMakePOS
-from .serializers import BillPosSerializer, StoreMakePOSSerializer
+from .models import POS, BillPos, FeePos4CreditCard, StoreMakePOS
+from .serializers import (
+    BillPosSerializer,
+    FeePos4CreditCardSerializer,
+    POSNickNameAPIViewSerializer,
+    StoreMakePOSSerializer,
+)
 
 
 class BillPosListAPIView(ListAPIView):
@@ -63,3 +69,34 @@ class StoreMakePOSDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIVie
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(PARSE_ERROR_MSG, status=status.HTTP_400_BAD_REQUEST)
+
+
+class FeePos4CreditCardListCreateAPIView(ListCreateAPIView):
+
+    queryset = FeePos4CreditCard.objects.all()
+    serializer_class = FeePos4CreditCardSerializer
+    pagination_class = CustomPageNumberPagination
+    permission_classes = [IsAdmin]
+
+
+class FeePos4CreditCardDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+
+    queryset = FeePos4CreditCard.objects.all()
+    serializer_class = FeePos4CreditCardSerializer
+    permission_classes = [IsAdmin]
+
+
+class POSNickNameAPIView(APIView):
+
+    permission_classes = [IsAdmin]
+
+    def get(self, request, *args, **kwargs):
+
+        data = POS.objects.values(
+            "id",
+            "name",
+            "bank_account",
+            "bank_name",
+        ).all()
+        serializer = POSNickNameAPIViewSerializer(data, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

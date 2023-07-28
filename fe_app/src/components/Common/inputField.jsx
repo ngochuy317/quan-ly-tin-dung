@@ -14,6 +14,7 @@ InputField.propTypes = {
   requiredIsRequired: PropTypes.bool.isRequired,
 
   optionalPlaceholder: PropTypes.string,
+  optionalStep: PropTypes.string,
 
   optionalOnChange: PropTypes.func,
 
@@ -46,6 +47,7 @@ function InputField(props) {
     optionalMaxLengthForTextType,
     optionalPlaceholder,
     optionalOnChange,
+    optionalStep,
   } = props;
   return (
     <div className={`col-md-${requiredColWidth}`}>
@@ -65,6 +67,7 @@ function InputField(props) {
           maxLength={optionalMaxLengthForTextType}
           placeholder={optionalPlaceholder}
           onChange={optionalOnChange}
+          step={optionalStep}
         />
       </div>
     </div>

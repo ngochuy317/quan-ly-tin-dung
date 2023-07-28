@@ -18,6 +18,7 @@ SelectField.propTypes = {
   requiredLblOption: PropTypes.func.isRequired,
 
   optionalOnChangeSelect: PropTypes.array,
+  optionalDisable: PropTypes.bool,
 };
 
 SelectField.defaultProps = {
@@ -36,6 +37,7 @@ function SelectField(props) {
     optionalOnChangeSelect,
     requiredValueOption,
     requiredLblOption,
+    optionalDisable,
   } = props;
   return (
     <>
@@ -50,6 +52,7 @@ function SelectField(props) {
             className="form-select"
             required={requiredIsRequired}
             onChange={optionalOnChangeSelect}
+            disabled={optionalDisable}
           >
             <option value="">{requiredLblSelect}</option>
             {requiredDataOption?.map((ele, index) => (

@@ -9,6 +9,11 @@ class PosApi {
     return axiosClient.get(url, { params });
   };
 
+  getAllNickName = () => {
+    const url = "/store/nick-name-pos/";
+    return axiosClient.get(url);
+  };
+
   getDetail = (id) => {
     const url = this.posBaseUrl + id + "/";
     return axiosClient.get(url);
