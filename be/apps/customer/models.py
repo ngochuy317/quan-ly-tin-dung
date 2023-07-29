@@ -15,6 +15,8 @@ class BankAccount(models.Model):
 
 class CreditCard(models.Model):
 
+    FOLDER_UPLOAD = "uploads/creditcards/"
+
     card_number = models.CharField(max_length=20, unique=True)
     card_bank_name = models.CharField(max_length=127, blank=True)
     card_name = models.CharField(max_length=127, blank=True)
@@ -23,8 +25,8 @@ class CreditCard(models.Model):
     card_ccv = models.CharField(max_length=3, blank=True)
     statement_date = models.DateField(blank=True, null=True)
     maturity_date = models.DateField(blank=True, null=True)
-    credit_card_front_image = models.ImageField(upload_to="uploads/creditcards/", blank=True, null=True)
-    credit_card_back_image = models.ImageField(upload_to="uploads/creditcards/", blank=True, null=True)
+    credit_card_front_image = models.ImageField(upload_to=FOLDER_UPLOAD, blank=True, null=True)
+    credit_card_back_image = models.ImageField(upload_to=FOLDER_UPLOAD, blank=True, null=True)
     note = models.TextField(blank=True, default="")
     notebook = models.OneToOneField(
         "store.RowNotebook", on_delete=models.CASCADE, related_name="creditcards", null=True, blank=True
@@ -36,20 +38,23 @@ class CreditCard(models.Model):
 
 
 class Customer(models.Model):
+
     GENDER_CHOICES = ((1, "Nam"), (2, "Nữ"), (3, "Khác"))
+    FOLDER_UPLOAD = "uploads/customer/"
+    RELATED_NAME = "customer"
 
     name = models.CharField(max_length=127, blank=True)
     phone_number = models.CharField(max_length=12, unique=True)
     gender = models.PositiveSmallIntegerField(choices=GENDER_CHOICES, default=3)
     bank_account = models.ForeignKey(
-        BankAccount, on_delete=models.CASCADE, related_name="customer", null=True, blank=True
+        BankAccount, on_delete=models.CASCADE, related_name=RELATED_NAME, null=True, blank=True
     )
-    id_card_front_image = models.ImageField(upload_to="uploads/customer/", blank=True, null=True)
-    id_card_back_image = models.ImageField(upload_to="uploads/customer/", blank=True, null=True)
+    id_card_front_image = models.ImageField(upload_to=FOLDER_UPLOAD, blank=True, null=True)
+    id_card_back_image = models.ImageField(upload_to=FOLDER_UPLOAD, blank=True, null=True)
     credit_card = models.ForeignKey(
         CreditCard,
         on_delete=models.CASCADE,
-        related_name="customer",
+        related_name=RELATED_NAME,
     )
 
     def __str__(self) -> str:

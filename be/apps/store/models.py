@@ -8,18 +8,20 @@ from django.utils.timezone import now
 
 class StoreMakePOS(models.Model):
 
+    FOLDER_UPLOAD = "uploads/storemakepos/"
+
     WORKING_STATUS_CHOICES = ((1, "Đã đóng GPKD"), (2, "Chưa đóng GPKD"))
 
     name = models.CharField(max_length=127)
     note = models.TextField(blank=True)
     address = models.CharField(max_length=1023)
-    tax_code_file = models.FileField(upload_to="uploads/storemakepos/", blank=True, null=True)
+    tax_code_file = models.FileField(upload_to=FOLDER_UPLOAD, blank=True, null=True)
     representative_s_name = models.CharField(max_length=127, blank=True)
     representative_s_phone_number = models.CharField(max_length=127, blank=True)
     working_status = models.SmallIntegerField(choices=WORKING_STATUS_CHOICES, default=2)
-    business_license_file = models.FileField(upload_to="uploads/storemakepos/", blank=True, null=True)
-    representative_id_card_front_image = models.ImageField(upload_to="uploads/storemakepos/", blank=True, null=True)
-    representative_id_card_back_image = models.ImageField(upload_to="uploads/storemakepos/", blank=True, null=True)
+    business_license_file = models.FileField(upload_to=FOLDER_UPLOAD, blank=True, null=True)
+    representative_id_card_front_image = models.ImageField(upload_to=FOLDER_UPLOAD, blank=True, null=True)
+    representative_id_card_back_image = models.ImageField(upload_to=FOLDER_UPLOAD, blank=True, null=True)
 
     class Meta:
         ordering = ["-id"]
@@ -72,6 +74,7 @@ class StoreCost(models.Model):
 class POS(models.Model):
 
     STATUS_POS_CHOICES = ((1, "Đang hoạt động"), (2, "Tạm dừng"), (3, "Đóng"))
+    RELATED_NAME = "poses"
 
     mid = models.CharField(max_length=127)
     tid = models.CharField(max_length=127)
@@ -83,8 +86,10 @@ class POS(models.Model):
     bank_account = models.CharField(max_length=127)
     money_limit_per_day = models.PositiveBigIntegerField(default=0)
     money_limit_per_time = models.PositiveBigIntegerField(default=0)
-    from_store = models.ForeignKey(StoreMakePOS, on_delete=models.CASCADE, related_name="poses", blank=True, null=True)
-    store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="poses")
+    from_store = models.ForeignKey(
+        StoreMakePOS, on_delete=models.CASCADE, related_name=RELATED_NAME, blank=True, null=True
+    )
+    store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name=RELATED_NAME)
 
     class Meta:
         ordering = ["-id"]
@@ -157,6 +162,7 @@ class SwipeCardTransaction(models.Model):
 
     TRANSACTION_TYPE_CHOICES = ((1, "Rút tiền"), (2, "Đáo thẻ"))
     GENDER_CHOICES = ((1, "Nam"), (2, "Nữ"), (3, "Khác"))
+    RELATED_NAME = "swipe_card_transaction"
 
     is_creditcard_stored = models.BooleanField(default=False)
     store_id = models.PositiveBigIntegerField()
@@ -171,12 +177,10 @@ class SwipeCardTransaction(models.Model):
         upload_to="uploads/swipecard_transaction/", blank=True, null=True
     )
     customer = models.ForeignKey(
-        "customer.Customer", on_delete=models.CASCADE, related_name="swipe_card_transaction", blank=True, null=True
+        "customer.Customer", on_delete=models.CASCADE, related_name=RELATED_NAME, blank=True, null=True
     )
-    user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name="swipe_card_transaction")
-    at_store = models.ForeignKey(
-        Store, on_delete=models.CASCADE, related_name="swipe_card_transaction", blank=True, null=True
-    )
+    user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name=RELATED_NAME)
+    at_store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name=RELATED_NAME, blank=True, null=True)
     transaction_datetime_created = models.DateTimeField(auto_now_add=True)
     transaction_datetime_updated = models.DateTimeField(auto_now=True)
     transaction_type = models.SmallIntegerField(choices=TRANSACTION_TYPE_CHOICES, default=1)
@@ -194,8 +198,10 @@ class Product(models.Model):
 
 class BillPos(models.Model):
 
-    transaction = models.ForeignKey(SwipeCardTransaction, on_delete=models.CASCADE, related_name="billposes")
-    pos = models.ForeignKey(POS, on_delete=models.CASCADE, related_name="billposes")
+    RELATED_NAME = "billposes"
+
+    transaction = models.ForeignKey(SwipeCardTransaction, on_delete=models.CASCADE, related_name=RELATED_NAME)
+    pos = models.ForeignKey(POS, on_delete=models.CASCADE, related_name=RELATED_NAME)
     bill_image = models.ImageField(upload_to="uploads/billpos/")
     total_money = models.PositiveBigIntegerField(blank=True, null=True)
     ref_no = models.CharField(max_length=128, blank=True)

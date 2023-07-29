@@ -11,6 +11,9 @@ from .managers import UserManager
 
 
 class InfomationDetail(models.Model):
+
+    FOLDER_UPLOAD = "uploads/user/"
+
     GENDER_CHOICES = ((1, "Nam"), (2, "Nữ"), (3, "Khác"))
     fullname = models.CharField(max_length=511)
     address = models.CharField(max_length=1023)
@@ -24,9 +27,9 @@ class InfomationDetail(models.Model):
     salary = models.IntegerField()
     transaction_discount = models.FloatField(default=0)
     store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name="users", blank=True, null=True)
-    user_image = models.ImageField(upload_to="uploads/user/", blank=True, null=True)
-    identity_card_front_image = models.ImageField(upload_to="uploads/user/", blank=True, null=True)
-    identity_card_back_image = models.ImageField(upload_to="uploads/user/", blank=True, null=True)
+    user_image = models.ImageField(upload_to=FOLDER_UPLOAD, blank=True, null=True)
+    identity_card_front_image = models.ImageField(upload_to=FOLDER_UPLOAD, blank=True, null=True)
+    identity_card_back_image = models.ImageField(upload_to=FOLDER_UPLOAD, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
 
     def update(self, commit=False, **kwargs):

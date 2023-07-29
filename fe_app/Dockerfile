@@ -17,7 +17,6 @@ RUN npm run build
 # expose port
 EXPOSE 3000
 
-# FROM nginx:1.15.8-alpine
 FROM nginx:1.25.1-alpine-slim
 COPY --from=builder /app/build /usr/share/nginx/html
 # to make react-router work with nginx
