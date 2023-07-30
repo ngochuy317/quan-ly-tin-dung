@@ -58,6 +58,10 @@ class User(models.Model):
     def __str__(self) -> str:
         return self.username
 
+    def delete(self, *args, **kwargs):
+        self.infomation_detail.delete()
+        super().delete(*args, **kwargs)
+
     def update(self, commit=False, **kwargs):
         for key, value in kwargs.items():
             setattr(self, key, value)
