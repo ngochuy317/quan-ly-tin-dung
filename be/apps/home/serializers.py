@@ -169,8 +169,6 @@ class CreateRowNotebookSerializer(serializers.ModelSerializer):
     """
 
     creditcard = CreditCardSerializer()
-    transaction_id = serializers.IntegerField()
-    is_creditcard_stored = serializers.BooleanField()
 
     class Meta:
         model = RowNotebook
@@ -178,19 +176,13 @@ class CreateRowNotebookSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         creditcard_data = validated_data.pop("creditcard")
-        transaction_id = validated_data.pop("transaction_id")
-        is_creditcard_stored = validated_data.pop("is_creditcard_stored")
-        transaction_instance = SwipeCardTransaction.objects.filter(id=transaction_id).first()
-        if transaction_instance:
-            creditcard_instance = CreditCard.objects.filter(id=transaction_instance.creditcard.id).first()
-            for attr, value in creditcard_data.items():
-                setattr(creditcard_instance, attr, value)
-            transaction_instance.is_creditcard_stored = is_creditcard_stored
-            transaction_instance.save()
-            instance = RowNotebook.objects.create(**validated_data)
-            creditcard_instance.notebook = instance
-            creditcard_instance.save()
-            return instance
+        creditcard_instance = CreditCard.objects.filter(card_number=creditcard_data.get("card_number")).first()
+        for attr, value in creditcard_data.items():
+            setattr(creditcard_instance, attr, value)
+        instance = RowNotebook.objects.create(**validated_data)
+        creditcard_instance.notebook = instance
+        creditcard_instance.save()
+        return instance
         raise serializers.ValidationError("Can not found creditcard object")
 
 

@@ -144,7 +144,7 @@ class RowNotebook(models.Model):
     storage_datetime = models.DateTimeField(default=now)
     closing_balance = models.BigIntegerField(blank=True, null=True)
     last_date = models.IntegerField(default=0)
-    note = models.TextField(default="")
+    note = models.TextField(blank=True)
     card_location = models.CharField(max_length=256, default="")
 
     def __str__(self):

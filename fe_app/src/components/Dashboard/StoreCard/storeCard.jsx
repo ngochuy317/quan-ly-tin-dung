@@ -3,22 +3,26 @@ import { useForm } from "react-hook-form";
 import { FaAsterisk } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import creditCardApi from "../../../api/creditCardAPI";
-import userApi from "../../../api/userAPI";
-// import Pagination from "../../Pagination/pagination";
 import notebookApi from "../../../api/notebookAPI";
+import storeApi from "../../../api/storeAPI";
+import userApi from "../../../api/userAPI";
 import InputField from "../../Common/inputField";
 import InputTextareaField from "../../Common/inputTextareaField";
 import SelectField from "../../Common/selectField";
 import { ADMIN, EMPLOYEE, STATUSOFCARD } from "../../ConstantUtils/constants";
 import { AuthContext } from "../../Dashboard/dashboard";
+import Pagination from "../../Pagination/pagination";
 
 function StoreCard() {
   const { register, handleSubmit, reset, formState, setValue, getValues } =
     useForm();
   const { isSubmitting } = formState;
+  const [stores, setStores] = useState([]);
   const [notebooks, setNotebooks] = useState([]);
+  const [params, setParams] = useState({ page: 1 });
   const [dataListCardNumber, setDataListCardNumber] = useState([]);
   const [rowNotebooks, setRowNotebooks] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [isManualInput, setIsManualInput] = useState(false);
   const [isCreditCardBackImage, setIsCreditCardBackImage] = useState(false);
@@ -50,6 +54,9 @@ function StoreCard() {
             // setRowNotebooks(response.store.notebooks[0].row_notebook);
           }
         } else if (role === ADMIN) {
+          const response = await storeApi.getAllFull();
+          console.log("Fetch store data full successfully", response);
+          setStores(response);
         }
       } catch (error) {
         console.log("Failed to information detail", error);
@@ -58,6 +65,11 @@ function StoreCard() {
 
     callAPIInit();
   }, [role]); // eslint-disable-line
+
+  const handleChangePage = (direction) => {
+    setParams({ page: currentPage + direction });
+    setCurrentPage(currentPage + direction);
+  };
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(async () => {
@@ -132,7 +144,20 @@ function StoreCard() {
         data.creditcard.credit_card_front_image[0];
       data.creditcard.credit_card_back_image =
         data.creditcard.credit_card_back_image[0];
-      data.is_creditcard_stored = true;
+
+      if (typeof data.creditcard.credit_card_front_image === "string") {
+        data.creditcard.credit_card_front_image = null;
+      } else if (data.creditcard.credit_card_front_image) {
+        data.creditcard.credit_card_front_image =
+          data.creditcard.credit_card_front_image[0];
+      }
+      if (typeof data.creditcard.credit_card_back_image === "string") {
+        data.creditcard.credit_card_back_image = null;
+      } else if (data.creditcard.credit_card_back_image) {
+        data.creditcard.credit_card_back_image =
+          data.creditcard.credit_card_back_image[0];
+      }
+
       console.log("data", data);
       const response = await creditCardApi.saveCreditCard2Notebook(data);
       console.log("Save creditcard 2 notebook successfully", response);
@@ -161,14 +186,37 @@ function StoreCard() {
     }
   };
 
+  const handleOnChangeStore = async (e) => {
+    let val = parseInt(e.target.value);
+    if (val) {
+      let store = stores.find((c) => c.id === val);
+      let initDataStore = {};
+      initDataStore.store_name = store.name;
+      initDataStore.store_code = store.code;
+      initDataStore.store_id = store.id;
+      initDataStore.store_phone_number = store.phone_number;
+      initDataStore.store_address = store.address;
+      setValue("store_address", store?.address);
+      setValue("store_phone_number", store?.phone_number);
+      setNotebooks(store?.notebooks);
+    } else {
+      setValue("store_address");
+      setValue("store_phone_number");
+    }
+  };
+
   const handleOnChangeNotebook = async (e) => {
     let val = parseInt(e.target.value);
-    let notebook = notebooks.find((c) => c.id === val);
-    setMaxLengthOrderInNotebook(notebook?.capacity);
-    let id = parseInt(e.target.value);
-    const response = await notebookApi.getDetailRowNotebook(id, { page: 1 });
-    console.log("Fetch detail rownotebook successfully", response);
-    setRowNotebooks(response?.results);
+    if (val) {
+      let notebook = notebooks.find((c) => c.id === val);
+      setMaxLengthOrderInNotebook(notebook?.capacity);
+      let id = parseInt(e.target.value);
+      const response = await notebookApi.getDetailRowNotebook(id, params);
+      console.log("Fetch detail rownotebook successfully", response);
+      setRowNotebooks(response?.results);
+    } else {
+      setRowNotebooks([]);
+    }
   };
 
   // const handleChangePage = (direction) => {
@@ -188,14 +236,34 @@ function StoreCard() {
       <form onSubmit={handleSubmit(onSubmit)}>
         <h5>Cửa hàng</h5>
         <div className="row">
-          <InputField
-            requiredColWidth={3}
-            requiredLbl="Tên cửa hàng"
-            requiredType="text"
-            requiredRegister={register}
-            requiredName="store_name"
-            optionalDisabled={true}
-          />
+          <div className="col-md-3">
+            <div className="mb-3">
+              <label className="form-label">Tên cửa hàng</label>
+              {role === ADMIN ? (
+                <select
+                  {...register("store_name")}
+                  className="form-select"
+                  onChange={handleOnChangeStore}
+                  disabled={stores.length > 0 ? null : true}
+                  required
+                >
+                  <option value="">Chọn cửa hàng</option>
+                  {stores?.map((store) => (
+                    <option key={store.id} value={store.id}>
+                      {store?.name}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  {...register("store_name")}
+                  type="text"
+                  className="form-control"
+                  disabled
+                />
+              )}
+            </div>
+          </div>
           {/* <div className="col-md-3">
             <div className="mb-3">
               <label className="form-label">Tên cửa hàng</label>
@@ -236,6 +304,8 @@ function StoreCard() {
             requiredLblSelect="Chọn Sổ lưu"
             requiredValueOption={(ele) => `${ele.id}`}
             requiredLblOption={(ele) => `${ele.name}`}
+            optionalOnChangeSelect={handleOnChangeNotebook}
+            optionalDisable={notebooks.length > 0 ? false : true}
           />
           <SelectField
             requiredColWidth={2}
@@ -401,7 +471,7 @@ function StoreCard() {
             requiredLbl="Ngày sao kê"
             requiredType="date"
             requiredRegister={register}
-            requiredName="statement_date"
+            requiredName="creditcard.statement_date"
             requiredIsRequired={true}
             optionalDisabled={!isManualInput}
           />
@@ -410,7 +480,7 @@ function StoreCard() {
             requiredLbl="Ngày cuối đáo"
             requiredType="date"
             requiredRegister={register}
-            requiredName="maturity_date"
+            requiredName="creditcard.maturity_date"
             requiredIsRequired={true}
             optionalDisabled={!isManualInput}
           />
@@ -526,11 +596,12 @@ function StoreCard() {
             </tbody>
           </table>
         </div>
-        {/* <Pagination
+        <Pagination
+          canBedisabled={rowNotebooks?.results?.length ? false : true}
           currentPage={currentPage}
           totalPages={rowNotebooks.total_pages}
           handleChangePage={handleChangePage}
-        /> */}
+        />
       </form>
     </div>
   );

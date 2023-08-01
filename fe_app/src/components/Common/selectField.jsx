@@ -17,7 +17,7 @@ SelectField.propTypes = {
   requiredValueOption: PropTypes.func.isRequired,
   requiredLblOption: PropTypes.func.isRequired,
 
-  optionalOnChangeSelect: PropTypes.array,
+  optionalOnChangeSelect: PropTypes.func,
   optionalDisable: PropTypes.bool,
 };
 
