@@ -11,7 +11,7 @@ RUN pip install -r requirements.txt
 
 COPY . /code
 WORKDIR /code
-COPY entrypoint.local.sh /entrypoint.local.sh
+COPY ./be/entrypoint.local.sh /entrypoint.local.sh
 
 RUN chmod +x /entrypoint.local.sh
 
