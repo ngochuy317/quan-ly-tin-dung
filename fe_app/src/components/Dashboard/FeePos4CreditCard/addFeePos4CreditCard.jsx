@@ -9,7 +9,7 @@ import SelectField from "../../Common/selectField";
 function AddFeePos4CreditCard() {
   const [poses, setPoses] = useState([]);
   const navigate = useNavigate();
-  const { register, handleSubmit, reset, setValue, getValues } = useForm();
+  const { register, handleSubmit } = useForm();
   const onSubmit = async (data) => {
     try {
       const response = await feePOS4CreditCardAPI.createOne(data);

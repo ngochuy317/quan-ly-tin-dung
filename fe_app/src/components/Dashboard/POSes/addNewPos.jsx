@@ -32,7 +32,7 @@ function NewPos() {
     }
 
     init();
-  }, []);
+  }, []); // eslint-disable-line
 
   useEffect(() => {
     async function fetchListStore() {

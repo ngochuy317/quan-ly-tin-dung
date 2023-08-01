@@ -8,7 +8,7 @@ import posApi from "../../../api/posAPI";
 
 function FeePos4CreditCardDetail() {
   const [poses, setPoses] = useState([]);
-  const { register, handleSubmit, reset, getValues } = useForm();
+  const { register, handleSubmit, reset } = useForm();
   const { id } = useParams();
   const navigate = useNavigate();
 
