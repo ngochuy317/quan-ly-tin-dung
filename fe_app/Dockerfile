@@ -4,7 +4,7 @@ FROM node:14.21.1 AS builder
 WORKDIR /app
 
 COPY . ./
-COPY package*.json ./
+COPY ./fe_app/package*.json ./
 RUN npm install
 
 ARG REACT_APP_API_URL
