@@ -4,7 +4,19 @@ from __future__ import absolute_import, print_function, unicode_literals
 from apps.base.constants import Y_M_D_H_M_FORMAT
 from apps.customer.models import BankAccount, CreditCard, Customer
 from apps.customer.serializers import CreditCardSerializer
-from apps.store.models import POS, BillPos, NoteBook, Product, RowNotebook, Store, StoreCost, SwipeCardTransaction
+from apps.store.models import (
+    POS,
+    BillPos,
+    FeePos4CreditCard,
+    NoteBook,
+    Product,
+    RowNotebook,
+    Store,
+    StoreCost,
+    StoreMakePOS,
+    SwipeCardTransaction,
+)
+from apps.store.serializers import ShortFeePos4CreditCardSerializer
 from apps.user.models import InfomationDetail, User
 from rest_framework import serializers
 
@@ -80,9 +92,58 @@ class POSSerializer(serializers.ModelSerializer):
         fields = "__all__"
         read_only_fields = ("id",)
 
+
+class POSSerializerDetail(serializers.ModelSerializer):
+    fee4creditcard = ShortFeePos4CreditCardSerializer(many=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        try:
+            if self.context["request"].method == "PUT":
+                self.fields["store_id"] = serializers.IntegerField()
+                self.fields["from_store_id"] = serializers.IntegerField()
+            elif self.context["request"].method == "GET":
+                self.fields["store_id"] = serializers.CharField(source="store.id")
+                self.fields["from_store_id"] = serializers.CharField(source="from_store.id")
+        except Exception as e:
+            print("Exception |", e)
+
+    class Meta:
+        model = POS
+        fields = "__all__"
+        read_only_fields = ("id",)
+        depth = 1
+
     def update(self, instance, validated_data):
-        store = validated_data.pop("store")
+
+        # Update store and store make POS
+        store_id = validated_data.pop("store_id")
+        from_store_id = validated_data.pop("from_store_id")
+        store = Store.objects.filter(id=store_id).first()
+        from_store = StoreMakePOS.objects.filter(id=from_store_id).first()
+        if not all([store, from_store]):
+            raise serializers.ValidationError("Can not found store or store make pos")
         instance.store = store
+        instance.from_store = from_store
+
+        fee4creditcard = validated_data.pop("fee4creditcard", [])
+        for data in fee4creditcard:
+            # Delete the choose one
+            if data.pop("delete", False):
+                fee_obj = FeePos4CreditCard.objects.filter(id=data["id"]).first()
+                fee_obj.delete()
+
+            # Update if delete flag not exist
+            elif data.pop("exist", False):
+                fee_obj = FeePos4CreditCard.objects.filter(id=data["id"]).first()
+                for attr, value in data.items():
+                    setattr(fee_obj, attr, value)
+                fee_obj.save()
+
+            # Create a new one if dont have flag delete or exist
+            elif data.pop("new", None):
+                FeePos4CreditCard.objects.create(**data, pos_machine=instance)
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()

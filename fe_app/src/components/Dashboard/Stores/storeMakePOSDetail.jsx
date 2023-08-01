@@ -142,40 +142,26 @@ function StoreMakePOSDetail() {
           /> */}
         </div>
         <div className="row">
-          {getValues("representative_id_card_front_image") ? (
-            <DisplayImageFileInputField
-              requiredColWidth={4}
-              requiredLbl={"Mặt trước CCCD người đại diện"}
-              requiredImageUrl={`${getValues(
-                "representative_id_card_front_image"
-              )}`}
-            />
-          ) : (
-            <FileInputField
-              requiredColWidth={4}
-              requiredLbl={"Mặt trước CCCD người đại diện"}
-              requiredRegister={register}
-              requiredName={"representative_id_card_front_image"}
-              optionalAccept={INPUTIMAGETYPEACCEPT}
-            />
-          )}
-          {getValues("representative_id_card_front_image") ? (
-            <DisplayImageFileInputField
-              requiredColWidth={4}
-              requiredLbl={"Mặt sau CCCD người đại diện"}
-              requiredImageUrl={`${getValues(
-                "representative_id_card_back_image"
-              )}`}
-            />
-          ) : (
-            <FileInputField
-              requiredColWidth={4}
-              requiredLbl={"Mặt sau CCCD người đại diện"}
-              requiredRegister={register}
-              requiredName={"representative_id_card_back_image"}
-              optionalAccept={INPUTIMAGETYPEACCEPT}
-            />
-          )}
+          <DisplayImageFileInputField
+            requiredColWidth={4}
+            requiredLbl={"Mặt trước CCCD người đại diện"}
+            requiredImageUrl={`${getValues(
+              "representative_id_card_front_image"
+            )}`}
+            requiredRegister={register}
+            requiredName={"representative_id_card_front_image"}
+            optionalAccept={INPUTIMAGETYPEACCEPT}
+          />
+          <DisplayImageFileInputField
+            requiredColWidth={4}
+            requiredLbl={"Mặt sau CCCD người đại diện"}
+            requiredImageUrl={`${getValues(
+              "representative_id_card_back_image"
+            )}`}
+            requiredRegister={register}
+            requiredName={"representative_id_card_back_image"}
+            optionalAccept={INPUTIMAGETYPEACCEPT}
+          />
           <SelectField
             requiredColWidth={4}
             requiredLbl={"Trạng thái hoạt động"}

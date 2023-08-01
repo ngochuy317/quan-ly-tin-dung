@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CurrencyFormat from "react-currency-format";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import posApi from "../../../api/posAPI";
 import storeApi from "../../../api/storeAPI";
@@ -14,8 +14,25 @@ import { POSSTATUS } from "../../ConstantUtils/constants";
 function NewPos() {
   const [stores, setStores] = useState([]);
   const [storeMakePOS, setStoreMakePOSApi] = useState([]);
-  const { register, handleSubmit, setValue } = useForm();
+  const { control, register, handleSubmit, setValue, formState } = useForm();
+  const { isSubmitting } = formState;
   const navigate = useNavigate();
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "fee4creditcard", // unique name for your Field Array
+    // keyName: "id", default to "id", you can change the key name
+  });
+
+  useEffect(() => {
+    function init() {
+      if (fields?.length < 1) {
+        append();
+      }
+    }
+
+    init();
+  }, []);
 
   useEffect(() => {
     async function fetchListStore() {
@@ -162,6 +179,74 @@ function NewPos() {
             requiredIsRequired={true}
           />
         </div>
+        {fields.length > 0 && (
+          <>
+            <h5>Phí thẻ tín dụng</h5>
+            <div className="table-responsive">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Loại</th>
+                    <th scope="col">Phí</th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {fields.map((item, index) => (
+                    <tr key={item.id}>
+                      <td>
+                        <input
+                          {...register(`fee4creditcard[${index}].type`)}
+                          className="form-control"
+                          required={true}
+                          type="text"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          {...register(`fee4creditcard[${index}].fee`)}
+                          className="form-control"
+                          required={true}
+                          type="number"
+                          step={"0.01"}
+                        />
+                      </td>
+                      <td>
+                        {item?.exist !== true && (
+                          <button
+                            disabled={isSubmitting}
+                            onClick={() => {
+                              remove(index);
+                            }}
+                            className="btn btn-outline-danger form-control"
+                          >
+                            {isSubmitting && (
+                              <span className="spinner-border spinner-border-sm mr-1"></span>
+                            )}
+                            Xoá
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+        <div className="d-flex justify-content-start">
+          <button
+            type="button"
+            disabled={isSubmitting}
+            onClick={() => append({})}
+            className="btn btn-outline-primary "
+          >
+            {isSubmitting && (
+              <span className="spinner-border spinner-border-sm mr-1"></span>
+            )}
+            Thêm phí
+          </button>
+        </div>
         <div className="row">
           <SelectField
             requiredColWidth={6}
@@ -187,10 +272,24 @@ function NewPos() {
           />
         </div>
         <div className="d-flex justify-content-end">
-          <button type="submit" className="btn btn-outline-primary mx-3">
+          <button
+            type="submit"
+            className="btn btn-outline-primary mx-3"
+            disabled={isSubmitting}
+          >
+            {isSubmitting && (
+              <span className="spinner-border spinner-border-sm mr-1"></span>
+            )}
             Lưu
           </button>
-          <button type="button" className="btn btn-outline-danger mx-3">
+          <button
+            type="button"
+            className="btn btn-outline-danger mx-3"
+            disabled={isSubmitting}
+          >
+            {isSubmitting && (
+              <span className="spinner-border spinner-border-sm mr-1"></span>
+            )}
             <Link
               to="./.."
               style={{ textDecoration: "none", color: "inherit" }}

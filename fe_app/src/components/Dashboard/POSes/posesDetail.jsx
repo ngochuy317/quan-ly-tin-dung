@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import CurrencyFormat from "react-currency-format";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import posApi from "../../../api/posAPI";
 import storeApi from "../../../api/storeAPI";
@@ -14,15 +14,33 @@ import { POSSTATUS } from "../../ConstantUtils/constants";
 function POSesDetail() {
   const [stores, setStores] = useState([]);
   const [storeMakePOS, setStoreMakePOSApi] = useState([]);
-  const { register, handleSubmit, reset, setValue, getValues } = useForm();
+  const {
+    control,
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    getValues,
+    formState,
+  } = useForm();
   const { id } = useParams();
   const navigate = useNavigate();
+  const { isSubmitting } = formState;
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "fee4creditcard", // unique name for your Field Array
+    // keyName: "id", default to "id", you can change the key name
+  });
 
   useEffect(() => {
     async function fetchPOSDetail() {
       try {
         const response = await posApi.getDetail(id);
         console.log("Fetch pos detail successfully", response);
+        for (const i in response?.fee4creditcard) {
+          response.fee4creditcard[i].exist = true;
+        }
 
         const responseJSONStore = await storeApi.getAllFull();
         console.log("Fetch store list successfully", responseJSONStore);
@@ -46,6 +64,7 @@ function POSesDetail() {
 
   const onSubmit = async (data) => {
     try {
+      console.log("🚀 ~ file: posesDetail.jsx:56 ~ onSubmit ~ data:", data);
       const response = await posApi.updateOne(id, data);
       console.log("Update pos successfully", response);
       navigate("./..");
@@ -177,13 +196,91 @@ function POSesDetail() {
             requiredIsRequired={true}
           />
         </div>
+        {fields.length > 0 && (
+          <>
+            <h5>Phí thẻ tín dụng</h5>
+            <div className="table-responsive">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Loại</th>
+                    <th scope="col">Phí</th>
+                    <th scope="col">Xoá?</th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {fields.map((item, index) => (
+                    <tr key={item.id}>
+                      <td>
+                        <input
+                          {...register(`fee4creditcard[${index}].type`)}
+                          className="form-control"
+                          required={true}
+                          type="text"
+                        />
+                      </td>
+                      <td>
+                        <input
+                          {...register(`fee4creditcard[${index}].fee`)}
+                          className="form-control"
+                          required={true}
+                          type="number"
+                          step={"0.01"}
+                        />
+                      </td>
+                      <td>
+                        {item?.exist === true && (
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            {...register(`fee4creditcard[${index}].delete`)}
+                          />
+                        )}
+                      </td>
+                      <td>
+                        {item?.exist !== true && (
+                          <button
+                            disabled={isSubmitting}
+                            onClick={() => {
+                              remove(index);
+                            }}
+                            className="btn btn-outline-danger form-control"
+                          >
+                            {isSubmitting && (
+                              <span className="spinner-border spinner-border-sm mr-1"></span>
+                            )}
+                            Xoá
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
+        )}
+        <div className="d-flex justify-content-start">
+          <button
+            type="button"
+            disabled={isSubmitting}
+            onClick={() => append({})}
+            className="btn btn-outline-primary "
+          >
+            {isSubmitting && (
+              <span className="spinner-border spinner-border-sm mr-1"></span>
+            )}
+            Thêm phí
+          </button>
+        </div>
         <div className="row">
           <SelectField
             requiredColWidth={6}
             requiredLbl={"Cửa hàng"}
             requiredIsRequired={true}
             requiredRegister={register}
-            requiredName={"store"}
+            requiredName={"store_id"}
             requiredDataOption={stores}
             requiredLblSelect="Chọn cửa hàng"
             requiredValueOption={(ele) => `${ele.id}`}
@@ -194,7 +291,7 @@ function POSesDetail() {
             requiredLbl={"Cửa hàng làm ra máy POS"}
             requiredIsRequired={true}
             requiredRegister={register}
-            requiredName={"from_store"}
+            requiredName={"from_store_id"}
             requiredDataOption={storeMakePOS}
             requiredLblSelect="Chọn cửa hàng"
             requiredValueOption={(ele) => `${ele.id}`}

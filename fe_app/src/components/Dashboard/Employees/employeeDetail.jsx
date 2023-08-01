@@ -3,10 +3,14 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import employeeApi from "../../../api/employeeAPI";
 import storeApi from "../../../api/storeAPI";
-import FileInputField from "../../Common/fileInputField";
+import DisplayImageFileInputField from "../../Common/displayImageFileInputField";
 import InputField from "../../Common/inputField";
 import SelectField from "../../Common/selectField";
-import { GENDERCHOICES, ROLES } from "../../ConstantUtils/constants";
+import {
+  GENDERCHOICES,
+  INPUTIMAGETYPEACCEPT,
+  ROLES,
+} from "../../ConstantUtils/constants";
 
 function EmployeeDetail() {
   const [stores, setStores] = useState([]);
@@ -204,67 +208,34 @@ function EmployeeDetail() {
           />
         </div>
         <div className="row">
-          {getValues("infomation_detail.user_image") ? (
-            <div className="col-md-4">
-              <div className="mb-3">
-                <label className="form-label">Ảnh chân dung</label>
-                <img
-                  src={`${getValues("infomation_detail.user_image")}`}
-                  style={{ maxWidth: "100%", height: "auto" }}
-                  alt=""
-                ></img>
-              </div>
-            </div>
-          ) : (
-            <FileInputField
-              requiredColWidth={4}
-              requiredLbl={"Ảnh chân dung"}
-              requiredRegister={register}
-              requiredName={"infomation_detail.user_image"}
-            />
-          )}
-          {getValues("infomation_detail.identity_card_front_image") ? (
-            <div className="col-md-4">
-              <div className="mb-3">
-                <label className="form-label">Ảnh mặt trước CCCD</label>
-                <img
-                  src={`${getValues(
-                    "infomation_detail.identity_card_front_image"
-                  )}`}
-                  style={{ maxWidth: "100%", height: "auto" }}
-                  alt=""
-                ></img>
-              </div>
-            </div>
-          ) : (
-            <FileInputField
-              requiredColWidth={4}
-              requiredLbl={"Ảnh mặt trước CCCD"}
-              requiredRegister={register}
-              requiredName={"infomation_detail.identity_card_front_image"}
-            />
-          )}
-          {getValues("infomation_detail.identity_card_back_image") ? (
-            <div className="col-md-4">
-              <div className="mb-3">
-                <label className="form-label">Ảnh mặt sau CCCD</label>
-                <img
-                  src={`${getValues(
-                    "infomation_detail.identity_card_back_image"
-                  )}`}
-                  style={{ maxWidth: "100%", height: "auto" }}
-                  alt=""
-                ></img>
-              </div>
-            </div>
-          ) : (
-            <FileInputField
-              requiredColWidth={4}
-              requiredLbl={"Ảnh mặt sau CCCD"}
-              requiredRegister={register}
-              requiredName={"infomation_detail.identity_card_back_image"}
-            />
-          )}
+          <DisplayImageFileInputField
+            requiredColWidth={4}
+            requiredLbl={"Ảnh chân dung"}
+            requiredImageUrl={`${getValues("infomation_detail.user_image")}`}
+            requiredRegister={register}
+            requiredName={"infomation_detail.user_image"}
+            optionalAccept={INPUTIMAGETYPEACCEPT}
+          />
+          <DisplayImageFileInputField
+            requiredColWidth={4}
+            requiredLbl={"Ảnh mặt trước CCCD"}
+            requiredImageUrl={`${getValues(
+              "infomation_detail.identity_card_front_image"
+            )}`}
+            requiredRegister={register}
+            requiredName={"infomation_detail.identity_card_front_image"}
+            optionalAccept={INPUTIMAGETYPEACCEPT}
+          />
+          <DisplayImageFileInputField
+            requiredColWidth={4}
+            requiredLbl={"Ảnh mặt sau CCCD"}
+            requiredImageUrl={`${getValues(
+              "infomation_detail.identity_card_back_image"
+            )}`}
+            requiredRegister={register}
+            requiredName={"infomation_detail.identity_card_back_image"}
+            optionalAccept={INPUTIMAGETYPEACCEPT}
+          />
         </div>
         <div className="row">
           <SelectField

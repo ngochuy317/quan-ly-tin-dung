@@ -6,6 +6,7 @@ import pytz
 from apps.base.constants import ADMIN, PARSE_ERROR_MSG, Y_M_D_FORMAT
 from apps.customer.models import CreditCard
 from apps.store.models import POS, NoteBook, Product, RowNotebook, Store, StoreCost, SwipeCardTransaction
+from apps.store.serializers import FeePos4CreditCardSerializer
 from apps.user.authentication import IsAdmin
 from apps.user.models import User
 from django.db.models import Q, Sum
@@ -31,6 +32,7 @@ from .serializers import (
     GetRowNotebookSerializer,
     NoteBookSerializer,
     POSSerializer,
+    POSSerializerDetail,
     ProductSerializer,
     StoreCostSerializer,
     StoreInformationDetailSerializer,
@@ -259,19 +261,36 @@ class POSListCreateAPIView(ListCreateAPIView):
     pagination_class = CustomPageNumberPagination
     permission_classes = [IsAdmin]
 
+    def post(self, request, *args, **kwargs):
+
+        data = request.data
+        feepos = data.pop("fee4creditcard", None)
+        serializer = POSSerializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        _pos_id = serializer.data["id"]
+
+        for x in feepos:
+            x["pos_machine"] = _pos_id
+        serializer_feepos = FeePos4CreditCardSerializer(data=feepos, many=True)
+        serializer_feepos.is_valid(raise_exception=True)
+        serializer_feepos.save()
+        return Response(status=status.HTTP_200_OK)
+
 
 class POSDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
     queryset = POS.objects.all()
-    serializer_class = POSSerializer
+    serializer_class = POSSerializerDetail
     permission_classes = [IsAdmin]
 
     def put(self, request, *args, **kwargs):
         _id = kwargs.get("pk")
         obj = POS.objects.filter(id=_id).first()
-        serializer = POSSerializer(obj, data=request.data)
+        serializer = POSSerializerDetail(obj, data=request.data, context={"request": request})
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        # return Response(status=status.HTTP_400_BAD_REQUEST)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 

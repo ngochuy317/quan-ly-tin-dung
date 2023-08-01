@@ -153,12 +153,12 @@ export const dataItemSideBarForAdmin = [
     role: [ADMIN],
     private: true,
   },
-  {
-    id: 15,
-    name: "Phí thẻ td",
-    icon: "comment-dollar",
-    path: "/dashboard/feepos4creditcard",
-    role: [ADMIN],
-    private: true,
-  },
+  // {
+  //   id: 15,
+  //   name: "Phí thẻ td",
+  //   icon: "comment-dollar",
+  //   path: "/dashboard/feepos4creditcard",
+  //   role: [ADMIN],
+  //   private: true,
+  // },
 ];

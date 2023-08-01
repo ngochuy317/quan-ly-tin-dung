@@ -108,10 +108,10 @@ class FeePos4CreditCard(models.Model):
 
     type = models.CharField(max_length=127)
     fee = models.FloatField()
-    pos_machine = models.OneToOneField(POS, on_delete=models.CASCADE, related_name="fee4creditcard")
+    pos_machine = models.ForeignKey(POS, on_delete=models.CASCADE, related_name="fee4creditcard")
 
     class Meta:
-        ordering = ["-id"]
+        ordering = ["id"]
 
 
 class NoteBook(models.Model):

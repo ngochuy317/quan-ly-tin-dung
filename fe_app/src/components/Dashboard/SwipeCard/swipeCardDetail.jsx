@@ -5,7 +5,7 @@ import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import DisplayImageFileInputField from "../../Common/displayImageFileInputField";
 import InputField from "../../Common/inputField";
 import SelectField from "../../Common/selectField";
-import { GENDERCHOICES, TRANSACTIONTYPE } from "../../ConstantUtils/constants";
+import { GENDERCHOICES, INPUTIMAGETYPEACCEPT, TRANSACTIONTYPE } from "../../ConstantUtils/constants";
 import ModifiyBillPOSMachineModal from "../../Modal/modifyBillPosMachineModal";
 
 function SwipeCardDetail() {
@@ -94,6 +94,17 @@ function SwipeCardDetail() {
         } else {
           data.customer.credit_card.credit_card_front_image =
             data.customer.credit_card.credit_card_front_image[0];
+        }
+      }
+
+      if (data.transaction_with_customer_image) {
+        if (
+          typeof data.transaction_with_customer_image === "string"
+        ) {
+          delete data.transaction_with_customer_image;
+        } else {
+          data.transaction_with_customer_image =
+            data.transaction_with_customer_image[0];
         }
       }
 
@@ -201,51 +212,30 @@ function SwipeCardDetail() {
           />
         </div>
         <div className="row">
-          <div className="col-md-4">
-            <div className="mb-3">
-              <label className="form-label">Ảnh mặt trước cmnd/cccd</label>
-              {dataSwipCardDetail?.customer?.id_card_front_image ? (
-                <img
-                  src={`${dataSwipCardDetail?.customer?.id_card_front_image}`}
-                  style={{ maxWidth: "100%", height: "auto" }}
-                  alt=""
-                ></img>
-              ) : (
-                <input
-                  {...register("customer.id_card_front_image")}
-                  type="file"
-                  className="form-control"
-                />
-              )}
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="mb-3">
-              <label className="form-label">Ảnh mặt sau cmnd/cccd</label>
-              {dataSwipCardDetail?.customer?.id_card_back_image ? (
-                <img
-                  src={`${dataSwipCardDetail?.customer?.id_card_back_image}`}
-                  style={{ maxWidth: "100%", height: "auto" }}
-                  alt=""
-                ></img>
-              ) : (
-                <input
-                  {...register("customer.id_card_back_image")}
-                  type="file"
-                  className="form-control"
-                />
-              )}
-            </div>
-          </div>
-          {getValues("transaction_with_customer_image") && (
-            <DisplayImageFileInputField
-              requiredColWidth={4}
-              requiredLbl={"Hình GD với khách"}
-              requiredImageUrl={`${getValues(
-                "transaction_with_customer_image"
-              )}`}
-            />
-          )}
+          <DisplayImageFileInputField
+            requiredColWidth={4}
+            requiredLbl={"Ảnh mặt trước cmnd/cccd"}
+            requiredImageUrl={`${getValues("customer.id_card_front_image")}`}
+            requiredRegister={register}
+            requiredName={"customer.id_card_front_image"}
+            optionalAccept={INPUTIMAGETYPEACCEPT}
+          />
+          <DisplayImageFileInputField
+            requiredColWidth={4}
+            requiredLbl={"Ảnh mặt sau cmnd/cccd"}
+            requiredImageUrl={`${getValues("customer.id_card_back_image")}`}
+            requiredRegister={register}
+            requiredName={"customer.id_card_back_image"}
+            optionalAccept={INPUTIMAGETYPEACCEPT}
+          />
+          <DisplayImageFileInputField
+            requiredColWidth={4}
+            requiredLbl={"Hình GD với khách"}
+            requiredImageUrl={`${getValues("transaction_with_customer_image")}`}
+            requiredRegister={register}
+            requiredName={"transaction_with_customer_image"}
+            optionalAccept={INPUTIMAGETYPEACCEPT}
+          />
 
           <h5>Máy POS</h5>
           {dataSwipCardDetail?.billpos?.map((item, index) => (

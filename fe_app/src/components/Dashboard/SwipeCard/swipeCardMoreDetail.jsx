@@ -36,10 +36,6 @@ function SwipeCardMoreDetail() {
   const [isManualInput, setIsManualInput] = useState(false);
   const [show, setShow] = useState(false);
   const [showNegativeMoney, setShowNegativeMoney] = useState(false);
-  const [
-    showImageTransactionWithCustomer,
-    setShowImageTransactionWithCustomer,
-  ] = useState(true);
   const [isCreditCardBackImage, setIsCreditCardBackImage] = useState(false);
   const [isCreditCardFrontImage, setIsCreditCardFrontImage] = useState(false);
   const [indexModal, setIndexModal] = useState(0);
@@ -54,9 +50,6 @@ function SwipeCardMoreDetail() {
     function initData() {
       reset({ ...state });
       setShowNegativeMoney(state.showNegativeMoney);
-      setShowImageTransactionWithCustomer(
-        state.showImageTransactionWithCustomer
-      );
       console.log(
         "🚀 ~ file: swipeCardMoreDetail.jsx:53 ~ initData ~ state:",
         state
@@ -65,7 +58,9 @@ function SwipeCardMoreDetail() {
         "🚀 ~ file: swipeCardMoreDetail.jsx:44 ~ initData ~ state:",
         state
       );
-      append();
+      if (fields?.length < 1) {
+        append();
+      }
       if (state.creditcard.credit_card_back_image) {
         setIsCreditCardBackImage(true);
       }
@@ -86,7 +81,6 @@ function SwipeCardMoreDetail() {
   const handleOnChangeTransactionType = (e) => {
     let val = e.target.value;
     setShowNegativeMoney(parseInt(val) === 2);
-    setShowImageTransactionWithCustomer(parseInt(val) === 1);
   };
 
   const handleOnChangeCardNumber = async (e) => {
@@ -432,15 +426,12 @@ function SwipeCardMoreDetail() {
               )}
             </div>
           </div>
-          {showImageTransactionWithCustomer && (
-            <FileInputField
-              requiredColWidth={4}
-              requiredLbl={`Hình GD với khách`}
-              requiredIsRequired={true}
-              requiredRegister={register}
-              requiredName={"transaction_with_customer_image"}
-            />
-          )}
+          <FileInputField
+            requiredColWidth={4}
+            requiredLbl={`Hình GD với khách`}
+            requiredRegister={register}
+            requiredName={"transaction_with_customer_image"}
+          />
         </div>
         <div className="row"></div>
         <h5>Thông tin thẻ</h5>

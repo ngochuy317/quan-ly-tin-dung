@@ -12,11 +12,21 @@ class SwipeCardTransactionAdmin(admin.ModelAdmin):
     )
 
 
+class FeePos4CreditCardInline(admin.TabularInline):
+    model = FeePos4CreditCard
+
+
+class POSAdmin(admin.ModelAdmin):
+    inlines = [
+        FeePos4CreditCardInline,
+    ]
+
+
 admin.site.register(Store)
 admin.site.register(StoreMakePOS)
 admin.site.register(FeePos4CreditCard)
 admin.site.register(BillPos)
-admin.site.register(POS)
+admin.site.register(POS, POSAdmin)
 admin.site.register(SwipeCardTransaction, SwipeCardTransactionAdmin)
 admin.site.register(NoteBook)
 admin.site.register(RowNotebook)

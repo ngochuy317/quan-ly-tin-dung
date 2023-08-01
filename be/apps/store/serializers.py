@@ -27,6 +27,17 @@ class FeePos4CreditCardSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class ShortFeePos4CreditCardSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+    delete = serializers.BooleanField(required=False, write_only=True)
+    exist = serializers.BooleanField(required=False, write_only=True)
+    new = serializers.BooleanField(required=False, write_only=True)
+
+    class Meta:
+        model = FeePos4CreditCard
+        fields = ("id", "fee", "type", "delete", "exist", "new")
+
+
 class POSNickNameAPIViewSerializer(serializers.Serializer):
 
     id = serializers.IntegerField()

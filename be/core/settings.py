@@ -151,7 +151,7 @@ if os.getenv("USE_SPACES") == "TRUE":
     AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
     AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME")
-    AWS_DEFAULT_ACL = "public-read"
+    AWS_DEFAULT_ACL = "private"
     AWS_S3_ENDPOINT_URL = os.getenv("AWS_S3_ENDPOINT_URL")
     AWS_S3_SIGNATURE_VERSION = "s3v4"
     AWS_S3_OBJECT_PARAMETERS = {"CacheControl": "max-age=86400"}
@@ -162,10 +162,10 @@ if os.getenv("USE_SPACES") == "TRUE":
     STATICFILES_STORAGE = "apps.base.storage_backends.StaticStorage"
 
     AWS_PUBLIC_MEDIA_LOCATION = "media/public"
-    DEFAULT_FILE_STORAGE = "apps.base.storage_backends.PublicMediaStorage"
+    # DEFAULT_FILE_STORAGE = "apps.base.storage_backends.PublicMediaStorage"
 
     AWS_PRIVATE_MEDIA_LOCATION = "media/private"
-    PRIVATE_FILE_STORAGE = "mysite.storage_backends.PrivateMediaStorage"
+    DEFAULT_FILE_STORAGE = "mysite.storage_backends.PrivateMediaStorage"
 
 else:
     STATIC_URL = "/static_backend/"
