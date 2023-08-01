@@ -16,6 +16,7 @@ x-common-variables: &common-variables
 
 services:
   django-qltd:
+    image: alan317/qltd-be:lastest
     container_name: django-qltd
     build:
       context: be
@@ -45,6 +46,7 @@ services:
       - django-qltd
 
   nginx:
+    image: alan317/qltd-nginx:lastest
     container_name: nginx
     build:
       context: nginx
@@ -57,6 +59,7 @@ services:
       - /var/log/nginx/:/var/log/nginx/
 
   frontend:
+    image: alan317/qltd-fe:lastest
     container_name: frontend
     build:
       context: ./fe_app
