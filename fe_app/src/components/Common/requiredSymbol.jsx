@@ -1,15 +1,11 @@
-import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+import { FaAsterisk } from "react-icons/fa";
 
 function RequiredSymbol() {
   return (
     <>
       {" "}
-      <FontAwesomeIcon
-        icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-        color="red"
-      />
+      <FaAsterisk color="red" size=".7em" />
     </>
   );
 }

@@ -1,8 +1,7 @@
-import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
 import CurrencyFormat from "react-currency-format";
 import { useFieldArray, useForm } from "react-hook-form";
+import { FaAsterisk } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import creditCardApi from "../../../api/creditCardAPI";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
@@ -454,10 +453,7 @@ function SwipeCardMoreDetail() {
             <div className="mb-3">
               <label className="form-label">
                 Số thẻ{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
+                <FaAsterisk color="red" size=".7em" />
               </label>
               <input
                 {...register("creditcard.card_number")}
@@ -600,10 +596,7 @@ function SwipeCardMoreDetail() {
             <div className="mb-3">
               <label className="form-label">
                 Ảnh mặt trước thẻ tín dụng{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
+                <FaAsterisk color="red" size=".7em" />
               </label>
               {isCreditCardFrontImage ? (
                 <img
@@ -627,10 +620,7 @@ function SwipeCardMoreDetail() {
             <div className="mb-3">
               <label className="form-label">
                 Ảnh mặt sau thẻ tín dụng{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
+                <FaAsterisk color="red" size=".7em" />
               </label>
               {isCreditCardBackImage ? (
                 <img

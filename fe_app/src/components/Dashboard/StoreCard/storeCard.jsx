@@ -1,7 +1,6 @@
-import { icon } from "@fortawesome/fontawesome-svg-core/import.macro";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useContext, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import { FaAsterisk } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import creditCardApi from "../../../api/creditCardAPI";
 import userApi from "../../../api/userAPI";
@@ -275,11 +274,7 @@ function StoreCard() {
           <div className="col-md-2">
             <div className="mb-3">
               <label className="form-label">
-                Số thứ tự trên sổ{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
+                Số thứ tự trên sổ <FaAsterisk color="red" size=".7em" />
               </label>
               <input
                 {...register("order_in_notebook")}
@@ -315,11 +310,7 @@ function StoreCard() {
           <div className="col-md-4">
             <div className="mb-3">
               <label className="form-label">
-                Số thẻ{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
+                Số thẻ <FaAsterisk color="red" size=".7em" />
               </label>
               <input
                 {...register("creditcard.card_number")}
@@ -405,7 +396,7 @@ function StoreCard() {
           />
         </div>
         <div className="row">
-        <InputField
+          <InputField
             requiredColWidth={3}
             requiredLbl="Ngày sao kê"
             requiredType="date"
@@ -414,7 +405,7 @@ function StoreCard() {
             requiredIsRequired={true}
             optionalDisabled={!isManualInput}
           />
-           <InputField
+          <InputField
             requiredColWidth={3}
             requiredLbl="Ngày cuối đáo"
             requiredType="date"
@@ -427,10 +418,7 @@ function StoreCard() {
             <div className="mb-3">
               <label className="form-label">
                 Ảnh mặt trước thẻ tín dụng{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
+                <FaAsterisk color="red" size=".7em" />
               </label>
               {isCreditCardFrontImage ? (
                 <img
@@ -452,11 +440,7 @@ function StoreCard() {
           <div className="col-md-3">
             <div className="mb-3">
               <label className="form-label">
-                Ảnh mặt sau thẻ tín dụng{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
+                Ảnh mặt sau thẻ tín dụng <FaAsterisk color="red" size=".7em" />
               </label>
               {isCreditCardBackImage ? (
                 <img
@@ -480,11 +464,7 @@ function StoreCard() {
           <div className="col-md-1">
             <div className="mb-3">
               <label className="form-label">
-                Ngày cuối{" "}
-                <FontAwesomeIcon
-                  icon={icon({ name: "asterisk", style: "solid", size: "2xs" })}
-                  color="red"
-                />
+                Ngày cuối <FaAsterisk color="red" size=".7em" />
               </label>
               <input
                 {...register("last_date")}
