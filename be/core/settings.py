@@ -165,7 +165,7 @@ if os.getenv("USE_SPACES") == "TRUE":
     # DEFAULT_FILE_STORAGE = "apps.base.storage_backends.PublicMediaStorage"
 
     AWS_PRIVATE_MEDIA_LOCATION = "media/private"
-    DEFAULT_FILE_STORAGE = "mysite.storage_backends.PrivateMediaStorage"
+    DEFAULT_FILE_STORAGE = "apps.base.storage_backends.PrivateMediaStorage"
 
 else:
     STATIC_URL = "/static_backend/"
