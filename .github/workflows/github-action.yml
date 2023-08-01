@@ -71,7 +71,7 @@ on:
 #             docker compose up -d
 
 jobs:
-  build-and-push:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
@@ -90,7 +90,7 @@ jobs:
         run: docker tag qltd-be alan317/qltd-be:lastest
 
       - name: Build Docker qltd fe
-        run: docker build -t qltd-fe -f ./fe_app/Dockerfile .
+        run: docker build -t qltd-fe -f ./fe_app/Dockerfile --build-arg REACT_APP_API_URL=${{ secrets.REACT_APP_API_URL }} .
 
       - name: Tagging Image qltd fe
         run: docker tag qltd-fe alan317/qltd-fe:lastest
