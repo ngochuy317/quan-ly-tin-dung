@@ -69,7 +69,7 @@ function CardManagement() {
                     onClick={handleOnClickCreditCard}
                     style={{ cursor: "pointer" }}
                   >
-                    {data.creditcard__card_number}
+                    {data.credit_card_number}
                   </a>
                 </td>
                 <td>{data.store_name}</td>

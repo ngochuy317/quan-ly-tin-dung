@@ -191,7 +191,7 @@ class AllTransaction4CreditCardAPIView(APIView):
     def get(self, request, *args, **kwargs):
         card_number = kwargs.get("card_number")
         if card_number:
-            data = SwipeCardTransaction.objects.filter(creditcard__card_number=card_number).values(
+            data = SwipeCardTransaction.objects.filter(credit_card_number=card_number).values(
                 "store_name", "customer_money_needed", "transaction_datetime_created"
             )
 
