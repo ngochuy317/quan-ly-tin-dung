@@ -6,20 +6,43 @@ DownloadFileInputField.propTypes = {
   requiredLbl: PropTypes.string.isRequired,
   requiredLblHref: PropTypes.string.isRequired,
   requiredHref: PropTypes.string.isRequired,
+  requiredName: PropTypes.string.isRequired,
+  requiredRegister: PropTypes.any.isRequired,
+
+  optionalOnChangeInputFile: PropTypes.func,
+  optionalIsRequired: PropTypes.bool,
+  optionalAccept: PropTypes.string,
 };
 
 function DownloadFileInputField(props) {
-  const { requiredColWidth, requiredLbl, requiredLblHref, requiredHref } =
-    props;
+  const {
+    requiredColWidth,
+    requiredLbl,
+    requiredLblHref,
+    requiredHref,
+    requiredName,
+    requiredRegister,
+    optionalIsRequired,
+    optionalAccept,
+    optionalOnChangeInputFile,
+  } = props;
   return (
     <div className={`col-md-${requiredColWidth}`}>
       <div className="mb-3">
-        <label className="form-label">{requiredLbl}</label>
-        <div>
+        <label className="form-label">
+          {requiredLbl}{" "}
           <a href={requiredHref} target="_blank">
             {requiredLblHref}
           </a>
-        </div>
+        </label>
+        <input
+          {...requiredRegister(requiredName)}
+          type="file"
+          className="form-control"
+          required={optionalIsRequired}
+          onChange={optionalOnChangeInputFile}
+          accept={optionalAccept}
+        />
       </div>
     </div>
   );

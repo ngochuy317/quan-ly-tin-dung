@@ -1,15 +1,17 @@
 import React from "react";
+import CurrencyFormat from "react-currency-format";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import storeApi from "../../../api/storeAPI";
+import FileInputField from "../../Common/fileInputField";
 import InputField from "../../Common/inputField";
 import InputTextareaField from "../../Common/inputTextareaField";
-import FileInputField from "../../Common/fileInputField";
+import RequiredSymbol from "../../Common/requiredSymbol";
 import { INPUTPDFFILETYPEACCEPT } from "../../ConstantUtils/constants";
 import { formatDataFileField } from "../../Utilities/fileField";
 
 function NewStore() {
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, setValue, getValues } = useForm();
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
@@ -22,6 +24,19 @@ function NewStore() {
     } catch (error) {
       console.log("Failed to create store", error);
     }
+  };
+
+  const moneyRentInputFieldFormat = (e) => {
+    let val = e.target.value?.replaceAll(",", "");
+    setValue("rent", val);
+  };
+  const moneyElectricBillInputFieldFormat = (e) => {
+    let val = e.target.value?.replaceAll(",", "");
+    setValue("electric_bill", val);
+  };
+  const moneyWaterBillInputFieldFormat = (e) => {
+    let val = e.target.value?.replaceAll(",", "");
+    setValue("water_bill", val);
   };
 
   return (
@@ -62,30 +77,54 @@ function NewStore() {
             requiredName={"contract_of_house_renting_file"}
             optionalAccept={INPUTPDFFILETYPEACCEPT}
           />
-          <InputField
-            requiredColWidth={3}
-            requiredLbl="Tiền thuê nhà"
-            requiredType="number"
-            requiredRegister={register}
-            requiredName="rent"
-            requiredIsRequired={true}
-          />
-          <InputField
-            requiredColWidth={3}
-            requiredLbl="Tiền điện"
-            requiredType="number"
-            requiredRegister={register}
-            requiredName="electric_bill"
-            requiredIsRequired={true}
-          />
-          <InputField
-            requiredColWidth={3}
-            requiredLbl="Tiền nước"
-            requiredType="number"
-            requiredRegister={register}
-            requiredName="water_bill"
-            requiredIsRequired={true}
-          />
+          <div className="col-md-3">
+            <div className="mb-3">
+              <label className="form-label">
+                Tiền thuê nhà
+                <RequiredSymbol />{" "}
+              </label>
+              <CurrencyFormat
+                type="text"
+                className="form-control"
+                value={getValues("rent")}
+                required
+                thousandSeparator={true}
+                onChange={moneyRentInputFieldFormat}
+              />
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="mb-3">
+              <label className="form-label">
+                Tiền điện
+                <RequiredSymbol />{" "}
+              </label>
+              <CurrencyFormat
+                type="text"
+                className="form-control"
+                value={getValues("electric_bill")}
+                required
+                thousandSeparator={true}
+                onChange={moneyElectricBillInputFieldFormat}
+              />
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="mb-3">
+              <label className="form-label">
+                Tiền nước
+                <RequiredSymbol />{" "}
+              </label>
+              <CurrencyFormat
+                type="text"
+                className="form-control"
+                value={getValues("water_bill")}
+                required
+                thousandSeparator={true}
+                onChange={moneyWaterBillInputFieldFormat}
+              />
+            </div>
+          </div>
         </div>
         <div className="row">
           <InputField

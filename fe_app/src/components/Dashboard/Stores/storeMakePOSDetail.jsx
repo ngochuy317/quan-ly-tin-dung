@@ -4,7 +4,6 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import storeMakePOSApi from "../../../api/storeMakePOSAPI";
 import DisplayImageFileInputField from "../../Common/displayImageFileInputField";
 import DownloadFileInputField from "../../Common/downloadFileInputField";
-import FileInputField from "../../Common/fileInputField";
 import InputField from "../../Common/inputField";
 import SelectField from "../../Common/selectField";
 import {
@@ -101,38 +100,24 @@ function StoreMakePOSDetail() {
             requiredName="address"
             requiredIsRequired={true}
           />
-          {getValues("business_license_file") ? (
-            <DownloadFileInputField
-              requiredColWidth={3}
-              requiredLbl={"Giấy phép kinh doanh(PDF)"}
-              requiredHref={`${getValues("business_license_file")}`}
-              requiredLblHref={"Xem"}
-            />
-          ) : (
-            <FileInputField
-              requiredColWidth={3}
-              requiredLbl={"Giấy phép kinh doanh(PDF)"}
-              requiredRegister={register}
-              requiredName={"business_license_file"}
-              optionalAccept={INPUTPDFFILETYPEACCEPT}
-            />
-          )}
-          {getValues("tax_code_file") ? (
-            <DownloadFileInputField
-              requiredColWidth={3}
-              requiredLbl={"Mã số thuế(PDF)"}
-              requiredHref={`${getValues("tax_code_file")}`}
-              requiredLblHref={"Xem"}
-            />
-          ) : (
-            <FileInputField
-              requiredColWidth={3}
-              requiredLbl={"Mã số thuế(PDF)"}
-              requiredRegister={register}
-              requiredName={"tax_code_file"}
-              optionalAccept={INPUTPDFFILETYPEACCEPT}
-            />
-          )}
+          <DownloadFileInputField
+            requiredColWidth={3}
+            requiredLbl={"GPKD(PDF)"}
+            requiredHref={`${getValues("business_license_file")}`}
+            requiredLblHref={"Xem"}
+            requiredRegister={register}
+            requiredName={"business_license_file"}
+            optionalAccept={INPUTPDFFILETYPEACCEPT}
+          />
+          <DownloadFileInputField
+            requiredColWidth={3}
+            requiredLbl={"Mã số thuế(PDF)"}
+            requiredHref={`${getValues("tax_code_file")}`}
+            requiredLblHref={"Xem"}
+            requiredRegister={register}
+            requiredName={"tax_code_file"}
+            optionalAccept={INPUTPDFFILETYPEACCEPT}
+          />
           {/* <InputTextareaField
             requiredColWidth={6}
             requiredLbl="Ghi chú"

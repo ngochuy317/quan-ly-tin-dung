@@ -1,15 +1,16 @@
-import React from "react";
 import PropTypes from "prop-types";
+import React from "react";
 
 DisplayImageFileInputField.propTypes = {
   requiredColWidth: PropTypes.number.isRequired,
   requiredLbl: PropTypes.string.isRequired,
   requiredImageUrl: PropTypes.string.isRequired,
-  // requiredRegister: PropTypes.func.isRequired,
-  // requiredName: PropTypes.string.isRequired,
-  // requiredIsRequired: PropTypes.bool.isRequired,
-  // optionalOnChangeInputFile: PropTypes.func,
-  // optionalAccept: PropTypes.string,
+  requiredRegister: PropTypes.func.isRequired,
+  requiredName: PropTypes.string.isRequired,
+
+  optionalIsRequired: PropTypes.bool,
+  optionalOnChangeInputFile: PropTypes.func,
+  optionalAccept: PropTypes.string,
 };
 
 function DisplayImageFileInputField(props) {
@@ -19,7 +20,7 @@ function DisplayImageFileInputField(props) {
     requiredLbl,
     requiredImageUrl,
     requiredRegister,
-    requiredIsRequired,
+    optionalIsRequired,
     optionalOnChangeInputFile,
     optionalAccept,
   } = props;
@@ -38,7 +39,7 @@ function DisplayImageFileInputField(props) {
           {...requiredRegister(requiredName)}
           type="file"
           className="form-control"
-          required={requiredIsRequired}
+          required={optionalIsRequired}
           onChange={optionalOnChangeInputFile}
           accept={optionalAccept}
         />

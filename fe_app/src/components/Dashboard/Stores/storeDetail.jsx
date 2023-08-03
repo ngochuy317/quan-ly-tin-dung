@@ -1,16 +1,17 @@
 import React, { useEffect } from "react";
+import CurrencyFormat from "react-currency-format";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import storeApi from "../../../api/storeAPI";
 import DownloadFileInputField from "../../Common/downloadFileInputField";
-import FileInputField from "../../Common/fileInputField";
 import InputField from "../../Common/inputField";
 import InputTextareaField from "../../Common/inputTextareaField";
+import RequiredSymbol from "../../Common/requiredSymbol";
 import { INPUTPDFFILETYPEACCEPT } from "../../ConstantUtils/constants";
 import { formatDataFileField } from "../../Utilities/fileField";
 
 function StoreDetail() {
-  const { register, handleSubmit, reset, getValues } = useForm();
+  const { register, handleSubmit, reset, getValues, setValue } = useForm();
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -28,10 +29,27 @@ function StoreDetail() {
     fetchStoreDetail();
   }, []); // eslint-disable-line
 
+  const moneyRentInputFieldFormat = (e) => {
+    let val = e.target.value?.replaceAll(",", "");
+    setValue("rent", val);
+  };
+  const moneyElectricBillInputFieldFormat = (e) => {
+    let val = e.target.value?.replaceAll(",", "");
+    setValue("electric_bill", val);
+  };
+  const moneyWaterBillInputFieldFormat = (e) => {
+    let val = e.target.value?.replaceAll(",", "");
+    setValue("water_bill", val);
+  };
+
   const onSubmit = async (data) => {
     try {
       let newData;
       newData = formatDataFileField(data, ["contract_of_house_renting_file"]);
+      console.log(
+        "🚀 ~ file: storeDetail.jsx:42 ~ onSubmit ~ newData:",
+        newData
+      );
       const response = await storeApi.updateOne(id, newData);
       console.log("Update store successfully", response);
       navigate("./..");
@@ -81,46 +99,63 @@ function StoreDetail() {
           />
         </div>
         <div className="row">
-          {getValues("contract_of_house_renting_file") ? (
-            <DownloadFileInputField
-              requiredColWidth={3}
-              requiredLbl={"Hợp đồng thuê nhà(PDF)"}
-              requiredHref={`${getValues("contract_of_house_renting_file")}`}
-              requiredLblHref={"Xem"}
-            />
-          ) : (
-            <FileInputField
-              requiredColWidth={3}
-              requiredLbl={"Hợp đồng thuê nhà(PDF)"}
-              requiredRegister={register}
-              requiredName={"contract_of_house_renting_file"}
-              optionalAccept={INPUTPDFFILETYPEACCEPT}
-            />
-          )}
-          <InputField
+          <DownloadFileInputField
             requiredColWidth={3}
-            requiredLbl="Tiền thuê nhà"
-            requiredType="number"
+            requiredLbl={"Hợp đồng thuê nhà(PDF)"}
+            requiredHref={`${getValues("contract_of_house_renting_file")}`}
+            requiredLblHref={"Xem"}
             requiredRegister={register}
-            requiredName="rent"
-            requiredIsRequired={true}
+            requiredName={"contract_of_house_renting_file"}
+            optionalAccept={INPUTPDFFILETYPEACCEPT}
           />
-          <InputField
-            requiredColWidth={3}
-            requiredLbl="Tiền điện"
-            requiredType="number"
-            requiredRegister={register}
-            requiredName="electric_bill"
-            requiredIsRequired={true}
-          />
-          <InputField
-            requiredColWidth={3}
-            requiredLbl="Tiền nước"
-            requiredType="number"
-            requiredRegister={register}
-            requiredName="water_bill"
-            requiredIsRequired={true}
-          />
+          <div className="col-md-3">
+            <div className="mb-3">
+              <label className="form-label">
+                Tiền thuê nhà
+                <RequiredSymbol />{" "}
+              </label>
+              <CurrencyFormat
+                type="text"
+                className="form-control"
+                value={getValues("rent")}
+                required
+                thousandSeparator={true}
+                onChange={moneyRentInputFieldFormat}
+              />
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="mb-3">
+              <label className="form-label">
+                Tiền điện
+                <RequiredSymbol />{" "}
+              </label>
+              <CurrencyFormat
+                type="text"
+                className="form-control"
+                value={getValues("electric_bill")}
+                required
+                thousandSeparator={true}
+                onChange={moneyElectricBillInputFieldFormat}
+              />
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="mb-3">
+              <label className="form-label">
+                Tiền nước
+                <RequiredSymbol />{" "}
+              </label>
+              <CurrencyFormat
+                type="text"
+                className="form-control"
+                value={getValues("water_bill")}
+                required
+                thousandSeparator={true}
+                onChange={moneyWaterBillInputFieldFormat}
+              />
+            </div>
+          </div>
         </div>
         <div className="row">
           <InputField

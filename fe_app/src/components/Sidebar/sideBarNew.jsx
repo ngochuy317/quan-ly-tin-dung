@@ -43,8 +43,8 @@ function SideBarNew() {
               <CDBSidebarMenuItem
                 suffix={
                   item?.private === true ? (
-                    <CDBBadge color="danger" size="small">
-                      AD
+                    <CDBBadge color="danger" size="small" borderType="pill">
+                      A
                     </CDBBadge>
                   ) : null
                 }
