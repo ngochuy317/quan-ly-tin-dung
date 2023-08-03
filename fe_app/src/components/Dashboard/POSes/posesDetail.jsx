@@ -265,7 +265,7 @@ function POSesDetail() {
           <button
             type="button"
             disabled={isSubmitting}
-            onClick={() => append({})}
+            onClick={() => append({ new: true })}
             className="btn btn-outline-primary "
           >
             {isSubmitting && (
