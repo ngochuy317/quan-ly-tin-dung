@@ -93,7 +93,7 @@ function NotebookDetail() {
             requiredRegister={register}
             requiredName={"store"}
             requiredDataOption={stores}
-            requiredLblSelect="Chọn cửa hàng"
+            optionalLblSelect="Chọn cửa hàng"
             requiredValueOption={(ele) => `${ele.id}`}
             requiredLblOption={(ele) => `${ele.name}`}
           />

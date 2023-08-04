@@ -7,7 +7,6 @@ SelectField.propTypes = {
 
   requiredLbl: PropTypes.string.isRequired,
   requiredName: PropTypes.string.isRequired,
-  requiredLblSelect: PropTypes.string.isRequired,
 
   requiredIsRequired: PropTypes.bool.isRequired,
 
@@ -17,6 +16,7 @@ SelectField.propTypes = {
   requiredValueOption: PropTypes.func.isRequired,
   requiredLblOption: PropTypes.func.isRequired,
 
+  optionalLblSelect: PropTypes.string,
   optionalOnChangeSelect: PropTypes.func,
   optionalDisable: PropTypes.bool,
 };
@@ -32,7 +32,7 @@ function SelectField(props) {
     requiredIsRequired,
     requiredRegister,
     requiredName,
-    requiredLblSelect,
+    optionalLblSelect,
     requiredDataOption,
     optionalOnChangeSelect,
     requiredValueOption,
@@ -54,7 +54,7 @@ function SelectField(props) {
             onChange={optionalOnChangeSelect}
             disabled={optionalDisable}
           >
-            <option value="">{requiredLblSelect}</option>
+            {optionalLblSelect && <option value="">{optionalLblSelect}</option>}
             {requiredDataOption?.map((ele, index) => (
               <option key={index} value={requiredValueOption(ele)}>
                 {requiredLblOption(ele)}

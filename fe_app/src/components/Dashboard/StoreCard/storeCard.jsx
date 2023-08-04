@@ -301,7 +301,7 @@ function StoreCard() {
             requiredRegister={register}
             requiredName={"notebook"}
             requiredDataOption={notebooks}
-            requiredLblSelect="Chọn Sổ lưu"
+            optionalLblSelect="Chọn Sổ lưu"
             requiredValueOption={(ele) => `${ele.id}`}
             requiredLblOption={(ele) => `${ele.name}`}
             optionalOnChangeSelect={handleOnChangeNotebook}
@@ -314,7 +314,7 @@ function StoreCard() {
             requiredRegister={register}
             requiredName={"status"}
             requiredDataOption={STATUSOFCARD}
-            requiredLblSelect="Chọn trạng thái"
+            optionalDisable={true}
             requiredValueOption={(ele) => `${ele.value}`}
             requiredLblOption={(ele) => `${ele.label}`}
           />

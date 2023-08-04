@@ -150,7 +150,7 @@ function NewPos() {
             requiredRegister={register}
             requiredName={"status"}
             requiredDataOption={POSSTATUS}
-            requiredLblSelect="Chọn trạng thái"
+            optionalLblSelect="Chọn trạng thái"
             requiredValueOption={(ele) => `${ele.value}`}
             requiredLblOption={(ele) => `${ele.label}`}
           />
@@ -255,7 +255,7 @@ function NewPos() {
             requiredRegister={register}
             requiredName={"store"}
             requiredDataOption={stores}
-            requiredLblSelect="Chọn cửa hàng"
+            optionalLblSelect="Chọn cửa hàng"
             requiredValueOption={(ele) => `${ele.id}`}
             requiredLblOption={(ele) => `${ele.name}`}
           />
@@ -266,7 +266,7 @@ function NewPos() {
             requiredRegister={register}
             requiredName={"from_store"}
             requiredDataOption={storeMakePOS}
-            requiredLblSelect="Chọn cửa hàng"
+            optionalLblSelect="Chọn cửa hàng"
             requiredValueOption={(ele) => `${ele.id}`}
             requiredLblOption={(ele) => `${ele.name}`}
           />

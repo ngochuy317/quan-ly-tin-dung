@@ -115,7 +115,7 @@ function NewStoreMakePOS() {
             requiredRegister={register}
             requiredName={"working_status"}
             requiredDataOption={WORKINGSTATUSOFSTOREMAKEPOS}
-            requiredLblSelect="Chọn trạng thái"
+            optionalLblSelect="Chọn trạng thái"
             requiredValueOption={(ele) => `${ele.value}`}
             requiredLblOption={(ele) => `${ele.label}`}
           />

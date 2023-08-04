@@ -5,7 +5,11 @@ import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import DisplayImageFileInputField from "../../Common/displayImageFileInputField";
 import InputField from "../../Common/inputField";
 import SelectField from "../../Common/selectField";
-import { GENDERCHOICES, INPUTIMAGETYPEACCEPT, TRANSACTIONTYPE } from "../../ConstantUtils/constants";
+import {
+  GENDERCHOICES,
+  INPUTIMAGETYPEACCEPT,
+  TRANSACTIONTYPE,
+} from "../../ConstantUtils/constants";
 import ModifiyBillPOSMachineModal from "../../Modal/modifyBillPosMachineModal";
 
 function SwipeCardDetail() {
@@ -48,6 +52,16 @@ function SwipeCardDetail() {
       getValues(`billpos[${index}]`)
     );
     handleShow();
+  };
+
+  const onDelete = async (id) => {
+    try {
+      const response = await swipeCardTransactionAPI.deleteOne(id);
+      console.log("Delete swipe card successfully", response);
+      navigate("./..");
+    } catch (error) {
+      console.log("Failed to delete swipe card", error);
+    }
   };
 
   const handleClose = (index, imageValue) => {
@@ -98,9 +112,7 @@ function SwipeCardDetail() {
       }
 
       if (data.transaction_with_customer_image) {
-        if (
-          typeof data.transaction_with_customer_image === "string"
-        ) {
+        if (typeof data.transaction_with_customer_image === "string") {
           delete data.transaction_with_customer_image;
         } else {
           data.transaction_with_customer_image =
@@ -172,7 +184,7 @@ function SwipeCardDetail() {
             requiredRegister={register}
             requiredName={"customer.gender"}
             requiredDataOption={GENDERCHOICES}
-            requiredLblSelect="Chọn giới tính"
+            optionalLblSelect="Chọn giới tính"
             requiredValueOption={(ele) => `${ele.value}`}
             requiredLblOption={(ele) => `${ele.label}`}
           />
@@ -435,6 +447,16 @@ function SwipeCardDetail() {
           </div>
         </div>
         <div className="d-flex justify-content-end">
+          <button
+            type="button"
+            onClick={() => onDelete(dataSwipCardDetail.id)}
+            className="btn btn-outline-danger"
+          >
+            {isSubmitting && (
+              <span className="spinner-border spinner-border-sm mr-1"></span>
+            )}
+            Xoá
+          </button>
           <button
             disabled={isSubmitting}
             type="button"

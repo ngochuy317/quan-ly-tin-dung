@@ -4,6 +4,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 from django.urls import path
 from .views import (
     BillPosListAPIView,
+    BillPosRetrieveUpdateDestroyAPIView,
     FeePos4CreditCardDetailRetrieveUpdateDestroyAPIView,
     FeePos4CreditCardListCreateAPIView,
     POSNickNameAPIView,
@@ -15,6 +16,7 @@ from .views import (
 
 urlpatterns = [
     path("bill-pos/", BillPosListAPIView.as_view(), name="get-bill-pos"),
+    path("bill-pos/<pk>/", BillPosRetrieveUpdateDestroyAPIView.as_view(), name="bill-pos-detail"),
     path("nick-name-pos/", POSNickNameAPIView.as_view(), name="nick-name-pos"),
     path("stores-make-pos/", StoreMakePOSListCreateAPIView.as_view(), name="stores-make-pos"),
     path("stores-make-pos/nopagination/", StoreMakePOSListAPIViewNoPagination.as_view(), name="stores-make-pos"),

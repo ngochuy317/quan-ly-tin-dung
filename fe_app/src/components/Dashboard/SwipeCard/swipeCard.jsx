@@ -8,6 +8,7 @@ import InputField from "../../Common/inputField";
 import {
   ADMIN,
   EMPLOYEE,
+  MAMANGER,
   TRANSACTIONTYPE,
 } from "../../ConstantUtils/constants";
 import { AuthContext } from "../../Dashboard/dashboard";
@@ -79,6 +80,16 @@ function SwipeCard() {
     }
     fetchTransactionHistory();
   }, [params]);
+
+  const onDelete = async (id) => {
+    try {
+      const response = await swipeCardTransactionAPI.deleteOne(id);
+      console.log("Delete swipe card successfully", response);
+      setParams({ ...params });
+    } catch (error) {
+      console.log("Failed to delete swipe card", error);
+    }
+  };
 
   const onAddForm = (event) => {
     setFormInput([
@@ -221,6 +232,7 @@ function SwipeCard() {
               <th scope="col">Ngày chỉnh sửa</th>
               {/* {role === ADMIN ? <th scope="col">Tiền về</th> : null} */}
               <th scope="col">Thao tác</th>
+              {(role === ADMIN || role === MAMANGER) && <th scope="col"></th>}
             </tr>
           </thead>
           <tbody className="table-group-divider">
@@ -250,6 +262,17 @@ function SwipeCard() {
                 <td>
                   <Link to={swipeCard.id + "/"}>Chỉnh sửa</Link>
                 </td>
+                {(role === ADMIN || role === MAMANGER) && (
+                  <td>
+                    <button
+                      type="button"
+                      onClick={() => onDelete(swipeCard.id)}
+                      className="btn btn-outline-danger mx-3"
+                    >
+                      Xoá
+                    </button>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>

@@ -178,7 +178,7 @@ function EmployeeDetail() {
             requiredRegister={register}
             requiredName={"infomation_detail.gender"}
             requiredDataOption={GENDERCHOICES}
-            requiredLblSelect="Chọn giới tính"
+            optionalLblSelect="Chọn giới tính"
             requiredValueOption={(ele) => `${ele.value}`}
             requiredLblOption={(ele) => `${ele.label}`}
           />
@@ -245,7 +245,7 @@ function EmployeeDetail() {
             requiredRegister={register}
             requiredName={"infomation_detail.store"}
             requiredDataOption={stores}
-            requiredLblSelect="Chọn cửa hàng"
+            optionalLblSelect="Chọn cửa hàng"
             requiredValueOption={(ele) => `${ele.id}`}
             requiredLblOption={(ele) => `${ele.name}`}
           />
@@ -256,7 +256,7 @@ function EmployeeDetail() {
             requiredRegister={register}
             requiredName={"role"}
             requiredDataOption={ROLES}
-            requiredLblSelect="Chọn cấp bậc"
+            optionalLblSelect="Chọn cấp bậc"
             requiredValueOption={(ele) => `${ele.roleKey}`}
             requiredLblOption={(ele) => `${ele.roleName}`}
           />

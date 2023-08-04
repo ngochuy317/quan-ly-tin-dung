@@ -263,7 +263,7 @@ function SwipeCardMoreDetail() {
                 requiredName={`billpos[${index}].pos`}
                 requiredDataOption={state.posMachineData}
                 // OptionalOnChangeSelect={optionalHandleOnChangePOS}
-                requiredLblSelect="Chọn máy POS"
+                optionalLblSelect="Chọn máy POS"
                 requiredValueOption={(ele) => `${ele.id}`}
                 requiredLblOption={(ele) =>
                   `${ele.id}-${ele.mid}-${ele.tid}-${ele.bank_name}`

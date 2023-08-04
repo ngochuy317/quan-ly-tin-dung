@@ -26,6 +26,19 @@ class BillPosListAPIView(ListAPIView):
     queryset = BillPos.objects.all()
 
 
+class BillPosRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
+    queryset = BillPos.objects.all()
+
+    def patch(self, request, *args, **kwargs):
+
+        partial = True
+        instance = self.get_object()
+        serializer = BillPosSerializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(status=status.HTTP_200_OK)
+
+
 class StoreMakePOSListAPIViewNoPagination(ListAPIView):
 
     queryset = StoreMakePOS.objects.all()

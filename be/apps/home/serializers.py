@@ -259,7 +259,9 @@ class BillPosSerializer(serializers.ModelSerializer):
 
 class SwipeCardTransactionReportSerializer(serializers.ModelSerializer):
     user_name = serializers.CharField(source="user.infomation_detail.fullname", read_only=True)
-    pos = POSSerializer()
+    customer_name = serializers.CharField(source="customer.name", read_only=True)
+    customer_phone_number = serializers.CharField(source="customer.phone_number", read_only=True)
+    # billposes = POSSerializer(many=True)
 
     class Meta:
         model = SwipeCardTransaction
@@ -271,7 +273,7 @@ class SwipeCardTransactionReportSerializer(serializers.ModelSerializer):
             "fee",
             "customer_name",
             "customer_phone_number",
-            "pos",
+            # "pos",
         )
 
 
@@ -285,7 +287,7 @@ class SwipeCardTransactionCustomerSerializer(serializers.Serializer):
 
     credit_card = CreditCardCustomerSerializer(read_only=True)
     phone_number = serializers.CharField()
-    name = serializers.CharField(read_only=True)
+    name = serializers.CharField(allow_null=True, allow_blank=True)
 
 
 class BankAccountSwipeCardTransactionDetailRetrieveUpdateSerializer(serializers.ModelSerializer):
@@ -432,6 +434,9 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
             phone_number=phone_number,
             credit_card=creditcard_obj,
         )
+        for attr, val in customer.items():
+            setattr(customer_obj, attr, val)
+        customer_obj.save()
         instance = SwipeCardTransaction.objects.create(
             **validated_data, customer=customer_obj, credit_card_number=card_number
         )

@@ -32,6 +32,12 @@ class SwipeCardTransactionAPI {
       },
     });
   };
+
+
+  deleteOne = (id) => {
+    const url = this.creditCardBaseUrl + id + "/";
+    return axiosClient.delete(url);
+  };
 }
 
 const swipeCardTransactionAPI = new SwipeCardTransactionAPI();

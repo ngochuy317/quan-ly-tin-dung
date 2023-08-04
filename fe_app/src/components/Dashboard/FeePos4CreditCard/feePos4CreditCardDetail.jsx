@@ -90,7 +90,7 @@ function FeePos4CreditCardDetail() {
             requiredRegister={register}
             requiredName={"pos_machine"}
             requiredDataOption={poses}
-            requiredLblSelect="Chọn máy POS"
+            optionalLblSelect="Chọn máy POS"
             requiredValueOption={(ele) => `${ele.id}`}
             requiredLblOption={(ele) =>
               `${ele.name}-${ele.bank_name}-${ele.bank_account}`

@@ -3,7 +3,9 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import billPOSApi from "../../../api/billPOSAPI";
 import storeApi from "../../../api/storeAPI";
-import { ADMIN } from "../../ConstantUtils/constants";
+import { ADMIN, BILLPOSSTATUS, COLORROWBYBILLPOSSATUS } from "../../ConstantUtils/constants";
+import BillPosStatusConfirmModal from "../../Modal/billPosStatusConfirmModal";
+import ShowErrorModal from "../../Modal/showErrorModal";
 import Pagination from "../../Pagination/pagination";
 import { AuthContext } from "../dashboard";
 
@@ -14,6 +16,12 @@ function BillPOSMachineMangement(props) {
   const [stores, setStores] = useState([]);
   const [poses, setPoses] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [show, setShow] = useState(false);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [dataBillPosStatusConfirmModal, setDataBillPosStatusConfirmModal] =
+    useState({});
+  const [errorMsg, setErrorMsg] = useState("");
+  const [billPosStatus, setBillPosStatus] = useState(1);
   const [params, setParams] = useState({ page: 1 });
   const [responseBillPOSMachine, setResponseBillPOSMachine] = useState([]);
 
@@ -32,6 +40,52 @@ function BillPOSMachineMangement(props) {
     }
   }, [role]);
 
+  const handleCloseErrorModal = () => setShowErrorModal(false);
+  const handleClose = () => setShow(false);
+  const handleConfirm = async (e, id) => {
+    e.preventDefault();
+    try {
+      const response = await billPOSApi.updateOne(id, {
+        status: billPosStatus,
+      });
+      console.log(
+        "🚀 ~ file: billPOSMachineManagement.jsx:49 ~ handleConfirm ~ id:",
+        id
+      );
+      console.log(
+        "🚀 ~ file: billPOSMachineManagement.jsx:51 ~ handleConfirm ~ response:",
+        response
+      );
+      setShow(false);
+      handleChangePage(0);
+    } catch (error) {
+      setShow(false);
+      setErrorMsg("Đã có lỗi xảy ra. Vui lòng thử lại");
+      setShowErrorModal(true);
+      console.log("Failed to confirm money reiceive", error);
+    }
+  };
+
+  const handleShowModal = (e, id, transactionTime, status) => {
+    console.log(
+      "🚀 ~ file: billPOSMachineManagement.jsx:70 ~ handleShowModal ~ data:",
+      id,
+      transactionTime,
+      status
+    );
+    e.preventDefault();
+    setDataBillPosStatusConfirmModal({
+      id: id,
+      transactionTime: transactionTime,
+      status: status,
+    });
+    setShow(true);
+    console.log(
+      "🚀 ~ file: billPOSMachineManagement.jsx:83 ~ handleShowModal ~ dataBillPosStatusConfirmModal:",
+      dataBillPosStatusConfirmModal
+    );
+  };
+
   const onSubmit = async (data) => {
     try {
       const response = await billPOSApi.getAll({
@@ -46,6 +100,14 @@ function BillPOSMachineMangement(props) {
     } catch (error) {
       console.log("Failed to Get Bill POS machine", error);
     }
+  };
+
+  const onChangeBillPosStatus = (e) => {
+    console.log(
+      "🚀 ~ file: billPOSMachineManagement.jsx:79 ~ BillPOSMachineMangement ~ e:",
+      e.target.value
+    );
+    setBillPosStatus(parseInt(e.target.value));
   };
 
   const handleChangePage = async (direction) => {
@@ -149,16 +211,19 @@ function BillPOSMachineMangement(props) {
               <th scope="col">Ngày giao dịch</th>
               <th scope="col">Hình bill</th>
               <th scope="col">Số tiền</th>
-              <th scope="col">Tiền về</th>
               <th scope="col">Số tham chiếu</th>
               <th scope="col">Số hoá đơn</th>
               <th scope="col">Số lô</th>
               <th scope="col">Trạng thái</th>
+              <th scope="col">Thao tác</th>
             </tr>
           </thead>
           <tbody className="table-group-divider">
             {responseBillPOSMachine?.results?.map((billPos, index) => (
-              <tr key={billPos.id}>
+              <tr
+                key={billPos.id}
+                className={COLORROWBYBILLPOSSATUS[billPos.status]}
+              >
                 <th scope="row">{index + 1}</th>
                 <td>{billPos.datetime_created}</td>
                 <td>
@@ -167,16 +232,46 @@ function BillPOSMachineMangement(props) {
                   </Link>
                 </td>
                 <td>{billPos.total_money?.toLocaleString("vn")}</td>
-                <td>{billPos.is_payment_received ? "Đã về" : "Chưa về"}</td>
                 <td>{billPos.ref_no}</td>
                 <td>{billPos.invoice_no}</td>
                 <td>{billPos.batch}</td>
-                <td>{billPos.active? "Hoạt động" : "Đã xoá"}</td>
+                <td>
+                  {BILLPOSSTATUS.find((c) => c.value === billPos.status)?.label}
+                </td>
+                <td>
+                  <a
+                    href="/#"
+                    onClick={(e) =>
+                      handleShowModal(
+                        e,
+                        billPos.id,
+                        billPos.datetime_created,
+                        billPos.status
+                      )
+                    }
+                    style={{ cursor: "pointer" }}
+                  >
+                    Xác nhận trạng thái
+                  </a>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
+        <BillPosStatusConfirmModal
+          requiredShow={show}
+          requiredHandleClose={handleClose}
+          requiredDataBillPosStatusConfirmModal={dataBillPosStatusConfirmModal}
+          requiredHandleConfirm={handleConfirm}
+          requiredData={BILLPOSSTATUS}
+          requiredOnChange={onChangeBillPosStatus}
+        />
       </div>
+      <ShowErrorModal
+        show={showErrorModal}
+        handleClose={handleCloseErrorModal}
+        msg={errorMsg}
+      />
       <Pagination
         canBedisabled={responseBillPOSMachine?.results?.length ? false : true}
         currentPage={currentPage}

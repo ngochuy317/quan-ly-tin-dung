@@ -275,7 +275,7 @@ function SwipeCardInput(props) {
             requiredRegister={register}
             requiredName={`billpos[${index}].pos`}
             requiredDataOption={requiredPosMachine}
-            requiredLblSelect="Chọn máy POS"
+            optionalLblSelect="Chọn máy POS"
             requiredValueOption={(ele) => `${ele.id}`}
             requiredLblOption={(ele) =>
               `${ele.id}-${ele.mid}-${ele.tid}-${ele.bank_name}`
