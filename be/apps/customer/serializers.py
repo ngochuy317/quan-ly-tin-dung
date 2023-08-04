@@ -5,8 +5,24 @@ from rest_framework import serializers
 from .models import CreditCard, Customer
 
 
+class CustomerSerializer(serializers.ModelSerializer):
+
+    phone_number = serializers.CharField()
+
+    class Meta:
+        model = Customer
+        fields = "__all__"
+
+    def validate_phone_number(self, value):
+        """
+        Because this serializer only use for update data which is `phone_number` can not be modified.
+        """
+        return value
+
+
 class CreditCardSerializer(serializers.ModelSerializer):
     card_number = serializers.CharField(max_length=127)
+    customer = CustomerSerializer()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -39,7 +55,8 @@ class CreditCardSerializer(serializers.ModelSerializer):
 class CreditCardCustomSerializer(CreditCardSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        customer = Customer.objects.filter(credit_card__id=data["id"]).first()
+        creditcard = CreditCard.objects.filter(id=data["id"]).first()
+        customer = creditcard.customer
         data["customer"] = {}
         data["customer"]["name"] = customer.name
         data["customer"]["gender"] = customer.gender

@@ -35,7 +35,7 @@ class NotebookApi {
   };
 
   getDetailRowNotebook = (id, params) => {
-    const url = "/rownotebook/" + id;
+    const url = "/rownotebook/" + id + "/";
     return axiosClient.get(url, { params });
   };
 }

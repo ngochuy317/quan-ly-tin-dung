@@ -166,7 +166,6 @@ class SwipeCardTransaction(models.Model):
 
     is_creditcard_stored = models.BooleanField(default=False)
     store_id = models.PositiveBigIntegerField()
-    credit_card_number = models.CharField(max_length=20, db_index=True)
     store_name = models.CharField(max_length=127)
     store_address = models.CharField(max_length=1023)
     store_phone_number = models.CharField(max_length=20, default="")
@@ -176,8 +175,8 @@ class SwipeCardTransaction(models.Model):
     transaction_with_customer_image = models.ImageField(
         upload_to="uploads/swipecard_transaction/", blank=True, null=True
     )
-    customer = models.ForeignKey(
-        "customer.Customer", on_delete=models.CASCADE, related_name=RELATED_NAME, blank=True, null=True
+    creditcard = models.ForeignKey(
+        "customer.CreditCard", on_delete=models.CASCADE, related_name=RELATED_NAME, blank=True, null=True
     )
     user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name=RELATED_NAME)
     at_store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name=RELATED_NAME, blank=True, null=True)

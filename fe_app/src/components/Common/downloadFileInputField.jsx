@@ -31,8 +31,8 @@ function DownloadFileInputField(props) {
       <div className="mb-3">
         <label className="form-label">
           {requiredLbl}{" "}
-          {requiredHref && requiredHref != "null" && (
-            <a href={requiredHref} target="_blank">
+          {requiredHref && requiredHref !== "null" && (
+            <a href={requiredHref} target="_blank" rel="noopener noreferrer">
               {requiredLblHref}
             </a>
           )}

@@ -230,7 +230,6 @@ function SwipeCard() {
               <th scope="col">Hoạt động</th>
               <th scope="col">NV quẹt thẻ</th>
               <th scope="col">Ngày chỉnh sửa</th>
-              {/* {role === ADMIN ? <th scope="col">Tiền về</th> : null} */}
               <th scope="col">Thao tác</th>
               {(role === ADMIN || role === MAMANGER) && <th scope="col"></th>}
             </tr>
@@ -240,13 +239,13 @@ function SwipeCard() {
               <tr key={swipeCard.id}>
                 <th scope="row">{index + 1}</th>
                 <td>{swipeCard.transaction_datetime_created}</td>
-                <td>{swipeCard?.customer?.credit_card?.card_name}</td>
+                <td>{swipeCard.creditcard.card_name}</td>
                 <td>
-                  <Link>{swipeCard?.customer?.credit_card?.card_number}</Link>
+                  <Link>{swipeCard.creditcard.card_number}</Link>
                 </td>
                 <td>{swipeCard.customer_money_needed}</td>
-                <td>{swipeCard.customer?.name}</td>
-                <td>{swipeCard.customer?.phone_number}</td>
+                <td>{swipeCard.creditcard.customer.name}</td>
+                <td>{swipeCard.creditcard.customer.phone_number}</td>
                 <td>
                   {
                     TRANSACTIONTYPE.find(

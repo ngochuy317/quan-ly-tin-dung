@@ -30,9 +30,8 @@ function SwipeCardDetail() {
         const response = await swipeCardTransactionAPI.getDetail(id);
         console.log("Fetch SwipeCardTransactionDetail successfully", response);
 
-        let initValues = { ...response };
         setDataSwipCardDetail(response);
-        reset({ ...initValues });
+        reset({ ...response });
       } catch (error) {
         console.log("Failed to fetch SwipeCardTransactionDetail", error);
       }
@@ -71,43 +70,39 @@ function SwipeCardDetail() {
 
   const onSubmit = async (data) => {
     try {
-      if (data.customer.id_card_front_image) {
-        if (typeof data.customer.id_card_front_image === "string") {
-          delete data.customer.id_card_front_image;
+      if (data.creditcard.customer.id_card_front_image) {
+        if (typeof data.creditcard.customer.id_card_front_image === "string") {
+          delete data.creditcard.customer.id_card_front_image;
         } else {
-          data.customer.id_card_front_image =
-            data.customer.id_card_front_image[0];
+          data.creditcard.customer.id_card_front_image =
+            data.creditcard.customer.id_card_front_image[0];
         }
       }
 
-      if (data.customer.id_card_back_image) {
-        if (typeof data.customer.id_card_back_image === "string") {
-          delete data.customer.id_card_back_image;
+      if (data.creditcard.customer.id_card_back_image) {
+        if (typeof data.creditcard.customer.id_card_back_image === "string") {
+          delete data.creditcard.customer.id_card_back_image;
         } else {
-          data.customer.id_card_back_image =
-            data.customer.id_card_back_image[0];
+          data.creditcard.customer.id_card_back_image =
+            data.creditcard.customer.id_card_back_image[0];
         }
       }
 
-      if (data.customer.credit_card.credit_card_back_image) {
-        if (
-          typeof data.customer.credit_card.credit_card_back_image === "string"
-        ) {
-          delete data.customer.credit_card.credit_card_back_image;
+      if (data.creditcard.credit_card_back_image) {
+        if (typeof data.creditcard.credit_card_back_image === "string") {
+          delete data.creditcard.credit_card_back_image;
         } else {
-          data.customer.credit_card.credit_card_back_image =
-            data.customer.credit_card.credit_card_back_image[0];
+          data.creditcard.credit_card_back_image =
+            data.creditcard.credit_card_back_image[0];
         }
       }
 
-      if (data.customer.credit_card.credit_card_front_image) {
-        if (
-          typeof data.customer.credit_card.credit_card_front_image === "string"
-        ) {
-          delete data.customer.credit_card.credit_card_front_image;
+      if (data.creditcard.credit_card_front_image) {
+        if (typeof data.creditcard.credit_card_front_image === "string") {
+          delete data.creditcard.credit_card_front_image;
         } else {
-          data.customer.credit_card.credit_card_front_image =
-            data.customer.credit_card.credit_card_front_image[0];
+          data.creditcard.credit_card_front_image =
+            data.creditcard.credit_card_front_image[0];
         }
       }
 
@@ -167,22 +162,19 @@ function SwipeCardDetail() {
         <div className="row"></div>
         <h5>Khách hàng</h5>
         <div className="row">
-          <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">Tên</label>
-              <input
-                {...register("customer.name")}
-                type="text"
-                className="form-control"
-              />
-            </div>
-          </div>
+          <InputField
+            requiredColWidth={2}
+            requiredLbl="Tên"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName={"creditcard.customer.name"}
+          />
           <SelectField
             requiredColWidth={1}
             requiredLbl="Giới tính"
             requiredIsRequired={true}
             requiredRegister={register}
-            requiredName={"customer.gender"}
+            requiredName={"creditcard.customer.gender"}
             requiredDataOption={GENDERCHOICES}
             optionalLblSelect="Chọn giới tính"
             requiredValueOption={(ele) => `${ele.value}`}
@@ -194,7 +186,7 @@ function SwipeCardDetail() {
             requiredLbl="Số điện thoại"
             requiredType="tel"
             requiredRegister={register}
-            requiredName={"customer.phone_number"}
+            requiredName={"creditcard.customer.phone_number"}
             optionalDisabled={true}
           />
 
@@ -212,7 +204,7 @@ function SwipeCardDetail() {
             requiredLbl="Số TK nhận tiền"
             requiredType="text"
             requiredRegister={register}
-            requiredName={"customer.bank_account.account_number"}
+            requiredName={"creditcard.customer.bank_account.account_number"}
           />
 
           <InputField
@@ -220,24 +212,28 @@ function SwipeCardDetail() {
             requiredLbl="Ngân hàng"
             requiredType="text"
             requiredRegister={register}
-            requiredName={"customer.bank_account.bank_name"}
+            requiredName={"creditcard.customer.bank_account.bank_name"}
           />
         </div>
         <div className="row">
           <DisplayImageFileInputField
             requiredColWidth={4}
             requiredLbl={"Ảnh mặt trước cmnd/cccd"}
-            requiredImageUrl={`${getValues("customer.id_card_front_image")}`}
+            requiredImageUrl={`${getValues(
+              "creditcard.customer.id_card_front_image"
+            )}`}
             requiredRegister={register}
-            requiredName={"customer.id_card_front_image"}
+            requiredName={"creditcard.customer.id_card_front_image"}
             optionalAccept={INPUTIMAGETYPEACCEPT}
           />
           <DisplayImageFileInputField
             requiredColWidth={4}
             requiredLbl={"Ảnh mặt sau cmnd/cccd"}
-            requiredImageUrl={`${getValues("customer.id_card_back_image")}`}
+            requiredImageUrl={`${getValues(
+              "creditcard.customer.id_card_back_image"
+            )}`}
             requiredRegister={register}
-            requiredName={"customer.id_card_back_image"}
+            requiredName={"creditcard.customer.id_card_back_image"}
             optionalAccept={INPUTIMAGETYPEACCEPT}
           />
           <DisplayImageFileInputField
@@ -298,7 +294,7 @@ function SwipeCardDetail() {
             requiredLbl="Số thẻ"
             requiredType="text"
             requiredRegister={register}
-            requiredName={"customer.credit_card.card_number"}
+            requiredName={"creditcard.card_number"}
             optionalDisabled={true}
           />
 
@@ -307,7 +303,7 @@ function SwipeCardDetail() {
             requiredLbl="Ngân hàng"
             requiredType="text"
             requiredRegister={register}
-            requiredName={"customer.credit_card.card_bank_name"}
+            requiredName={"creditcard.card_bank_name"}
           />
 
           <InputField
@@ -315,7 +311,7 @@ function SwipeCardDetail() {
             requiredLbl="Hạn mức thẻ"
             requiredType="number"
             requiredRegister={register}
-            requiredName={"customer.credit_card.line_of_credit"}
+            requiredName={"creditcard.line_of_credit"}
           />
 
           <InputField
@@ -332,7 +328,7 @@ function SwipeCardDetail() {
             requiredLbl="Tên trên thẻ"
             requiredType="text"
             requiredRegister={register}
-            requiredName={"customer.credit_card.card_name"}
+            requiredName={"creditcard.card_name"}
           />
 
           <InputField
@@ -340,7 +336,7 @@ function SwipeCardDetail() {
             requiredLbl="Ngày mở thẻ"
             requiredType="date"
             requiredRegister={register}
-            requiredName={"customer.credit_card.card_issued_date"}
+            requiredName={"creditcard.card_issued_date"}
           />
 
           <InputField
@@ -348,7 +344,7 @@ function SwipeCardDetail() {
             requiredLbl="Ngày hết hạn"
             requiredType="date"
             requiredRegister={register}
-            requiredName={"customer.credit_card.card_expire_date"}
+            requiredName={"creditcard.card_expire_date"}
           />
 
           <InputField
@@ -356,7 +352,7 @@ function SwipeCardDetail() {
             requiredLbl="CCV"
             requiredType="text"
             requiredRegister={register}
-            requiredName={"customer.credit_card.card_ccv"}
+            requiredName={"creditcard.card_ccv"}
             optionalMaxLengthForTextType={3}
           />
         </div>
@@ -366,7 +362,7 @@ function SwipeCardDetail() {
             requiredLbl="Ngày sao kê"
             requiredType="date"
             requiredRegister={register}
-            requiredName={"customer.credit_card.statement_date"}
+            requiredName={"creditcard.statement_date"}
           />
           {/* <InputField
             requiredColWidth={2}
@@ -392,59 +388,28 @@ function SwipeCardDetail() {
               </select>
             </div>
           </div>
-          {/* <div className="col-md-2">
-            <div className="mb-3">
-              <input
-                {...register("is_payment_received")}
-                type="checkbox"
-                className="form-check-input"
-                // checked
-              />
-              <label className="form-check-label">Tiền về</label>
-            </div>
-          </div> */}
         </div>
         <div className="row">
-          <div className="col-md-6">
-            <div className="mb-3">
-              <label className="form-label">Ảnh mặt trước thẻ tín dụng</label>
-
-              {dataSwipCardDetail?.customer?.credit_card
-                ?.credit_card_front_image ? (
-                <img
-                  src={`${dataSwipCardDetail.customer.credit_card.credit_card_front_image}`}
-                  style={{ maxWidth: "100%", height: "auto" }}
-                  alt=""
-                ></img>
-              ) : (
-                <input
-                  {...register("customer.credit_card.credit_card_front_image")}
-                  type="file"
-                  className="form-control"
-                />
-              )}
-            </div>
-          </div>
-
-          <div className="col-md-6">
-            <div className="mb-3">
-              <label className="form-label">Ảnh mặt sau thẻ tín dụng</label>
-              {dataSwipCardDetail?.customer?.credit_card
-                ?.credit_card_back_image ? (
-                <img
-                  src={`${dataSwipCardDetail.customer.credit_card.credit_card_back_image}`}
-                  style={{ maxWidth: "100%", height: "auto" }}
-                  alt=""
-                ></img>
-              ) : (
-                <input
-                  {...register("customer.credit_card.credit_card_back_image")}
-                  type="file"
-                  className="form-control"
-                />
-              )}
-            </div>
-          </div>
+          <DisplayImageFileInputField
+            requiredColWidth={6}
+            requiredLbl={"Ảnh mặt trước thẻ tín dụng"}
+            requiredImageUrl={`${getValues(
+              "creditcard.credit_card_front_image"
+            )}`}
+            requiredRegister={register}
+            requiredName={"creditcard.credit_card_front_image"}
+            optionalAccept={INPUTIMAGETYPEACCEPT}
+          />
+          <DisplayImageFileInputField
+            requiredColWidth={6}
+            requiredLbl={"Ảnh mặt sau thẻ tín dụng"}
+            requiredImageUrl={`${getValues(
+              "creditcard.credit_card_back_image"
+            )}`}
+            requiredRegister={register}
+            requiredName={"creditcard.credit_card_back_image"}
+            optionalAccept={INPUTIMAGETYPEACCEPT}
+          />
         </div>
         <div className="d-flex justify-content-end">
           <button

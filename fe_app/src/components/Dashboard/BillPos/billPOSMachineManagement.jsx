@@ -3,7 +3,12 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import billPOSApi from "../../../api/billPOSAPI";
 import storeApi from "../../../api/storeAPI";
-import { ADMIN, BILLPOSSTATUS, COLORROWBYBILLPOSSATUS } from "../../ConstantUtils/constants";
+import {
+  ADMIN,
+  BILLPOSSTATUS,
+  COLORROWBYBILLPOSSATUS,
+  MAMANGER,
+} from "../../ConstantUtils/constants";
 import BillPosStatusConfirmModal from "../../Modal/billPosStatusConfirmModal";
 import ShowErrorModal from "../../Modal/showErrorModal";
 import Pagination from "../../Pagination/pagination";
@@ -215,7 +220,9 @@ function BillPOSMachineMangement(props) {
               <th scope="col">Số hoá đơn</th>
               <th scope="col">Số lô</th>
               <th scope="col">Trạng thái</th>
-              <th scope="col">Thao tác</th>
+              {(role === ADMIN || role === MAMANGER) && (
+                <th scope="col">Thao tác</th>
+              )}
             </tr>
           </thead>
           <tbody className="table-group-divider">
@@ -227,7 +234,11 @@ function BillPOSMachineMangement(props) {
                 <th scope="row">{index + 1}</th>
                 <td>{billPos.datetime_created}</td>
                 <td>
-                  <Link to={billPos.bill_image} target="_blank">
+                  <Link
+                    to={billPos.bill_image}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     Xem
                   </Link>
                 </td>
@@ -238,22 +249,24 @@ function BillPOSMachineMangement(props) {
                 <td>
                   {BILLPOSSTATUS.find((c) => c.value === billPos.status)?.label}
                 </td>
-                <td>
-                  <a
-                    href="/#"
-                    onClick={(e) =>
-                      handleShowModal(
-                        e,
-                        billPos.id,
-                        billPos.datetime_created,
-                        billPos.status
-                      )
-                    }
-                    style={{ cursor: "pointer" }}
-                  >
-                    Xác nhận trạng thái
-                  </a>
-                </td>
+                {(role === ADMIN || role === MAMANGER) && (
+                  <td>
+                    <a
+                      href="/#"
+                      onClick={(e) =>
+                        handleShowModal(
+                          e,
+                          billPos.id,
+                          billPos.datetime_created,
+                          billPos.status
+                        )
+                      }
+                      style={{ cursor: "pointer" }}
+                    >
+                      Xác nhận trạng thái
+                    </a>
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
