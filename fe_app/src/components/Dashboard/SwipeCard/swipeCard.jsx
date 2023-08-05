@@ -239,13 +239,13 @@ function SwipeCard() {
               <tr key={swipeCard.id}>
                 <th scope="row">{index + 1}</th>
                 <td>{swipeCard.transaction_datetime_created}</td>
-                <td>{swipeCard.creditcard.card_name}</td>
+                <td>{swipeCard.creditcard?.card_name}</td>
                 <td>
-                  <Link>{swipeCard.creditcard.card_number}</Link>
+                  <Link>{swipeCard.creditcard?.card_number}</Link>
                 </td>
                 <td>{swipeCard.customer_money_needed}</td>
-                <td>{swipeCard.creditcard.customer.name}</td>
-                <td>{swipeCard.creditcard.customer.phone_number}</td>
+                <td>{swipeCard.creditcard?.customer.name}</td>
+                <td>{swipeCard.creditcard?.customer.phone_number}</td>
                 <td>
                   {
                     TRANSACTIONTYPE.find(
