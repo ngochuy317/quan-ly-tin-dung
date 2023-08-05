@@ -34,9 +34,13 @@ class Customer(models.Model):
 
 class CreditCard(models.Model):
 
+    STORAGE_STATUS_CHOICES = ((1, "Đang lưu thẻ"), (2, "Đã trả thẻ"))
+    MATURITY_STATUS_CHOICES = ((1, "Chưa đáo"), (2, "Đã đáo"))
     FOLDER_UPLOAD = "uploads/creditcards/"
     RELATED_NAME = "creditcard"
 
+    storage_status = models.SmallIntegerField(choices=STORAGE_STATUS_CHOICES, default=1)
+    maturity_status = models.SmallIntegerField(choices=STORAGE_STATUS_CHOICES, default=1)
     card_number = models.CharField(max_length=20, unique=True)
     card_bank_name = models.CharField(max_length=127, blank=True)
     card_name = models.CharField(max_length=127, blank=True)
@@ -57,6 +61,9 @@ class CreditCard(models.Model):
         related_name=RELATED_NAME,
     )
     line_of_credit = models.PositiveBigIntegerField(default=0)
+
+    # class Meta:
+    #     unique_together = ('card_number', 'card_bank_name',)
 
     def __str__(self) -> str:
         return self.card_number

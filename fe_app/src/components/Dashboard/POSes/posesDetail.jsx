@@ -98,6 +98,30 @@ function POSesDetail() {
       <h2 className="text-center">Máy POS</h2>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="row">
+          <SelectField
+            requiredColWidth={6}
+            requiredLbl={"Cửa hàng"}
+            requiredIsRequired={true}
+            requiredRegister={register}
+            requiredName={"store_id"}
+            requiredDataOption={stores}
+            optionalLblSelect="Chọn cửa hàng"
+            requiredValueOption={(ele) => `${ele.id}`}
+            requiredLblOption={(ele) => `${ele.name}`}
+          />
+          <SelectField
+            requiredColWidth={6}
+            requiredLbl={"Cửa hàng làm ra máy POS"}
+            requiredIsRequired={true}
+            requiredRegister={register}
+            requiredName={"from_store_id"}
+            requiredDataOption={storeMakePOS}
+            optionalLblSelect="Chọn cửa hàng"
+            requiredValueOption={(ele) => `${ele.id}`}
+            requiredLblOption={(ele) => `${ele.name}`}
+          />
+        </div>
+        <div className="row">
           <InputField
             requiredColWidth={4}
             requiredLbl="MID"
@@ -273,30 +297,6 @@ function POSesDetail() {
             )}
             Thêm phí
           </button>
-        </div>
-        <div className="row">
-          <SelectField
-            requiredColWidth={6}
-            requiredLbl={"Cửa hàng"}
-            requiredIsRequired={true}
-            requiredRegister={register}
-            requiredName={"store_id"}
-            requiredDataOption={stores}
-            optionalLblSelect="Chọn cửa hàng"
-            requiredValueOption={(ele) => `${ele.id}`}
-            requiredLblOption={(ele) => `${ele.name}`}
-          />
-          <SelectField
-            requiredColWidth={6}
-            requiredLbl={"Cửa hàng làm ra máy POS"}
-            requiredIsRequired={true}
-            requiredRegister={register}
-            requiredName={"from_store_id"}
-            requiredDataOption={storeMakePOS}
-            optionalLblSelect="Chọn cửa hàng"
-            requiredValueOption={(ele) => `${ele.id}`}
-            requiredLblOption={(ele) => `${ele.name}`}
-          />
         </div>
         <div className="d-flex justify-content-end">
           <button

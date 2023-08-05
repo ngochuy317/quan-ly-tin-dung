@@ -219,6 +219,8 @@ function BillPOSMachineMangement(props) {
               <th scope="col">Số tham chiếu</th>
               <th scope="col">Số hoá đơn</th>
               <th scope="col">Số lô</th>
+              <th scope="col">Mã chuẩn chi</th>
+              <th scope="col">Nhân viên</th>
               <th scope="col">Trạng thái</th>
               {(role === ADMIN || role === MAMANGER) && (
                 <th scope="col">Thao tác</th>
@@ -246,6 +248,8 @@ function BillPOSMachineMangement(props) {
                 <td>{billPos.ref_no}</td>
                 <td>{billPos.invoice_no}</td>
                 <td>{billPos.batch}</td>
+                <td>{billPos.authorization_code}</td>
+                <td>{billPos.emp_name}</td>
                 <td>
                   {BILLPOSSTATUS.find((c) => c.value === billPos.status)?.label}
                 </td>

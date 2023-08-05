@@ -35,7 +35,6 @@ function StoreCard() {
   const [hrefCreditCardFrontImage, setHrefCreditCardFrontImage] = useState("");
   const [hrefCustomerIDBackImage, setHrefCustomerIDBackImage] = useState("");
   const [hrefCustomerIDFrontImage, setHrefCustomerIDFrontImage] = useState("");
-  // const [reloadAfterSubmit, setReloadAfterSubmit] = useState(false);
   const [searchCreditCard, setSearchCreditCard] = useState("");
   // const [currentPage, setCurrentPage] = useState(1);
   const [maxLengthOrderInNotebook, setMaxLengthOrderInNotebook] = useState(0);
@@ -195,51 +194,49 @@ function StoreCard() {
         data.creditcard.customer.id_card_back_image =
           data.creditcard.customer.id_card_back_image[0];
       }
-      if (
-        typeof data.creditcard.customer.credit_card_front_image === "string"
-      ) {
-        data.creditcard.customer.credit_card_front_image = null;
-      } else if (data.creditcard.customer.credit_card_front_image) {
-        data.creditcard.customer.credit_card_front_image =
-          data.creditcard.customer.credit_card_front_image[0];
+      if (typeof data.creditcard.customer.id_card_front_image === "string") {
+        data.creditcard.customer.id_card_front_image = null;
+      } else if (data.creditcard.customer.id_card_front_image) {
+        data.creditcard.customer.id_card_front_image =
+          data.creditcard.customer.id_card_front_image[0];
       }
 
       console.log("data", data);
       const response = await creditCardApi.saveCreditCard2Notebook(data);
       console.log("Save creditcard 2 notebook successfully", response);
-      // setReloadAfterSubmit(!reloadAfterSubmit);
-      setParams({ ...params });
-      reset({
-        creditcard: {
-          card_number: "",
-          card_bank_name: "",
-          line_of_credit: "",
-          card_name: "",
-          card_issued_date: "",
-          card_expire_date: "",
-          card_ccv: "",
-          credit_card_front_image: "",
-          credit_card_back_image: "",
-          maturity_date: "",
-          statement_date: "",
-          customer: {
-            name: "",
-            phone_number: "",
-            id_card_front_image: "",
-            id_card_back_image: "",
-          },
-        },
-        closing_balance: "",
-        note: "",
-        last_date: "",
-        order_in_notebook: "",
-        notebook: "",
-        card_location: "",
-      });
-      setHrefCreditCardFrontImage("");
-      setHrefCreditCardBackImage("");
-      setHrefCustomerIDFrontImage("");
-      setHrefCustomerIDBackImage("");
+      window.location.href = "/dashboard/storecard";
+      // setParams({ ...params });
+      // reset({
+      //   creditcard: {
+      //     card_number: null,
+      //     card_bank_name: null,
+      //     line_of_credit: null,
+      //     card_name: null,
+      //     card_issued_date: null,
+      //     card_expire_date: null,
+      //     card_ccv: null,
+      //     credit_card_front_image: null,
+      //     credit_card_back_image: null,
+      //     maturity_date: null,
+      //     statement_date: null,
+      //     customer: {
+      //       name: null,
+      //       phone_number: null,
+      //       id_card_front_image: null,
+      //       id_card_back_image: null,
+      //     },
+      //   },
+      //   note: null,
+      //   last_date: null,
+      //   order_in_notebook: null,
+      //   notebook: null,
+      //   card_location: null,
+      //   card_taken_date: null,
+      // });
+      // setHrefCreditCardFrontImage("");
+      // setHrefCreditCardBackImage("");
+      // setHrefCustomerIDFrontImage("");
+      // setHrefCustomerIDBackImage("");
     } catch (error) {
       console.log("Failed to save creditcard 2 notebook");
     }
@@ -334,80 +331,6 @@ function StoreCard() {
             requiredName="store_phone_number"
             optionalDisabled={true}
           />
-        </div>
-        <h5>Sổ lưu thẻ</h5>
-        <div className="row">
-          <SelectField
-            requiredColWidth={2}
-            requiredLbl={"Sổ lưu thẻ"}
-            requiredIsRequired={true}
-            requiredRegister={register}
-            requiredName={"notebook"}
-            requiredDataOption={notebooks}
-            optionalLblSelect="Chọn Sổ lưu"
-            requiredValueOption={(ele) => `${ele.id}`}
-            requiredLblOption={(ele) => `${ele.name}`}
-            optionalOnChangeSelect={handleOnChangeNotebook}
-            optionalDisable={notebooks.length > 0 ? false : true}
-          />
-          <SelectField
-            requiredColWidth={2}
-            requiredLbl={"Trạng thái"}
-            requiredIsRequired={true}
-            requiredRegister={register}
-            requiredName={"status"}
-            requiredDataOption={STATUSOFCARD}
-            optionalDisable={true}
-            requiredValueOption={(ele) => `${ele.value}`}
-            requiredLblOption={(ele) => `${ele.label}`}
-          />
-          <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">Số dư cuối kì</label>
-              <RequiredSymbol />
-              <CurrencyFormat
-                type="text"
-                className="form-control"
-                required
-                thousandSeparator={true}
-                onChange={handleOnChangeClosingBalance}
-              />
-            </div>
-          </div>
-          <InputTextareaField
-            requiredColWidth={2}
-            requiredLbl="Ghi chú"
-            requiredType="text"
-            requiredRegister={register}
-            requiredName="note"
-          />
-          <InputField
-            requiredColWidth={2}
-            requiredLbl="Ngăn chứa thẻ"
-            requiredType="text"
-            requiredRegister={register}
-            requiredName="card_location"
-            requiredIsRequired={true}
-          />
-          <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">
-                Số thứ tự trên sổ <FaAsterisk color="red" size=".7em" />
-              </label>
-              <input
-                {...register("order_in_notebook")}
-                type="number"
-                className="form-control"
-                max={maxLengthOrderInNotebook}
-                required
-                placeholder={
-                  maxLengthOrderInNotebook > 0
-                    ? "Tối đa " + maxLengthOrderInNotebook
-                    : null
-                }
-              />
-            </div>
-          </div>
         </div>
         <h5>Thông tin khách hàng</h5>
         <div className="row">
@@ -663,6 +586,89 @@ function StoreCard() {
               />
             </div>
           </div>
+        </div>
+        <h5>Sổ lưu thẻ</h5>
+        <div className="row">
+          <SelectField
+            requiredColWidth={2}
+            requiredLbl={"Sổ lưu thẻ"}
+            requiredIsRequired={true}
+            requiredRegister={register}
+            requiredName={"notebook"}
+            requiredDataOption={notebooks}
+            optionalLblSelect="Chọn Sổ lưu"
+            requiredValueOption={(ele) => `${ele.id}`}
+            requiredLblOption={(ele) => `${ele.name}`}
+            optionalOnChangeSelect={handleOnChangeNotebook}
+            optionalDisable={notebooks.length > 0 ? false : true}
+          />
+          <SelectField
+            requiredColWidth={2}
+            requiredLbl={"Trạng thái"}
+            requiredIsRequired={true}
+            requiredRegister={register}
+            requiredName={"status"}
+            requiredDataOption={STATUSOFCARD}
+            optionalDisable={true}
+            requiredValueOption={(ele) => `${ele.value}`}
+            requiredLblOption={(ele) => `${ele.label}`}
+          />
+          <div className="col-md-2">
+            <div className="mb-3">
+              <label className="form-label">Số dư cuối kì</label>
+              <RequiredSymbol />
+              <CurrencyFormat
+                type="text"
+                className="form-control"
+                required
+                thousandSeparator={true}
+                onChange={handleOnChangeClosingBalance}
+              />
+            </div>
+          </div>
+          <InputTextareaField
+            requiredColWidth={2}
+            requiredLbl="Ghi chú"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName="note"
+          />
+          <InputField
+            requiredColWidth={2}
+            requiredLbl="Ngăn chứa thẻ"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName="card_location"
+            requiredIsRequired={true}
+          />
+          <div className="col-md-2">
+            <div className="mb-3">
+              <label className="form-label">
+                Số thứ tự trên sổ <FaAsterisk color="red" size=".7em" />
+              </label>
+              <input
+                {...register("order_in_notebook")}
+                type="number"
+                className="form-control"
+                max={maxLengthOrderInNotebook}
+                required
+                placeholder={
+                  maxLengthOrderInNotebook > 0
+                    ? "Tối đa " + maxLengthOrderInNotebook
+                    : null
+                }
+              />
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <InputField
+            requiredColWidth={3}
+            requiredLbl="Ngày trả thẻ"
+            requiredType="date"
+            requiredRegister={register}
+            requiredName="card_taken_date"
+          />
         </div>
         <div className="d-flex justify-content-end">
           <button

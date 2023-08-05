@@ -9,6 +9,7 @@ from .models import BillPos, FeePos4CreditCard, StoreMakePOS
 class BillPosSerializer(serializers.ModelSerializer):
 
     datetime_created = serializers.DateTimeField(read_only=True, format=Y_M_D_H_M_FORMAT)
+    emp_name = serializers.ReadOnlyField(source="transaction.user.infomation_detail.fullname")
 
     class Meta:
         model = BillPos

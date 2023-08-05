@@ -3,7 +3,6 @@ from __future__ import absolute_import, print_function, unicode_literals
 import datetime
 
 from django.db import models
-from django.utils.timezone import now
 
 
 class StoreMakePOS(models.Model):
@@ -135,13 +134,12 @@ class NoteBook(models.Model):
 
 
 class RowNotebook(models.Model):
-    STATUS_CHOICES = ((1, "Đang lưu thẻ"), (2, "Đã trả thẻ"))
     notebook = models.ForeignKey(NoteBook, on_delete=models.CASCADE, related_name="row_notebook")
     card_given_date = models.DateField(default=datetime.date.today)
     card_taken_date = models.DateField(default=datetime.date.today)
     order_in_notebook = models.IntegerField(default=1)
-    status = models.SmallIntegerField(choices=STATUS_CHOICES, default=1)
-    storage_datetime = models.DateTimeField(default=now)
+    storage_datetime = models.DateTimeField(auto_now_add=True)
+    update_datetime = models.DateTimeField(auto_now=True)
     closing_balance = models.BigIntegerField(blank=True, null=True)
     last_date = models.IntegerField(default=0)
     note = models.TextField(blank=True)
