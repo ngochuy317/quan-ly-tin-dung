@@ -104,6 +104,17 @@ export const TRANSACTIONTYPE = [
   },
 ];
 
+export const TOLLSTATUS = [
+  {
+    value: 1,
+    label: "Đã thu",
+  },
+  {
+    value: 2,
+    label: "Chưa thu",
+  },
+];
+
 export const COLORROWBYBILLPOSSATUS = {
   1: "table-warning",
   2: "table-success",

@@ -8,6 +8,7 @@ import SelectField from "../../Common/selectField";
 import {
   GENDERCHOICES,
   INPUTIMAGETYPEACCEPT,
+  TOLLSTATUS,
   TRANSACTIONTYPE,
 } from "../../ConstantUtils/constants";
 import ModifiyBillPOSMachineModal from "../../Modal/modifyBillPosMachineModal";
@@ -194,6 +195,7 @@ function SwipeCardDetail() {
             requiredColWidth={2}
             requiredLbl="Số tiền cần"
             requiredType="number"
+            requiredIsRequired={true}
             requiredRegister={register}
             requiredName={"customer_money_needed"}
             optionalMaxForNumberType={999999999}
@@ -244,46 +246,6 @@ function SwipeCardDetail() {
             requiredName={"transaction_with_customer_image"}
             optionalAccept={INPUTIMAGETYPEACCEPT}
           />
-
-          <h5>Máy POS</h5>
-          {dataSwipCardDetail?.billpos?.map((item, index) => (
-            <div key={item.id} className="row">
-              <InputField
-                requiredColWidth={2}
-                requiredLbl="Máy POS"
-                requiredType="text"
-                requiredRegister={register}
-                requiredName={`billpos[${index}].pos`}
-                optionalDisabled={true}
-              />
-              {getValues(`billpos[${index}].bill_image`) && (
-                <div className="col-md-4">
-                  <div className="mb-3">
-                    <label className="form-label">Hình bill máy POS</label>
-                    <img
-                      src={getValues(`billpos[${index}].bill_image`)}
-                      style={{ maxWidth: "100%", height: "auto" }}
-                      alt=""
-                    ></img>
-                  </div>
-                </div>
-              )}
-              <div className="col-md-2">
-                <div className="mb-3">
-                  <label className="form-label">Bill Máy Pos {index}</label>
-                  <button
-                    id={`file-upload-${index}`}
-                    disabled={isSubmitting}
-                    className="btn btn-outline-primary form-control"
-                    onClick={() => handleClickPosMachine(index)}
-                    type="button"
-                  >
-                    Xem dữ liệu
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
         </div>
 
         <div className="row"></div>
@@ -371,23 +333,27 @@ function SwipeCardDetail() {
             requiredRegister={register}
             requiredName={"creditcard.maturity_date"}
           /> */}
-          <div className="col-md-2">
-            <div className="mb-3">
-              <label className="form-label">Hoạt động</label>
-              <select
-                {...register("transaction_type")}
-                className="form-select"
-                required
-                disabled
-              >
-                {TRANSACTIONTYPE?.map((ele) => (
-                  <option key={ele.value} value={ele.value}>
-                    {ele.label}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
+          <SelectField
+            requiredColWidth={2}
+            requiredLbl={"Hoạt động"}
+            requiredIsRequired={true}
+            requiredRegister={register}
+            requiredName={"transaction_type"}
+            requiredDataOption={TRANSACTIONTYPE}
+            requiredValueOption={(ele) => `${ele.value}`}
+            requiredLblOption={(ele) => `${ele.label}`}
+            optionalDisable={true}
+          />
+          <SelectField
+            requiredColWidth={2}
+            requiredLbl={"Tình trạng thu phí"}
+            requiredIsRequired={true}
+            requiredRegister={register}
+            requiredName={"toll_status"}
+            requiredDataOption={TOLLSTATUS}
+            requiredValueOption={(ele) => `${ele.value}`}
+            requiredLblOption={(ele) => `${ele.label}`}
+          />
         </div>
         <div className="row">
           <DisplayImageFileInputField
@@ -411,6 +377,45 @@ function SwipeCardDetail() {
             optionalAccept={INPUTIMAGETYPEACCEPT}
           />
         </div>
+        <h5>Máy POS</h5>
+        {dataSwipCardDetail?.billpos?.map((item, index) => (
+          <div key={item.id} className="row">
+            <InputField
+              requiredColWidth={2}
+              requiredLbl="Máy POS"
+              requiredType="text"
+              requiredRegister={register}
+              requiredName={`billpos[${index}].pos`}
+              optionalDisabled={true}
+            />
+            {getValues(`billpos[${index}].bill_image`) && (
+              <div className="col-md-4">
+                <div className="mb-3">
+                  <label className="form-label">Hình bill máy POS</label>
+                  <img
+                    src={getValues(`billpos[${index}].bill_image`)}
+                    style={{ maxWidth: "100%", height: "auto" }}
+                    alt=""
+                  ></img>
+                </div>
+              </div>
+            )}
+            <div className="col-md-2">
+              <div className="mb-3">
+                <label className="form-label">Bill Máy Pos {index}</label>
+                <button
+                  id={`file-upload-${index}`}
+                  disabled={isSubmitting}
+                  className="btn btn-outline-primary form-control"
+                  onClick={() => handleClickPosMachine(index)}
+                  type="button"
+                >
+                  Xem dữ liệu
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
         <div className="d-flex justify-content-end">
           <button
             type="button"

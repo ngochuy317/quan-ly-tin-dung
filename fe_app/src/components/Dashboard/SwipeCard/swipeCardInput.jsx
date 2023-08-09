@@ -10,7 +10,7 @@ import FileInputField from "../../Common/fileInputField";
 import InputField from "../../Common/inputField";
 import RequiredSymbol from "../../Common/requiredSymbol";
 import SelectField from "../../Common/selectField";
-import { TRANSACTIONTYPE } from "../../ConstantUtils/constants";
+import { TOLLSTATUS, TRANSACTIONTYPE } from "../../ConstantUtils/constants";
 import AddBillPOSMachineModal from "../../Modal/billPOSMachineModal";
 
 SwipeCardInput.propTypes = {
@@ -194,8 +194,7 @@ function SwipeCardInput(props) {
         <div className="col-md-3">
           <div className="mb-3">
             <label className="form-label">
-              Số thẻ{" "}
-              <FaAsterisk color="red" size=".7em" />
+              Số thẻ <FaAsterisk color="red" size=".7em" />
             </label>
             <input
               {...register("creditcard.card_number")}
@@ -265,6 +264,18 @@ function SwipeCardInput(props) {
           optionalPlaceholder="Nhập 3 số đầu để tìm"
           optionalOnChange={handleOnChangeCardNumber}
         /> */}
+      </div>
+      <div className="row">
+        <SelectField
+          requiredColWidth={2}
+          requiredLbl={"Tình trạng thu phí"}
+          requiredIsRequired={true}
+          requiredRegister={register}
+          requiredName={"toll_status"}
+          requiredDataOption={TOLLSTATUS}
+          requiredValueOption={(ele) => `${ele.value}`}
+          requiredLblOption={(ele) => `${ele.label}`}
+        />
       </div>
       {fields.map((item, index) => (
         <div className="row" key={item.id}>

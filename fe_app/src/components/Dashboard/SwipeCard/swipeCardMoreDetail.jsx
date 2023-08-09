@@ -9,7 +9,11 @@ import FileInputField from "../../Common/fileInputField";
 import InputField from "../../Common/inputField";
 import RequiredSymbol from "../../Common/requiredSymbol";
 import SelectField from "../../Common/selectField";
-import { GENDERCHOICES, TRANSACTIONTYPE } from "../../ConstantUtils/constants";
+import {
+  GENDERCHOICES,
+  TOLLSTATUS,
+  TRANSACTIONTYPE,
+} from "../../ConstantUtils/constants";
 import AddBillPOSMachineModal from "../../Modal/billPOSMachineModal";
 
 function SwipeCardMoreDetail() {
@@ -251,89 +255,16 @@ function SwipeCardMoreDetail() {
             optionalDisabled={true}
           />
         </div>
-        <h5>Máy POS</h5>
-        <div className="row">
-          {fields.map((item, index) => (
-            <div key={item.id} className="row">
-              <SelectField
-                requiredColWidth={2}
-                requiredLbl={`Máy POS ${index}`}
-                requiredIsRequired={true}
-                requiredRegister={register}
-                requiredName={`billpos[${index}].pos`}
-                requiredDataOption={state.posMachineData}
-                // OptionalOnChangeSelect={optionalHandleOnChangePOS}
-                optionalLblSelect="Chọn máy POS"
-                requiredValueOption={(ele) => `${ele.id}`}
-                requiredLblOption={(ele) =>
-                  `${ele.id}-${ele.mid}-${ele.tid}-${ele.bank_name}`
-                }
-              />
-              <FileInputField
-                requiredColWidth={4}
-                requiredLbl={`Hình bill máy POS ${index}`}
-                requiredIsRequired={true}
-                requiredRegister={register}
-                requiredName={`billpos[${index}].bill_image`}
-              />
-              <div className="col-md-2">
-                <div className="mb-3">
-                  <label className="form-label">Bill Máy Pos {index}</label>
-                  <button
-                    id={`file-upload-${index}`}
-                    disabled={isSubmitting}
-                    className="btn btn-outline-primary form-control"
-                    onClick={() => handleClickPosMachine(index)}
-                    type="button"
-                  >
-                    Thêm dữ liệu
-                  </button>
-                </div>
-              </div>
-              <div className="col-md-1">
-                <div className="mb-3">
-                  <label className="form-label" style={{ color: "white" }}>
-                    White
-                  </label>
-                  <button
-                    disabled={isSubmitting}
-                    onClick={() => {
-                      remove(index);
-                    }}
-                    className="btn btn-outline-danger form-control"
-                  >
-                    {isSubmitting && (
-                      <span className="spinner-border spinner-border-sm mr-1"></span>
-                    )}
-                    Xoá
-                  </button>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="d-flex justify-content-end">
-          <button
-            type="button"
-            disabled={isSubmitting}
-            onClick={() => append({})}
-            className="btn btn-outline-primary "
-          >
-            {isSubmitting && (
-              <span className="spinner-border spinner-border-sm mr-1"></span>
-            )}
-            Thêm bill pos
-          </button>
-        </div>
 
         <h5>Khách hàng</h5>
         <div className="row">
           <InputField
             requiredColWidth={2}
-            requiredLbl="Tên"
+            requiredLbl="Tên khách hàng"
             requiredType="text"
             requiredRegister={register}
             requiredName={"customer.name"}
+            requiredIsRequired={true}
           />
 
           <div className="col-md-1">
@@ -452,8 +383,7 @@ function SwipeCardMoreDetail() {
           <div className="col-md-4">
             <div className="mb-3">
               <label className="form-label">
-                Số thẻ{" "}
-                <FaAsterisk color="red" size=".7em" />
+                Số thẻ <FaAsterisk color="red" size=".7em" />
               </label>
               <input
                 {...register("creditcard.card_number")}
@@ -564,7 +494,7 @@ function SwipeCardMoreDetail() {
             optionalDisabled={!isManualInput}
           /> */}
 
-          <div className="col-md-2">
+          {/* <div className="col-md-2">
             <div className="mb-3">
               <label className="form-label">Hoạt động</label>
               <select
@@ -580,7 +510,28 @@ function SwipeCardMoreDetail() {
                 ))}
               </select>
             </div>
-          </div>
+          </div> */}
+          <SelectField
+            requiredColWidth={2}
+            requiredLbl={"Hoạt động"}
+            requiredIsRequired={true}
+            requiredRegister={register}
+            requiredName={"transaction_type"}
+            requiredDataOption={TRANSACTIONTYPE}
+            requiredValueOption={(ele) => `${ele.value}`}
+            requiredLblOption={(ele) => `${ele.label}`}
+            optionalOnChangeSelect={handleOnChangeTransactionType}
+          />
+          <SelectField
+            requiredColWidth={2}
+            requiredLbl={"Tình trạng thu phí"}
+            requiredIsRequired={true}
+            requiredRegister={register}
+            requiredName={"toll_status"}
+            requiredDataOption={TOLLSTATUS}
+            requiredValueOption={(ele) => `${ele.value}`}
+            requiredLblOption={(ele) => `${ele.label}`}
+          />
           {showNegativeMoney ? (
             <InputField
               requiredColWidth={2}
@@ -619,8 +570,7 @@ function SwipeCardMoreDetail() {
           <div className="col-md-6">
             <div className="mb-3">
               <label className="form-label">
-                Ảnh mặt sau thẻ tín dụng{" "}
-                <FaAsterisk color="red" size=".7em" />
+                Ảnh mặt sau thẻ tín dụng <FaAsterisk color="red" size=".7em" />
               </label>
               {isCreditCardBackImage ? (
                 <img
@@ -639,6 +589,80 @@ function SwipeCardMoreDetail() {
               )}
             </div>
           </div>
+        </div>
+        <h5>Máy POS</h5>
+        <div className="row">
+          {fields.map((item, index) => (
+            <div key={item.id} className="row">
+              <SelectField
+                requiredColWidth={2}
+                requiredLbl={`Máy POS ${index}`}
+                requiredIsRequired={true}
+                requiredRegister={register}
+                requiredName={`billpos[${index}].pos`}
+                requiredDataOption={state.posMachineData}
+                // OptionalOnChangeSelect={optionalHandleOnChangePOS}
+                optionalLblSelect="Chọn máy POS"
+                requiredValueOption={(ele) => `${ele.id}`}
+                requiredLblOption={(ele) =>
+                  `${ele.id}-${ele.mid}-${ele.tid}-${ele.bank_name}`
+                }
+              />
+              <FileInputField
+                requiredColWidth={4}
+                requiredLbl={`Hình bill máy POS ${index}`}
+                requiredIsRequired={true}
+                requiredRegister={register}
+                requiredName={`billpos[${index}].bill_image`}
+              />
+              <div className="col-md-2">
+                <div className="mb-3">
+                  <label className="form-label">Bill Máy Pos {index}</label>
+                  <button
+                    id={`file-upload-${index}`}
+                    disabled={isSubmitting}
+                    className="btn btn-outline-primary form-control"
+                    onClick={() => handleClickPosMachine(index)}
+                    type="button"
+                  >
+                    Thêm dữ liệu
+                  </button>
+                </div>
+              </div>
+              <div className="col-md-1">
+                <div className="mb-3">
+                  <label className="form-label" style={{ color: "white" }}>
+                    White
+                  </label>
+                  <button
+                    disabled={isSubmitting}
+                    onClick={() => {
+                      remove(index);
+                    }}
+                    className="btn btn-outline-danger form-control"
+                  >
+                    {isSubmitting && (
+                      <span className="spinner-border spinner-border-sm mr-1"></span>
+                    )}
+                    Xoá
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="d-flex justify-content-end">
+          <button
+            type="button"
+            disabled={isSubmitting}
+            onClick={() => append({})}
+            className="btn btn-outline-primary "
+          >
+            {isSubmitting && (
+              <span className="spinner-border spinner-border-sm mr-1"></span>
+            )}
+            Thêm bill pos
+          </button>
         </div>
         <div className="d-flex justify-content-end">
           <button type="button" className="btn btn-outline-danger mx-3">

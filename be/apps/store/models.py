@@ -161,6 +161,7 @@ class SwipeCardTransaction(models.Model):
     TRANSACTION_TYPE_CHOICES = ((1, "Rút tiền"), (2, "Đáo thẻ"))
     GENDER_CHOICES = ((1, "Nam"), (2, "Nữ"), (3, "Khác"))
     RELATED_NAME = "swipe_card_transaction"
+    TOLL_STATUS_CHOICES = ((1, "Đã thu"), (2, "Chưa thu"))
 
     is_creditcard_stored = models.BooleanField(default=False)
     store_id = models.PositiveBigIntegerField()
@@ -181,6 +182,7 @@ class SwipeCardTransaction(models.Model):
     transaction_datetime_created = models.DateTimeField(auto_now_add=True)
     transaction_datetime_updated = models.DateTimeField(auto_now=True)
     transaction_type = models.SmallIntegerField(choices=TRANSACTION_TYPE_CHOICES, default=1)
+    toll_status = models.SmallIntegerField(choices=TOLL_STATUS_CHOICES, default=1)
 
     class Meta:
         ordering = ["-id"]
