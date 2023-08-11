@@ -214,6 +214,14 @@ function SwipeCardInput(props) {
           </div>
         </div>
         <InputField
+          requiredColWidth={3}
+          requiredLbl="Ngân hàng"
+          requiredType="text"
+          requiredRegister={register}
+          requiredName={"creditcard.card_bank_name"}
+          optionalPlaceholder="Nhập ngân hàng phát hành thẻ"
+        />
+        <InputField
           requiredColWidth={2}
           requiredLbl="Tên khách hàng"
           requiredType="text"
@@ -221,6 +229,8 @@ function SwipeCardInput(props) {
           requiredName="customer.name"
           // requiredIsRequired={true}
         />
+      </div>
+      <div className="row">
         <InputField
           requiredColWidth={2}
           requiredLbl="Sđt khách hàng"
@@ -254,18 +264,7 @@ function SwipeCardInput(props) {
             requiredName="negative_money"
           />
         ) : null}
-        {/* <InputField
-          requiredColWidth={3}
-          requiredLbl="Số thẻ"
-          requiredType="text"
-          requiredRegister={register}
-          requiredName="creditcard.card_number"
-          requiredIsRequired={true}
-          optionalPlaceholder="Nhập 3 số đầu để tìm"
-          optionalOnChange={handleOnChangeCardNumber}
-        /> */}
-      </div>
-      <div className="row">
+
         <SelectField
           requiredColWidth={2}
           requiredLbl={"Tình trạng thu phí"}
