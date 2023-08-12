@@ -390,10 +390,7 @@ function SwipeCardMoreDetail() {
         <div className="row">
           <div className="col-md-6">
             <div className="mb-3">
-              <label className="form-label">
-                Ảnh mặt trước thẻ tín dụng{" "}
-                <FaAsterisk color="red" size=".7em" />
-              </label>
+              <label className="form-label">Ảnh mặt trước thẻ tín dụng </label>
               {isCreditCardFrontImage ? (
                 <img
                   src={`${getValues("creditcard.credit_card_front_image")}`}
@@ -413,9 +410,7 @@ function SwipeCardMoreDetail() {
 
           <div className="col-md-6">
             <div className="mb-3">
-              <label className="form-label">
-                Ảnh mặt sau thẻ tín dụng <FaAsterisk color="red" size=".7em" />
-              </label>
+              <label className="form-label">Ảnh mặt sau thẻ tín dụng</label>
               {isCreditCardBackImage ? (
                 <img
                   src={`${getValues("creditcard.credit_card_back_image")}`}
