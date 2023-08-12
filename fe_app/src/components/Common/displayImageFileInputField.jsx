@@ -9,6 +9,7 @@ DisplayImageFileInputField.propTypes = {
   requiredName: PropTypes.string.isRequired,
 
   optionalIsRequired: PropTypes.bool,
+  optionalDisabled: PropTypes.bool,
   optionalOnChangeInputFile: PropTypes.func,
   optionalAccept: PropTypes.string,
 };
@@ -23,6 +24,7 @@ function DisplayImageFileInputField(props) {
     optionalIsRequired,
     optionalOnChangeInputFile,
     optionalAccept,
+    optionalDisabled,
   } = props;
   return (
     <div className={`col-md-${requiredColWidth}`}>
@@ -42,6 +44,7 @@ function DisplayImageFileInputField(props) {
           required={optionalIsRequired}
           onChange={optionalOnChangeInputFile}
           accept={optionalAccept}
+          disabled={optionalDisabled}
         />
       </div>
     </div>

@@ -386,35 +386,6 @@ function SwipeCardMoreDetail() {
             optionalDisabled={!isManualInput}
             optionalMaxLengthForTextType={3}
           />
-          <InputField
-            requiredColWidth={2}
-            requiredLbl="Hạn mức thẻ"
-            requiredType="number"
-            requiredRegister={register}
-            requiredName={"creditcard.line_of_credit"}
-            requiredIsRequired={true}
-            optionalDisabled={!isManualInput}
-          />
-          <InputField
-            requiredColWidth={2}
-            requiredLbl="Ngày sao kê"
-            requiredType="date"
-            requiredRegister={register}
-            requiredName={"creditcard.statement_date"}
-            requiredIsRequired={true}
-            optionalDisabled={!isManualInput}
-          />
-        </div>
-        <div className="row">
-          {/* <InputField
-            requiredColWidth={2}
-            requiredLbl="Ngày cuối đáo"
-            requiredType="date"
-            requiredRegister={register}
-            requiredName={"creditcard.maturity_date"}
-            requiredIsRequired={true}
-            optionalDisabled={!isManualInput}
-          /> */}
         </div>
         <div className="row">
           <div className="col-md-6">
@@ -434,7 +405,6 @@ function SwipeCardMoreDetail() {
                   {...register("creditcard.credit_card_front_image")}
                   type="file"
                   className="form-control"
-                  required
                   disabled={!isManualInput}
                 />
               )}
@@ -457,7 +427,6 @@ function SwipeCardMoreDetail() {
                   {...register("creditcard.credit_card_back_image")}
                   type="file"
                   className="form-control"
-                  required
                   disabled={!isManualInput}
                 />
               )}

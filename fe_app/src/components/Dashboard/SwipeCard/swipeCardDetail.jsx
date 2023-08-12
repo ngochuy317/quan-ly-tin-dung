@@ -252,7 +252,7 @@ function SwipeCardDetail() {
         <h5>Thông tin thẻ</h5>
         <div className="row">
           <InputField
-            requiredColWidth={4}
+            requiredColWidth={3}
             requiredLbl="Số thẻ"
             requiredType="text"
             requiredRegister={register}
@@ -261,21 +261,12 @@ function SwipeCardDetail() {
           />
 
           <InputField
-            requiredColWidth={4}
+            requiredColWidth={3}
             requiredLbl="Ngân hàng"
             requiredType="text"
             requiredRegister={register}
             requiredName={"creditcard.card_bank_name"}
           />
-
-          <InputField
-            requiredColWidth={2}
-            requiredLbl="Hạn mức thẻ"
-            requiredType="number"
-            requiredRegister={register}
-            requiredName={"creditcard.line_of_credit"}
-          />
-
           <InputField
             requiredColWidth={2}
             requiredLbl="Phí"
@@ -283,8 +274,6 @@ function SwipeCardDetail() {
             requiredRegister={register}
             requiredName={"fee"}
           />
-        </div>
-        <div className="row">
           <InputField
             requiredColWidth={4}
             requiredLbl="Tên trên thẻ"
@@ -292,7 +281,8 @@ function SwipeCardDetail() {
             requiredRegister={register}
             requiredName={"creditcard.card_name"}
           />
-
+        </div>
+        <div className="row">
           <InputField
             requiredColWidth={3}
             requiredLbl="Ngày mở thẻ"
@@ -317,22 +307,6 @@ function SwipeCardDetail() {
             requiredName={"creditcard.card_ccv"}
             optionalMaxLengthForTextType={3}
           />
-        </div>
-        <div className="row">
-          <InputField
-            requiredColWidth={2}
-            requiredLbl="Ngày sao kê"
-            requiredType="date"
-            requiredRegister={register}
-            requiredName={"creditcard.statement_date"}
-          />
-          {/* <InputField
-            requiredColWidth={2}
-            requiredLbl="Ngày cuối đáo"
-            requiredType="date"
-            requiredRegister={register}
-            requiredName={"creditcard.maturity_date"}
-          /> */}
           <SelectField
             requiredColWidth={2}
             requiredLbl={"Hoạt động"}
@@ -355,6 +329,13 @@ function SwipeCardDetail() {
             requiredLblOption={(ele) => `${ele.label}`}
           />
         </div>
+        {/* <InputField
+            requiredColWidth={2}
+            requiredLbl="Ngày cuối đáo"
+            requiredType="date"
+            requiredRegister={register}
+            requiredName={"creditcard.maturity_date"}
+          /> */}
         <div className="row">
           <DisplayImageFileInputField
             requiredColWidth={6}
