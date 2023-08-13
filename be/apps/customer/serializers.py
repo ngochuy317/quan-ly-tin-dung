@@ -22,7 +22,7 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 class CreditCardSerializer(serializers.ModelSerializer):
     card_number = serializers.CharField(max_length=127)
-    customer = CustomerSerializer()
+    customer = CustomerSerializer(read_only=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
