@@ -191,7 +191,7 @@ class AllTransaction4CreditCardAPIView(APIView):
     def get(self, request, *args, **kwargs):
         card_number = kwargs.get("card_number")
         if card_number:
-            data = SwipeCardTransaction.objects.filter(credit_card_number=card_number).values(
+            data = SwipeCardTransaction.objects.filter(creditcard__card_number=card_number).values(
                 "store_name", "customer_money_needed", "transaction_datetime_created"
             )
 
@@ -206,14 +206,16 @@ class CreditCardManagementAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
         swipe_card_ids = (
-            SwipeCardTransaction.objects.order_by("credit_card_number", "-transaction_datetime_created")
-            .distinct("credit_card_number")
+            SwipeCardTransaction.objects.order_by("creditcard__card_number", "-transaction_datetime_created")
+            .distinct("creditcard__card_number")
             .values("id")
         )
         swipe_card_list = (
             SwipeCardTransaction.objects.filter(id__in=swipe_card_ids)
             .order_by("-transaction_datetime_created")
-            .values("id", "store_name", "credit_card_number", "customer_money_needed", "transaction_datetime_created")
+            .values(
+                "id", "store_name", "creditcard__card_number", "customer_money_needed", "transaction_datetime_created"
+            )
         )
 
         pagination = CustomPageNumberPaginationPageSize15()

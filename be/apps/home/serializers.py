@@ -483,7 +483,7 @@ class StoreCostSerializer(serializers.ModelSerializer):
 class CreditCardManagementSerializer(serializers.Serializer):
 
     id = serializers.IntegerField()
-    credit_card_number = serializers.CharField()
+    card_number = serializers.ReadOnlyField(source="creditcard__card_number")
     store_name = serializers.CharField()
     customer_money_needed = serializers.IntegerField()
     transaction_datetime_created = serializers.DateTimeField(format=Y_M_D_H_M_FORMAT)
