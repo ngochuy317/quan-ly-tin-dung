@@ -53,10 +53,21 @@ services:
       dockerfile: ./nginx.Dockerfile
     ports:
       - 80:80
+      - 443:443
     volumes:
       - django-qltd_volume:/var/www/mywebsite/backend/staticfiles
       - django-qltd_media:/var/www/mywebsite/backend/media
+      - qltd_letsencrypt:/etc/letsencrypt/live/quanlyquetthe.com/fullchain.pem
+      - qltd_certbot:/etc/letsencrypt/live/quanlyquetthe.com/privkey.pem
       - /var/log/nginx/:/var/log/nginx/
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - qltd_letsencrypt:/etc/letsencrypt
+      - qltd_certbot:/var/www/certbot
+    command: certonly --webroot -w /var/www/certbot --force-renewal --email ngochuy317@gmail.com -d quanlyquetthe.com --agree-tos
 
   frontend:
     image: alan317/qltd-fe:lastest
@@ -74,6 +85,8 @@ services:
 volumes:
   django-qltd_media:
   django-qltd_volume:
+  qltd_letsencrypt:
+  qltd_certbot:
   postgres_data_qltd:
 
 networks:
