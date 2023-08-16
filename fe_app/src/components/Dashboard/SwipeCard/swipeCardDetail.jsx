@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import CurrencyFormat from "react-currency-format";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import DisplayImageFileInputField from "../../Common/displayImageFileInputField";
 import InputField from "../../Common/inputField";
+import RequiredSymbol from "../../Common/requiredSymbol";
 import SelectField from "../../Common/selectField";
 import {
   GENDERCHOICES,
@@ -62,6 +64,11 @@ function SwipeCardDetail() {
     } catch (error) {
       console.log("Failed to delete swipe card", error);
     }
+  };
+
+  const moneyInputFieldFormat = (e) => {
+    let val = e.target.value?.replaceAll(",", "");
+    setValue("customer_money_needed", val);
   };
 
   const handleClose = (index, imageValue) => {
@@ -190,17 +197,6 @@ function SwipeCardDetail() {
             requiredName={"creditcard.customer.phone_number"}
             optionalDisabled={true}
           />
-
-          <InputField
-            requiredColWidth={2}
-            requiredLbl="Số tiền cần"
-            requiredType="number"
-            requiredIsRequired={true}
-            requiredRegister={register}
-            requiredName={"customer_money_needed"}
-            optionalMaxForNumberType={999999999}
-          />
-
           <InputField
             requiredColWidth={2}
             requiredLbl="Số TK nhận tiền"
@@ -217,62 +213,23 @@ function SwipeCardDetail() {
             requiredName={"creditcard.customer.bank_account.bank_name"}
           />
         </div>
-        <div className="row">
-          <DisplayImageFileInputField
-            requiredColWidth={4}
-            requiredLbl={"Ảnh mặt trước cmnd/cccd"}
-            requiredImageUrl={`${getValues(
-              "creditcard.customer.id_card_front_image"
-            )}`}
-            requiredRegister={register}
-            requiredName={"creditcard.customer.id_card_front_image"}
-            optionalAccept={INPUTIMAGETYPEACCEPT}
-          />
-          <DisplayImageFileInputField
-            requiredColWidth={4}
-            requiredLbl={"Ảnh mặt sau cmnd/cccd"}
-            requiredImageUrl={`${getValues(
-              "creditcard.customer.id_card_back_image"
-            )}`}
-            requiredRegister={register}
-            requiredName={"creditcard.customer.id_card_back_image"}
-            optionalAccept={INPUTIMAGETYPEACCEPT}
-          />
-          <DisplayImageFileInputField
-            requiredColWidth={4}
-            requiredLbl={"Hình GD với khách"}
-            requiredImageUrl={`${getValues("transaction_with_customer_image")}`}
-            requiredRegister={register}
-            requiredName={"transaction_with_customer_image"}
-            optionalAccept={INPUTIMAGETYPEACCEPT}
-          />
-        </div>
-
         <div className="row"></div>
         <h5>Thông tin thẻ</h5>
         <div className="row">
           <InputField
-            requiredColWidth={3}
-            requiredLbl="Số thẻ"
-            requiredType="text"
-            requiredRegister={register}
-            requiredName={"creditcard.card_number"}
-            optionalDisabled={true}
-          />
-
-          <InputField
-            requiredColWidth={3}
-            requiredLbl="Ngân hàng"
+            requiredColWidth={4}
+            requiredLbl="Ngân hàng phát hành thẻ"
             requiredType="text"
             requiredRegister={register}
             requiredName={"creditcard.card_bank_name"}
           />
           <InputField
-            requiredColWidth={2}
-            requiredLbl="Phí"
-            requiredType="number"
+            requiredColWidth={4}
+            requiredLbl="Số thẻ"
+            requiredType="text"
             requiredRegister={register}
-            requiredName={"fee"}
+            requiredName={"creditcard.card_number"}
+            optionalDisabled={true}
           />
           <InputField
             requiredColWidth={4}
@@ -307,27 +264,6 @@ function SwipeCardDetail() {
             requiredName={"creditcard.card_ccv"}
             optionalMaxLengthForTextType={3}
           />
-          <SelectField
-            requiredColWidth={2}
-            requiredLbl={"Hoạt động"}
-            requiredIsRequired={true}
-            requiredRegister={register}
-            requiredName={"transaction_type"}
-            requiredDataOption={TRANSACTIONTYPE}
-            requiredValueOption={(ele) => `${ele.value}`}
-            requiredLblOption={(ele) => `${ele.label}`}
-            optionalDisable={true}
-          />
-          <SelectField
-            requiredColWidth={2}
-            requiredLbl={"Tình trạng thu phí"}
-            requiredIsRequired={true}
-            requiredRegister={register}
-            requiredName={"toll_status"}
-            requiredDataOption={TOLLSTATUS}
-            requiredValueOption={(ele) => `${ele.value}`}
-            requiredLblOption={(ele) => `${ele.label}`}
-          />
         </div>
         {/* <InputField
             requiredColWidth={2}
@@ -358,28 +294,105 @@ function SwipeCardDetail() {
             optionalAccept={INPUTIMAGETYPEACCEPT}
           />
         </div>
+        <div className="row">
+          <DisplayImageFileInputField
+            requiredColWidth={6}
+            requiredLbl={"Ảnh mặt trước cmnd/cccd"}
+            requiredImageUrl={`${getValues(
+              "creditcard.customer.id_card_front_image"
+            )}`}
+            requiredRegister={register}
+            requiredName={"creditcard.customer.id_card_front_image"}
+            optionalAccept={INPUTIMAGETYPEACCEPT}
+          />
+          <DisplayImageFileInputField
+            requiredColWidth={6}
+            requiredLbl={"Ảnh mặt sau cmnd/cccd"}
+            requiredImageUrl={`${getValues(
+              "creditcard.customer.id_card_back_image"
+            )}`}
+            requiredRegister={register}
+            requiredName={"creditcard.customer.id_card_back_image"}
+            optionalAccept={INPUTIMAGETYPEACCEPT}
+          />
+        </div>
+        <h5>Chi tiết giao dịch</h5>
+        <div className="row">
+          <SelectField
+            requiredColWidth={2}
+            requiredLbl={"Hoạt động"}
+            requiredIsRequired={true}
+            requiredRegister={register}
+            requiredName={"transaction_type"}
+            requiredDataOption={TRANSACTIONTYPE}
+            requiredValueOption={(ele) => `${ele.value}`}
+            requiredLblOption={(ele) => `${ele.label}`}
+            optionalDisable={true}
+          />
+          <div className="col-md-2">
+            <div className="mb-3">
+              <label className="form-label">
+                Số tiền cần
+                <RequiredSymbol />
+              </label>
+              <CurrencyFormat
+                type="text"
+                className="form-control"
+                value={getValues("customer_money_needed")}
+                required
+                thousandSeparator={true}
+                onChange={moneyInputFieldFormat}
+              />
+            </div>
+          </div>
+          <InputField
+            requiredColWidth={2}
+            requiredLbl="Phí"
+            requiredType="number"
+            requiredRegister={register}
+            requiredName={"fee"}
+          />
+          <DisplayImageFileInputField
+            requiredColWidth={4}
+            requiredLbl={"Hình GD với khách"}
+            requiredImageUrl={`${getValues("transaction_with_customer_image")}`}
+            requiredRegister={register}
+            requiredName={"transaction_with_customer_image"}
+            optionalAccept={INPUTIMAGETYPEACCEPT}
+          />
+          <SelectField
+            requiredColWidth={2}
+            requiredLbl={"Tình trạng thu phí"}
+            requiredIsRequired={true}
+            requiredRegister={register}
+            requiredName={"toll_status"}
+            requiredDataOption={TOLLSTATUS}
+            requiredValueOption={(ele) => `${ele.value}`}
+            requiredLblOption={(ele) => `${ele.label}`}
+          />
+        </div>
         <h5>Máy POS</h5>
         {dataSwipCardDetail?.billpos?.map((item, index) => (
           <div key={item.id} className="row">
             <InputField
               requiredColWidth={2}
-              requiredLbl="Máy POS"
+              requiredLbl={`Máy POS ${index}`}
               requiredType="text"
               requiredRegister={register}
               requiredName={`billpos[${index}].pos`}
               optionalDisabled={true}
             />
             {getValues(`billpos[${index}].bill_image`) && (
-              <div className="col-md-4">
-                <div className="mb-3">
-                  <label className="form-label">Hình bill máy POS</label>
-                  <img
-                    src={getValues(`billpos[${index}].bill_image`)}
-                    style={{ maxWidth: "100%", height: "auto" }}
-                    alt=""
-                  ></img>
-                </div>
-              </div>
+              <DisplayImageFileInputField
+                requiredColWidth={4}
+                requiredLbl={`Hình bill máy POS ${index}`}
+                requiredImageUrl={`${getValues(
+                  `billpos[${index}].bill_image`
+                )}`}
+                requiredRegister={register}
+                requiredName={`billpos[${index}].bill_image`}
+                optionalAccept={INPUTIMAGETYPEACCEPT}
+              />
             )}
             <div className="col-md-2">
               <div className="mb-3">

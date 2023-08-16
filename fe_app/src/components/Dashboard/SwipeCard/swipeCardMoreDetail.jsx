@@ -53,17 +53,6 @@ function SwipeCardMoreDetail() {
     function initData() {
       reset({ ...state });
       setShowNegativeMoney(state.showNegativeMoney);
-      console.log(
-        "🚀 ~ file: swipeCardMoreDetail.jsx:53 ~ initData ~ state:",
-        state
-      );
-      console.log(
-        "🚀 ~ file: swipeCardMoreDetail.jsx:44 ~ initData ~ state:",
-        state
-      );
-      if (fields?.length < 1) {
-        append();
-      }
       if (state.creditcard.credit_card_back_image) {
         setIsCreditCardBackImage(true);
       }
@@ -153,46 +142,54 @@ function SwipeCardMoreDetail() {
 
   const onSubmit = async (data) => {
     try {
-      // data.bill_pos_image = data.bill_pos_image[0];
-      if (typeof data.customer.id_card_front_image === "string") {
+      if (
+        typeof data.customer.id_card_front_image === "string" ||
+        data.customer.id_card_front_image === undefined
+      ) {
         delete data.customer.id_card_front_image;
       } else {
         data.customer.id_card_front_image =
           data.customer.id_card_front_image[0];
       }
 
-      if (typeof data.customer.id_card_back_image === "string") {
+      if (
+        typeof data.customer.id_card_back_image === "string" ||
+        data.customer.id_card_back_image === undefined
+      ) {
         delete data.customer.id_card_back_image;
       } else {
         data.customer.id_card_back_image = data.customer.id_card_back_image[0];
       }
 
-      if (typeof data.creditcard.credit_card_front_image === "string") {
+      if (
+        typeof data.creditcard.credit_card_front_image === "string" ||
+        data.creditcard.credit_card_front_image === undefined
+      ) {
         delete data.creditcard.credit_card_front_image;
       } else {
         data.creditcard.credit_card_front_image =
           data.creditcard.credit_card_front_image[0];
       }
 
-      if (typeof data.creditcard.credit_card_back_image === "string") {
+      if (
+        typeof data.creditcard.credit_card_back_image === "string" ||
+        data.creditcard.credit_card_back_image === undefined
+      ) {
         delete data.creditcard.credit_card_back_image;
       } else {
         data.creditcard.credit_card_back_image =
           data.creditcard.credit_card_back_image[0];
       }
 
-      if (typeof data.transaction_with_customer_image === "string") {
+      if (
+        typeof data.transaction_with_customer_image === "string" ||
+        data.transaction_with_customer_image === undefined
+      ) {
         delete data.transaction_with_customer_image;
       } else {
         data.transaction_with_customer_image =
           data.transaction_with_customer_image[0];
       }
-      // data.customer_id_card_front_image = data.customer_id_card_front_image[0];
-      // data.customer_id_card_back_image = data.customer_id_card_back_image[0];
-      // data.creditcard.credit_card_front_image =
-      //   data.creditcard.credit_card_front_image[0];
-      // data.creditcard.credit_card_back_image =
-      //   data.creditcard.credit_card_back_image[0];
       for (const i in data.billpos) {
         data.billpos[i].bill_image = data.billpos[i].bill_image[0];
       }
