@@ -267,7 +267,6 @@ class POSNameMidTidSerializer(serializers.ModelSerializer):
 class BillPosSerializer(serializers.ModelSerializer):
 
     total_money = serializers.CharField(required=False, allow_null=True, allow_blank=True)
-    pos = POSNameMidTidSerializer(read_only=True)
 
     class Meta:
         model = BillPos
@@ -280,6 +279,14 @@ class BillPosSerializer(serializers.ModelSerializer):
             return int(value)
         except ValueError:
             raise serializers.ValidationError("You must supply an integer")
+
+
+class BillPosSwipeCardDetailSerializer(BillPosSerializer):
+    pos = POSNameMidTidSerializer(read_only=True)
+
+    class Meta:
+        model = BillPos
+        fields = "__all__"
 
 
 class BillPosUpdateSerializer(serializers.ModelSerializer):
@@ -374,7 +381,7 @@ class SwipeCardTransactionDetailRetrieveUpdateSerializer(serializers.ModelSerial
         try:
             if self.context["request"].method in ["GET"]:
                 self.fields["user"] = serializers.CharField(source="user.id")
-                self.fields["billpos"] = BillPosSerializer(source="billposes", many=True)
+                self.fields["billpos"] = BillPosSwipeCardDetailSerializer(source="billposes", many=True)
         except KeyError:
             pass
         except Exception as ex:
