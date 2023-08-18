@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import CurrencyFormat from "react-currency-format";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import storeApi from "../../../api/storeAPI";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import DisplayImageFileInputField from "../../Common/displayImageFileInputField";
 import InputField from "../../Common/inputField";
@@ -18,12 +19,26 @@ import ModifiyBillPOSMachineModal from "../../Modal/modifyBillPosMachineModal";
 function SwipeCardDetail() {
   const { id } = useParams();
   const [dataSwipCardDetail, setDataSwipCardDetail] = useState();
+  const [posList, setPOSList] = useState([]);
   const [indexModal, setIndexModal] = useState(0);
   const [show, setShow] = useState(false);
   const handleShow = () => setShow(true);
 
-  const { register, handleSubmit, reset, formState, getValues, setValue } =
-    useForm();
+  const {
+    control,
+    register,
+    handleSubmit,
+    reset,
+    formState,
+    getValues,
+    setValue,
+  } = useForm();
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "billpos", // unique name for your Field Array
+    // keyName: "id", default to "id", you can change the key name
+  });
+
   const { isSubmitting } = formState;
   const navigate = useNavigate();
 
@@ -32,7 +47,17 @@ function SwipeCardDetail() {
       try {
         const response = await swipeCardTransactionAPI.getDetail(id);
         console.log("Fetch SwipeCardTransactionDetail successfully", response);
-
+        for (const i in response?.billpos) {
+          response.billpos[i].exist = true;
+        }
+        const storePOSListResponse = await storeApi.getListPOSById(
+          response.store_id
+        );
+        console.log(
+          "🚀 ~ file: swipeCardDetail.jsx:57 ~ fetchSwipeCardTransactionDetail ~ storePOSListResponse:",
+          storePOSListResponse
+        );
+        setPOSList(storePOSListResponse);
         setDataSwipCardDetail(response);
         reset({ ...response });
       } catch (error) {
@@ -48,10 +73,6 @@ function SwipeCardDetail() {
     console.log(
       "🚀 ~ file: swipeCardInput.jsx:79 ~ handleClickPosMachine ~ index:",
       index
-    );
-    console.log(
-      "🚀 ~ file: swipeCardDetail.jsx:47 ~ handleClickPosMachine ~ getValues:",
-      getValues(`billpos[${index}]`)
     );
     handleShow();
   };
@@ -72,7 +93,7 @@ function SwipeCardDetail() {
   };
 
   const handleClose = (index, imageValue) => {
-    setValue(`billpos[${index}].bill_image`, imageValue);
+    // setValue(`billpos[${index}].bill_image`, imageValue);
     setShow(false);
   };
 
@@ -123,10 +144,15 @@ function SwipeCardDetail() {
         }
       }
 
+      for (const i in data?.billpos) {
+        if (data.billpos[i].exist === true) {
+          delete data.billpos[i].bill_image;
+        } else {
+          data.billpos[i].bill_image = data.billpos[i].bill_image[0];
+        }
+      }
+
       console.log("🚀 ~ file: swipeCardDetail.jsx:34 ~ onSubmit ~ data:", data);
-      // delete data.customer.credit_card.credit_card_front_image;
-      // delete data.credit_card.credit_card_back_image;
-      // delete data.pos;
 
       const response = await swipeCardTransactionAPI.updateOne(id, data);
       console.log("Update Swipecard successfully", response);
@@ -372,44 +398,119 @@ function SwipeCardDetail() {
           />
         </div>
         <h5>Máy POS</h5>
-        {dataSwipCardDetail?.billpos?.map((item, index) => (
-          <div key={item.id} className="row">
-            <InputField
-              requiredColWidth={2}
-              requiredLbl={`Máy POS ${index}`}
-              requiredType="text"
-              requiredRegister={register}
-              requiredName={`billpos[${index}].pos`}
-              optionalDisabled={true}
-            />
-            {getValues(`billpos[${index}].bill_image`) && (
-              <DisplayImageFileInputField
-                requiredColWidth={4}
-                requiredLbl={`Hình bill máy POS ${index}`}
-                requiredImageUrl={`${getValues(
-                  `billpos[${index}].bill_image`
-                )}`}
-                requiredRegister={register}
-                requiredName={`billpos[${index}].bill_image`}
-                optionalAccept={INPUTIMAGETYPEACCEPT}
-              />
-            )}
-            <div className="col-md-2">
-              <div className="mb-3">
-                <label className="form-label">Bill Máy Pos {index}</label>
-                <button
-                  id={`file-upload-${index}`}
-                  disabled={isSubmitting}
-                  className="btn btn-outline-primary form-control"
-                  onClick={() => handleClickPosMachine(index)}
-                  type="button"
-                >
-                  Xem dữ liệu
-                </button>
-              </div>
-            </div>
+        <div className="table-responsive">
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">Máy POS</th>
+                <th scope="col">Hình bill máy POS</th>
+                <th scope="col">Hợp lệ</th>
+                <th scope="col">Xem dữ liệu</th>
+                <th scope="col">Xoá</th>
+              </tr>
+            </thead>
+            <tbody>
+              {fields?.map((item, index) => (
+                <tr key={item.id}>
+                  <td>
+                    {item?.exist !== true ? (
+                      <select
+                        {...register(`billpos[${index}].pos`)}
+                        className="form-select"
+                        required={true}
+                        disabled={item?.exist === true}
+                      >
+                        <option value="">Chọn POS</option>
+                        {posList?.poses?.map((ele, index) => (
+                          <option key={index} value={ele.id}>
+                            {ele.name}-{ele.mid}-{ele.tid}
+                          </option>
+                        ))}
+                      </select>
+                    ) : (
+                      <span>
+                        {getValues(`billpos[${index}].pos.name`)}-
+                        {getValues(`billpos[${index}].pos.mid`)}-
+                        {getValues(`billpos[${index}].pos.tid`)}
+                      </span>
+                    )}
+                  </td>
+                  <td>
+                    <div className="col-md-3">
+                      <div className="mb-3">
+                        {item?.exist === true ? (
+                          <img
+                            src={`${getValues(`billpos[${index}].bill_image`)}`}
+                            style={{
+                              maxWidth: "50%",
+                              height: "auto",
+                            }}
+                            alt=""
+                          ></img>
+                        ) : (
+                          <input
+                            {...register(`billpos[${index}].bill_image`)}
+                            type="file"
+                            className="form-control"
+                            required={true}
+                            accept={INPUTIMAGETYPEACCEPT}
+                          />
+                        )}
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    <input
+                      {...register(`billpos[${index}].valid`)}
+                      className={"form-check-input"}
+                      type="checkbox"
+                    />
+                  </td>
+                  <td>
+                    <button
+                      id={`file-upload-${index}`}
+                      disabled={isSubmitting}
+                      className="btn btn-outline-primary form-control"
+                      onClick={() => handleClickPosMachine(index)}
+                      type="button"
+                    >
+                      POS {index}
+                    </button>
+                  </td>
+                  <td>
+                    {item?.exist !== true && (
+                      <button
+                        disabled={isSubmitting}
+                        onClick={() => {
+                          remove(index);
+                        }}
+                        className="btn btn-outline-danger form-control"
+                      >
+                        {isSubmitting && (
+                          <span className="spinner-border spinner-border-sm mr-1"></span>
+                        )}
+                        Xoá
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="d-flex justify-content-start">
+            <button
+              type="button"
+              disabled={isSubmitting}
+              onClick={() => append({})}
+              className="btn btn-outline-primary "
+            >
+              {isSubmitting && (
+                <span className="spinner-border spinner-border-sm mr-1"></span>
+              )}
+              Thêm bill pos
+            </button>
           </div>
-        ))}
+        </div>
         <div className="d-flex justify-content-end">
           <button
             type="button"

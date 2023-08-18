@@ -5,7 +5,7 @@ from datetime import datetime
 import pytz
 from apps.base.constants import ADMIN, PARSE_ERROR_MSG, Y_M_D_FORMAT
 from apps.customer.models import CreditCard
-from apps.store.models import POS, NoteBook, Product, RowNotebook, Store, StoreCost, SwipeCardTransaction
+from apps.store.models import POS, BillPos, NoteBook, Product, RowNotebook, Store, StoreCost, SwipeCardTransaction
 from apps.store.serializers import FeePos4CreditCardSerializer
 from apps.user.authentication import IsAdmin
 from apps.user.models import User
@@ -14,7 +14,7 @@ from django.shortcuts import render
 from django.views import View
 from nested_multipart_parser import NestedParser
 from rest_framework import status
-from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -27,6 +27,7 @@ from .pagination import (
 from .serializers import (
     AllTransaction4CreditCardSerializer,
     BillPosSerializer,
+    BillPosUpdateSerializer,
     CreateRowNotebookSerializer,
     CreditCardManagementSerializer,
     GetRowNotebookSerializer,
@@ -36,6 +37,7 @@ from .serializers import (
     ProductSerializer,
     StoreCostSerializer,
     StoreInformationDetailSerializer,
+    StorePOSOnlySerializer,
     StoreSerializer,
     SwipeCardTransactionDetailRetrieveUpdateSerializer,
     SwipeCardTransactionReportSerializer,
@@ -127,13 +129,34 @@ class SwipeCardTransactionDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestr
         parser = NestedParser(request.data)
         if parser.is_valid():
             data = parser.validate_data
+            billpos = data.pop("billpos", None)
             partial = True
             instance = self.get_object()
             serializer = SwipeCardTransactionDetailRetrieveUpdateSerializer(instance, data=data, partial=partial)
             serializer.is_valid(raise_exception=True)
             serializer.save()
+            self.update_or_create_bill_pos_data(serializer.data.get("id"), billpos)
             return Response(status=status.HTTP_200_OK)
         return Response(PARSE_ERROR_MSG, status=status.HTTP_400_BAD_REQUEST)
+
+    def update_or_create_bill_pos_data(self, swipe_trasaction_id: int, billposes: list):
+        if not all([swipe_trasaction_id, billposes]):
+            return
+        for billpos in billposes:
+            try:
+                if billpos.get("exist", False) == "true":
+                    obj_billposes = BillPos.objects.filter(id=billpos.get("id")).first()
+                    if obj_billposes:
+                        serializer = BillPosUpdateSerializer(obj_billposes, data=billpos)
+                        serializer.is_valid(raise_exception=True)
+                        serializer.save()
+                else:
+                    billpos.update({"transaction": swipe_trasaction_id})
+                    serializer = BillPosSerializer(data=billpos)
+                    serializer.is_valid(raise_exception=True)
+                    serializer.save()
+            except Exception as e:
+                print(e)
 
 
 class SwipeCardTransactionReportAPIView(ListAPIView):
@@ -354,6 +377,13 @@ class StoreDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(PARSE_ERROR_MSG, status=status.HTTP_400_BAD_REQUEST)
+
+
+class StorePOSOnlyRetrieveAPIView(RetrieveAPIView):
+
+    queryset = Store.objects.all()
+    serializer_class = StorePOSOnlySerializer
+    permission_classes = [IsAuthenticated]
 
 
 class EmployeesListCreateAPIView(ListCreateAPIView):

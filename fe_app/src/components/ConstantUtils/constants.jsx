@@ -37,22 +37,25 @@ export const POSSTATUS = [
   },
 ];
 
-export const BILLPOSSTATUS = [
+export const BILLPOSRECEIVEMONEY = [
   {
-    value: 1,
+    value: false,
     label: "Tiền chưa về",
   },
   {
-    value: 2,
+    value: true,
     label: "Tiền đã về",
   },
+];
+
+export const BILLPOSVALID = [
   {
-    value: 3,
-    label: "Sai Bill",
+    value: false,
+    label: "Không hợp lệ",
   },
   {
-    value: 4,
-    label: "Huỷ Bill",
+    value: true,
+    label: "Hợp lệ",
   },
 ];
 
@@ -115,11 +118,14 @@ export const TOLLSTATUS = [
   },
 ];
 
-export const COLORROWBYBILLPOSSATUS = {
-  1: "table-warning",
-  2: "table-success",
-  3: "table-danger",
-  4: "table-danger",
+export const COLORBILLPOSRECEIVEMONEY = {
+  1: "table-success",
+  2: "table-danger",
+};
+
+export const COLORBILLPOSVALID = {
+  1: "table-success",
+  2: "table-danger",
 };
 
 export const INPUTIMAGETYPEACCEPT = ".jpg, .png, .jpeg";

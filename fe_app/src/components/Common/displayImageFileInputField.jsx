@@ -12,6 +12,7 @@ DisplayImageFileInputField.propTypes = {
   optionalDisabled: PropTypes.bool,
   optionalOnChangeInputFile: PropTypes.func,
   optionalAccept: PropTypes.string,
+  optionalMaxWidth: PropTypes.string,
 };
 
 function DisplayImageFileInputField(props) {
@@ -25,6 +26,7 @@ function DisplayImageFileInputField(props) {
     optionalOnChangeInputFile,
     optionalAccept,
     optionalDisabled,
+    optionalMaxWidth,
   } = props;
   return (
     <div className={`col-md-${requiredColWidth}`}>
@@ -33,7 +35,7 @@ function DisplayImageFileInputField(props) {
         {requiredImageUrl && (
           <img
             src={requiredImageUrl}
-            style={{ maxWidth: "100%", height: "auto" }}
+            style={{ maxWidth: optionalMaxWidth || "100%", height: "auto" }}
             alt=""
           ></img>
         )}

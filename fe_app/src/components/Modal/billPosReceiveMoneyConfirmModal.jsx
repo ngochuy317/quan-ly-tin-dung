@@ -2,26 +2,27 @@ import { CDBBtn } from "cdbreact";
 import PropTypes from "prop-types";
 import React from "react";
 import Modal from "react-bootstrap/Modal";
-import { BILLPOSSTATUS } from "../ConstantUtils/constants";
+import { BILLPOSRECEIVEMONEY } from "../ConstantUtils/constants";
 
-BillPosStatusConfirmModal.propTypes = {
+BillPosReceiveMoneyConfirmModal.propTypes = {
   requiredShow: PropTypes.bool.isRequired,
   requiredHandleClose: PropTypes.func.isRequired,
-  requiredDataBillPosStatusConfirmModal: PropTypes.object.isRequired,
+  requiredDataBillPosReceiveMoneyConfirmModal: PropTypes.object.isRequired,
   requiredHandleConfirm: PropTypes.func.isRequired,
   requiredData: PropTypes.array.isRequired,
   requiredOnChange: PropTypes.func.isRequired,
 };
 
-function BillPosStatusConfirmModal(props) {
+function BillPosReceiveMoneyConfirmModal(props) {
   const {
     requiredShow,
     requiredHandleClose,
     requiredHandleConfirm,
     requiredData,
     requiredOnChange,
-    requiredDataBillPosStatusConfirmModal,
+    requiredDataBillPosReceiveMoneyConfirmModal,
   } = props;
+    console.log("🚀 ~ file: billPosReceiveMoneyConfirmModal.jsx:25 ~ BillPosReceiveMoneyConfirmModal ~ requiredDataBillPosReceiveMoneyConfirmModal:", requiredDataBillPosReceiveMoneyConfirmModal)
 
   return (
     <>
@@ -32,14 +33,17 @@ function BillPosStatusConfirmModal(props) {
         <Modal.Body>
           <div>
             Xác nhận giao dịch vào{" "}
-            {requiredDataBillPosStatusConfirmModal?.transactionTime}: từ{" "}
+            {requiredDataBillPosReceiveMoneyConfirmModal?.transactionTime}: từ{" "}
             {
-              BILLPOSSTATUS.find(
-                (c) => c.value === requiredDataBillPosStatusConfirmModal?.status
+              BILLPOSRECEIVEMONEY.find(
+                (c) =>
+                  c.value ===
+                  requiredDataBillPosReceiveMoneyConfirmModal?.receive_money
               )?.label
             }{" "}
             sang{" "}
-            <select name="billposstatus" onChange={requiredOnChange}>
+            <select name="billposstatus" onChange={requiredOnChange} required>
+              <option value="">Chọn</option>
               {requiredData?.map((ele, index) => (
                 <option key={index} value={ele.value}>
                   {ele.label}
@@ -57,7 +61,7 @@ function BillPosStatusConfirmModal(props) {
             onClick={(e) =>
               requiredHandleConfirm(
                 e,
-                requiredDataBillPosStatusConfirmModal?.id
+                requiredDataBillPosReceiveMoneyConfirmModal?.id
               )
             }
             circle
@@ -70,4 +74,4 @@ function BillPosStatusConfirmModal(props) {
   );
 }
 
-export default BillPosStatusConfirmModal;
+export default BillPosReceiveMoneyConfirmModal;

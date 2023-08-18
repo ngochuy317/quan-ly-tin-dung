@@ -198,7 +198,6 @@ class Product(models.Model):
 class BillPos(models.Model):
 
     RELATED_NAME = "billposes"
-    STATUS_CHOICES = ((1, "Tiền chưa về"), (2, "Tiền đã về"), (3, "Sai Bill"), (4, "Huỷ Bill"))
 
     transaction = models.ForeignKey(SwipeCardTransaction, on_delete=models.CASCADE, related_name=RELATED_NAME)
     pos = models.ForeignKey(POS, on_delete=models.CASCADE, related_name=RELATED_NAME)
@@ -210,7 +209,8 @@ class BillPos(models.Model):
     authorization_code = models.CharField(max_length=128, blank=True)
     datetime_created = models.DateTimeField(auto_now_add=True)
     datetime_updated = models.DateTimeField(auto_now=True)
-    status = models.SmallIntegerField(choices=STATUS_CHOICES, default=1)
+    receive_money = models.BooleanField(default=False)
+    valid = models.BooleanField(default=True)
 
     class Meta:
         ordering = ["-datetime_created"]

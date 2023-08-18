@@ -5,11 +5,12 @@ import billPOSApi from "../../../api/billPOSAPI";
 import storeApi from "../../../api/storeAPI";
 import {
   ADMIN,
-  BILLPOSSTATUS,
-  COLORROWBYBILLPOSSATUS,
+  BILLPOSRECEIVEMONEY,
+  COLORBILLPOSRECEIVEMONEY,
+  COLORBILLPOSVALID,
   MAMANGER,
 } from "../../ConstantUtils/constants";
-import BillPosStatusConfirmModal from "../../Modal/billPosStatusConfirmModal";
+import BillPosReceiveMoneyConfirmModal from "../../Modal/billPosReceiveMoneyConfirmModal";
 import ShowErrorModal from "../../Modal/showErrorModal";
 import Pagination from "../../Pagination/pagination";
 import { AuthContext } from "../dashboard";
@@ -23,10 +24,10 @@ function BillPOSMachineMangement(props) {
   const [currentPage, setCurrentPage] = useState(1);
   const [show, setShow] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
-  const [dataBillPosStatusConfirmModal, setDataBillPosStatusConfirmModal] =
+  const [dataBillPosReceiveMoneyConfirmModal, setDataBillPosReceiveMoneyConfirmModal] =
     useState({});
   const [errorMsg, setErrorMsg] = useState("");
-  const [billPosStatus, setBillPosStatus] = useState(1);
+  const [billPosReceiveMoney, setBillPosReceiveMoney] = useState(1);
   const [params, setParams] = useState({ page: 1 });
   const [responseBillPOSMachine, setResponseBillPOSMachine] = useState([]);
 
@@ -51,7 +52,7 @@ function BillPOSMachineMangement(props) {
     e.preventDefault();
     try {
       const response = await billPOSApi.updateOne(id, {
-        status: billPosStatus,
+        receive_money: billPosReceiveMoney,
       });
       console.log(
         "🚀 ~ file: billPOSMachineManagement.jsx:49 ~ handleConfirm ~ id:",
@@ -71,23 +72,23 @@ function BillPOSMachineMangement(props) {
     }
   };
 
-  const handleShowModal = (e, id, transactionTime, status) => {
+  const handleShowModal = (e, id, transactionTime, receive_money) => {
     console.log(
       "🚀 ~ file: billPOSMachineManagement.jsx:70 ~ handleShowModal ~ data:",
       id,
       transactionTime,
-      status
+      receive_money
     );
     e.preventDefault();
-    setDataBillPosStatusConfirmModal({
+    setDataBillPosReceiveMoneyConfirmModal({
       id: id,
       transactionTime: transactionTime,
-      status: status,
+      receive_money: receive_money,
     });
     setShow(true);
     console.log(
-      "🚀 ~ file: billPOSMachineManagement.jsx:83 ~ handleShowModal ~ dataBillPosStatusConfirmModal:",
-      dataBillPosStatusConfirmModal
+      "🚀 ~ file: billPOSMachineManagement.jsx:83 ~ handleShowModal ~ dataBillPosReceiveMoneyConfirmModal:",
+      dataBillPosReceiveMoneyConfirmModal
     );
   };
 
@@ -112,7 +113,7 @@ function BillPOSMachineMangement(props) {
       "🚀 ~ file: billPOSMachineManagement.jsx:79 ~ BillPOSMachineMangement ~ e:",
       e.target.value
     );
-    setBillPosStatus(parseInt(e.target.value));
+    setBillPosReceiveMoney(e.target.value);
   };
 
   const handleChangePage = async (direction) => {
@@ -221,7 +222,8 @@ function BillPOSMachineMangement(props) {
               <th scope="col">Số lô</th>
               <th scope="col">Mã chuẩn chi</th>
               <th scope="col">Nhân viên</th>
-              <th scope="col">Trạng thái</th>
+              <th scope="col">Tiền về</th>
+              <th scope="col">Hợp lệ</th>
               {(role === ADMIN || role === MAMANGER) && (
                 <th scope="col">Thao tác</th>
               )}
@@ -229,10 +231,7 @@ function BillPOSMachineMangement(props) {
           </thead>
           <tbody className="table-group-divider">
             {responseBillPOSMachine?.results?.map((billPos, index) => (
-              <tr
-                key={billPos.id}
-                className={COLORROWBYBILLPOSSATUS[billPos.status]}
-              >
+              <tr key={billPos.id}>
                 <th scope="row">{index + 1}</th>
                 <td>{billPos.datetime_created}</td>
                 <td>
@@ -250,8 +249,11 @@ function BillPOSMachineMangement(props) {
                 <td>{billPos.batch}</td>
                 <td>{billPos.authorization_code}</td>
                 <td>{billPos.emp_name}</td>
-                <td>
-                  {BILLPOSSTATUS.find((c) => c.value === billPos.status)?.label}
+                <td className={COLORBILLPOSRECEIVEMONEY[billPos.receive_money ? 1 : 2]}>
+                  {billPos.receive_money ? "Đã về" : "Chưa về"}
+                </td>
+                <td className={COLORBILLPOSVALID[billPos.valid ? 1 : 2]}>
+                  {billPos.valid ? "Hợp lệ" : "Không hợp lệ"}
                 </td>
                 {(role === ADMIN || role === MAMANGER) && (
                   <td>
@@ -262,12 +264,12 @@ function BillPOSMachineMangement(props) {
                           e,
                           billPos.id,
                           billPos.datetime_created,
-                          billPos.status
+                          billPos.receive_money
                         )
                       }
                       style={{ cursor: "pointer" }}
                     >
-                      Xác nhận trạng thái
+                      Xác nhận tiền về
                     </a>
                   </td>
                 )}
@@ -275,12 +277,12 @@ function BillPOSMachineMangement(props) {
             ))}
           </tbody>
         </table>
-        <BillPosStatusConfirmModal
+        <BillPosReceiveMoneyConfirmModal
           requiredShow={show}
           requiredHandleClose={handleClose}
-          requiredDataBillPosStatusConfirmModal={dataBillPosStatusConfirmModal}
+          requiredDataBillPosReceiveMoneyConfirmModal={dataBillPosReceiveMoneyConfirmModal}
           requiredHandleConfirm={handleConfirm}
-          requiredData={BILLPOSSTATUS}
+          requiredData={BILLPOSRECEIVEMONEY}
           requiredOnChange={onChangeBillPosStatus}
         />
       </div>

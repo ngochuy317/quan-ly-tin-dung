@@ -541,7 +541,7 @@ function SwipeCardMoreDetail() {
                 optionalLblSelect="Chọn máy POS"
                 requiredValueOption={(ele) => `${ele.id}`}
                 requiredLblOption={(ele) =>
-                  `${ele.id}-${ele.mid}-${ele.tid}-${ele.bank_name}`
+                  `${ele.name}-${ele.mid}-${ele.tid}`
                 }
               />
               <FileInputField

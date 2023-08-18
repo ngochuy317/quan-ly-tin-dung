@@ -228,6 +228,11 @@ class StoreInformationDetailSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class StorePOSOnlySerializer(serializers.Serializer):
+
+    poses = POSSerializer(many=True, read_only=True)
+
+
 class StoreSerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField(allow_blank=True, required=False)
     poses = POSSerializer(many=True, read_only=True)
@@ -249,9 +254,20 @@ class StoreSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("You must supply an integer")
 
 
+class POSNameMidTidSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = POS
+        fields = (
+            "name",
+            "mid",
+            "tid",
+        )
+
+
 class BillPosSerializer(serializers.ModelSerializer):
 
     total_money = serializers.CharField(required=False, allow_null=True, allow_blank=True)
+    pos = POSNameMidTidSerializer(read_only=True)
 
     class Meta:
         model = BillPos
@@ -264,6 +280,15 @@ class BillPosSerializer(serializers.ModelSerializer):
             return int(value)
         except ValueError:
             raise serializers.ValidationError("You must supply an integer")
+
+
+class BillPosUpdateSerializer(serializers.ModelSerializer):
+
+    exist = serializers.BooleanField(required=False)
+
+    class Meta:
+        model = BillPos
+        exclude = ("bill_image",)
 
 
 class SwipeCardTransactionReportSerializer(serializers.ModelSerializer):

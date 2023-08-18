@@ -19,6 +19,11 @@ class StoreApi {
     return axiosClient.get(url);
   };
 
+  getListPOSById = (id) => {
+    const url = this.storeBaseUrl + id + "/posonly/";
+    return axiosClient.get(url);
+  };
+
   createOne = (data) => {
     const url = this.storeBaseUrl;
     return axiosClient.post(url, data, {
