@@ -19,3 +19,7 @@ class SwipeCardTransactionFilter(filters.FilterSet):
 
 class NotebookFilter(filters.FilterSet):
     store_id = filters.NumberFilter(field_name="store__id")
+
+
+class CreditCardManagementFilter(filters.FilterSet):
+    card_number = filters.CharFilter(field_name="creditcard__card_number", lookup_expr="icontains")

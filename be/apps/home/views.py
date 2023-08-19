@@ -18,7 +18,7 @@ from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveAPIV
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .filters import NotebookFilter, SwipeCardTransactionFilter
+from .filters import CreditCardManagementFilter, NotebookFilter, SwipeCardTransactionFilter
 from .pagination import (
     CustomPageNumberPagination,
     CustomPageNumberPaginationPageSize15,
@@ -224,17 +224,20 @@ class AllTransaction4CreditCardAPIView(APIView):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class CreditCardManagementAPIView(APIView):
+class CreditCardManagementAPIView(ListAPIView):
 
+    serializer_class = CreditCardManagementSerializer
+    pagination_class = CustomPageNumberPaginationPageSize15
     permission_classes = [IsAdmin]
+    filterset_class = CreditCardManagementFilter
 
-    def get(self, request, *args, **kwargs):
+    def get_queryset(self):
         swipe_card_ids = (
             SwipeCardTransaction.objects.order_by("creditcard__card_number", "-transaction_datetime_created")
             .distinct("creditcard__card_number")
             .values("id")
         )
-        swipe_card_list = (
+        swipe_card_list_qs = (
             SwipeCardTransaction.objects.filter(id__in=swipe_card_ids)
             .order_by("-transaction_datetime_created")
             .values(
@@ -246,11 +249,7 @@ class CreditCardManagementAPIView(APIView):
                 "transaction_datetime_created",
             )
         )
-
-        pagination = CustomPageNumberPaginationPageSize15()
-        data = pagination.paginate_queryset(swipe_card_list, request, view=self)
-        serializer = CreditCardManagementSerializer(data, many=True)
-        return pagination.get_paginated_response(serializer.data)
+        return swipe_card_list_qs
 
 
 class NotebookListCreateAPIView(ListCreateAPIView):

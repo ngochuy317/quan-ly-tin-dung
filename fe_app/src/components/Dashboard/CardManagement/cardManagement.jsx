@@ -1,16 +1,27 @@
 import React, { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import cardManagementAPI from "../../../api/cardManagementAPI";
+import InputField from "../../Common/inputField";
 import HistoryCreditCardModal from "../../Modal/historyCreditCardModal";
+import Pagination from "../../Pagination/pagination";
 
 function CardManagement() {
   const [dataCard, setDataCard] = useState([]);
   const [dataTableHistoryCreditCard, setDataTableHistoryCreditCard] = useState(
     []
   );
+  const [currentPage, setCurrentPage] = useState(1);
+  const { register, handleSubmit, setValue, formState } = useForm();
+  const { isSubmitting } = formState;
   const [params, setParams] = useState({ page: 1 });
   const [show, setShow] = useState(false);
   const [titleModal, setTitleModal] = useState("");
+
+  const handleChangePage = (direction) => {
+    setParams({ page: currentPage + direction });
+    setCurrentPage(currentPage + direction);
+  };
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -28,7 +39,7 @@ function CardManagement() {
 
     initData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [params]);
 
   const handleOnClickCreditCard = async (e) => {
     try {
@@ -45,9 +56,65 @@ function CardManagement() {
       console.log("Failed to fetch creditcard", error);
     }
   };
+
+  const onSubmit = async (data) => {
+    try {
+      console.log("🚀 ~ file: cardManagement.jsx:59 ~ onSubmit ~ data:", data);
+      const response = await cardManagementAPI.getAll({
+        ...params,
+        ...data,
+      });
+      setDataCard(response);
+    } catch (error) {
+      console.log("Failed to search creditcard", error);
+    }
+  };
+
+  const onClickDeleteSearch = async () => {
+    try {
+      setValue("card_number", "");
+      const response = await cardManagementAPI.getAll(params);
+      console.log("Fetch creditcard successfully", response);
+      setDataCard(response);
+    } catch (error) {
+      console.log("Failed to fetch creditcard", error);
+    }
+  };
   return (
     <div>
       <h2 className="text-center">Quản lý thẻ</h2>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <InputField
+          requiredColWidth={3}
+          requiredLbl="Số trên thẻ"
+          requiredType="text"
+          requiredRegister={register}
+          requiredName={"card_number"}
+        />
+        <div className="d-flex justify-content-end">
+          <button
+            type="button"
+            disabled={isSubmitting}
+            className="btn btn-outline-primary mx-3"
+            onClick={() => onClickDeleteSearch()}
+          >
+            {isSubmitting && (
+              <span className="spinner-border spinner-border-sm mr-1"></span>
+            )}
+            Xoá tìm kiếm
+          </button>
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="btn btn-outline-primary mx-3"
+          >
+            {isSubmitting && (
+              <span className="spinner-border spinner-border-sm mr-1"></span>
+            )}
+            Tìm kiếm
+          </button>
+        </div>
+      </form>
       <div className="table-responsive">
         <table className="table">
           <thead>
@@ -57,7 +124,7 @@ function CardManagement() {
               <th scope="col">Cửa hàng</th>
               <th scope="col">Số tiền</th>
               <th scope="col">Ngày quẹt</th>
-              <th scope="col">Chỉnh sửa</th>
+              <th scope="col">Thao tác</th>
             </tr>
           </thead>
           <tbody className="table-group-divider">
@@ -90,6 +157,12 @@ function CardManagement() {
         handleClose={handleClose}
         title={titleModal}
         dataTableHistoryCreditCard={dataTableHistoryCreditCard}
+      />
+      <Pagination
+        canBedisabled={dataCard?.results?.length ? false : true}
+        currentPage={currentPage}
+        totalPages={dataCard.total_pages}
+        handleChangePage={handleChangePage}
       />
     </div>
   );

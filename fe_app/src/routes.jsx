@@ -62,8 +62,8 @@ function RoutesApp() {
       <Route path="/products/:id" element={<ProductDetail />} />
       <Route path="/reportadm" element={<ReportAdmin />} />
       <Route path="/reportemp" element={<ReportEmployee />} />
-      <Route path="/creditcardmanage" element={<CardManagement />} />
-      <Route path="/creditcardmanage/:id" element={<CreditCardDetail />} />
+      <Route path="/creditcardmanagement" element={<CardManagement />} />
+      <Route path="/creditcardmanagement/:id" element={<CreditCardDetail />} />
       <Route path="/billposmanage" element={<BillPOSMachineMangement />} />
       <Route path="/feepos4creditcard" element={<FeePos4CreditCardList />} />
       <Route path="/feepos4creditcard/add" element={<AddFeePos4CreditCard />} />

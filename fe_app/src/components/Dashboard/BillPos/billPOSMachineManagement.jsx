@@ -95,7 +95,6 @@ function BillPOSMachineMangement(props) {
   };
 
   const onSubmit = async (data) => {
-    // data.datetime_created = `${data.datetime_created.from},${data.datetime_created.to}`
     console.log(
       "🚀 ~ file: billPOSMachineManagement.jsx:97 ~ onSubmit ~ data:",
       data
