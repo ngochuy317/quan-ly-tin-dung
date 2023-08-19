@@ -144,6 +144,7 @@ class SwipeCardTransactionDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestr
             return
         for billpos in billposes:
             try:
+                billpos["pos"] = billpos.get("pos", {}).get("id")
                 if billpos.get("exist", False) == "true":
                     obj_billposes = BillPos.objects.filter(id=billpos.get("id")).first()
                     if obj_billposes:
@@ -237,7 +238,12 @@ class CreditCardManagementAPIView(APIView):
             SwipeCardTransaction.objects.filter(id__in=swipe_card_ids)
             .order_by("-transaction_datetime_created")
             .values(
-                "id", "store_name", "creditcard__card_number", "customer_money_needed", "transaction_datetime_created"
+                "id",
+                "store_name",
+                "creditcard__card_number",
+                "creditcard__id",
+                "customer_money_needed",
+                "transaction_datetime_created",
             )
         )
 

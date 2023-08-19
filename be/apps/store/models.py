@@ -146,11 +146,7 @@ class RowNotebook(models.Model):
     card_location = models.CharField(max_length=256, default="")
 
     def __str__(self):
-        return (
-            f"Tên sổ: {self.notebook.name},  "
-            f"  Trạng thái: {self.status},  "
-            f"  Giờ lưu: {self.storage_datetime:%m/%d/%Y %H:%M}"
-        )
+        return f"Tên sổ: {self.notebook.name},  " f"  Giờ lưu: {self.storage_datetime:%m/%d/%Y %H:%M}"
 
     class Meta:
         ordering = ["-storage_datetime"]

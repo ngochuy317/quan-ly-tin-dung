@@ -2,7 +2,9 @@ import axiosClient from "./axiosClient";
 
 class CreditCardApi {
   constructor() {
-    this.creditCardBaseUrl = "/creditcard/";
+    this.customer = "customer";
+    this.creditCardBaseUrl = "creditcard";
+    this.creditCardsBaseUrl = "/creditcards/";
   }
 
   // createOne = (data) => {
@@ -13,6 +15,20 @@ class CreditCardApi {
   search = (params) => {
     const url = "customer/creditcards/";
     return axiosClient.get(url, { params });
+  };
+
+  getDetail = (id) => {
+    const url = `${this.customer}/${this.creditCardBaseUrl}/${id}/`;
+    return axiosClient.get(url);
+  };
+
+  updateOne = (id, data) => {
+    const url = `${this.customer}/${this.creditCardBaseUrl}/${id}/`;
+    return axiosClient.put(url, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
   };
 
   saveCreditCard2Notebook = (data) => {

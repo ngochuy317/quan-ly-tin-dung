@@ -14,7 +14,7 @@ import {
   TOLLSTATUS,
   TRANSACTIONTYPE,
 } from "../../ConstantUtils/constants";
-import AddBillPOSMachineModal from "../../Modal/billPOSMachineModal";
+import BillPOSMachineModal from "../../Modal/billPOSMachineModal";
 
 function SwipeCardMoreDetail() {
   const {
@@ -540,9 +540,7 @@ function SwipeCardMoreDetail() {
                 // OptionalOnChangeSelect={optionalHandleOnChangePOS}
                 optionalLblSelect="Chọn máy POS"
                 requiredValueOption={(ele) => `${ele.id}`}
-                requiredLblOption={(ele) =>
-                  `${ele.name}-${ele.mid}-${ele.tid}`
-                }
+                requiredLblOption={(ele) => `${ele.name}-${ele.mid}-${ele.tid}`}
               />
               <FileInputField
                 requiredColWidth={4}
@@ -620,14 +618,15 @@ function SwipeCardMoreDetail() {
             Lưu
           </button>
         </div>
-        <AddBillPOSMachineModal
+        <BillPOSMachineModal
           requiredShow={show}
           requiredHandleClose={handleClose}
           requiredTitle={"Bill máy POS"}
           requiredRegister={register}
           index={indexModal}
           getValues={getValues}
-        ></AddBillPOSMachineModal>
+          setValue={setValue}
+        ></BillPOSMachineModal>
       </form>
     </div>
   );

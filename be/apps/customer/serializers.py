@@ -52,6 +52,12 @@ class CreditCardSerializer(serializers.ModelSerializer):
         return ""
 
 
+class CreditCardRetriveUpdateDeleteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CreditCard
+        exclude = ("notebook",)
+
+
 class CreditCardCustomSerializer(CreditCardSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)

@@ -2,6 +2,7 @@ import { CDBBtn } from "cdbreact";
 import PropTypes from "prop-types";
 import React from "react";
 import Modal from "react-bootstrap/Modal";
+import CurrencyFormat from "react-currency-format";
 import InputField from "../Common/inputField";
 
 BillPOSMachineModal.propTypes = {
@@ -10,7 +11,8 @@ BillPOSMachineModal.propTypes = {
   requiredTitle: PropTypes.string.isRequired,
   requiredRegister: PropTypes.func.isRequired,
   index: PropTypes.number.isRequired,
-  getValues: PropTypes.func.isRequired
+  getValues: PropTypes.func.isRequired,
+  setValue: PropTypes.func.isRequired,
 };
 
 function BillPOSMachineModal(props) {
@@ -21,6 +23,7 @@ function BillPOSMachineModal(props) {
     requiredRegister,
     index,
     getValues,
+    setValue,
   } = props;
 
   const clickClose = (index) => {
@@ -31,6 +34,11 @@ function BillPOSMachineModal(props) {
     requiredHandleClose(index, getValues(`billpos[${index}].bill_image[0]`));
   };
 
+  const moneyBillPOSInputFieldFormat = (e, index) => {
+    let val = e.target.value?.replaceAll(",", "");
+    setValue(`billpos[${index}].total_money`, val);
+  };
+
   return (
     <div>
       <Modal size="xl" show={requiredShow} onHide={requiredHandleClose}>
@@ -39,13 +47,19 @@ function BillPOSMachineModal(props) {
         </Modal.Header>
         <Modal.Body>
           <div className="row">
-            <InputField
-              requiredColWidth={4}
-              requiredLbl="Số Tiền"
-              requiredType="number"
-              requiredRegister={requiredRegister}
-              requiredName={`billpos[${index}].total_money`}
-            />
+            <div className="col-md-4">
+              <div className="mb-3">
+                <label className="form-label">Số Tiền</label>
+                <CurrencyFormat
+                  type="text"
+                  className="form-control"
+                  value={getValues(`billpos[${index}].total_money`)}
+                  required
+                  thousandSeparator={true}
+                  onChange={(e) => moneyBillPOSInputFieldFormat(e, index)}
+                />
+              </div>
+            </div>
             <InputField
               requiredColWidth={4}
               requiredLbl="Mã chuẩn chi"

@@ -31,6 +31,7 @@ import SwipeCard from "./components/Dashboard/SwipeCard/swipeCard";
 import SwipeCardDetail from "./components/Dashboard/SwipeCard/swipeCardDetail";
 import SwipeCardMoreDetail from "./components/Dashboard/SwipeCard/swipeCardMoreDetail";
 import AddFeePos4CreditCard from "./components/Dashboard/FeePos4CreditCard/addFeePos4CreditCard";
+import CreditCardDetail from "./components/Dashboard/CardManagement/creditcardDetail";
 
 function RoutesApp() {
   return (
@@ -61,7 +62,8 @@ function RoutesApp() {
       <Route path="/products/:id" element={<ProductDetail />} />
       <Route path="/reportadm" element={<ReportAdmin />} />
       <Route path="/reportemp" element={<ReportEmployee />} />
-      <Route path="/creditcarmanage" element={<CardManagement />} />
+      <Route path="/creditcardmanage" element={<CardManagement />} />
+      <Route path="/creditcardmanage/:id" element={<CreditCardDetail />} />
       <Route path="/billposmanage" element={<BillPOSMachineMangement />} />
       <Route path="/feepos4creditcard" element={<FeePos4CreditCardList />} />
       <Route path="/feepos4creditcard/add" element={<AddFeePos4CreditCard />} />

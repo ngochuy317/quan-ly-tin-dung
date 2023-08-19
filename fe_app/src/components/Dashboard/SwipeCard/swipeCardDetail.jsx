@@ -405,6 +405,7 @@ function SwipeCardDetail() {
                 <th scope="col">Máy POS</th>
                 <th scope="col">Hình bill máy POS</th>
                 <th scope="col">Hợp lệ</th>
+                <th scope="col">Số tiền</th>
                 <th scope="col">Xem dữ liệu</th>
                 <th scope="col">Xoá</th>
               </tr>
@@ -466,6 +467,7 @@ function SwipeCardDetail() {
                       type="checkbox"
                     />
                   </td>
+                  <td>{getValues(`billpos[${index}].total_money`)}</td>
                   <td>
                     <button
                       id={`file-upload-${index}`}

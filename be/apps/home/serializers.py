@@ -258,6 +258,7 @@ class POSNameMidTidSerializer(serializers.ModelSerializer):
     class Meta:
         model = POS
         fields = (
+            "id",
             "name",
             "mid",
             "tid",
@@ -516,6 +517,7 @@ class CreditCardManagementSerializer(serializers.Serializer):
 
     id = serializers.IntegerField()
     card_number = serializers.ReadOnlyField(source="creditcard__card_number")
+    creditcard_id = serializers.ReadOnlyField(source="creditcard__id")
     store_name = serializers.CharField()
     customer_money_needed = serializers.IntegerField()
     transaction_datetime_created = serializers.DateTimeField(format=Y_M_D_H_M_FORMAT)

@@ -149,7 +149,7 @@ export const dataItemSideBarForAdmin = [
     id: 14,
     name: "Quản lý thẻ",
     icon: "id-card",
-    path: "/dashboard/creditcarmanage",
+    path: "/dashboard/creditcardmanage",
     role: [ADMIN],
     private: true,
   },

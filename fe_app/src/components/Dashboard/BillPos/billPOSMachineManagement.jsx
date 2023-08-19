@@ -3,11 +3,11 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import billPOSApi from "../../../api/billPOSAPI";
 import storeApi from "../../../api/storeAPI";
+import RequiredSymbol from "../../Common/requiredSymbol";
 import {
   ADMIN,
   BILLPOSRECEIVEMONEY,
-  COLORBILLPOSRECEIVEMONEY,
-  COLORBILLPOSVALID,
+  COLORBILLPOS,
   MAMANGER,
 } from "../../ConstantUtils/constants";
 import BillPosReceiveMoneyConfirmModal from "../../Modal/billPosReceiveMoneyConfirmModal";
@@ -24,8 +24,10 @@ function BillPOSMachineMangement(props) {
   const [currentPage, setCurrentPage] = useState(1);
   const [show, setShow] = useState(false);
   const [showErrorModal, setShowErrorModal] = useState(false);
-  const [dataBillPosReceiveMoneyConfirmModal, setDataBillPosReceiveMoneyConfirmModal] =
-    useState({});
+  const [
+    dataBillPosReceiveMoneyConfirmModal,
+    setDataBillPosReceiveMoneyConfirmModal,
+  ] = useState({});
   const [errorMsg, setErrorMsg] = useState("");
   const [billPosReceiveMoney, setBillPosReceiveMoney] = useState(1);
   const [params, setParams] = useState({ page: 1 });
@@ -93,6 +95,11 @@ function BillPOSMachineMangement(props) {
   };
 
   const onSubmit = async (data) => {
+    // data.datetime_created = `${data.datetime_created.from},${data.datetime_created.to}`
+    console.log(
+      "🚀 ~ file: billPOSMachineManagement.jsx:97 ~ onSubmit ~ data:",
+      data
+    );
     try {
       const response = await billPOSApi.getAll({
         ...params,
@@ -148,7 +155,10 @@ function BillPOSMachineMangement(props) {
         <div className="row">
           <div className="col-md-3">
             <div className="mb-3">
-              <label className="form-label">Cửa hàng</label>
+              <label className="form-label">
+                Cửa hàng
+                <RequiredSymbol />
+              </label>
               {role === ADMIN ? (
                 <select
                   {...register("store_id")}
@@ -174,7 +184,7 @@ function BillPOSMachineMangement(props) {
               )}
             </div>
           </div>
-          <div className="col-md-4">
+          <div className="col-md-3">
             <div className="mb-3">
               <label className="form-label">Máy POS</label>
               <select
@@ -191,14 +201,54 @@ function BillPOSMachineMangement(props) {
               </select>
             </div>
           </div>
-          <div className="col-md-4">
+          <div className="col-md-3">
             <div className="mb-3">
-              <label className="form-label">Ngày giao dịch</label>
+              <label className="form-label">
+                Từ ngày
+                <RequiredSymbol />
+              </label>
               <input
-                {...register("datetime_created")}
+                {...register("datetime_created_after")}
                 type="date"
                 className="form-control"
+                required
               />
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="mb-3">
+              <label className="form-label">
+                Đến ngày
+                <RequiredSymbol />
+              </label>
+              <input
+                {...register("datetime_created_before")}
+                type="date"
+                className="form-control"
+                required
+              />
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-md-3">
+            <div className="mb-3">
+              <label className="form-label">Tiền về</label>
+              <select {...register("receive_money")} className="form-select">
+                <option value="">Tất cả</option>
+                <option value={true}>Tiền về</option>
+                <option value={false}>Tiền chưa về</option>
+              </select>
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="mb-3">
+              <label className="form-label">Bill hợp lệ</label>
+              <select {...register("valid")} className="form-select">
+                <option value="">Tất cả</option>
+                <option value={true}>Bill hợp lệ</option>
+                <option value={false}>Bill chưa hợp lệ</option>
+              </select>
             </div>
           </div>
         </div>
@@ -231,7 +281,16 @@ function BillPOSMachineMangement(props) {
           </thead>
           <tbody className="table-group-divider">
             {responseBillPOSMachine?.results?.map((billPos, index) => (
-              <tr key={billPos.id}>
+              <tr
+                key={billPos.id}
+                className={
+                  billPos.valid === false
+                    ? COLORBILLPOS["red"]
+                    : billPos.receive_money
+                    ? COLORBILLPOS["green"]
+                    : COLORBILLPOS["yellow"]
+                }
+              >
                 <th scope="row">{index + 1}</th>
                 <td>{billPos.datetime_created}</td>
                 <td>
@@ -249,28 +308,29 @@ function BillPOSMachineMangement(props) {
                 <td>{billPos.batch}</td>
                 <td>{billPos.authorization_code}</td>
                 <td>{billPos.emp_name}</td>
-                <td className={COLORBILLPOSRECEIVEMONEY[billPos.receive_money ? 1 : 2]}>
-                  {billPos.receive_money ? "Đã về" : "Chưa về"}
+                <td>
+                  {billPos.valid === true &&
+                    (billPos.receive_money ? "Đã về" : "Chưa về")}
                 </td>
-                <td className={COLORBILLPOSVALID[billPos.valid ? 1 : 2]}>
-                  {billPos.valid ? "Hợp lệ" : "Không hợp lệ"}
-                </td>
+                <td>{billPos.valid ? "Hợp lệ" : "Không hợp lệ"}</td>
                 {(role === ADMIN || role === MAMANGER) && (
                   <td>
-                    <a
-                      href="/#"
-                      onClick={(e) =>
-                        handleShowModal(
-                          e,
-                          billPos.id,
-                          billPos.datetime_created,
-                          billPos.receive_money
-                        )
-                      }
-                      style={{ cursor: "pointer" }}
-                    >
-                      Xác nhận tiền về
-                    </a>
+                    {billPos.valid === true && (
+                      <a
+                        href="/#"
+                        onClick={(e) =>
+                          handleShowModal(
+                            e,
+                            billPos.id,
+                            billPos.datetime_created,
+                            billPos.receive_money
+                          )
+                        }
+                        style={{ cursor: "pointer" }}
+                      >
+                        Xác nhận tiền về
+                      </a>
+                    )}
                   </td>
                 )}
               </tr>
@@ -280,7 +340,9 @@ function BillPOSMachineMangement(props) {
         <BillPosReceiveMoneyConfirmModal
           requiredShow={show}
           requiredHandleClose={handleClose}
-          requiredDataBillPosReceiveMoneyConfirmModal={dataBillPosReceiveMoneyConfirmModal}
+          requiredDataBillPosReceiveMoneyConfirmModal={
+            dataBillPosReceiveMoneyConfirmModal
+          }
           requiredHandleConfirm={handleConfirm}
           requiredData={BILLPOSRECEIVEMONEY}
           requiredOnChange={onChangeBillPosStatus}

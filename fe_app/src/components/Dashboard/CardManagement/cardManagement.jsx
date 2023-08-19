@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import cardManagementAPI from "../../../api/cardManagementAPI";
 import HistoryCreditCardModal from "../../Modal/historyCreditCardModal";
 
@@ -56,6 +57,7 @@ function CardManagement() {
               <th scope="col">Cửa hàng</th>
               <th scope="col">Số tiền</th>
               <th scope="col">Ngày quẹt</th>
+              <th scope="col">Chỉnh sửa</th>
             </tr>
           </thead>
           <tbody className="table-group-divider">
@@ -73,8 +75,11 @@ function CardManagement() {
                   </a>
                 </td>
                 <td>{data.store_name}</td>
-                <td>{data.customer_money_needed}</td>
+                <td>{data.customer_money_needed?.toLocaleString("vn")}</td>
                 <td>{data.transaction_datetime_created}</td>
+                <td>
+                  <Link to={data.creditcard_id + "/"}>Chỉnh sửa</Link>
+                </td>
               </tr>
             ))}
           </tbody>

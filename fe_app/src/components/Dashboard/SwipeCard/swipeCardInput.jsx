@@ -11,7 +11,7 @@ import InputField from "../../Common/inputField";
 import RequiredSymbol from "../../Common/requiredSymbol";
 import SelectField from "../../Common/selectField";
 import { TOLLSTATUS, TRANSACTIONTYPE } from "../../ConstantUtils/constants";
-import AddBillPOSMachineModal from "../../Modal/billPOSMachineModal";
+import BillPOSMachineModal from "../../Modal/billPOSMachineModal";
 
 SwipeCardInput.propTypes = {
   deleteFormInput: PropTypes.func,
@@ -38,6 +38,11 @@ function SwipeCardInput(props) {
   const moneyInputFieldFormat = (e) => {
     let val = e.target.value?.replaceAll(",", "");
     setValue("customer_money_needed", val);
+  };
+
+  const moneyBillPOSInputFieldFormat = (e, index) => {
+    let val = e.target.value?.replaceAll(",", "");
+    setValue(`billpos[${index}].total_money`, val);
   };
 
   useEffect(() => {
@@ -287,9 +292,7 @@ function SwipeCardInput(props) {
             requiredDataOption={requiredPosMachine}
             optionalLblSelect="Chọn máy POS"
             requiredValueOption={(ele) => `${ele.id}`}
-            requiredLblOption={(ele) =>
-              `${ele.name}-${ele.mid}-${ele.tid}`
-            }
+            requiredLblOption={(ele) => `${ele.name}-${ele.mid}-${ele.tid}`}
           />
           <FileInputField
             requiredColWidth={4}
@@ -298,6 +301,22 @@ function SwipeCardInput(props) {
             requiredRegister={register}
             requiredName={`billpos[${index}].bill_image`}
           />
+          <div className="col-md-2">
+            <div className="mb-3">
+              <label className="form-label">
+                Số Tiền
+                <RequiredSymbol />{" "}
+              </label>
+              <CurrencyFormat
+                type="text"
+                className="form-control"
+                value={getValues(`billpos[${index}].total_money`)}
+                required
+                thousandSeparator={true}
+                onChange={(e) => moneyBillPOSInputFieldFormat(e, index)}
+              />
+            </div>
+          </div>
           <div className="col-md-2">
             <div className="mb-3">
               <label className="form-label">Bill Máy Pos {index}</label>
@@ -406,14 +425,15 @@ function SwipeCardInput(props) {
           </div>
         </div>
       </div>
-      <AddBillPOSMachineModal
+      <BillPOSMachineModal
         requiredShow={show}
         requiredHandleClose={handleClose}
         requiredTitle={"Bill máy POS"}
         requiredRegister={register}
         index={indexModal}
         getValues={getValues}
-      ></AddBillPOSMachineModal>
+        setValue={setValue}
+      ></BillPOSMachineModal>
     </form>
   );
 }

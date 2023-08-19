@@ -118,14 +118,10 @@ export const TOLLSTATUS = [
   },
 ];
 
-export const COLORBILLPOSRECEIVEMONEY = {
-  1: "table-success",
-  2: "table-danger",
-};
-
-export const COLORBILLPOSVALID = {
-  1: "table-success",
-  2: "table-danger",
+export const COLORBILLPOS = {
+  "green": "table-success",
+  "red": "table-danger",
+  "yellow": "table-warning",
 };
 
 export const INPUTIMAGETYPEACCEPT = ".jpg, .png, .jpeg";
