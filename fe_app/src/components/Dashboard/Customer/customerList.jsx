@@ -3,6 +3,7 @@ import customerApi from "../../../api/customerAPI";
 import Pagination from "../../Pagination/pagination";
 
 function CustomerList() {
+  const [currentPage, setCurrentPage] = useState(1);
   const [params, setParams] = useState({ page: 1 });
   const [responseData, setResponseData] = useState({});
 
@@ -20,6 +21,11 @@ function CustomerList() {
 
     fetchCustomerList();
   }, [params]);
+
+  const handleChangePage = (direction) => {
+    setParams({ page: currentPage + direction });
+    setCurrentPage(currentPage + direction);
+  };
 
   return (
     <>
@@ -44,6 +50,12 @@ function CustomerList() {
           </tbody>
         </table>
       </div>
+      <Pagination
+        canBedisabled={responseData?.results?.length ? false : true}
+        currentPage={currentPage}
+        totalPages={responseData.total_pages}
+        handleChangePage={handleChangePage}
+      />
     </>
   );
 }
