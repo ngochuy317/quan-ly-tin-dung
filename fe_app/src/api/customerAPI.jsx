@@ -6,9 +6,9 @@ class CustomerApi {
     this.customerBaseUrl = "/customer/";
   }
 
-  createOne = (data) => {
+  getAll = (params) => {
     const url = this.customerBaseUrl;
-    return axiosClient.post(url, data);
+    return axiosClient.get(url, { params });
   };
 
 }

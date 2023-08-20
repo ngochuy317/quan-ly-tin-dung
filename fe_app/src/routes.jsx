@@ -32,6 +32,7 @@ import SwipeCardDetail from "./components/Dashboard/SwipeCard/swipeCardDetail";
 import SwipeCardMoreDetail from "./components/Dashboard/SwipeCard/swipeCardMoreDetail";
 import AddFeePos4CreditCard from "./components/Dashboard/FeePos4CreditCard/addFeePos4CreditCard";
 import CreditCardDetail from "./components/Dashboard/CardManagement/creditcardDetail";
+import CustomerList from "./components/Dashboard/Customer/customerList";
 
 function RoutesApp() {
   return (
@@ -68,6 +69,7 @@ function RoutesApp() {
       <Route path="/feepos4creditcard" element={<FeePos4CreditCardList />} />
       <Route path="/feepos4creditcard/add" element={<AddFeePos4CreditCard />} />
       <Route path="/feepos4creditcard/:id" element={<FeePos4CreditCardDetail />} />
+      <Route path="/customermanagement" element={<CustomerList />} />
     </Routes>
   );
 }

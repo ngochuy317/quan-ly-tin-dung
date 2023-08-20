@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 
+from apps.base.pagination import CustomPageNumberPaginationPageSize15
 from apps.user.authentication import IsAdmin
 from rest_framework import status
 from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.parsers import FileUploadParser, MultiPartParser
 from rest_framework.response import Response
 from .filters import CreditCardFilter
-from .models import CreditCard
-from .serializers import CreditCardCustomSerializer, CreditCardRetriveUpdateDeleteSerializer
+from .models import CreditCard, Customer
+from .serializers import CreditCardCustomSerializer, CreditCardRetriveUpdateDeleteSerializer, CustomerSerializer
 
 
 class CreditCardAPIView(ListAPIView):
@@ -38,3 +39,11 @@ class CreditCardRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
     queryset = CreditCard.objects.all()
     serializer_class = CreditCardRetriveUpdateDeleteSerializer
     permission_classes = [IsAdmin]
+
+
+class CustomerListAPIView(ListAPIView):
+
+    permission_classes = [IsAdmin]
+    serializer_class = CustomerSerializer
+    queryset = Customer.objects.all()
+    pagination_class = CustomPageNumberPaginationPageSize15

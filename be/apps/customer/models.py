@@ -28,6 +28,9 @@ class Customer(models.Model):
     id_card_front_image = models.ImageField(upload_to=FOLDER_UPLOAD, blank=True, null=True)
     id_card_back_image = models.ImageField(upload_to=FOLDER_UPLOAD, blank=True, null=True)
 
+    class Meta:
+        ordering = ["-id"]
+
     def __str__(self) -> str:
         return f"Name: {self.name} Phone number: {self.phone_number}"
 

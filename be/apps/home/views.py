@@ -4,6 +4,7 @@ from datetime import datetime
 
 import pytz
 from apps.base.constants import ADMIN, PARSE_ERROR_MSG, Y_M_D_FORMAT
+from apps.base.pagination import CustomPageNumberPagination, CustomPageNumberPaginationPageSize15
 from apps.customer.models import CreditCard
 from apps.store.models import POS, BillPos, NoteBook, Product, RowNotebook, Store, StoreCost, SwipeCardTransaction
 from apps.store.serializers import FeePos4CreditCardSerializer
@@ -19,11 +20,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .filters import CreditCardManagementFilter, NotebookFilter, SwipeCardTransactionFilter
-from .pagination import (
-    CustomPageNumberPagination,
-    CustomPageNumberPaginationPageSize15,
-    SwipeCardTransactionPageNumberPagination,
-)
+from .pagination import SwipeCardTransactionPageNumberPagination
 from .serializers import (
     AllTransaction4CreditCardSerializer,
     BillPosSerializer,

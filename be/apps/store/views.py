@@ -2,7 +2,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from apps.base.constants import PARSE_ERROR_MSG
-from apps.home.pagination import CustomPageNumberPagination
+from apps.base.pagination import CustomPageNumberPagination
 from apps.user.authentication import IsAdmin
 from nested_multipart_parser import NestedParser
 from rest_framework import status
