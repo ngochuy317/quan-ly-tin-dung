@@ -2,16 +2,16 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import creditCardApi from "../../../api/creditCardAPI";
-import InputField from "../../Common/inputField";
 import DisplayImageFileInputField from "../../Common/displayImageFileInputField";
+import InputField from "../../Common/inputField";
+import Spinner from "../../Common/spinner";
 import { INPUTIMAGETYPEACCEPT } from "../../ConstantUtils/constants";
 
 function CreditCardDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const { register, handleSubmit, reset, getValues, formState } =
-    useForm();
+  const { register, handleSubmit, reset, getValues, formState } = useForm();
   const { isSubmitting } = formState;
 
   useEffect(() => {
@@ -33,8 +33,7 @@ function CreditCardDetail() {
         if (typeof data.credit_card_front_image === "string") {
           delete data.credit_card_front_image;
         } else {
-          data.credit_card_front_image =
-            data.credit_card_front_image[0];
+          data.credit_card_front_image = data.credit_card_front_image[0];
         }
       }
 
@@ -42,11 +41,13 @@ function CreditCardDetail() {
         if (typeof data.credit_card_back_image === "string") {
           delete data.credit_card_back_image;
         } else {
-          data.credit_card_back_image =
-            data.credit_card_back_image[0];
+          data.credit_card_back_image = data.credit_card_back_image[0];
         }
       }
-      console.log("🚀 ~ file: creditcardDetail.jsx:33 ~ onSubmit ~ data:", data)
+      console.log(
+        "🚀 ~ file: creditcardDetail.jsx:33 ~ onSubmit ~ data:",
+        data
+      );
       const response = await creditCardApi.updateOne(id, data);
       console.log("Update creditcard successfully", response);
       navigate("./..");
@@ -111,9 +112,7 @@ function CreditCardDetail() {
           <DisplayImageFileInputField
             requiredColWidth={6}
             requiredLbl={"Ảnh mặt trước thẻ tín dụng"}
-            requiredImageUrl={`${getValues(
-              "credit_card_front_image"
-            )}`}
+            requiredImageUrl={`${getValues("credit_card_front_image")}`}
             requiredRegister={register}
             requiredName={"credit_card_front_image"}
             optionalAccept={INPUTIMAGETYPEACCEPT}
@@ -121,9 +120,7 @@ function CreditCardDetail() {
           <DisplayImageFileInputField
             requiredColWidth={6}
             requiredLbl={"Ảnh mặt sau thẻ tín dụng"}
-            requiredImageUrl={`${getValues(
-              "credit_card_back_image"
-            )}`}
+            requiredImageUrl={`${getValues("credit_card_back_image")}`}
             requiredRegister={register}
             requiredName={"credit_card_back_image"}
             optionalAccept={INPUTIMAGETYPEACCEPT}
@@ -147,9 +144,7 @@ function CreditCardDetail() {
             disabled={isSubmitting}
             className="btn btn-outline-primary"
           >
-            {isSubmitting && (
-              <span className="spinner-border spinner-border-sm mr-1"></span>
-            )}
+            {isSubmitting && <Spinner/>}
             Xác nhận
           </button>
         </div>

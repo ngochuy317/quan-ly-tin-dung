@@ -22,7 +22,6 @@ function BillPosReceiveMoneyConfirmModal(props) {
     requiredOnChange,
     requiredDataBillPosReceiveMoneyConfirmModal,
   } = props;
-    console.log("🚀 ~ file: billPosReceiveMoneyConfirmModal.jsx:25 ~ BillPosReceiveMoneyConfirmModal ~ requiredDataBillPosReceiveMoneyConfirmModal:", requiredDataBillPosReceiveMoneyConfirmModal)
 
   return (
     <>

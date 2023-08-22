@@ -9,6 +9,7 @@ import FileInputField from "../../Common/fileInputField";
 import InputField from "../../Common/inputField";
 import RequiredSymbol from "../../Common/requiredSymbol";
 import SelectField from "../../Common/selectField";
+import Spinner from "../../Common/spinner";
 import {
   GENDERCHOICES,
   TOLLSTATUS,
@@ -575,9 +576,7 @@ function SwipeCardMoreDetail() {
                     }}
                     className="btn btn-outline-danger form-control"
                   >
-                    {isSubmitting && (
-                      <span className="spinner-border spinner-border-sm mr-1"></span>
-                    )}
+                    {isSubmitting && <Spinner />}
                     Xoá
                   </button>
                 </div>
@@ -592,9 +591,7 @@ function SwipeCardMoreDetail() {
             onClick={() => append({})}
             className="btn btn-outline-primary "
           >
-            {isSubmitting && (
-              <span className="spinner-border spinner-border-sm mr-1"></span>
-            )}
+            {isSubmitting && <Spinner />}
             Thêm bill pos
           </button>
         </div>
@@ -612,9 +609,7 @@ function SwipeCardMoreDetail() {
             type="submit"
             className="btn btn-outline-primary"
           >
-            {isSubmitting && (
-              <span className="spinner-border spinner-border-sm mr-1"></span>
-            )}
+            {isSubmitting && <Spinner />}
             Lưu
           </button>
         </div>

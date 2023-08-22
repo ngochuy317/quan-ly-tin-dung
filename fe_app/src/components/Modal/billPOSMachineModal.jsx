@@ -26,14 +26,6 @@ function BillPOSMachineModal(props) {
     setValue,
   } = props;
 
-  const clickClose = (index) => {
-    console.log(
-      "🚀 ~ file: billPosmodal.jsx:35 ~ handleClose ~ getValues:",
-      getValues(`billpos[${index}].bill_image[0]`)
-    );
-    requiredHandleClose(index, getValues(`billpos[${index}].bill_image[0]`));
-  };
-
   const moneyBillPOSInputFieldFormat = (e, index) => {
     let val = e.target.value?.replaceAll(",", "");
     setValue(`billpos[${index}].total_money`, val);

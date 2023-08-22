@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import cardManagementAPI from "../../../api/cardManagementAPI";
 import InputField from "../../Common/inputField";
+import Spinner from "../../Common/spinner";
 import HistoryCreditCardModal from "../../Modal/historyCreditCardModal";
 import Pagination from "../../Pagination/pagination";
 
@@ -99,7 +100,7 @@ function CardManagement() {
             onClick={() => onClickDeleteSearch()}
           >
             {isSubmitting && (
-              <span className="spinner-border spinner-border-sm mr-1"></span>
+              <Spinner/>
             )}
             Xoá tìm kiếm
           </button>
@@ -109,7 +110,7 @@ function CardManagement() {
             className="btn btn-outline-primary mx-3"
           >
             {isSubmitting && (
-              <span className="spinner-border spinner-border-sm mr-1"></span>
+              <Spinner/>
             )}
             Tìm kiếm
           </button>

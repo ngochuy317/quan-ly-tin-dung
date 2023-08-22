@@ -1,12 +1,9 @@
 import React from "react";
-import { CDBSpinner, CDBContainer } from "cdbreact";
 
 function Spinner() {
   return (
     <>
-      <CDBContainer>
-        <CDBSpinner className="text-center" dark />
-      </CDBContainer>
+      <span className="spinner-border spinner-border-sm mr-1"></span>
     </>
   );
 }

@@ -5,7 +5,12 @@ import storeMakePOSApi from "../../../api/storeMakePOSAPI";
 import FileInputField from "../../Common/fileInputField";
 import InputField from "../../Common/inputField";
 import SelectField from "../../Common/selectField";
-import { INPUTIMAGETYPEACCEPT, INPUTPDFFILETYPEACCEPT, WORKINGSTATUSOFSTOREMAKEPOS } from "../../ConstantUtils/constants";
+import Spinner from "../../Common/spinner";
+import {
+  INPUTIMAGETYPEACCEPT,
+  INPUTPDFFILETYPEACCEPT,
+  WORKINGSTATUSOFSTOREMAKEPOS,
+} from "../../ConstantUtils/constants";
 import { formatDataFileField } from "../../Utilities/fileField";
 
 function NewStoreMakePOS() {
@@ -94,7 +99,7 @@ function NewStoreMakePOS() {
           /> */}
         </div>
         <div className="row">
-        <FileInputField
+          <FileInputField
             requiredColWidth={4}
             requiredLbl={"Mặt trước CCCD người đại diện"}
             requiredRegister={register}
@@ -126,9 +131,7 @@ function NewStoreMakePOS() {
             type="submit"
             className="btn btn-outline-primary mx-3"
           >
-            {isSubmitting && (
-              <span className="spinner-border spinner-border-sm mr-1"></span>
-            )}
+            {isSubmitting && <Spinner />}
             Lưu
           </button>
           <button
@@ -136,9 +139,7 @@ function NewStoreMakePOS() {
             type="button"
             className="btn btn-outline-primary mx-3"
           >
-            {isSubmitting && (
-              <span className="spinner-border spinner-border-sm mr-1"></span>
-            )}
+            {isSubmitting && <Spinner />}
             <Link
               to="./.."
               style={{ textDecoration: "none", color: "inherit" }}

@@ -8,6 +8,7 @@ import DisplayImageFileInputField from "../../Common/displayImageFileInputField"
 import InputField from "../../Common/inputField";
 import RequiredSymbol from "../../Common/requiredSymbol";
 import SelectField from "../../Common/selectField";
+import Spinner from "../../Common/spinner";
 import {
   GENDERCHOICES,
   INPUTIMAGETYPEACCEPT,
@@ -488,9 +489,7 @@ function SwipeCardDetail() {
                         }}
                         className="btn btn-outline-danger form-control"
                       >
-                        {isSubmitting && (
-                          <span className="spinner-border spinner-border-sm mr-1"></span>
-                        )}
+                        {isSubmitting && <Spinner />}
                         Xoá
                       </button>
                     )}
@@ -506,9 +505,7 @@ function SwipeCardDetail() {
               onClick={() => append({})}
               className="btn btn-outline-primary "
             >
-              {isSubmitting && (
-                <span className="spinner-border spinner-border-sm mr-1"></span>
-              )}
+              {isSubmitting && <Spinner />}
               Thêm bill pos
             </button>
           </div>
@@ -519,9 +516,7 @@ function SwipeCardDetail() {
             onClick={() => onDelete(dataSwipCardDetail.id)}
             className="btn btn-outline-danger"
           >
-            {isSubmitting && (
-              <span className="spinner-border spinner-border-sm mr-1"></span>
-            )}
+            {isSubmitting && <Spinner />}
             Xoá
           </button>
           <button
@@ -529,9 +524,7 @@ function SwipeCardDetail() {
             type="button"
             className="btn btn-outline-danger mx-3"
           >
-            {isSubmitting && (
-              <span className="spinner-border spinner-border-sm mr-1"></span>
-            )}
+            {isSubmitting && <Spinner />}
             <Link
               to="./.."
               style={{ textDecoration: "none", color: "inherit" }}
@@ -544,9 +537,7 @@ function SwipeCardDetail() {
             type="submit"
             className="btn btn-outline-primary"
           >
-            {isSubmitting && (
-              <span className="spinner-border spinner-border-sm mr-1"></span>
-            )}
+            {isSubmitting && <Spinner />}
             Lưu
           </button>
         </div>

@@ -9,6 +9,7 @@ import InputField from "../../Common/inputField";
 import InputTextareaField from "../../Common/inputTextareaField";
 import RequiredSymbol from "../../Common/requiredSymbol";
 import SelectField from "../../Common/selectField";
+import Spinner from "../../Common/spinner";
 import { POSSTATUS } from "../../ConstantUtils/constants";
 
 function POSesDetail() {
@@ -271,9 +272,7 @@ function POSesDetail() {
                             }}
                             className="btn btn-outline-danger form-control"
                           >
-                            {isSubmitting && (
-                              <span className="spinner-border spinner-border-sm mr-1"></span>
-                            )}
+                            {isSubmitting && <Spinner />}
                             Xoá
                           </button>
                         )}
@@ -292,9 +291,7 @@ function POSesDetail() {
             onClick={() => append({ new: true })}
             className="btn btn-outline-primary "
           >
-            {isSubmitting && (
-              <span className="spinner-border spinner-border-sm mr-1"></span>
-            )}
+            {isSubmitting && <Spinner />}
             Thêm phí
           </button>
         </div>

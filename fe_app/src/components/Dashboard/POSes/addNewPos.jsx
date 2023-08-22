@@ -9,6 +9,7 @@ import InputField from "../../Common/inputField";
 import InputTextareaField from "../../Common/inputTextareaField";
 import RequiredSymbol from "../../Common/requiredSymbol";
 import SelectField from "../../Common/selectField";
+import Spinner from "../../Common/spinner";
 import { POSSTATUS } from "../../ConstantUtils/constants";
 
 function NewPos() {
@@ -245,7 +246,7 @@ function NewPos() {
                             className="btn btn-outline-danger form-control"
                           >
                             {isSubmitting && (
-                              <span className="spinner-border spinner-border-sm mr-1"></span>
+                              <Spinner/>
                             )}
                             Xoá
                           </button>
@@ -265,9 +266,7 @@ function NewPos() {
             onClick={() => append({})}
             className="btn btn-outline-primary "
           >
-            {isSubmitting && (
-              <span className="spinner-border spinner-border-sm mr-1"></span>
-            )}
+            {isSubmitting && <Spinner/>}
             Thêm phí
           </button>
         </div>
@@ -277,9 +276,7 @@ function NewPos() {
             className="btn btn-outline-primary mx-3"
             disabled={isSubmitting}
           >
-            {isSubmitting && (
-              <span className="spinner-border spinner-border-sm mr-1"></span>
-            )}
+            {isSubmitting && <Spinner/>}
             Lưu
           </button>
           <button
@@ -287,9 +284,7 @@ function NewPos() {
             className="btn btn-outline-danger mx-3"
             disabled={isSubmitting}
           >
-            {isSubmitting && (
-              <span className="spinner-border spinner-border-sm mr-1"></span>
-            )}
+            {isSubmitting && <Spinner/>}
             <Link
               to="./.."
               style={{ textDecoration: "none", color: "inherit" }}

@@ -10,6 +10,7 @@ import FileInputField from "../../Common/fileInputField";
 import InputField from "../../Common/inputField";
 import RequiredSymbol from "../../Common/requiredSymbol";
 import SelectField from "../../Common/selectField";
+import Spinner from "../../Common/spinner";
 import { TOLLSTATUS, TRANSACTIONTYPE } from "../../ConstantUtils/constants";
 import BillPOSMachineModal from "../../Modal/billPOSMachineModal";
 
@@ -344,9 +345,7 @@ function SwipeCardInput(props) {
                   }}
                   className="btn btn-outline-danger form-control"
                 >
-                  {isSubmitting && (
-                    <span className="spinner-border spinner-border-sm mr-1"></span>
-                  )}
+                  {isSubmitting && <Spinner />}
                   Xoá
                 </button>
               </div>
@@ -366,9 +365,7 @@ function SwipeCardInput(props) {
               onClick={() => append({})}
               className="btn btn-outline-primary form-control"
             >
-              {isSubmitting && (
-                <span className="spinner-border spinner-border-sm mr-1"></span>
-              )}
+              {isSubmitting && <Spinner />}
               Thêm bill pos
             </button>
           </div>
@@ -383,9 +380,7 @@ function SwipeCardInput(props) {
               onClick={() => deleteFormInput()}
               className="btn btn-outline-danger form-control"
             >
-              {isSubmitting && (
-                <span className="spinner-border spinner-border-sm mr-1"></span>
-              )}
+              {isSubmitting && <Spinner />}
               Xoá
             </button>
           </div>
@@ -400,9 +395,7 @@ function SwipeCardInput(props) {
               type="submit"
               className="btn btn-outline-primary form-control"
             >
-              {isSubmitting && (
-                <span className="spinner-border spinner-border-sm mr-1"></span>
-              )}
+              {isSubmitting && <Spinner />}
               Lưu
             </button>
           </div>
@@ -417,9 +410,7 @@ function SwipeCardInput(props) {
               onClick={() => handleNavigateSwipecardDetail()}
               className="btn btn-outline-primary form-control"
             >
-              {isSubmitting && (
-                <span className="spinner-border spinner-border-sm mr-1"></span>
-              )}
+              {isSubmitting && <Spinner />}
               Chi tiết
             </button>
           </div>

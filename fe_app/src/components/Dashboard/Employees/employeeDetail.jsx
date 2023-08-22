@@ -6,6 +6,7 @@ import storeApi from "../../../api/storeAPI";
 import DisplayImageFileInputField from "../../Common/displayImageFileInputField";
 import InputField from "../../Common/inputField";
 import SelectField from "../../Common/selectField";
+import Spinner from "../../Common/spinner";
 import {
   GENDERCHOICES,
   INPUTIMAGETYPEACCEPT,
@@ -268,9 +269,7 @@ function EmployeeDetail() {
             className="btn btn-outline-danger mx-3"
             disabled={isSubmitting}
           >
-            {isSubmitting && (
-              <span className="spinner-border spinner-border-sm mr-1"></span>
-            )}
+            {isSubmitting && <Spinner/>}
             Xoá
           </button>
           <button
@@ -278,9 +277,7 @@ function EmployeeDetail() {
             className="btn btn-outline-primary mx-3"
             disabled={isSubmitting}
           >
-            {isSubmitting && (
-              <span className="spinner-border spinner-border-sm mr-1"></span>
-            )}
+            {isSubmitting && <Spinner/>}
             Lưu
           </button>
           <button
@@ -288,9 +285,7 @@ function EmployeeDetail() {
             className="btn btn-outline-primary mx-3"
             disabled={isSubmitting}
           >
-            {isSubmitting && (
-              <span className="spinner-border spinner-border-sm mr-1"></span>
-            )}
+            {isSubmitting && <Spinner/>}
             <Link
               to="./.."
               style={{ textDecoration: "none", color: "inherit" }}

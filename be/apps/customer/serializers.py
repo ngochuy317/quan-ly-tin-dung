@@ -5,6 +5,22 @@ from rest_framework import serializers
 from .models import CreditCard, Customer
 
 
+class CreditCardCustomerRetrieveUpdateSerializer(serializers.Serializer):
+
+    card_number = serializers.CharField()
+    card_bank_name = serializers.CharField()
+
+
+class CustomerRetrieveUpdateSerializer(serializers.ModelSerializer):
+
+    creditcard = CreditCardCustomerRetrieveUpdateSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Customer
+        fields = "__all__"
+        depth = 1
+
+
 class CustomerSerializer(serializers.ModelSerializer):
 
     phone_number = serializers.CharField()

@@ -3,10 +3,11 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import employeeApi from "../../../api/employeeAPI";
 import storeApi from "../../../api/storeAPI";
+import FileInputField from "../../Common/fileInputField";
 import InputField from "../../Common/inputField";
 import SelectField from "../../Common/selectField";
-import { ROLES, GENDERCHOICES } from "../../ConstantUtils/constants";
-import FileInputField from "../../Common/fileInputField";
+import Spinner from "../../Common/spinner";
+import { GENDERCHOICES, ROLES } from "../../ConstantUtils/constants";
 
 function NewEmployee() {
   const [stores, setStores] = useState([]);
@@ -239,9 +240,7 @@ function NewEmployee() {
             className="btn btn-outline-primary mx-3"
             disabled={isSubmitting}
           >
-            {isSubmitting && (
-              <span className="spinner-border spinner-border-sm mr-1"></span>
-            )}
+            {isSubmitting && <Spinner/>}
             Lưu
           </button>
           <button
@@ -249,9 +248,7 @@ function NewEmployee() {
             className="btn btn-outline-primary mx-3"
             disabled={isSubmitting}
           >
-            {isSubmitting && (
-              <span className="spinner-border spinner-border-sm mr-1"></span>
-            )}
+            {isSubmitting && <Spinner/>}
             <Link
               to="./.."
               style={{ textDecoration: "none", color: "inherit" }}
