@@ -2,6 +2,7 @@ import { CDBBtn } from "cdbreact";
 import PropTypes from "prop-types";
 import React from "react";
 import Modal from "react-bootstrap/Modal";
+import { Link } from "react-router-dom";
 import DisplayImageFileInputField from "../Common/displayImageFileInputField";
 import InputField from "../Common/inputField";
 import Spinner from "../Common/spinner";
@@ -53,7 +54,18 @@ function CustomerDetailModal(props) {
               requiredLbl="Số tài khoản"
               requiredType="text"
               requiredRegister={requiredRegister}
-              requiredName={"bacnk_account"}
+              requiredIsRequired={true}
+              requiredName={"bank_account.account_number"}
+            />
+          </div>
+          <div className="row">
+            <InputField
+              requiredColWidth={4}
+              requiredLbl="Tên ngân hàng"
+              requiredType="text"
+              requiredRegister={requiredRegister}
+              requiredIsRequired={true}
+              requiredName={"bank_account.bank_name"}
             />
           </div>
           <div className="row">
@@ -87,8 +99,10 @@ function CustomerDetailModal(props) {
                 {requiredGetValues("creditcard")?.map((creditcard, index) => (
                   <tr key={index}>
                     <td>{index + 1}</td>
-                    <td>{creditcard.card_number}</td>
-                    <td>{creditcard.card_bank_name}</td>
+                    <td>
+                      <Link to="/dashboard/creditcardmanagement">{creditcard.card_number}</Link>
+                    </td>
+                    <td>{creditcard?.bank_account?.card_bank_name}</td>
                   </tr>
                 ))}
               </tbody>

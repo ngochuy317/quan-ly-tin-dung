@@ -2,7 +2,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from rest_framework import serializers
-from .models import CreditCard, Customer
+from .models import BankAccount, CreditCard, Customer
 
 
 class CreditCardCustomerRetrieveUpdateSerializer(serializers.Serializer):
@@ -11,23 +11,50 @@ class CreditCardCustomerRetrieveUpdateSerializer(serializers.Serializer):
     card_bank_name = serializers.CharField()
 
 
+class BankAccountSerializer(serializers.Serializer):
+
+    id = serializers.IntegerField(required=False)
+    account_number = serializers.CharField(required=False)
+    bank_name = serializers.CharField(required=False)
+
+
 class CustomerRetrieveUpdateSerializer(serializers.ModelSerializer):
 
+    bank_account = BankAccountSerializer(required=False)
     creditcard = CreditCardCustomerRetrieveUpdateSerializer(many=True, read_only=True)
 
     class Meta:
         model = Customer
         fields = "__all__"
-        depth = 1
+
+    def update(self, instance, validated_data):
+        bank_account = validated_data.pop("bank_account", None)
+        bank_account_id = bank_account.pop("id", None)
+        if bank_account and bank_account_id:
+            bank_account_obj = BankAccount.objects.filter(id=bank_account_id).first()
+            if bank_account_obj:
+                for attr, value in bank_account.items():
+                    setattr(bank_account_obj, attr, value)
+                bank_account_obj.save()
+
+        bank_account_obj = BankAccount.objects.create(**bank_account)
+        instance.bank_account = bank_account_obj
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
 
 
 class CustomerSerializer(serializers.ModelSerializer):
 
     phone_number = serializers.CharField()
+    bank_account = BankAccountSerializer()
 
     class Meta:
         model = Customer
         fields = "__all__"
+        depth = 1
 
     def validate_phone_number(self, value):
         """

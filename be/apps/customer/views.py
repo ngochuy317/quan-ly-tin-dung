@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, print_function, unicode_literals
 
+from apps.base.constants import PARSE_ERROR_MSG
 from apps.base.pagination import CustomPageNumberPaginationPageSize15
 from apps.user.authentication import IsAdmin
+from nested_multipart_parser import NestedParser
 from rest_framework import status
 from rest_framework.generics import ListAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.parsers import FileUploadParser, MultiPartParser
@@ -56,6 +58,18 @@ class CustomerListAPIView(ListAPIView):
 
 class CustomerRetrieveUpdateAPIView(RetrieveUpdateAPIView):
 
-    permission_classes = [IsAdmin]
+    # permission_classes = [IsAdmin]
     serializer_class = CustomerRetrieveUpdateSerializer
     queryset = Customer.objects.all()
+
+    def put(self, request, *args, **kwargs):
+        parser = NestedParser(request.data)
+        if parser.is_valid():
+            data = parser.validate_data
+            _id = kwargs.get("pk")
+            obj = Customer.objects.filter(id=_id).first()
+            serializer = CustomerRetrieveUpdateSerializer(obj, data=data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(PARSE_ERROR_MSG, status=status.HTTP_400_BAD_REQUEST)
