@@ -53,6 +53,7 @@ function POSesList() {
             <thead>
               <tr>
                 <th scope="col">#</th>
+                <th scope="col">C.H làm ra máy POS</th>
                 <th scope="col">Mid</th>
                 <th scope="col">Tid</th>
                 <th scope="col">Ghi chú</th>
@@ -66,6 +67,11 @@ function POSesList() {
               {responseData?.results?.map((pos, index) => (
                 <tr key={pos.id}>
                   <th scope="row">{index + 1}</th>
+                  <td>
+                    <Link to={"/dashboard/storesmakepos/" + pos.from_store + "/"}>
+                      {pos.store_make_pos_name}
+                    </Link>
+                  </td>
                   <td>{pos.mid}</td>
                   <td>{pos.tid}</td>
                   <td>

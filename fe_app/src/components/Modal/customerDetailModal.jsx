@@ -47,7 +47,7 @@ function CustomerDetailModal(props) {
               requiredType="text"
               requiredRegister={requiredRegister}
               requiredName={"phone_number"}
-              optionalDisabled={true}
+              requiredIsRequired={true}
             />
             <InputField
               requiredColWidth={4}
@@ -100,7 +100,9 @@ function CustomerDetailModal(props) {
                   <tr key={index}>
                     <td>{index + 1}</td>
                     <td>
-                      <Link to="/dashboard/creditcardmanagement">{creditcard.card_number}</Link>
+                      <Link to="/dashboard/creditcardmanagement">
+                        {creditcard.card_number}
+                      </Link>
                     </td>
                     <td>{creditcard?.bank_account?.card_bank_name}</td>
                   </tr>

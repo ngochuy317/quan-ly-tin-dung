@@ -194,7 +194,7 @@ function BillPOSMachineMangement(props) {
                 <option value="">Tất cả</option>
                 {poses?.map((pos) => (
                   <option key={pos.id} value={pos.id}>
-                    {pos.id}
+                    {pos.name}-{pos.mid}-{pos.tid}
                   </option>
                 ))}
               </select>

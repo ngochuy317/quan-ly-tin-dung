@@ -23,6 +23,12 @@ class CustomerApi {
       },
     });
   };
+
+  deleteOne = (id) => {
+    const url = `${this.customerBaseUrl}${id}/`;
+    return axiosClient.delete(url);
+  };
+
 }
 
 const customerApi = new CustomerApi();

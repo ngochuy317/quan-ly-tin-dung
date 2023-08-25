@@ -75,7 +75,7 @@ function EmployeesList(props) {
                 <td>{ROLES.find(
                       (c) => c.roleKey === user.role
                     )?.roleName}</td>
-                <td>{user.infomation_detail.store}</td>
+                <td>{user.infomation_detail.store_name}</td>
                 <td>
                   <Link to={user.id + "/"}>Chỉnh sửa</Link>
                 </td>

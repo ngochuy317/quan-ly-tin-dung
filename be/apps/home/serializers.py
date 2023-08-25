@@ -53,6 +53,7 @@ class ShortInfomationDetailSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     infomation_detail = InfomationDetailSerializer()
     password = serializers.CharField(allow_blank=True, required=False, write_only=True)
+    store_name = serializers.ReadOnlyField(source="infomation_detail.store.name")
 
     class Meta:
         model = User
@@ -86,6 +87,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class POSSerializer(serializers.ModelSerializer):
     store_name = serializers.ReadOnlyField(source="store.name")
+    store_make_pos_name = serializers.ReadOnlyField(source="from_store.name")
 
     class Meta:
         model = POS

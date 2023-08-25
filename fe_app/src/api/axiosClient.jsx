@@ -1,10 +1,13 @@
 import axios from "axios";
 import queryString from "query-string";
+import Swal from "sweetalert2";
+// import Swal from 'sweetalert2/src/sweetalert2.js'
 
 const axiosClient = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
   headers: {
     "Content-Type": "application/json",
+    "Accept-Language": "vi-vi"
   },
   paramsSerializer: (params) => queryString.stringify(params),
 });
@@ -31,6 +34,17 @@ axiosClient.interceptors.response.use(
         localStorage.removeItem("access_token");
         localStorage.removeItem("activeTab");
         window.location.href = "/login";
+      } else {
+        let textError = "";
+        for (const field in error.response.data) {
+          textError += `${field} : ${error.response.data[field]}`;
+        }
+        Swal.fire({
+          title: "Error",
+          text: textError,
+          icon: "error",
+          confirmButtonText: "OK",
+        });
       }
     }
     throw error;

@@ -6,13 +6,13 @@ from .views import (
     CreditCardAPIView,
     CreditCardRetrieveUpdateDestroyAPIView,
     CustomerListAPIView,
-    CustomerRetrieveUpdateAPIView,
+    CustomerRetrieveUpdateDestroyAPIView,
 )
 
 
 urlpatterns = [
     path("", CustomerListAPIView.as_view(), name="customers"),
-    path("<pk>/", CustomerRetrieveUpdateAPIView.as_view(), name="retrive-update-customer"),
+    path("<pk>/", CustomerRetrieveUpdateDestroyAPIView.as_view(), name="retrive-update-customer"),
     path("creditcards/", CreditCardAPIView.as_view(), name="creditcards"),
     path("creditcard/<pk>/", CreditCardRetrieveUpdateDestroyAPIView.as_view(), name="creditcard-detail"),
 ]

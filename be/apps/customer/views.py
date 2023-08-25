@@ -6,7 +6,7 @@ from apps.base.pagination import CustomPageNumberPaginationPageSize15
 from apps.user.authentication import IsAdmin
 from nested_multipart_parser import NestedParser
 from rest_framework import status
-from rest_framework.generics import ListAPIView, RetrieveUpdateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.parsers import FileUploadParser, MultiPartParser
 from rest_framework.response import Response
 from .filters import CreditCardFilter
@@ -56,7 +56,7 @@ class CustomerListAPIView(ListAPIView):
     pagination_class = CustomPageNumberPaginationPageSize15
 
 
-class CustomerRetrieveUpdateAPIView(RetrieveUpdateAPIView):
+class CustomerRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
     # permission_classes = [IsAdmin]
     serializer_class = CustomerRetrieveUpdateSerializer

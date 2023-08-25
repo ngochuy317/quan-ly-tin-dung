@@ -68,6 +68,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     # 'apps.base.middleware.LoginRequiredMiddleware',
+    "django.middleware.locale.LocaleMiddleware",
 ]
 
 ROOT_URLCONF = "core.urls"
@@ -188,6 +189,8 @@ AUTH_EXEMPT_ROUTES = ("logout", "login", "forgot-password", "index")
 LOGIN_URL = "/user/login/"
 
 STRPTIME_FORMAT = "%m/%d/%Y, %H:%M:%S"
+
+LANGUAGE_CODE = "vi-vi"
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [

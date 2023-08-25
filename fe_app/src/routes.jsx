@@ -2,9 +2,13 @@ import React from "react";
 import { Route, Routes } from "react-router-dom";
 import BillPOSMachineMangement from "./components/Dashboard/BillPos/billPOSMachineManagement";
 import CardManagement from "./components/Dashboard/CardManagement/cardManagement";
+import CreditCardDetail from "./components/Dashboard/CardManagement/creditcardDetail";
+import CustomerDetail from "./components/Dashboard/Customer/customerDetail";
+import CustomerList from "./components/Dashboard/Customer/customerList";
 import NewEmployee from "./components/Dashboard/Employees/addNewEmployee";
 import EmployeeDetail from "./components/Dashboard/Employees/employeeDetail";
 import EmployeesList from "./components/Dashboard/Employees/employeesList";
+import AddFeePos4CreditCard from "./components/Dashboard/FeePos4CreditCard/addFeePos4CreditCard";
 import FeePos4CreditCardDetail from "./components/Dashboard/FeePos4CreditCard/feePos4CreditCardDetail";
 import FeePos4CreditCardList from "./components/Dashboard/FeePos4CreditCard/feePos4CreditCardList";
 import NewNotebook from "./components/Dashboard/Notebooks/addNewNotebook";
@@ -30,9 +34,6 @@ import StoresMakePOSList from "./components/Dashboard/Stores/storesMakePOSList";
 import SwipeCard from "./components/Dashboard/SwipeCard/swipeCard";
 import SwipeCardDetail from "./components/Dashboard/SwipeCard/swipeCardDetail";
 import SwipeCardMoreDetail from "./components/Dashboard/SwipeCard/swipeCardMoreDetail";
-import AddFeePos4CreditCard from "./components/Dashboard/FeePos4CreditCard/addFeePos4CreditCard";
-import CreditCardDetail from "./components/Dashboard/CardManagement/creditcardDetail";
-import CustomerList from "./components/Dashboard/Customer/customerList";
 
 function RoutesApp() {
   return (
@@ -68,8 +69,12 @@ function RoutesApp() {
       <Route path="/billposmanage" element={<BillPOSMachineMangement />} />
       <Route path="/feepos4creditcard" element={<FeePos4CreditCardList />} />
       <Route path="/feepos4creditcard/add" element={<AddFeePos4CreditCard />} />
-      <Route path="/feepos4creditcard/:id" element={<FeePos4CreditCardDetail />} />
+      <Route
+        path="/feepos4creditcard/:id"
+        element={<FeePos4CreditCardDetail />}
+      />
       <Route path="/customermanagement" element={<CustomerList />} />
+      <Route path="/customermanagement/:id" element={<CustomerDetail />} />
     </Routes>
   );
 }
