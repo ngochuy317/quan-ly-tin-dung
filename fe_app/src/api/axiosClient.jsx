@@ -7,7 +7,7 @@ const axiosClient = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
   headers: {
     "Content-Type": "application/json",
-    "Accept-Language": "vi-vi"
+    "Accept-Language": "vi-vi",
   },
   paramsSerializer: (params) => queryString.stringify(params),
 });
@@ -34,6 +34,7 @@ axiosClient.interceptors.response.use(
         localStorage.removeItem("access_token");
         localStorage.removeItem("activeTab");
         window.location.href = "/login";
+      } else if (error.response.status === 404) {
       } else {
         let textError = "";
         for (const field in error.response.data) {

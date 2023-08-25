@@ -113,11 +113,13 @@ function SwipeCardInput(props) {
   useEffect(() => {
     const delayDebounceFn = setTimeout(async () => {
       // Send Axios request here
-      const result = await creditCardApi.search({
-        card_number: searchCreditCard,
-      });
+      if (searchCreditCard) {
+        const result = await creditCardApi.search({
+          card_number: searchCreditCard,
+        });
 
-      setDataListCardNumber([...result]);
+        setDataListCardNumber([...result]);
+      }
     }, 2000);
 
     return () => clearTimeout(delayDebounceFn);

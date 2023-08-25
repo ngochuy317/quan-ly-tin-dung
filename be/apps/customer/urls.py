@@ -12,7 +12,7 @@ from .views import (
 
 urlpatterns = [
     path("", CustomerListAPIView.as_view(), name="customers"),
-    path("<pk>/", CustomerRetrieveUpdateDestroyAPIView.as_view(), name="retrive-update-customer"),
     path("creditcards/", CreditCardAPIView.as_view(), name="creditcards"),
+    path("<pk>/", CustomerRetrieveUpdateDestroyAPIView.as_view(), name="retrive-update-customer"),
     path("creditcard/<pk>/", CreditCardRetrieveUpdateDestroyAPIView.as_view(), name="creditcard-detail"),
 ]
