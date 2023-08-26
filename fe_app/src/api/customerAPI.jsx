@@ -29,6 +29,9 @@ class CustomerApi {
     return axiosClient.delete(url);
   };
 
+  search = (params) => {
+    return axiosClient.get(this.customerBaseUrl, { params });
+  };
 }
 
 const customerApi = new CustomerApi();

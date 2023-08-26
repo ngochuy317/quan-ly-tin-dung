@@ -4,10 +4,12 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { FaAsterisk } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import creditCardApi from "../../../api/creditCardAPI";
+import customerApi from "../../../api/customerAPI";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import FileInputField from "../../Common/fileInputField";
 import InputField from "../../Common/inputField";
 import RequiredSymbol from "../../Common/requiredSymbol";
+import SearchSpiner from "../../Common/searchSpiner";
 import SelectField from "../../Common/selectField";
 import Spinner from "../../Common/spinner";
 import {
@@ -37,8 +39,14 @@ function SwipeCardMoreDetail() {
 
   const [dataListCardNumber, setDataListCardNumber] = useState([]);
 
-  const [isManualInput, setIsManualInput] = useState(false);
+  const [isManualInputCreditCardData, setIsManualInputCreditCardData] =
+    useState(false);
+  const [isManualInputCustomerData, setIsManualInputCuctomerdData] =
+    useState(false);
   const [show, setShow] = useState(false);
+  const [isSearchCreditCard, setIsSearchCreditCard] = useState(false);
+  const [isSearchCustomer, setIsSearchCustomer] = useState(false);
+  const [searchCustomerValue, setSearchCustomerValue] = useState("");
   const [showNegativeMoney, setShowNegativeMoney] = useState(false);
   const [isCreditCardBackImage, setIsCreditCardBackImage] = useState(false);
   const [isCreditCardFrontImage, setIsCreditCardFrontImage] = useState(false);
@@ -76,17 +84,44 @@ function SwipeCardMoreDetail() {
     setShowNegativeMoney(parseInt(val) === 2);
   };
 
+  const handleOnChangeCustomerPhoneNumber = async (e) => {
+    try {
+      async function searchCustomerByPhoneNumber(e) {
+        setIsSearchCustomer(true);
+        let val = e.target.value;
+        if (val !== searchCustomerValue) {
+          setSearchCustomerValue(val);
+          const result = await customerApi.search({ phone_number: val });
+          console.log(
+            "🚀 ~ file: swipeCardMoreDetail.jsx:88 ~ handleOnChangeCustomerPhoneNumber ~ result:",
+            result?.results[0]
+          );
+          reset({ ...{ customer: result?.results[0] } });
+          setIsSearchCustomer(false);
+        } else {
+          setIsSearchCustomer(false);
+        }
+      }
+      setTimeout(() => searchCustomerByPhoneNumber(e), 3000);
+    } catch (error) {
+      console.log("Failed to fetch customer by phone_number", error);
+      setIsSearchCustomer(false);
+    }
+  };
+
   const handleOnChangeCardNumber = async (e) => {
     let event = e.nativeEvent.inputType ? "input" : "option selected";
     if (event === "input") {
       let val = e.target.value;
       if (val.length > 2) {
+        setIsSearchCreditCard(true);
         const result = await creditCardApi.search({ card_number: val });
         console.log(
           "🚀 ~ file: swipeCardInput.jsx:44 ~ handleOnChangeCardNumber ~ result:",
           result
         );
         setDataListCardNumber([...result]);
+        setIsSearchCreditCard(false);
       }
     } else if (event === "option selected") {
       const card = dataListCardNumber.find(
@@ -215,9 +250,13 @@ function SwipeCardMoreDetail() {
     handleShow();
   };
 
-  const handleOnChangeManualInput = (e) => {
+  const handleOnChangeManualInputCreditCardData = (e) => {
     let check = e.target.checked;
-    setIsManualInput(check);
+    setIsManualInputCreditCardData(check);
+  };
+  const handleOnChangeManualInputCustomerData = (e) => {
+    let check = e.target.checked;
+    setIsManualInputCuctomerdData(check);
   };
 
   return (
@@ -234,7 +273,6 @@ function SwipeCardMoreDetail() {
             requiredName={"store_name"}
             optionalDisabled={true}
           />
-
           <InputField
             requiredColWidth={4}
             requiredLbl="Địa chỉ"
@@ -243,7 +281,6 @@ function SwipeCardMoreDetail() {
             requiredName={"store_address"}
             optionalDisabled={true}
           />
-
           <InputField
             requiredColWidth={2}
             requiredLbl="Số điện thoại"
@@ -255,7 +292,47 @@ function SwipeCardMoreDetail() {
         </div>
 
         <h5>Khách hàng</h5>
+        <div className="form-check form-switch">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            id="flexSwitchCheckManualInput"
+            onChange={handleOnChangeManualInputCustomerData}
+          />
+          <label
+            className="form-check-label"
+            htmlFor="flexSwitchCheckManualInput"
+          >
+            Nhập bằng tay thông tin KH
+          </label>
+        </div>
         <div className="row">
+          {/* <InputField
+            requiredColWidth={3}
+            requiredLbl="Số điện thoại"
+            requiredType="tel"
+            requiredRegister={register}
+            requiredName={"customer.phone_number"}
+            requiredIsRequired={true}
+            optionalPlaceholder="Nhập SĐT để tìm KH"
+          /> */}
+          <div className="col-md-3">
+            <div className="mb-3">
+              <label className="form-label">
+                Số điện thoại
+                <FaAsterisk color="red" size=".7em" />
+              </label>
+              {isSearchCustomer && <SearchSpiner />}
+              <input
+                {...register("customer.phone_number")}
+                type="tel"
+                className="form-control"
+                placeholder="Nhập SĐT để tìm KH"
+                onChange={handleOnChangeCustomerPhoneNumber}
+                required
+              />
+            </div>
+          </div>
           <InputField
             requiredColWidth={2}
             requiredLbl="Tên khách hàng"
@@ -263,12 +340,17 @@ function SwipeCardMoreDetail() {
             requiredRegister={register}
             requiredName={"customer.name"}
             requiredIsRequired={true}
+            optionalDisabled={!isManualInputCustomerData}
           />
 
-          <div className="col-md-1">
+          <div className="col-md-2">
             <div className="mb-3">
               <label className="form-label">Giới tính </label>
-              <select {...register("customer.gender")} className="form-select">
+              <select
+                {...register("customer.gender")}
+                className="form-select"
+                disabled={!isManualInputCustomerData}
+              >
                 {GENDERCHOICES?.map((gender) => (
                   <option key={gender.value} value={gender.value}>
                     {gender.label}
@@ -279,18 +361,11 @@ function SwipeCardMoreDetail() {
           </div>
           <InputField
             requiredColWidth={2}
-            requiredLbl="Số điện thoại"
-            requiredType="tel"
-            requiredRegister={register}
-            requiredName={"customer.phone_number"}
-            requiredIsRequired={true}
-          />
-          <InputField
-            requiredColWidth={2}
             requiredLbl="Số TK nhận tiền"
             requiredType="text"
             requiredRegister={register}
             requiredName={"customer.bank_account.account_number"}
+            optionalDisabled={!isManualInputCustomerData}
           />
 
           <InputField
@@ -299,6 +374,7 @@ function SwipeCardMoreDetail() {
             requiredType="text"
             requiredRegister={register}
             requiredName={"customer.bank_account.bank_name"}
+            optionalDisabled={!isManualInputCustomerData}
           />
         </div>
         <div className="row"></div>
@@ -309,13 +385,13 @@ function SwipeCardMoreDetail() {
             className="form-check-input"
             type="checkbox"
             id="flexSwitchCheckManualInput"
-            onChange={handleOnChangeManualInput}
+            onChange={handleOnChangeManualInputCreditCardData}
           />
           <label
             className="form-check-label"
             htmlFor="flexSwitchCheckManualInput"
           >
-            Nhập bằng tay
+            Nhập bằng tay thông tin thẻ
           </label>
         </div>
         <div className="row">
@@ -326,13 +402,14 @@ function SwipeCardMoreDetail() {
             requiredRegister={register}
             requiredName={"creditcard.card_bank_name"}
             requiredIsRequired={true}
-            optionalDisabled={!isManualInput}
+            optionalDisabled={!isManualInputCreditCardData}
           />
           <div className="col-md-4">
             <div className="mb-3">
               <label className="form-label">
                 Số thẻ <FaAsterisk color="red" size=".7em" />
               </label>
+              {isSearchCreditCard && <SearchSpiner />}
               <input
                 {...register("creditcard.card_number")}
                 type="text"
@@ -355,7 +432,7 @@ function SwipeCardMoreDetail() {
             requiredType="text"
             requiredRegister={register}
             requiredName={"creditcard.card_name"}
-            optionalDisabled={!isManualInput}
+            optionalDisabled={!isManualInputCreditCardData}
           />
         </div>
         <div className="row">
@@ -365,7 +442,7 @@ function SwipeCardMoreDetail() {
             requiredType="date"
             requiredRegister={register}
             requiredName={"creditcard.card_issued_date"}
-            optionalDisabled={!isManualInput}
+            optionalDisabled={!isManualInputCreditCardData}
           />
           <InputField
             requiredColWidth={2}
@@ -373,7 +450,7 @@ function SwipeCardMoreDetail() {
             requiredType="date"
             requiredRegister={register}
             requiredName={"creditcard.card_expire_date"}
-            optionalDisabled={!isManualInput}
+            optionalDisabled={!isManualInputCreditCardData}
           />
           <InputField
             requiredColWidth={2}
@@ -381,7 +458,7 @@ function SwipeCardMoreDetail() {
             requiredType="text"
             requiredRegister={register}
             requiredName={"creditcard.card_ccv"}
-            optionalDisabled={!isManualInput}
+            optionalDisabled={!isManualInputCreditCardData}
             optionalMaxLengthForTextType={3}
           />
         </div>
@@ -400,7 +477,7 @@ function SwipeCardMoreDetail() {
                   {...register("creditcard.credit_card_front_image")}
                   type="file"
                   className="form-control"
-                  disabled={!isManualInput}
+                  disabled={!isManualInputCreditCardData}
                 />
               )}
             </div>
@@ -420,7 +497,7 @@ function SwipeCardMoreDetail() {
                   {...register("creditcard.credit_card_back_image")}
                   type="file"
                   className="form-control"
-                  disabled={!isManualInput}
+                  disabled={!isManualInputCreditCardData}
                 />
               )}
             </div>
@@ -499,7 +576,7 @@ function SwipeCardMoreDetail() {
             requiredType="number"
             requiredRegister={register}
             requiredName={"fee"}
-            optionalDisabled={!isManualInput}
+            optionalDisabled={!isManualInputCreditCardData}
           />
           <FileInputField
             requiredColWidth={4}

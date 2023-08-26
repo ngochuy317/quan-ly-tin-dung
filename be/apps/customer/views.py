@@ -9,7 +9,7 @@ from rest_framework import status
 from rest_framework.generics import ListAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.parsers import FileUploadParser, MultiPartParser
 from rest_framework.response import Response
-from .filters import CreditCardFilter
+from .filters import CreditCardFilter, CustomerFilter
 from .models import CreditCard, Customer
 from .serializers import (
     CreditCardCustomSerializer,
@@ -50,8 +50,9 @@ class CreditCardRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
 class CustomerListAPIView(ListAPIView):
 
-    permission_classes = [IsAdmin]
+    # permission_classes = [IsAdmin]
     serializer_class = CustomerSerializer
+    filterset_class = CustomerFilter
     queryset = Customer.objects.all()
     pagination_class = CustomPageNumberPaginationPageSize15
 
