@@ -34,8 +34,8 @@ function StoreCard() {
   const [isManualInput, setIsManualInput] = useState(false);
   const [hrefCreditCardBackImage, setHrefCreditCardBackImage] = useState("");
   const [hrefCreditCardFrontImage, setHrefCreditCardFrontImage] = useState("");
-  const [hrefCustomerIDBackImage, setHrefCustomerIDBackImage] = useState("");
-  const [hrefCustomerIDFrontImage, setHrefCustomerIDFrontImage] = useState("");
+  const [hrefIDBackImage, setHrefIDBackImage] = useState("");
+  const [hrefIDFrontImage, setHrefIDFrontImage] = useState("");
   const [searchCreditCard, setSearchCreditCard] = useState("");
   // const [currentPage, setCurrentPage] = useState(1);
   const [maxLengthOrderInNotebook, setMaxLengthOrderInNotebook] = useState(0);
@@ -110,19 +110,19 @@ function StoreCard() {
       setValue("creditcard.customer.name", card.customer.name);
       setValue("creditcard.customer.phone_number", card.customer.phone_number);
 
-      if (card?.customer?.id_card_back_image) {
+      if (card?.id_card_back_image) {
         setValue(
-          "creditcard.customer.id_card_back_image",
-          card.customer.id_card_back_image
+          "creditcard.id_card_back_image",
+          card.id_card_back_image
         );
-        setHrefCustomerIDBackImage(card.customer.id_card_back_image);
+        setHrefIDBackImage(card.id_card_back_image);
       }
       if (card?.credit_card_front_image) {
         setValue(
-          "creditcard.customer.credit_card_front_image",
-          card.customer.credit_card_front_image
+          "creditcard.credit_card_front_image",
+          card.credit_card_front_image
         );
-        setHrefCustomerIDFrontImage(card.customer.credit_card_front_image);
+        setHrefIDFrontImage(card.credit_card_front_image);
       }
 
       setValue("creditcard.card_bank_name", card.card_bank_name);
@@ -189,17 +189,17 @@ function StoreCard() {
           data.creditcard.credit_card_back_image[0];
       }
 
-      if (typeof data.creditcard.customer.id_card_back_image === "string") {
-        data.creditcard.customer.id_card_back_image = null;
-      } else if (data.creditcard.customer.id_card_back_image) {
-        data.creditcard.customer.id_card_back_image =
-          data.creditcard.customer.id_card_back_image[0];
+      if (typeof data.creditcard.id_card_back_image === "string") {
+        data.creditcard.id_card_back_image = null;
+      } else if (data.creditcard.id_card_back_image) {
+        data.creditcard.id_card_back_image =
+          data.creditcard.id_card_back_image[0];
       }
-      if (typeof data.creditcard.customer.id_card_front_image === "string") {
-        data.creditcard.customer.id_card_front_image = null;
-      } else if (data.creditcard.customer.id_card_front_image) {
-        data.creditcard.customer.id_card_front_image =
-          data.creditcard.customer.id_card_front_image[0];
+      if (typeof data.creditcard.id_card_front_image === "string") {
+        data.creditcard.id_card_front_image = null;
+      } else if (data.creditcard.id_card_front_image) {
+        data.creditcard.id_card_front_image =
+          data.creditcard.id_card_front_image[0];
       }
 
       console.log("data", data);
@@ -236,8 +236,8 @@ function StoreCard() {
       // });
       // setHrefCreditCardFrontImage("");
       // setHrefCreditCardBackImage("");
-      // setHrefCustomerIDFrontImage("");
-      // setHrefCustomerIDBackImage("");
+      // setHrefIDFrontImage("");
+      // setHrefIDBackImage("");
     } catch (error) {
       console.log("Failed to save creditcard 2 notebook");
     }
@@ -351,52 +351,24 @@ function StoreCard() {
             requiredIsRequired={true}
             optionalDisabled={!isManualInput}
           />
-          <div className="col-md-4">
-            <div className="mb-3">
-              <label className="form-label">Ảnh mặt trước cmnd/cccd</label>
-              {hrefCustomerIDFrontImage ? (
-                <img
-                  src={hrefCustomerIDFrontImage}
-                  style={{ maxWidth: "100%", height: "auto" }}
-                  alt=""
-                ></img>
-              ) : (
-                <span>Không có hình</span>
-              )}
-              {isManualInput && (
-                <input
-                  {...register("creditcard.customer.id_card_front_image")}
-                  type="file"
-                  className="form-control"
-                  disabled={!isManualInput}
-                  accept={INPUTIMAGETYPEACCEPT}
-                />
-              )}
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="mb-3">
-              <label className="form-label">Ảnh mặt sau cmnd/cccd</label>
-              {hrefCustomerIDBackImage ? (
-                <img
-                  src={hrefCustomerIDBackImage}
-                  style={{ maxWidth: "100%", height: "auto" }}
-                  alt=""
-                ></img>
-              ) : (
-                <span>Không có hình</span>
-              )}
-              {isManualInput && (
-                <input
-                  {...register("creditcard.customer.id_card_back_image")}
-                  type="file"
-                  className="form-control"
-                  disabled={!isManualInput}
-                  accept={INPUTIMAGETYPEACCEPT}
-                />
-              )}
-            </div>
-          </div>
+          <InputField
+            requiredColWidth={2}
+            requiredLbl="STK nhận tiền"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName={"creditcard.customer.bank_account.account_number"}
+            requiredIsRequired={true}
+            optionalDisabled={!isManualInput}
+          />
+          <InputField
+            requiredColWidth={2}
+            requiredLbl="Ngân hàng nhận tiền"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName={"creditcard.customer.bank_account.bank_name"}
+            requiredIsRequired={true}
+            optionalDisabled={!isManualInput}
+          />
         </div>
         <h5>Thông tin thẻ</h5>
         <div className="form-check form-switch">
@@ -500,6 +472,7 @@ function StoreCard() {
             requiredName="creditcard.card_ccv"
             requiredIsRequired={true}
             optionalDisabled={!isManualInput}
+            optionalMaxLengthForTextType={3}
           />
         </div>
         <div className="row">
@@ -572,6 +545,53 @@ function StoreCard() {
           </div>
         </div>
         <div className="row">
+          {" "}
+          <div className="col-md-4">
+            <div className="mb-3">
+              <label className="form-label">Ảnh mặt trước cmnd/cccd</label>
+              {hrefIDFrontImage ? (
+                <img
+                  src={hrefIDFrontImage}
+                  style={{ maxWidth: "100%", height: "auto" }}
+                  alt=""
+                ></img>
+              ) : (
+                <span>Không có hình</span>
+              )}
+              {isManualInput && (
+                <input
+                  {...register("creditcard.id_card_front_image")}
+                  type="file"
+                  className="form-control"
+                  disabled={!isManualInput}
+                  accept={INPUTIMAGETYPEACCEPT}
+                />
+              )}
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="mb-3">
+              <label className="form-label">Ảnh mặt sau cmnd/cccd</label>
+              {hrefIDBackImage ? (
+                <img
+                  src={hrefIDBackImage}
+                  style={{ maxWidth: "100%", height: "auto" }}
+                  alt=""
+                ></img>
+              ) : (
+                <span>Không có hình</span>
+              )}
+              {isManualInput && (
+                <input
+                  {...register("creditcard.id_card_back_image")}
+                  type="file"
+                  className="form-control"
+                  disabled={!isManualInput}
+                  accept={INPUTIMAGETYPEACCEPT}
+                />
+              )}
+            </div>
+          </div>
           <div className="col-md-1">
             <div className="mb-3">
               <label className="form-label">
@@ -669,6 +689,7 @@ function StoreCard() {
             requiredType="date"
             requiredRegister={register}
             requiredName="card_taken_date"
+            requiredIsRequired={true}
           />
         </div>
         <div className="d-flex justify-content-end">

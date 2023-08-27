@@ -22,11 +22,6 @@ class Customer(models.Model):
     name = models.CharField(max_length=127, blank=True)
     phone_number = models.CharField(max_length=12, unique=True)
     gender = models.PositiveSmallIntegerField(choices=GENDER_CHOICES, default=3)
-    bank_account = models.ForeignKey(
-        BankAccount, on_delete=models.CASCADE, related_name=RELATED_NAME, null=True, blank=True
-    )
-    id_card_front_image = models.ImageField(upload_to=FOLDER_UPLOAD, blank=True, null=True)
-    id_card_back_image = models.ImageField(upload_to=FOLDER_UPLOAD, blank=True, null=True)
 
     class Meta:
         ordering = ["-id"]
@@ -54,6 +49,8 @@ class CreditCard(models.Model):
     maturity_date = models.DateField(blank=True, null=True)
     credit_card_front_image = models.ImageField(upload_to=FOLDER_UPLOAD, blank=True, null=True)
     credit_card_back_image = models.ImageField(upload_to=FOLDER_UPLOAD, blank=True, null=True)
+    id_card_front_image = models.ImageField(upload_to=FOLDER_UPLOAD, blank=True, null=True)
+    id_card_back_image = models.ImageField(upload_to=FOLDER_UPLOAD, blank=True, null=True)
     note = models.TextField(blank=True, default="")
     notebook = models.OneToOneField(
         "store.RowNotebook", on_delete=models.CASCADE, related_name=RELATED_NAME, null=True, blank=True

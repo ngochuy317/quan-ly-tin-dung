@@ -100,21 +100,21 @@ function SwipeCardDetail() {
 
   const onSubmit = async (data) => {
     try {
-      if (data.creditcard.customer.id_card_front_image) {
-        if (typeof data.creditcard.customer.id_card_front_image === "string") {
-          delete data.creditcard.customer.id_card_front_image;
+      if (data.creditcard.id_card_front_image) {
+        if (typeof data.creditcard.id_card_front_image === "string") {
+          delete data.creditcard.id_card_front_image;
         } else {
-          data.creditcard.customer.id_card_front_image =
-            data.creditcard.customer.id_card_front_image[0];
+          data.creditcard.id_card_front_image =
+            data.creditcard.id_card_front_image[0];
         }
       }
 
-      if (data.creditcard.customer.id_card_back_image) {
-        if (typeof data.creditcard.customer.id_card_back_image === "string") {
-          delete data.creditcard.customer.id_card_back_image;
+      if (data.creditcard.id_card_back_image) {
+        if (typeof data.creditcard.id_card_back_image === "string") {
+          delete data.creditcard.id_card_back_image;
         } else {
-          data.creditcard.customer.id_card_back_image =
-            data.creditcard.customer.id_card_back_image[0];
+          data.creditcard.id_card_back_image =
+            data.creditcard.id_card_back_image[0];
         }
       }
 
@@ -325,21 +325,17 @@ function SwipeCardDetail() {
           <DisplayImageFileInputField
             requiredColWidth={6}
             requiredLbl={"Ảnh mặt trước cmnd/cccd"}
-            requiredImageUrl={`${getValues(
-              "creditcard.customer.id_card_front_image"
-            )}`}
+            requiredImageUrl={`${getValues("creditcard.id_card_front_image")}`}
             requiredRegister={register}
-            requiredName={"creditcard.customer.id_card_front_image"}
+            requiredName={"creditcard.id_card_front_image"}
             optionalAccept={INPUTIMAGETYPEACCEPT}
           />
           <DisplayImageFileInputField
             requiredColWidth={6}
             requiredLbl={"Ảnh mặt sau cmnd/cccd"}
-            requiredImageUrl={`${getValues(
-              "creditcard.customer.id_card_back_image"
-            )}`}
+            requiredImageUrl={`${getValues("creditcard.id_card_back_image")}`}
             requiredRegister={register}
-            requiredName={"creditcard.customer.id_card_back_image"}
+            requiredName={"creditcard.id_card_back_image"}
             optionalAccept={INPUTIMAGETYPEACCEPT}
           />
         </div>

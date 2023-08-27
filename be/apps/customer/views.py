@@ -59,7 +59,7 @@ class CustomerListAPIView(ListAPIView):
 
 class CustomerRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
-    # permission_classes = [IsAdmin]
+    permission_classes = [IsAdmin]
     serializer_class = CustomerRetrieveUpdateSerializer
     queryset = Customer.objects.all()
 

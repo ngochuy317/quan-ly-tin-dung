@@ -68,24 +68,6 @@ function CustomerDetailModal(props) {
               requiredName={"bank_account.bank_name"}
             />
           </div>
-          <div className="row">
-            <DisplayImageFileInputField
-              requiredColWidth={6}
-              requiredLbl={"Ảnh mặt trước cmnd/cccd"}
-              requiredImageUrl={`${requiredGetValues("id_card_front_image")}`}
-              requiredRegister={requiredRegister}
-              requiredName={"id_card_front_image"}
-              optionalAccept={INPUTIMAGETYPEACCEPT}
-            />
-            <DisplayImageFileInputField
-              requiredColWidth={6}
-              requiredLbl={"Ảnh mặt sau cmnd/cccd"}
-              requiredImageUrl={`${requiredGetValues("id_card_back_image")}`}
-              requiredRegister={requiredRegister}
-              requiredName={"id_card_back_image"}
-              optionalAccept={INPUTIMAGETYPEACCEPT}
-            />
-          </div>
           <div className="table-responsive">
             <table className="table">
               <thead>

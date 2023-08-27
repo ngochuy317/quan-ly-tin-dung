@@ -2,7 +2,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from rest_framework import serializers
-from .models import BankAccount, CreditCard, Customer
+from .models import CreditCard, Customer
 
 
 class CreditCardCustomerRetrieveUpdateSerializer(serializers.Serializer):
@@ -28,17 +28,6 @@ class CustomerRetrieveUpdateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def update(self, instance, validated_data):
-        bank_account = validated_data.pop("bank_account", None)
-        bank_account_id = bank_account.pop("id", None)
-        if bank_account and bank_account_id:
-            bank_account_obj = BankAccount.objects.filter(id=bank_account_id).first()
-            if bank_account_obj:
-                for attr, value in bank_account.items():
-                    setattr(bank_account_obj, attr, value)
-                bank_account_obj.save()
-
-        bank_account_obj = BankAccount.objects.create(**bank_account)
-        instance.bank_account = bank_account_obj
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
@@ -49,7 +38,6 @@ class CustomerRetrieveUpdateSerializer(serializers.ModelSerializer):
 class CustomerSerializer(serializers.ModelSerializer):
 
     phone_number = serializers.CharField()
-    bank_account = BankAccountSerializer()
 
     class Meta:
         model = Customer
@@ -65,7 +53,7 @@ class CustomerSerializer(serializers.ModelSerializer):
 
 class CreditCardSerializer(serializers.ModelSerializer):
     card_number = serializers.CharField(max_length=127)
-    customer = CustomerSerializer(read_only=True)
+    customer = CustomerSerializer(required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -110,18 +98,10 @@ class CreditCardCustomSerializer(CreditCardSerializer):
         data["customer"]["name"] = customer.name
         data["customer"]["gender"] = customer.gender
         data["customer"]["phone_number"] = customer.phone_number
-        if customer.bank_account:
-            data["customer"]["bank_account"] = {}
-            data["customer"]["bank_account"]["account_number"] = customer.bank_account.account_number
-            data["customer"]["bank_account"]["bank_name"] = customer.bank_account.bank_name
-        if customer.id_card_front_image:
-            data["customer"]["id_card_front_image"] = self.context["request"].build_absolute_uri(
-                customer.id_card_front_image.url
-            )
-        if customer.id_card_back_image:
-            data["customer"]["id_card_back_image"] = self.context["request"].build_absolute_uri(
-                customer.id_card_back_image.url
-            )
+        if data.get("id_card_front_image"):
+            data["id_card_front_image"] = self.context["request"].build_absolute_uri(data["id_card_front_image"])
+        if data.get("id_card_back_image"):
+            data["id_card_back_image"] = self.context["request"].build_absolute_uri(data["id_card_back_image"])
         if data.get("credit_card_back_image"):
             data["credit_card_back_image"] = self.context["request"].build_absolute_uri(data["credit_card_back_image"])
         if data.get("credit_card_front_image"):

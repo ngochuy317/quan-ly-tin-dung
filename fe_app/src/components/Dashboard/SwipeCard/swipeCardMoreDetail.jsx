@@ -179,22 +179,23 @@ function SwipeCardMoreDetail() {
   const onSubmit = async (data) => {
     try {
       if (
-        typeof data.customer.id_card_front_image === "string" ||
-        data.customer.id_card_front_image === undefined
+        typeof data.creditcard.id_card_front_image === "string" ||
+        data.creditcard.id_card_front_image === undefined
       ) {
-        delete data.customer.id_card_front_image;
+        delete data.creditcard.id_card_front_image;
       } else {
-        data.customer.id_card_front_image =
-          data.customer.id_card_front_image[0];
+        data.creditcard.id_card_front_image =
+          data.creditcard.id_card_front_image[0];
       }
 
       if (
-        typeof data.customer.id_card_back_image === "string" ||
-        data.customer.id_card_back_image === undefined
+        typeof data.creditcard.id_card_back_image === "string" ||
+        data.creditcard.id_card_back_image === undefined
       ) {
-        delete data.customer.id_card_back_image;
+        delete data.creditcard.id_card_back_image;
       } else {
-        data.customer.id_card_back_image = data.customer.id_card_back_image[0];
+        data.creditcard.id_card_back_image =
+          data.creditcard.id_card_back_image[0];
       }
 
       if (
@@ -507,15 +508,15 @@ function SwipeCardMoreDetail() {
           <div className="col-md-6">
             <div className="mb-3">
               <label className="form-label">Ảnh mặt trước cmnd/cccd</label>
-              {dataListCardSelect?.customer?.id_card_front_image ? (
+              {dataListCardSelect?.creditcard?.id_card_front_image ? (
                 <img
-                  src={`${dataListCardSelect?.customer?.id_card_front_image}`}
+                  src={`${dataListCardSelect?.creditcard?.id_card_front_image}`}
                   style={{ maxWidth: "100%", height: "auto" }}
                   alt=""
                 ></img>
               ) : (
                 <input
-                  {...register("customer.id_card_front_image")}
+                  {...register("creditcard.id_card_front_image")}
                   type="file"
                   className="form-control"
                 />
@@ -525,15 +526,15 @@ function SwipeCardMoreDetail() {
           <div className="col-md-6">
             <div className="mb-3">
               <label className="form-label">Ảnh mặt sau cmnd/cccd</label>
-              {dataListCardSelect?.customer?.id_card_back_image ? (
+              {dataListCardSelect?.creditcard?.id_card_back_image ? (
                 <img
-                  src={`${dataListCardSelect?.customer?.id_card_back_image}`}
+                  src={`${dataListCardSelect?.creditcard?.id_card_back_image}`}
                   style={{ maxWidth: "100%", height: "auto" }}
                   alt=""
                 ></img>
               ) : (
                 <input
-                  {...register("customer.id_card_back_image")}
+                  {...register("creditcard.id_card_back_image")}
                   type="file"
                   className="form-control"
                 />

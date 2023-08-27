@@ -2,11 +2,8 @@ import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import customerApi from "../../../api/customerAPI";
-import DisplayImageFileInputField from "../../Common/displayImageFileInputField";
 import InputField from "../../Common/inputField";
 import Spinner from "../../Common/spinner";
-import { INPUTIMAGETYPEACCEPT } from "../../ConstantUtils/constants";
-import { formatDataFileField } from "../../Utilities/fileField";
 
 CustomerDetail.propTypes = {};
 
@@ -33,13 +30,7 @@ function CustomerDetail() {
 
   const onSubmit = async (data) => {
     try {
-      let newData;
-      let data = getValues();
-      newData = formatDataFileField(data, [
-        "id_card_front_image",
-        "id_card_back_image",
-      ]);
-      const response = await customerApi.updateOne(id, newData);
+      const response = await customerApi.updateOne(id, data);
       console.log("Update customer successfully", response);
       navigate("./..");
     } catch (error) {
@@ -47,15 +38,15 @@ function CustomerDetail() {
     }
   };
 
-//   const onDelete = async () => {
-//     try {
-//       const response = await customerApi.deleteOne(id);
-//       console.log("Delete customer successfully", response);
-//       navigate("./..");
-//     } catch (error) {
-//       console.log("Failed to delete customer", error);
-//     }
-//   };
+  //   const onDelete = async () => {
+  //     try {
+  //       const response = await customerApi.deleteOne(id);
+  //       console.log("Delete customer successfully", response);
+  //       navigate("./..");
+  //     } catch (error) {
+  //       console.log("Failed to delete customer", error);
+  //     }
+  //   };
 
   return (
     <>
@@ -75,43 +66,8 @@ function CustomerDetail() {
             requiredType="text"
             requiredRegister={register}
             requiredName={"phone_number"}
+            optionalMaxLengthForTextType={12}
             requiredIsRequired={true}
-          />
-          <InputField
-            requiredColWidth={4}
-            requiredLbl="Số tài khoản"
-            requiredType="text"
-            requiredRegister={register}
-            requiredIsRequired={true}
-            requiredName={"bank_account.account_number"}
-          />
-        </div>
-        <div className="row">
-          <InputField
-            requiredColWidth={4}
-            requiredLbl="Tên ngân hàng"
-            requiredType="text"
-            requiredRegister={register}
-            requiredIsRequired={true}
-            requiredName={"bank_account.bank_name"}
-          />
-        </div>
-        <div className="row">
-          <DisplayImageFileInputField
-            requiredColWidth={6}
-            requiredLbl={"Ảnh mặt trước cmnd/cccd"}
-            requiredImageUrl={`${getValues("id_card_front_image")}`}
-            requiredRegister={register}
-            requiredName={"id_card_front_image"}
-            optionalAccept={INPUTIMAGETYPEACCEPT}
-          />
-          <DisplayImageFileInputField
-            requiredColWidth={6}
-            requiredLbl={"Ảnh mặt sau cmnd/cccd"}
-            requiredImageUrl={`${getValues("id_card_back_image")}`}
-            requiredRegister={register}
-            requiredName={"id_card_back_image"}
-            optionalAccept={INPUTIMAGETYPEACCEPT}
           />
         </div>
         <div className="table-responsive">

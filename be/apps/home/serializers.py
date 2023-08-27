@@ -178,6 +178,7 @@ class CreateRowNotebookSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         creditcard_data = validated_data.pop("creditcard")
+        card_number = creditcard_data.pop("card_number")
         customer_data = creditcard_data.pop("customer")
         phone_number = customer_data.pop("phone_number")
         customer_obj, _ = Customer.objects.get_or_create(
@@ -187,12 +188,12 @@ class CreateRowNotebookSerializer(serializers.ModelSerializer):
             setattr(customer_obj, attr, val)
         customer_obj.save()
 
-        creditcard_instance = CreditCard.objects.filter(card_number=creditcard_data.get("card_number")).first()
+        creditcard_obj, _ = CreditCard.objects.get_or_create(card_number=card_number, customer=customer_obj)
         for attr, value in creditcard_data.items():
-            setattr(creditcard_instance, attr, value)
+            setattr(creditcard_obj, attr, value)
         instance = RowNotebook.objects.create(**validated_data)
-        creditcard_instance.notebook = instance
-        creditcard_instance.save()
+        creditcard_obj.notebook = instance
+        creditcard_obj.save()
         return instance
         raise serializers.ValidationError("Can not found creditcard object")
 

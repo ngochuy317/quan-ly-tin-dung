@@ -38,7 +38,6 @@ function CustomerList() {
               <th scope="col">#</th>
               <th scope="col">Tên</th>
               <th scope="col">SĐT</th>
-              <th scope="col">Số tài khoản</th>
               <th scope="col">Chi tiết</th>
             </tr>
           </thead>
@@ -48,7 +47,6 @@ function CustomerList() {
                 <th scope="row">{index + 1}</th>
                 <td>{customer.name}</td>
                 <td>{customer.phone_number}</td>
-                <td>{customer.bank_account?.account_number}</td>
                 <td>
                   <Link to={customer.id + "/"}>Chỉnh sửa</Link>
                 </td>
