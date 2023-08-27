@@ -44,6 +44,22 @@ function CreditCardDetail() {
           data.credit_card_back_image = data.credit_card_back_image[0];
         }
       }
+
+      if (data.id_card_front_image) {
+        if (typeof data.id_card_front_image === "string") {
+          delete data.id_card_front_image;
+        } else {
+          data.id_card_front_image = data.id_card_front_image[0];
+        }
+      }
+
+      if (data.id_card_back_image) {
+        if (typeof data.id_card_back_image === "string") {
+          delete data.id_card_back_image;
+        } else {
+          data.id_card_back_image = data.id_card_back_image[0];
+        }
+      }
       console.log(
         "🚀 ~ file: creditcardDetail.jsx:33 ~ onSubmit ~ data:",
         data
@@ -126,6 +142,24 @@ function CreditCardDetail() {
             optionalAccept={INPUTIMAGETYPEACCEPT}
           />
         </div>
+        <div className="row">
+          <DisplayImageFileInputField
+            requiredColWidth={6}
+            requiredLbl={"Ảnh mặt trước CMND/CCCD"}
+            requiredImageUrl={`${getValues("id_card_front_image")}`}
+            requiredRegister={register}
+            requiredName={"id_card_front_image"}
+            optionalAccept={INPUTIMAGETYPEACCEPT}
+          />
+          <DisplayImageFileInputField
+            requiredColWidth={6}
+            requiredLbl={"Ảnh mặt sau CMND/CCCD"}
+            requiredImageUrl={`${getValues("id_card_back_image")}`}
+            requiredRegister={register}
+            requiredName={"id_card_back_image"}
+            optionalAccept={INPUTIMAGETYPEACCEPT}
+          />
+        </div>
         <div className="d-flex justify-content-end">
           <button
             type="button"
@@ -144,7 +178,7 @@ function CreditCardDetail() {
             disabled={isSubmitting}
             className="btn btn-outline-primary"
           >
-            {isSubmitting && <Spinner/>}
+            {isSubmitting && <Spinner />}
             Xác nhận
           </button>
         </div>
