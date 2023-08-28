@@ -179,6 +179,8 @@ class SwipeCardTransaction(models.Model):
     transaction_datetime_updated = models.DateTimeField(auto_now=True)
     transaction_type = models.SmallIntegerField(choices=TRANSACTION_TYPE_CHOICES, default=1)
     toll_status = models.SmallIntegerField(choices=TOLL_STATUS_CHOICES, default=1)
+    account_number = models.CharField(max_length=127, blank=True)
+    bank_name = models.CharField(max_length=127, null=True)
 
     class Meta:
         ordering = ["-id"]

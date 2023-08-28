@@ -96,7 +96,9 @@ function SwipeCardMoreDetail() {
             "🚀 ~ file: swipeCardMoreDetail.jsx:88 ~ handleOnChangeCustomerPhoneNumber ~ result:",
             result?.results[0]
           );
-          reset({ ...{ customer: result?.results[0] } });
+          setValue("customer.phone_number", result?.results[0].phone_number);
+          setValue("customer.name", result?.results[0].name);
+          setValue("customer.gender", result?.results[0].gender);
           setIsSearchCustomer(false);
         } else {
           setIsSearchCustomer(false);
@@ -128,18 +130,6 @@ function SwipeCardMoreDetail() {
         (c) => c.card_number === e.target.value
       );
       setDataListCardSelect(card);
-      setValue("customer.phone_number", card.customer.phone_number);
-      setValue("customer.name", card.customer.name);
-
-      setValue(
-        "customer.bank_account.account_number",
-        card.customer?.bank_account?.account_number
-      );
-      setValue(
-        "customer.bank_account.bank_name",
-        card.customer?.bank_account?.bank_name
-      );
-      setValue("customer.gender", card.customer.gender);
       setValue("creditcard.card_bank_name", card.card_bank_name);
       setValue("creditcard.card_expire_date", card.card_expire_date);
       setValue("creditcard.card_issued_date", card.card_issued_date);
@@ -320,8 +310,7 @@ function SwipeCardMoreDetail() {
           <div className="col-md-3">
             <div className="mb-3">
               <label className="form-label">
-                Số điện thoại
-                <FaAsterisk color="red" size=".7em" />
+                Số điện thoại <FaAsterisk color="red" size=".7em" />
               </label>
               {isSearchCustomer && <SearchSpiner />}
               <input
@@ -341,7 +330,6 @@ function SwipeCardMoreDetail() {
             requiredRegister={register}
             requiredName={"customer.name"}
             requiredIsRequired={true}
-            optionalDisabled={!isManualInputCustomerData}
           />
 
           <div className="col-md-2">
@@ -365,7 +353,7 @@ function SwipeCardMoreDetail() {
             requiredLbl="Số TK nhận tiền"
             requiredType="text"
             requiredRegister={register}
-            requiredName={"customer.bank_account.account_number"}
+            requiredName={"account_number"}
             optionalDisabled={!isManualInputCustomerData}
           />
 
@@ -374,7 +362,7 @@ function SwipeCardMoreDetail() {
             requiredLbl="Ngân hàng"
             requiredType="text"
             requiredRegister={register}
-            requiredName={"customer.bank_account.bank_name"}
+            requiredName={"bank_name"}
             optionalDisabled={!isManualInputCustomerData}
           />
         </div>
@@ -519,6 +507,7 @@ function SwipeCardMoreDetail() {
                   {...register("creditcard.id_card_front_image")}
                   type="file"
                   className="form-control"
+                  disabled={!isManualInputCreditCardData}
                 />
               )}
             </div>
@@ -537,6 +526,7 @@ function SwipeCardMoreDetail() {
                   {...register("creditcard.id_card_back_image")}
                   type="file"
                   className="form-control"
+                  disabled={!isManualInputCreditCardData}
                 />
               )}
             </div>

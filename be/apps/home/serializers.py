@@ -2,7 +2,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from apps.base.constants import Y_M_D_H_M_FORMAT
-from apps.customer.models import BankAccount, CreditCard, Customer
+from apps.customer.models import CreditCard, Customer
 from apps.customer.serializers import CreditCardSerializer
 from apps.store.models import (
     POS,
@@ -335,19 +335,9 @@ class SwipeCardTransactionCustomerSerializer(serializers.Serializer):
     name = serializers.CharField(allow_null=True, allow_blank=True)
 
 
-class BankAccountSwipeCardTransactionDetailRetrieveUpdateSerializer(serializers.ModelSerializer):
-
-    account_number = serializers.CharField(max_length=127, allow_null=True, allow_blank=True)
-    bank_name = serializers.CharField(max_length=127, allow_null=True, allow_blank=True)
-
-    class Meta:
-        model = BankAccount
-        fields = "__all__"
-
-
 class CustomerSwipeCardTransactionDetailRetrieveUpdateSerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField()
-    bank_account = BankAccountSwipeCardTransactionDetailRetrieveUpdateSerializer()
+    name = serializers.CharField(max_length=127, required=False)
 
     class Meta:
         model = Customer
@@ -399,22 +389,12 @@ class SwipeCardTransactionDetailRetrieveUpdateSerializer(serializers.ModelSerial
     def update(self, instance: SwipeCardTransaction, validated_data):
         creditcard = validated_data.pop("creditcard")
         customer = creditcard.pop("customer")
-        bank_account = customer.pop("bank_account", {})
         credit_card_obj: CreditCard = CreditCard.objects.get(card_number=creditcard.pop("card_number"))
         for attr, value in creditcard.items():
             setattr(credit_card_obj, attr, value)
         customer_obj: Customer = Customer.objects.get(phone_number=customer.pop("phone_number"))
         for attr, value in customer.items():
             setattr(customer_obj, attr, value)
-        if customer_obj.bank_account:
-            bank_account_obj: BankAccount = BankAccount.objects.get(id=customer_obj.bank_account.id)
-            for attr, value in bank_account.items():
-                setattr(bank_account_obj, attr, value)
-            bank_account_obj.save()
-        else:
-            if any(bank_account.values()):
-                bank_account_obj: BankAccount = BankAccount.objects.create(**bank_account)
-                customer_obj.bank_account = bank_account_obj
         # update SwipeCardTransaction data
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
@@ -479,7 +459,13 @@ class SwipeCardTransactionSerializer(serializers.ModelSerializer):
         card_number = creditcard_data.pop("card_number")
         creditcard_data.pop("credit_card_front_image", None)
         creditcard_data.pop("credit_card_back_image", None)
-        creditcard_obj, _ = CreditCard.objects.get_or_create(card_number=card_number, customer=customer_obj)
+
+        creditcard_obj = CreditCard.objects.filter(card_number=card_number).first()
+        if not creditcard_obj:
+            creditcard_obj = CreditCard.objects.create(card_number=card_number, customer=customer_obj)
+        else:
+            creditcard_obj.customer = customer_obj
+
         for attr, val in creditcard_data.items():
             setattr(creditcard_obj, attr, val)
         creditcard_obj.save()

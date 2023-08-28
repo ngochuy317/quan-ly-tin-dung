@@ -229,7 +229,7 @@ function SwipeCardDetail() {
             requiredLbl="Số TK nhận tiền"
             requiredType="text"
             requiredRegister={register}
-            requiredName={"creditcard.customer.bank_account.account_number"}
+            requiredName={"account_number"}
           />
 
           <InputField
@@ -237,7 +237,7 @@ function SwipeCardDetail() {
             requiredLbl="Ngân hàng"
             requiredType="text"
             requiredRegister={register}
-            requiredName={"creditcard.customer.bank_account.bank_name"}
+            requiredName={"bank_name"}
           />
         </div>
         <div className="row"></div>
