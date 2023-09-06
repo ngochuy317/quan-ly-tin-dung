@@ -57,6 +57,13 @@ class CustomerListAPIView(ListAPIView):
     pagination_class = CustomPageNumberPaginationPageSize15
 
 
+class CustomerListAPIViewNoPagination(ListAPIView):
+
+    serializer_class = CustomerSerializer
+    filterset_class = CustomerFilter
+    queryset = Customer.objects.all()
+
+
 class CustomerRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):
 
     permission_classes = [IsAdmin]

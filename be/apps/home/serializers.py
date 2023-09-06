@@ -399,7 +399,9 @@ class SwipeCardTransactionDetailRetrieveUpdateSerializer(serializers.ModelSerial
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         customer_obj.save()
+        credit_card_obj.customer = customer_obj
         credit_card_obj.save()
+        instance.creditcard = credit_card_obj
         instance.save()
         return instance
 

@@ -9,4 +9,4 @@ class CreditCardFilter(filters.FilterSet):
 
 
 class CustomerFilter(filters.FilterSet):
-    phone_number = filters.CharFilter(field_name="phone_number")
+    phone_number = filters.CharFilter(lookup_expr="startswith")

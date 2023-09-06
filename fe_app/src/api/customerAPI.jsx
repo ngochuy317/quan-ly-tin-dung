@@ -30,7 +30,7 @@ class CustomerApi {
   };
 
   search = (params) => {
-    return axiosClient.get(this.customerBaseUrl, { params });
+    return axiosClient.get(`${this.customerBaseUrl}no-pagination/`, { params });
   };
 }
 

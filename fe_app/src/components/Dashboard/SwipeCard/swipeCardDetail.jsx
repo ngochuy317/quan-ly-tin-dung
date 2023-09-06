@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
 import CurrencyFormat from "react-currency-format";
 import { useFieldArray, useForm } from "react-hook-form";
+import { FaAsterisk } from "react-icons/fa";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import creditCardApi from "../../../api/creditCardAPI";
+import customerApi from "../../../api/customerAPI";
 import storeApi from "../../../api/storeAPI";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import DisplayImageFileInputField from "../../Common/displayImageFileInputField";
@@ -19,9 +22,12 @@ import ModifiyBillPOSMachineModal from "../../Modal/modifyBillPosMachineModal";
 
 function SwipeCardDetail() {
   const { id } = useParams();
+
   const [dataSwipCardDetail, setDataSwipCardDetail] = useState();
   const [posList, setPOSList] = useState([]);
   const [indexModal, setIndexModal] = useState(0);
+  const [findCard, setFindCard] = useState(false);
+  const [findCustomer, setFindCustomer] = useState(false);
   const [show, setShow] = useState(false);
   const handleShow = () => setShow(true);
 
@@ -42,6 +48,100 @@ function SwipeCardDetail() {
 
   const { isSubmitting } = formState;
   const navigate = useNavigate();
+  const [searchCreditCard, setSearchCreditCard] = useState("");
+  const [searchCustomer, setSearchCustomer] = useState("_*_");
+  const [dataListCardNumber, setDataListCardNumber] = useState([]);
+  const [dataListCustomer, setDataListCustomer] = useState([]);
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(async () => {
+      const result = await customerApi.search({
+        phone_number: searchCustomer,
+      });
+      console.log(
+        "🚀 ~ file: swipeCardDetail.jsx:60 ~ delayDebounceFn ~ result:",
+        result
+      );
+      setDataListCustomer([...result]);
+    }, 1000);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchCustomer]);
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(async () => {
+      const result = await creditCardApi.search({
+        card_number: searchCreditCard,
+      });
+      console.log(
+        "🚀 ~ file: swipeCardDetail.jsx:75 ~ delayDebounceFn ~ result:",
+        result
+      );
+      // if ()
+      setDataListCardNumber([...result]);
+    }, 1000);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchCreditCard]);
+
+  const handleOnChangeCustomer = async (e) => {
+    let event = e.nativeEvent.inputType ? "input" : "option selected";
+    console.log(
+      "🚀 ~ file: swipeCardDetail.jsx:89 ~ handleOnChangeCustomer ~ event:",
+      event
+    );
+    if (event === "input") {
+      let val = e.target.value;
+      if (val.length > 2) {
+        setSearchCustomer(val);
+      }
+    } else if (event === "option selected") {
+      const customer = dataListCustomer.find(
+        (c) => c.phone_number === e.target.value
+      );
+      console.log(
+        "🚀 ~ file: swipeCardDetail.jsx:98 ~ handleOnChangeCustomer ~ customer:",
+        customer
+      );
+      setValue("creditcard.customer.phone_number", customer.phone_number);
+      setValue("creditcard.customer.name", customer.name);
+      setValue("creditcard.customer.gender", customer.gender);
+      setFindCustomer(!findCustomer);
+    }
+  };
+
+  const handleOnChangeCardNumber = async (e) => {
+    let event = e.nativeEvent.inputType ? "input" : "option selected";
+    if (event === "input") {
+      let val = e.target.value;
+      if (val.length > 2) {
+        setSearchCreditCard(val);
+      }
+    } else if (event === "option selected") {
+      const card = dataListCardNumber.find(
+        (c) => c.card_number === e.target.value
+      );
+      setValue("creditcard.card_bank_name", card.card_bank_name);
+      setValue("creditcard.card_expire_date", card.card_expire_date);
+      setValue("creditcard.card_issued_date", card.card_issued_date);
+      setValue("creditcard.card_name", card.card_name);
+      setValue(
+        "creditcard.credit_card_back_image",
+        card.credit_card_back_image
+      );
+      setValue(
+        "creditcard.credit_card_front_image",
+        card.credit_card_front_image
+      );
+      setValue("creditcard.id_card_back_image", card.id_card_back_image);
+      setValue("creditcard.id_card_front_image", card.id_card_front_image);
+      setValue("creditcard.maturity_date", card.maturity_date);
+      setValue("creditcard.statement_date", card.statement_date);
+      setValue("creditcard.line_of_credit", card.line_of_credit);
+      setValue("creditcard.card_ccv", card.card_ccv);
+      setFindCard(!findCard);
+    }
+  };
 
   useEffect(() => {
     async function fetchSwipeCardTransactionDetail() {
@@ -205,7 +305,7 @@ function SwipeCardDetail() {
             requiredName={"creditcard.customer.name"}
           />
           <SelectField
-            requiredColWidth={1}
+            requiredColWidth={2}
             requiredLbl="Giới tính"
             requiredIsRequired={true}
             requiredRegister={register}
@@ -215,15 +315,35 @@ function SwipeCardDetail() {
             requiredValueOption={(ele) => `${ele.value}`}
             requiredLblOption={(ele) => `${ele.label}`}
           />
-
-          <InputField
+          <div className="col-md-2">
+            <div className="mb-3">
+              <label className="form-label">
+                Số điện thoại <FaAsterisk color="red" size=".7em" />
+              </label>
+              <input
+                {...register("creditcard.customer.phone_number")}
+                type="tel"
+                className="form-control"
+                required
+                list="listCustomers"
+                placeholder="Nhập sđt để tìm"
+                onChange={handleOnChangeCustomer}
+              />
+              <datalist id="listCustomers">
+                {dataListCustomer?.map((data, index) => (
+                  <option value={data.phone_number} key={index}></option>
+                ))}
+              </datalist>
+            </div>
+          </div>
+          {/* <InputField
             requiredColWidth={2}
             requiredLbl="Số điện thoại"
             requiredType="tel"
+            requiredIsRequired={true}
             requiredRegister={register}
             requiredName={"creditcard.customer.phone_number"}
-            optionalDisabled={true}
-          />
+          /> */}
           <InputField
             requiredColWidth={2}
             requiredLbl="Số TK nhận tiền"
@@ -250,14 +370,36 @@ function SwipeCardDetail() {
             requiredRegister={register}
             requiredName={"creditcard.card_bank_name"}
           />
-          <InputField
+          <div className="col-md-4">
+            <div className="mb-3">
+              <label className="form-label">
+                Số thẻ <FaAsterisk color="red" size=".7em" />
+              </label>
+              <input
+                {...register("creditcard.card_number")}
+                type="text"
+                className="form-control"
+                required
+                list="cardNumbers"
+                id="myBrowser"
+                placeholder="Nhập 3 số đầu để tìm"
+                onChange={handleOnChangeCardNumber}
+              />
+              <datalist id="cardNumbers">
+                {dataListCardNumber?.map((data, index) => (
+                  <option value={data.card_number} key={index}></option>
+                ))}
+              </datalist>
+            </div>
+          </div>
+          {/* <InputField
             requiredColWidth={4}
             requiredLbl="Số thẻ"
             requiredType="text"
             requiredRegister={register}
             requiredName={"creditcard.card_number"}
-            optionalDisabled={true}
-          />
+            optionalOnChange={(e) => setSearchCreditCard(e.target.value)}
+          /> */}
           <InputField
             requiredColWidth={4}
             requiredLbl="Tên trên thẻ"
