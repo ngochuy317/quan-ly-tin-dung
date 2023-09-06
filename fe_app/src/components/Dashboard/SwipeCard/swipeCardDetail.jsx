@@ -92,7 +92,7 @@ function SwipeCardDetail() {
     );
     if (event === "input") {
       let val = e.target.value;
-      if (val.length > 2) {
+      if (val.length > 0) {
         setSearchCustomer(val);
       }
     } else if (event === "option selected") {
@@ -114,7 +114,7 @@ function SwipeCardDetail() {
     let event = e.nativeEvent.inputType ? "input" : "option selected";
     if (event === "input") {
       let val = e.target.value;
-      if (val.length > 2) {
+      if (val.length > 0) {
         setSearchCreditCard(val);
       }
     } else if (event === "option selected") {

@@ -388,13 +388,26 @@ class SwipeCardTransactionDetailRetrieveUpdateSerializer(serializers.ModelSerial
 
     def update(self, instance: SwipeCardTransaction, validated_data):
         creditcard = validated_data.pop("creditcard")
+        card_number = creditcard.pop("card_number")
         customer = creditcard.pop("customer")
-        credit_card_obj: CreditCard = CreditCard.objects.get(card_number=creditcard.pop("card_number"))
-        for attr, value in creditcard.items():
-            setattr(credit_card_obj, attr, value)
-        customer_obj: Customer = Customer.objects.get(phone_number=customer.pop("phone_number"))
-        for attr, value in customer.items():
-            setattr(customer_obj, attr, value)
+        phone_number = customer.pop("phone_number")
+
+        customer_obj: Customer = Customer.objects.filter(phone_number=phone_number).first()
+        if not customer_obj:
+            customer_obj: Customer = Customer.objects.create(phone_number=phone_number, **customer)
+        else:
+            for attr, value in customer.items():
+                setattr(customer_obj, attr, value)
+
+        credit_card_obj: CreditCard = CreditCard.objects.filter(card_number=card_number).first()
+        if not credit_card_obj:
+            credit_card_obj: CreditCard = CreditCard.objects.create(
+                card_number=card_number, customer=customer_obj, **creditcard
+            )
+        else:
+            for attr, value in creditcard.items():
+                setattr(credit_card_obj, attr, value)
+
         # update SwipeCardTransaction data
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
