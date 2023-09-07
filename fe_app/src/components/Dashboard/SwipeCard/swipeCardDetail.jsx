@@ -92,7 +92,7 @@ function SwipeCardDetail() {
     );
     if (event === "input") {
       let val = e.target.value;
-      if (val.length > 0) {
+      if (val.length > 2) {
         setSearchCustomer(val);
       }
     } else if (event === "option selected") {
@@ -114,7 +114,7 @@ function SwipeCardDetail() {
     let event = e.nativeEvent.inputType ? "input" : "option selected";
     if (event === "input") {
       let val = e.target.value;
-      if (val.length > 0) {
+      if (val.length > 2) {
         setSearchCreditCard(val);
       }
     } else if (event === "option selected") {
@@ -387,7 +387,9 @@ function SwipeCardDetail() {
               />
               <datalist id="cardNumbers">
                 {dataListCardNumber?.map((data, index) => (
-                  <option value={data.card_number} key={index}></option>
+                  <option value={data.card_number} key={index}>
+                    thẻ đã quẹt
+                  </option>
                 ))}
               </datalist>
             </div>
