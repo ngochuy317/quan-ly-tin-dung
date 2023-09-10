@@ -6,12 +6,12 @@ WORKDIR /tmp
 
 RUN pip install --upgrade pip
 
-COPY ./be/requirements.txt requirements.txt
+COPY ./requirements.txt requirements.txt
 RUN pip install -r requirements.txt
 
 COPY . /code
 WORKDIR /code
-COPY ./be/entrypoint.local.sh /entrypoint.local.sh
+COPY ./entrypoint.local.sh /entrypoint.local.sh
 
 RUN chmod +x /entrypoint.local.sh
 

@@ -329,7 +329,7 @@ function SwipeCardDetail() {
                 placeholder="Nhập sđt để tìm"
                 onChange={handleOnChangeCustomer}
               />
-              <datalist id="listCustomers">
+              <datalist id="listCustomers" onChange={handleOnChangeCustomer}>
                 {dataListCustomer?.map((data, index) => (
                   <option value={data.phone_number} key={index}></option>
                 ))}
