@@ -15,10 +15,18 @@ import ShowErrorModal from "../../Modal/showErrorModal";
 import Pagination from "../../Pagination/pagination";
 import { AuthContext } from "../dashboard";
 
-function BillPOSMachineMangement(props) {
+function BillPOSMachineMangement() {
   const { role = "" } = React.useContext(AuthContext);
 
-  const { register, handleSubmit, getValues } = useForm();
+  const { register, handleSubmit, getValues } = useForm({
+    defaultValues: {
+      datetime_created_after: new Date(Date.now() - 86400000)
+        .toISOString()
+        .substring(0, 10),
+      datetime_created_before: new Date().toISOString().substring(0, 10),
+    },
+  });
+
   const [stores, setStores] = useState([]);
   const [poses, setPoses] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
