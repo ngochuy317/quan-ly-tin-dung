@@ -522,6 +522,7 @@ class CreditCardManagementSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     card_number = serializers.ReadOnlyField(source="creditcard__card_number")
     creditcard_id = serializers.ReadOnlyField(source="creditcard__id")
+    card_name = serializers.ReadOnlyField(source="creditcard__card_name")
     store_name = serializers.CharField()
     customer_money_needed = serializers.IntegerField()
     transaction_datetime_created = serializers.DateTimeField(format=Y_M_D_H_M_FORMAT)

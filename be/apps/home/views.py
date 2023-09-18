@@ -241,6 +241,7 @@ class CreditCardManagementAPIView(ListAPIView):
                 "id",
                 "store_name",
                 "creditcard__card_number",
+                "creditcard__card_name",
                 "creditcard__id",
                 "customer_money_needed",
                 "transaction_datetime_created",
@@ -390,7 +391,7 @@ class StorePOSOnlyRetrieveAPIView(RetrieveAPIView):
 
 class EmployeesListCreateAPIView(ListCreateAPIView):
 
-    queryset = User.objects.filter(~Q(role=ADMIN))
+    queryset = User.objects.all()
     serializer_class = UserSerializer
     pagination_class = CustomPageNumberPagination
     permission_classes = [IsAdmin]

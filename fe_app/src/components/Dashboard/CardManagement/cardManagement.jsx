@@ -99,9 +99,7 @@ function CardManagement() {
             className="btn btn-outline-primary mx-3"
             onClick={() => onClickDeleteSearch()}
           >
-            {isSubmitting && (
-              <Spinner/>
-            )}
+            {isSubmitting && <Spinner />}
             Xoá tìm kiếm
           </button>
           <button
@@ -109,9 +107,7 @@ function CardManagement() {
             disabled={isSubmitting}
             className="btn btn-outline-primary mx-3"
           >
-            {isSubmitting && (
-              <Spinner/>
-            )}
+            {isSubmitting && <Spinner />}
             Tìm kiếm
           </button>
         </div>
@@ -121,6 +117,7 @@ function CardManagement() {
           <thead>
             <tr>
               <th scope="col">#</th>
+              <th scope="col">Tên trên thẻ</th>
               <th scope="col">Số thẻ</th>
               <th scope="col">Cửa hàng</th>
               <th scope="col">Số tiền</th>
@@ -132,6 +129,7 @@ function CardManagement() {
             {dataCard?.results?.map((data, index) => (
               <tr key={data.id}>
                 <td>{index + 1}</td>
+                <td>{data.card_name}</td>
                 <td>
                   {" "}
                   <a
