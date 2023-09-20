@@ -83,6 +83,11 @@ function SwipeCardInput(props) {
     }
   };
 
+  const clearCustomerData = () => {
+    setValue("customer.name", "");
+    setValue("customer.phone_number", "");
+  };
+
   const handleClickPosMachine = (index, e) => {
     setIndexModal(index);
     console.log(
@@ -229,24 +234,38 @@ function SwipeCardInput(props) {
           requiredName={"creditcard.card_bank_name"}
           optionalPlaceholder="Nhập ngân hàng phát hành thẻ"
         />
-        <InputField
-          requiredColWidth={2}
-          requiredLbl="Tên khách hàng"
-          requiredType="text"
-          requiredRegister={register}
-          requiredName="customer.name"
-          // requiredIsRequired={true}
-        />
+        <div className="row">
+          <InputField
+            requiredColWidth={2}
+            requiredLbl="Tên khách hàng"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName="customer.name"
+          />
+          <InputField
+            requiredColWidth={2}
+            requiredLbl="Sđt khách hàng"
+            requiredType="tel"
+            requiredRegister={register}
+            requiredName="customer.phone_number"
+            requiredIsRequired={true}
+          />
+
+          <div className="col-md-2">
+            <div className="mb-3">
+              <label className="form-label">Xoá dữ liệu khách hàng</label>
+              <button
+                className="btn btn-outline-primary form-control"
+                onClick={() => clearCustomerData()}
+                type="button"
+              >
+                Xoá
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
       <div className="row">
-        <InputField
-          requiredColWidth={2}
-          requiredLbl="Sđt khách hàng"
-          requiredType="tel"
-          requiredRegister={register}
-          requiredName="customer.phone_number"
-          requiredIsRequired={true}
-        />
         <div className="col-md-2">
           <div className="mb-3">
             <label className="form-label">
