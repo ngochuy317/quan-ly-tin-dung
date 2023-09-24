@@ -5,10 +5,12 @@ import { useFieldArray, useForm } from "react-hook-form";
 import { FaAsterisk } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import creditCardApi from "../../../api/creditCardAPI";
+import customerApi from "../../../api/customerAPI";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import FileInputField from "../../Common/fileInputField";
 import InputField from "../../Common/inputField";
 import RequiredSymbol from "../../Common/requiredSymbol";
+import SearchSpiner from "../../Common/searchSpiner";
 import SelectField from "../../Common/selectField";
 import Spinner from "../../Common/spinner";
 import { TOLLSTATUS, TRANSACTIONTYPE } from "../../ConstantUtils/constants";
@@ -32,6 +34,7 @@ function SwipeCardInput(props) {
   const { isSubmitting } = formState;
 
   const [dataListCardNumber, setDataListCardNumber] = useState([]);
+  const [isSearchCustomer, setIsSearchCustomer] = useState(false);
   const [show, setShow] = useState(false);
   const [showNegativeMoney, setShowNegativeMoney] = useState(false);
   const [indexModal, setIndexModal] = useState(0);
@@ -80,6 +83,33 @@ function SwipeCardInput(props) {
       deleteFormInput();
     } catch (error) {
       console.log("Failed to create swipe card transaction", error);
+    }
+  };
+
+  const handleClickSearchPhoneNumberCustomer = async (e) => {
+    e.preventDefault();
+    try {
+      let val = getValues("customer.phone_number");
+      setIsSearchCustomer(true);
+      if (val) {
+        const result = await customerApi.search({ phone_number: val });
+        if (result) {
+          console.log(
+            "🚀 ~ file: swipeCardMoreDetail.jsx:95 ~ handleClickSearchPhoneNumberCustomer ~ result:",
+            result
+          );
+          setValue("customer.phone_number", result[0].phone_number);
+          setValue("customer.name", result[0].name);
+          setValue("customer.gender", result[0].gender);
+        }
+        setIsSearchCustomer(false);
+      }
+    } catch (error) {
+      setIsSearchCustomer(false);
+      console.log(
+        "🚀 ~ file: swipeCardMoreDetail.jsx:102 ~ handleClickSearchPhoneNumberCustomer ~ error:",
+        error
+      );
     }
   };
 
@@ -242,14 +272,31 @@ function SwipeCardInput(props) {
             requiredRegister={register}
             requiredName="customer.name"
           />
-          <InputField
-            requiredColWidth={2}
-            requiredLbl="Sđt khách hàng"
-            requiredType="tel"
-            requiredRegister={register}
-            requiredName="customer.phone_number"
-            requiredIsRequired={true}
-          />
+          <div className="col-md-3">
+            <div className="mb-3">
+              <label className="form-label">
+                Số điện thoại <FaAsterisk color="red" size=".7em" />
+              </label>
+              {isSearchCustomer && <SearchSpiner />}
+              <div className="d-flex">
+                <input
+                  {...register("customer.phone_number")}
+                  type="tel"
+                  className="form-control"
+                  placeholder="Nhập SĐT để tìm KH"
+                  required
+                />
+                <button
+                  disabled={isSearchCustomer}
+                  className="btn btn-outline-primary"
+                  onClick={handleClickSearchPhoneNumberCustomer}
+                >
+                  {isSearchCustomer && <Spinner />}
+                  Tìm
+                </button>
+              </div>
+            </div>
+          </div>
 
           <div className="col-md-2">
             <div className="mb-3">

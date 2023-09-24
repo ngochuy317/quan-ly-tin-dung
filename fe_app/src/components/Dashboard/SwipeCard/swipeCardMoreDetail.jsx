@@ -46,7 +46,6 @@ function SwipeCardMoreDetail() {
   const [show, setShow] = useState(false);
   const [isSearchCreditCard, setIsSearchCreditCard] = useState(false);
   const [isSearchCustomer, setIsSearchCustomer] = useState(false);
-  const [searchCustomerValue, setSearchCustomerValue] = useState("");
   const [showNegativeMoney, setShowNegativeMoney] = useState(false);
   const [isCreditCardBackImage, setIsCreditCardBackImage] = useState(false);
   const [isCreditCardFrontImage, setIsCreditCardFrontImage] = useState(false);
@@ -84,30 +83,30 @@ function SwipeCardMoreDetail() {
     setShowNegativeMoney(parseInt(val) === 2);
   };
 
-  const handleOnChangeCustomerPhoneNumber = async (e) => {
+  const handleClickSearchPhoneNumberCustomer = async (e) => {
+    e.preventDefault();
     try {
-      async function searchCustomerByPhoneNumber(e) {
-        setIsSearchCustomer(true);
-        let val = e.target.value;
-        if (val !== searchCustomerValue) {
-          setSearchCustomerValue(val);
-          const result = await customerApi.search({ phone_number: val });
+      let val = getValues("customer.phone_number");
+      setIsSearchCustomer(true);
+      if (val) {
+        const result = await customerApi.search({ phone_number: val });
+        if (result) {
           console.log(
-            "🚀 ~ file: swipeCardMoreDetail.jsx:88 ~ handleOnChangeCustomerPhoneNumber ~ result:",
-            result?.results[0]
+            "🚀 ~ file: swipeCardMoreDetail.jsx:95 ~ handleClickSearchPhoneNumberCustomer ~ result:",
+            result
           );
-          setValue("customer.phone_number", result?.results[0].phone_number);
-          setValue("customer.name", result?.results[0].name);
-          setValue("customer.gender", result?.results[0].gender);
-          setIsSearchCustomer(false);
-        } else {
-          setIsSearchCustomer(false);
+          setValue("customer.phone_number", result[0].phone_number);
+          setValue("customer.name", result[0].name);
+          setValue("customer.gender", result[0].gender);
         }
+        setIsSearchCustomer(false);
       }
-      setTimeout(() => searchCustomerByPhoneNumber(e), 3000);
     } catch (error) {
-      console.log("Failed to fetch customer by phone_number", error);
       setIsSearchCustomer(false);
+      console.log(
+        "🚀 ~ file: swipeCardMoreDetail.jsx:102 ~ handleClickSearchPhoneNumberCustomer ~ error:",
+        error
+      );
     }
   };
 
@@ -313,14 +312,23 @@ function SwipeCardMoreDetail() {
                 Số điện thoại <FaAsterisk color="red" size=".7em" />
               </label>
               {isSearchCustomer && <SearchSpiner />}
-              <input
-                {...register("customer.phone_number")}
-                type="tel"
-                className="form-control"
-                placeholder="Nhập SĐT để tìm KH"
-                onChange={handleOnChangeCustomerPhoneNumber}
-                required
-              />
+              <div className="d-flex">
+                <input
+                  {...register("customer.phone_number")}
+                  type="tel"
+                  className="form-control"
+                  placeholder="Nhập SĐT để tìm KH"
+                  required
+                />
+                <button
+                  disabled={isSearchCustomer}
+                  className="btn btn-outline-primary"
+                  onClick={handleClickSearchPhoneNumberCustomer}
+                >
+                  {isSearchCustomer && <Spinner />}
+                  Tìm
+                </button>
+              </div>
             </div>
           </div>
           <InputField
