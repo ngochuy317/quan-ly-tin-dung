@@ -34,6 +34,7 @@ function SwipeCardInput(props) {
   const { isSubmitting } = formState;
 
   const [dataListCardNumber, setDataListCardNumber] = useState([]);
+  const [dataListCustomer, setDataListCustomer] = useState([]);
   const [isSearchCustomer, setIsSearchCustomer] = useState(false);
   const [show, setShow] = useState(false);
   const [showNegativeMoney, setShowNegativeMoney] = useState(false);
@@ -86,33 +87,6 @@ function SwipeCardInput(props) {
     }
   };
 
-  const handleClickSearchPhoneNumberCustomer = async (e) => {
-    e.preventDefault();
-    try {
-      let val = getValues("customer.phone_number");
-      setIsSearchCustomer(true);
-      if (val) {
-        const result = await customerApi.search({ phone_number: val });
-        if (result) {
-          console.log(
-            "🚀 ~ file: swipeCardMoreDetail.jsx:95 ~ handleClickSearchPhoneNumberCustomer ~ result:",
-            result
-          );
-          setValue("customer.phone_number", result[0].phone_number);
-          setValue("customer.name", result[0].name);
-          setValue("customer.gender", result[0].gender);
-        }
-        setIsSearchCustomer(false);
-      }
-    } catch (error) {
-      setIsSearchCustomer(false);
-      console.log(
-        "🚀 ~ file: swipeCardMoreDetail.jsx:102 ~ handleClickSearchPhoneNumberCustomer ~ error:",
-        error
-      );
-    }
-  };
-
   const clearCustomerData = () => {
     setValue("customer.name", "");
     setValue("customer.phone_number", "");
@@ -159,6 +133,30 @@ function SwipeCardInput(props) {
 
     return () => clearTimeout(delayDebounceFn);
   }, [searchCreditCard]);
+
+  const handleOnChangeCustomerPhoneNumber = async (e) => {
+    let event = e.nativeEvent.inputType ? "input" : "option selected";
+    if (event === "input") {
+      let val = e.target.value;
+      if (val.length > 2) {
+        setIsSearchCustomer(true);
+        const result = await customerApi.search({ phone_number: val });
+        console.log(
+          "🚀 ~ file: swipeCardMoreDetail.jsx:120 ~ handleOnChangeCustomerPhoneNumber ~ result:",
+          result
+        );
+        setDataListCustomer([...result]);
+        setIsSearchCustomer(false);
+      }
+    } else if (event === "option selected") {
+      const customer = dataListCustomer.find(
+        (c) => c.phone_number === e.target.value
+      );
+      setValue("customer.phone_number", customer.phone_number);
+      setValue("customer.name", customer.name);
+      setValue("customer.gender", customer.gender);
+    }
+  };
 
   const handleOnChangeCardNumber = async (e) => {
     let event = e.nativeEvent.inputType ? "input" : "option selected";
@@ -278,23 +276,20 @@ function SwipeCardInput(props) {
                 Số điện thoại <FaAsterisk color="red" size=".7em" />
               </label>
               {isSearchCustomer && <SearchSpiner />}
-              <div className="d-flex">
-                <input
-                  {...register("customer.phone_number")}
-                  type="tel"
-                  className="form-control"
-                  placeholder="Nhập SĐT để tìm KH"
-                  required
-                />
-                <button
-                  disabled={isSearchCustomer}
-                  className="btn btn-outline-primary"
-                  onClick={handleClickSearchPhoneNumberCustomer}
-                >
-                  {isSearchCustomer && <Spinner />}
-                  Tìm
-                </button>
-              </div>
+              <input
+                {...register("customer.phone_number")}
+                type="tel"
+                className="form-control"
+                placeholder="Nhập SĐT để tìm KH"
+                list="phoneNumbers"
+                onChange={handleOnChangeCustomerPhoneNumber}
+                required
+              />
+              <datalist id="phoneNumbers">
+                {dataListCustomer?.map((data, index) => (
+                  <option value={data.phone_number} key={index}></option>
+                ))}
+              </datalist>
             </div>
           </div>
 

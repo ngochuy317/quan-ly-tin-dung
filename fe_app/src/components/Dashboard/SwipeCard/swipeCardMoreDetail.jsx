@@ -38,6 +38,7 @@ function SwipeCardMoreDetail() {
   });
 
   const [dataListCardNumber, setDataListCardNumber] = useState([]);
+  const [dataListCustomer, setDataListCustomer] = useState([]);
 
   const [isManualInputCreditCardData, setIsManualInputCreditCardData] =
     useState(false);
@@ -83,30 +84,27 @@ function SwipeCardMoreDetail() {
     setShowNegativeMoney(parseInt(val) === 2);
   };
 
-  const handleClickSearchPhoneNumberCustomer = async (e) => {
-    e.preventDefault();
-    try {
-      let val = getValues("customer.phone_number");
-      setIsSearchCustomer(true);
-      if (val) {
+  const handleOnChangeCustomerPhoneNumber = async (e) => {
+    let event = e.nativeEvent.inputType ? "input" : "option selected";
+    if (event === "input") {
+      let val = e.target.value;
+      if (val.length > 2) {
+        setIsSearchCustomer(true);
         const result = await customerApi.search({ phone_number: val });
-        if (result) {
-          console.log(
-            "🚀 ~ file: swipeCardMoreDetail.jsx:95 ~ handleClickSearchPhoneNumberCustomer ~ result:",
-            result
-          );
-          setValue("customer.phone_number", result[0].phone_number);
-          setValue("customer.name", result[0].name);
-          setValue("customer.gender", result[0].gender);
-        }
+        console.log(
+          "🚀 ~ file: swipeCardMoreDetail.jsx:120 ~ handleOnChangeCustomerPhoneNumber ~ result:",
+          result
+        );
+        setDataListCustomer([...result]);
         setIsSearchCustomer(false);
       }
-    } catch (error) {
-      setIsSearchCustomer(false);
-      console.log(
-        "🚀 ~ file: swipeCardMoreDetail.jsx:102 ~ handleClickSearchPhoneNumberCustomer ~ error:",
-        error
+    } else if (event === "option selected") {
+      const customer = dataListCustomer.find(
+        (c) => c.phone_number === e.target.value
       );
+      setValue("customer.phone_number", customer.phone_number);
+      setValue("customer.name", customer.name);
+      setValue("customer.gender", customer.gender);
     }
   };
 
@@ -312,23 +310,20 @@ function SwipeCardMoreDetail() {
                 Số điện thoại <FaAsterisk color="red" size=".7em" />
               </label>
               {isSearchCustomer && <SearchSpiner />}
-              <div className="d-flex">
-                <input
-                  {...register("customer.phone_number")}
-                  type="tel"
-                  className="form-control"
-                  placeholder="Nhập SĐT để tìm KH"
-                  required
-                />
-                <button
-                  disabled={isSearchCustomer}
-                  className="btn btn-outline-primary"
-                  onClick={handleClickSearchPhoneNumberCustomer}
-                >
-                  {isSearchCustomer && <Spinner />}
-                  Tìm
-                </button>
-              </div>
+              <input
+                {...register("customer.phone_number")}
+                type="tel"
+                className="form-control"
+                placeholder="Nhập SĐT để tìm KH"
+                list="phoneNumbers"
+                onChange={handleOnChangeCustomerPhoneNumber}
+                required
+              />
+              <datalist id="phoneNumbers">
+                {dataListCustomer?.map((data, index) => (
+                  <option value={data.phone_number} key={index}></option>
+                ))}
+              </datalist>
             </div>
           </div>
           <InputField
