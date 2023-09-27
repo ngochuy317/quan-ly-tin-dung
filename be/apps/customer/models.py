@@ -6,8 +6,8 @@ from django.db import models
 
 class BankAccount(models.Model):
 
-    account_number = models.CharField(max_length=127)
-    bank_name = models.CharField(max_length=127)
+    account_number = models.CharField(max_length=127, null=True, blank=True)
+    bank_name = models.CharField(max_length=127, null=True, blank=True)
 
     def __str__(self) -> str:
         return f"{self.bank_name} -- {self.account_number[-4:]}"
@@ -22,6 +22,9 @@ class Customer(models.Model):
     name = models.CharField(max_length=127, blank=True)
     phone_number = models.CharField(max_length=12, unique=True)
     gender = models.PositiveSmallIntegerField(choices=GENDER_CHOICES, default=3)
+    bank_account = models.ForeignKey(
+        BankAccount, on_delete=models.CASCADE, related_name=RELATED_NAME, null=True, blank=True
+    )
 
     class Meta:
         ordering = ["-id"]

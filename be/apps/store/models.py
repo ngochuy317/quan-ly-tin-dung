@@ -173,6 +173,9 @@ class SwipeCardTransaction(models.Model):
     creditcard = models.ForeignKey(
         "customer.CreditCard", on_delete=models.CASCADE, related_name=RELATED_NAME, blank=True, null=True
     )
+    customer = models.ForeignKey(
+        "customer.Customer", on_delete=models.CASCADE, related_name=RELATED_NAME, blank=True, null=True
+    )
     user = models.ForeignKey("user.User", on_delete=models.CASCADE, related_name=RELATED_NAME)
     at_store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name=RELATED_NAME, blank=True, null=True)
     transaction_datetime_created = models.DateTimeField(auto_now_add=True)
