@@ -7,18 +7,16 @@ import NoMatch from "../NoMatch/noMatch";
 function Layout() {
   return (
     <BrowserRouter>
-      <div>
-        <div className="container-fluid">
+      <div className="container-fluid">
           <div className="row flex-nowrap">
-            <Routes>
-              <Route path="/" element={<Navigate to="/login" replace />} />
-              <Route path="login" element={<LoginForm />} />
-              <Route path="dashboard/*" element={<Dashboard />} />
-              <Route path="*" element={<NoMatch />} />
-            </Routes>
+        <Routes>
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="login" element={<LoginForm />} />
+          <Route path="dashboard/*" element={<Dashboard />} />
+          <Route path="*" element={<NoMatch />} />
+        </Routes>
           </div>
         </div>
-      </div>
     </BrowserRouter>
   );
 }

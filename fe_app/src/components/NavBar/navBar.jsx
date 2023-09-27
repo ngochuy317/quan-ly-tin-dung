@@ -12,7 +12,7 @@ function NavBar() {
   }
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light">
+    <nav style={{zIndex: 3}} className="navbar navbar-expand-lg navbar-light">
       <div className="container-fluid">
         <div className="navbar-brand"></div>
         <div className="d-flex">

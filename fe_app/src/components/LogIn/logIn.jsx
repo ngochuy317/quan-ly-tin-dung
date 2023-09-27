@@ -53,8 +53,8 @@ function LoginForm() {
   };
 
   return (
-    <div className="d-flex justify-content-center p-2">
-      <div className="justify-content-center w-50 p-3">
+    <div className="d-flex justify-content-center p-2 m-auto">
+      <div className="justify-content-center p-3">
         <h2 className="text-center">Đăng nhập</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="text-start">
           <div className="mb-3">
@@ -74,10 +74,6 @@ function LoginForm() {
               placeholder="Mật khẫu"
             />
           </div>
-
-          <p className="mt-3 text-sm">
-            <br />
-          </p>
           {error?.length && <h6 className="text-center">{error}</h6>}
 
           <div className="text-center">
