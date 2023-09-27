@@ -3,7 +3,9 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import customerApi from "../../../api/customerAPI";
 import InputField from "../../Common/inputField";
+import SelectField from "../../Common/selectField";
 import Spinner from "../../Common/spinner";
+import { GENDERCHOICES } from "../../ConstantUtils/constants";
 
 CustomerDetail.propTypes = {};
 
@@ -68,6 +70,17 @@ function CustomerDetail() {
             requiredName={"phone_number"}
             optionalMaxLengthForTextType={12}
             requiredIsRequired={true}
+          />
+          <SelectField
+            requiredColWidth={4}
+            requiredLbl={"Giới tính"}
+            requiredIsRequired={true}
+            requiredRegister={register}
+            requiredName={"gender"}
+            requiredDataOption={GENDERCHOICES}
+            optionalLblSelect="Chọn giới tính"
+            requiredValueOption={(ele) => `${ele.value}`}
+            requiredLblOption={(ele) => `${ele.label}`}
           />
         </div>
         <div className="table-responsive">
