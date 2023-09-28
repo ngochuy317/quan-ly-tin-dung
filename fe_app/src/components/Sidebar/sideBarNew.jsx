@@ -14,12 +14,11 @@ import {
   dataItemSideBarForEmployee,
 } from "../ConstantUtils/sideBarConstants";
 import { useBreakpoints } from "../../hooks/useBreakpoint";
+import {AuthContext} from "../Dashboard/dashboard";
 
 function SideBarNew() {
-  // const { role, username } = React.useContext(AuthContext);
-  const screenSize = useBreakpoints()
-  const role = 1
-  const username = "nva"
+  const { role, username } = React.useContext(AuthContext);
+  const screenSize = useBreakpoints();
   const dataItemSideBar = {
     1: dataItemSideBarForAdmin,
     2: dataItemSideBarForEmployee,
@@ -27,22 +26,38 @@ function SideBarNew() {
   const [hideSideBar, sethideSideBar] = useState(true);
 
   const handleClick = () => {
-    console.log("click", screenSize)
-    if (screenSize !== 'xs') {
+    if (screenSize !== "xs") {
       return;
     }
-    sethideSideBar(!hideSideBar)
-  }
+    sethideSideBar(!hideSideBar);
+  };
 
-  if (screenSize === 'xs' && hideSideBar) {
-    return <div style={{zIndex: 5}} className="btn py-4 position-absolute z-index-5" onClick={handleClick}>
-      <i
-        className="fa fa-bars" />
-    </div>
+  if (screenSize === "xs" && hideSideBar) {
+    return (
+      <div
+        style={{ zIndex: 5 }}
+        className="py-4 min-vh-100 position-fixed"
+      >
+        <div
+          onClick={handleClick}
+          className="sticky-top btn bg-info z-index-5"
+        >
+          <i className="fa fa-bars" />
+        </div>
+      </div>
+    );
   }
 
   return (
-    <CDBSidebar onClick={handleClick} toggled={screenSize === 'xs' && hideSideBar} className={`min-vh-100 ${screenSize === 'xs' ? 'position-absolute' : undefined}`} textColor="#fff" backgroundColor="#333">
+    <CDBSidebar
+      onClick={handleClick}
+      toggled={screenSize === "xs" && hideSideBar}
+      className={`min-vh-100 ${
+        screenSize === "xs" ? "position-fixed" : undefined
+      }`}
+      textColor="#fff"
+      backgroundColor="#333"
+    >
       <CDBSidebarHeader prefix={<i className="fa fa-bars" />}>
         <div>{username}</div>
         <div>{ROLES.find((c) => c.roleKey === role)?.roleName}</div>
