@@ -1,6 +1,7 @@
-import React from "react";
 import PropTypes from "prop-types";
 import RequiredSymbol from "./requiredSymbol";
+import React, { useState, useEffect } from "react";
+import { useForm } from "react-hook-form";
 
 FileInputField.propTypes = {
   requiredColWidth: PropTypes.number.isRequired,
@@ -24,8 +25,20 @@ function FileInputField(props) {
     requiredName,
     requiredIsRequired,
     optionalOnChangeInputFile,
-    optionalAccept
+    optionalAccept,
   } = props;
+
+  const [imageUrls, setimageUrls] = useState("");
+
+  const onFileInputChange = (e) => {
+    const fileList = e.target.files;
+    if (!fileList.length) {
+      return;
+    }
+    setimageUrls(URL.createObjectURL(fileList[0]));
+    optionalOnChangeInputFile?.();
+  };
+
   return (
     <div className={`col-md-${requiredColWidth}`}>
       <div className="mb-3">
@@ -38,9 +51,13 @@ function FileInputField(props) {
           type="file"
           className="form-control"
           required={requiredIsRequired}
-          onChange={optionalOnChangeInputFile}
+          onChange={(e) => onFileInputChange(e)}
           accept={optionalAccept}
         />
+
+        {imageUrls && (
+          <img className="w-100 h-100 py-3 object-fit-cover" src={imageUrls} />
+        )}
       </div>
     </div>
   );
