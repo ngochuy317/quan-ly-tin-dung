@@ -302,14 +302,14 @@ function SwipeCardDetail() {
             requiredLbl="Tên"
             requiredType="text"
             requiredRegister={register}
-            requiredName={"creditcard.customer.name"}
+            requiredName={"customer.name"}
           />
           <SelectField
             requiredColWidth={2}
             requiredLbl="Giới tính"
             requiredIsRequired={true}
             requiredRegister={register}
-            requiredName={"creditcard.customer.gender"}
+            requiredName={"customer.gender"}
             requiredDataOption={GENDERCHOICES}
             optionalLblSelect="Chọn giới tính"
             requiredValueOption={(ele) => `${ele.value}`}
@@ -321,7 +321,7 @@ function SwipeCardDetail() {
                 Số điện thoại <FaAsterisk color="red" size=".7em" />
               </label>
               <input
-                {...register("creditcard.customer.phone_number")}
+                {...register("customer.phone_number")}
                 type="tel"
                 className="form-control"
                 required
@@ -349,7 +349,7 @@ function SwipeCardDetail() {
             requiredLbl="Số TK nhận tiền"
             requiredType="text"
             requiredRegister={register}
-            requiredName={"account_number"}
+            requiredName={"customer.bank_account.account_number"}
           />
 
           <InputField
@@ -357,7 +357,7 @@ function SwipeCardDetail() {
             requiredLbl="Ngân hàng"
             requiredType="text"
             requiredRegister={register}
-            requiredName={"bank_name"}
+            requiredName={"customer.bank_account.bank_name"}
           />
         </div>
         <div className="row"></div>

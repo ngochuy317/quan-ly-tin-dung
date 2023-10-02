@@ -2,6 +2,7 @@ export const ADMIN = 1;
 export const EMPLOYEE = 2;
 export const MAMANGER = 3;
 export const ACCOUNTANT = 4;
+export const CHIEF_ACCOUNTANT = 5;
 
 export const ROLES = [
   {
@@ -19,6 +20,10 @@ export const ROLES = [
   {
     roleKey: ACCOUNTANT,
     roleName: "Kế toán",
+  },
+  {
+    roleKey: CHIEF_ACCOUNTANT,
+    roleName: "Kế toán trưởng",
   },
 ];
 

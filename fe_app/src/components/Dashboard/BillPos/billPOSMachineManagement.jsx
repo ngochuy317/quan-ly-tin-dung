@@ -308,6 +308,7 @@ function BillPOSMachineMangement() {
                   >
                     Xem
                   </Link>
+                  <img src={billPos.bill_image} alt="" width="50" height="50" />
                 </td>
                 <td>{billPos.total_money?.toLocaleString("vn")}</td>
                 <td>{billPos.ref_no}</td>

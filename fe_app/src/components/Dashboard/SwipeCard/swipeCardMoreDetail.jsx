@@ -356,7 +356,7 @@ function SwipeCardMoreDetail() {
             requiredLbl="Số TK nhận tiền"
             requiredType="text"
             requiredRegister={register}
-            requiredName={"account_number"}
+            requiredName={"customer.bank_account.account_number"}
             optionalDisabled={!isManualInputCustomerData}
           />
 
@@ -365,7 +365,7 @@ function SwipeCardMoreDetail() {
             requiredLbl="Ngân hàng"
             requiredType="text"
             requiredRegister={register}
-            requiredName={"bank_name"}
+            requiredName={"customer.bank_account.bank_name"}
             optionalDisabled={!isManualInputCustomerData}
           />
         </div>

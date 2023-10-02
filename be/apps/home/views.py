@@ -141,8 +141,8 @@ class SwipeCardTransactionDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestr
             return
         for billpos in billposes:
             try:
-                billpos["pos"] = billpos.get("pos", {}).get("id")
                 if billpos.get("exist", False) == "true":
+                    billpos["pos"] = billpos.get("pos", {}).get("id")
                     obj_billposes = BillPos.objects.filter(id=billpos.get("id")).first()
                     if obj_billposes:
                         serializer = BillPosUpdateSerializer(obj_billposes, data=billpos)

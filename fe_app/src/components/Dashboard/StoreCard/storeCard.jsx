@@ -31,7 +31,6 @@ function StoreCard() {
   const [rowNotebooks, setRowNotebooks] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const [isManualInput, setIsManualInput] = useState(false);
   const [hrefCreditCardBackImage, setHrefCreditCardBackImage] = useState("");
   const [hrefCreditCardFrontImage, setHrefCreditCardFrontImage] = useState("");
   const [hrefIDBackImage, setHrefIDBackImage] = useState("");
@@ -111,10 +110,7 @@ function StoreCard() {
       setValue("creditcard.customer.phone_number", card.customer.phone_number);
 
       if (card?.id_card_back_image) {
-        setValue(
-          "creditcard.id_card_back_image",
-          card.id_card_back_image
-        );
+        setValue("creditcard.id_card_back_image", card.id_card_back_image);
         setHrefIDBackImage(card.id_card_back_image);
       }
       if (card?.credit_card_front_image) {
@@ -159,10 +155,7 @@ function StoreCard() {
     }
   };
 
-  const handleOnChangeManualInput = (e) => {
-    let check = e.target.checked;
-    setIsManualInput(check);
-  };
+  const handleOnChangeManualInput = (e) => {};
 
   const handleOnChangeClosingBalance = (e) => {
     let val = e.target.value?.replaceAll(",", "");
@@ -349,7 +342,6 @@ function StoreCard() {
             requiredRegister={register}
             requiredName={"creditcard.customer.phone_number"}
             requiredIsRequired={true}
-            optionalDisabled={!isManualInput}
           />
           <InputField
             requiredColWidth={2}
@@ -358,7 +350,6 @@ function StoreCard() {
             requiredRegister={register}
             requiredName={"creditcard.customer.bank_account.account_number"}
             requiredIsRequired={true}
-            optionalDisabled={!isManualInput}
           />
           <InputField
             requiredColWidth={2}
@@ -367,7 +358,6 @@ function StoreCard() {
             requiredRegister={register}
             requiredName={"creditcard.customer.bank_account.bank_name"}
             requiredIsRequired={true}
-            optionalDisabled={!isManualInput}
           />
         </div>
         <h5>Thông tin thẻ</h5>
@@ -415,7 +405,6 @@ function StoreCard() {
             requiredRegister={register}
             requiredName="creditcard.card_bank_name"
             requiredIsRequired={true}
-            optionalDisabled={!isManualInput}
           />
           <InputField
             requiredColWidth={2}
@@ -424,7 +413,6 @@ function StoreCard() {
             requiredRegister={register}
             requiredName="creditcard.line_of_credit"
             requiredIsRequired={true}
-            optionalDisabled={!isManualInput}
           />
           <InputField
             requiredColWidth={2}
@@ -433,7 +421,6 @@ function StoreCard() {
             requiredRegister={register}
             requiredName="fee"
             requiredIsRequired={true}
-            optionalDisabled={!isManualInput}
           />
         </div>
         <div className="row">
@@ -444,7 +431,6 @@ function StoreCard() {
             requiredRegister={register}
             requiredName="creditcard.card_name"
             requiredIsRequired={true}
-            optionalDisabled={!isManualInput}
           />
           <InputField
             requiredColWidth={3}
@@ -453,7 +439,6 @@ function StoreCard() {
             requiredRegister={register}
             requiredName="creditcard.card_issued_date"
             requiredIsRequired={true}
-            optionalDisabled={!isManualInput}
           />
           <InputField
             requiredColWidth={3}
@@ -462,7 +447,6 @@ function StoreCard() {
             requiredRegister={register}
             requiredName="creditcard.card_expire_date"
             requiredIsRequired={true}
-            optionalDisabled={!isManualInput}
           />
           <InputField
             requiredColWidth={2}
@@ -471,7 +455,6 @@ function StoreCard() {
             requiredRegister={register}
             requiredName="creditcard.card_ccv"
             requiredIsRequired={true}
-            optionalDisabled={!isManualInput}
             optionalMaxLengthForTextType={3}
           />
         </div>
@@ -483,7 +466,6 @@ function StoreCard() {
             requiredRegister={register}
             requiredName="creditcard.statement_date"
             requiredIsRequired={true}
-            optionalDisabled={!isManualInput}
           />
           <InputField
             requiredColWidth={3}
@@ -492,7 +474,6 @@ function StoreCard() {
             requiredRegister={register}
             requiredName="creditcard.maturity_date"
             requiredIsRequired={true}
-            optionalDisabled={!isManualInput}
           />
           <div className="col-md-3">
             <div className="mb-3">
@@ -509,14 +490,11 @@ function StoreCard() {
               ) : (
                 <span>Không có hình</span>
               )}
-              {isManualInput && (
-                <input
-                  {...register("creditcard.credit_card_front_image")}
-                  type="file"
-                  className="form-control"
-                  disabled={!isManualInput}
-                />
-              )}
+              <input
+                {...register("creditcard.credit_card_front_image")}
+                type="file"
+                className="form-control"
+              />
             </div>
           </div>
           <div className="col-md-3">
@@ -533,14 +511,11 @@ function StoreCard() {
               ) : (
                 <span>Không có hình</span>
               )}
-              {isManualInput && (
-                <input
-                  {...register("creditcard.credit_card_back_image")}
-                  type="file"
-                  className="form-control"
-                  disabled={!isManualInput}
-                />
-              )}
+              <input
+                {...register("creditcard.credit_card_back_image")}
+                type="file"
+                className="form-control"
+              />
             </div>
           </div>
         </div>
@@ -558,15 +533,12 @@ function StoreCard() {
               ) : (
                 <span>Không có hình</span>
               )}
-              {isManualInput && (
                 <input
                   {...register("creditcard.id_card_front_image")}
                   type="file"
                   className="form-control"
-                  disabled={!isManualInput}
                   accept={INPUTIMAGETYPEACCEPT}
                 />
-              )}
             </div>
           </div>
           <div className="col-md-4">
@@ -581,15 +553,12 @@ function StoreCard() {
               ) : (
                 <span>Không có hình</span>
               )}
-              {isManualInput && (
                 <input
                   {...register("creditcard.id_card_back_image")}
                   type="file"
                   className="form-control"
-                  disabled={!isManualInput}
                   accept={INPUTIMAGETYPEACCEPT}
                 />
-              )}
             </div>
           </div>
           <div className="col-md-1">

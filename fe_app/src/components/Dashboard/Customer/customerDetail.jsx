@@ -83,6 +83,24 @@ function CustomerDetail() {
             requiredLblOption={(ele) => `${ele.label}`}
           />
         </div>
+        <div className="row">
+        <InputField
+            requiredColWidth={4}
+            requiredLbl="Số tài khoản ngân hàng"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName={"bank_account.account_number"}
+            requiredIsRequired={true}
+          />
+        <InputField
+            requiredColWidth={4}
+            requiredLbl="Ngân hàng"
+            requiredType="text"
+            requiredRegister={register}
+            requiredName={"bank_account.bank_name"}
+            requiredIsRequired={true}
+          />
+        </div>
         <div className="table-responsive">
           <table className="table">
             <thead>

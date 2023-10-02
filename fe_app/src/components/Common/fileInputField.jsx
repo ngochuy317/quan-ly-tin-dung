@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
+import React, { useState } from "react";
 import RequiredSymbol from "./requiredSymbol";
-import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
 
 FileInputField.propTypes = {
   requiredColWidth: PropTypes.number.isRequired,
@@ -56,7 +55,11 @@ function FileInputField(props) {
         />
 
         {imageUrls && (
-          <img className="w-100 h-100 py-3 object-fit-cover" src={imageUrls} />
+          <img
+            className="w-100 h-100 py-3 object-fit-cover"
+            src={imageUrls}
+            alt=""
+          />
         )}
       </div>
     </div>

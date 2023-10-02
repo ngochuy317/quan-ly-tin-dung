@@ -7,11 +7,13 @@ ADMIN = 1
 EMPLOYEE = 2
 MAMANGER = 3
 ACCOUNTANT = 4
+CHIEF_ACCOUNTANT = 5
 ROLE_CHOICES = (
     (ADMIN, "Admin"),
     (EMPLOYEE, "Nhân viên"),
     (MAMANGER, "Quản lý"),
     (ACCOUNTANT, "Kế toán"),
+    (CHIEF_ACCOUNTANT, "Kế toán trưởng"),
 )
 
 Y_M_D_FORMAT = "%Y-%m-%d"

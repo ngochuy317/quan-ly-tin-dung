@@ -2,7 +2,7 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 from rest_framework import serializers
-from .models import CreditCard, Customer
+from .models import BankAccount, CreditCard, Customer
 
 
 class CreditCardCustomerRetrieveUpdateSerializer(serializers.Serializer):
@@ -28,7 +28,14 @@ class CustomerRetrieveUpdateSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
     def update(self, instance, validated_data):
-
+        bank_account = validated_data.pop("bank_account", None)
+        if bank_account:
+            bank_account_obj = BankAccount.objects.filter(id=bank_account.pop("id", None)).first()
+            if bank_account_obj:
+                for attr, value in bank_account.items():
+                    setattr(bank_account_obj, attr, value)
+                bank_account_obj.save()
+            instance.bank_account = bank_account_obj
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
