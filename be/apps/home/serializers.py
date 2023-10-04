@@ -299,6 +299,17 @@ class BillPosSwipeCardDetailSerializer(BillPosSerializer):
         fields = "__all__"
 
 
+class BillPOSListBySwipeCardTransactionIdAPIView(serializers.Serializer):
+    id = serializers.IntegerField()
+    bill_image = serializers.SerializerMethodField()
+    total_money = serializers.IntegerField()
+
+    def get_bill_image(self, obj):
+        if obj.bill_image:
+            return self.context["request"].build_absolute_uri(obj.bill_image.url)
+        return ""
+
+
 class BillPosUpdateSerializer(serializers.ModelSerializer):
 
     exist = serializers.BooleanField(required=False)

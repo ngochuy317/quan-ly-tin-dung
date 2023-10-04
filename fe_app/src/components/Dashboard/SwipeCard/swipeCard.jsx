@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import posApi from "../../../api/posAPI";
 import storeApi from "../../../api/storeAPI";
 import swipeCardTransactionAPI from "../../../api/swipeCardTransactionAPI";
 import userApi from "../../../api/userAPI";
@@ -12,6 +13,7 @@ import {
   TRANSACTIONTYPE,
 } from "../../ConstantUtils/constants";
 import { AuthContext } from "../../Dashboard/dashboard";
+import ViewBillPOSMachineModal from "../../Modal/viewBillPOSMachineModal";
 import Pagination from "../../Pagination/pagination";
 import SwipeCardInput from "./swipeCardInput";
 
@@ -26,6 +28,8 @@ function SwipeCard() {
   const [posMachine, setPOSMachine] = useState([]);
   const [initData, setInitData] = useState({});
   const [canAddForm, setCanAddForm] = useState(false);
+  const [showModalBillPOSInfo, setShowModalBillPOSInfo] = useState(false);
+  const [billPOSData, setBillPOSData] = useState([]);
   const posMachineRef = useRef();
   posMachineRef.current = posMachine;
 
@@ -34,6 +38,27 @@ function SwipeCard() {
 
   const { role = "" } = React.useContext(AuthContext);
 
+  const handleCloseModalBillPOSInfo = () => setShowModalBillPOSInfo(false);
+  const handleShowModalBillPOSInfo = () => setShowModalBillPOSInfo(true);
+
+  const handleOnClickShowBillPOSInfoBtn = async (swipeCardId) => {
+    try {
+      const responseGetBillPOS = await posApi.filterBySwipeCardTransactionId(
+        swipeCardId
+      );
+      console.log(
+        "Fetch bill POS by swipecard transaction id successfully",
+        responseGetBillPOS
+      );
+      setBillPOSData([...responseGetBillPOS]);
+      handleShowModalBillPOSInfo();
+    } catch (error) {
+      console.log(
+        "Failed to fetch bill POS by swipecard transaction id",
+        error
+      );
+    }
+  };
   useEffect(() => {
     async function initData() {
       try {
@@ -223,6 +248,7 @@ function SwipeCard() {
               <th scope="col">#</th>
               <th scope="col">Ngày giao dịch</th>
               <th scope="col">Tên trên thẻ</th>
+              <th scope="col">BillPOS</th>
               <th scope="col">Số thẻ</th>
               <th scope="col">Số tiền KH cần</th>
               <th scope="col">Tên khách hàng</th>
@@ -241,9 +267,20 @@ function SwipeCard() {
                 <td>{swipeCard.transaction_datetime_created}</td>
                 <td>{swipeCard.creditcard?.card_name}</td>
                 <td>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      handleOnClickShowBillPOSInfoBtn(swipeCard.id)
+                    }
+                    className="btn btn-outline-primary mx-3"
+                  >
+                    Xem
+                  </button>
+                </td>
+                <td>
                   <Link>{swipeCard.creditcard?.card_number}</Link>
                 </td>
-                <td>{swipeCard.customer_money_needed}</td>
+                <td>{swipeCard.customer_money_needed?.toLocaleString("vn")}</td>
                 <td>{swipeCard.creditcard?.customer.name}</td>
                 <td>{swipeCard.creditcard?.customer.phone_number}</td>
                 <td>
@@ -277,6 +314,11 @@ function SwipeCard() {
           </tbody>
         </table>
       </div>
+      <ViewBillPOSMachineModal
+        requiredShow={showModalBillPOSInfo}
+        requiredHandleClose={handleCloseModalBillPOSInfo}
+        requiredBillPOSData={billPOSData}
+      />
       <Pagination
         canBedisabled={responseSwipeCardData?.results?.length ? false : true}
         currentPage={currentPage}

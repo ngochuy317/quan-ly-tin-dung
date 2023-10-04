@@ -14,6 +14,10 @@ class PosApi {
     return axiosClient.get(url);
   };
 
+  filterBySwipeCardTransactionId = (id) => {
+    return axiosClient.get(`swipecardtransaction/${id}/billpos/`);
+  };
+
   getDetail = (id) => {
     const url = this.posBaseUrl + id + "/";
     return axiosClient.get(url);

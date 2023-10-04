@@ -23,6 +23,7 @@ from .filters import CreditCardManagementFilter, NotebookFilter, SwipeCardTransa
 from .pagination import SwipeCardTransactionPageNumberPagination
 from .serializers import (
     AllTransaction4CreditCardSerializer,
+    BillPOSListBySwipeCardTransactionIdAPIView,
     BillPosSerializer,
     BillPosUpdateSerializer,
     CreateRowNotebookSerializer,
@@ -113,6 +114,16 @@ class ProductListCreateAPIView(ListCreateAPIView):
     serializer_class = ProductSerializer
     pagination_class = CustomPageNumberPagination
     permission_classes = [IsAdmin]
+
+
+class BillPOSListBySwipeCardTransactionIdAPIView(ListCreateAPIView):
+
+    serializer_class = BillPOSListBySwipeCardTransactionIdAPIView
+    permission_classes = [IsAdmin]
+
+    def get_queryset(self):
+        print(self.kwargs["pk"])
+        return BillPos.objects.filter(transaction__id=self.kwargs["pk"])
 
 
 class SwipeCardTransactionDetailRetrieveUpdateDestroyAPIView(RetrieveUpdateDestroyAPIView):

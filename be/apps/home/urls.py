@@ -4,6 +4,7 @@ from __future__ import absolute_import, print_function, unicode_literals
 from django.urls import path
 from .views import (
     AllTransaction4CreditCardAPIView,
+    BillPOSListBySwipeCardTransactionIdAPIView,
     CreditCardManagementAPIView,
     EmployeeDetailRetrieveUpdateDestroyAPIView,
     EmployeesListCreateAPIView,
@@ -64,6 +65,11 @@ urlpatterns = [
         name="swipe-card-transaction-report",
     ),
     path("api/totalmoneytoday/", TotalMoneyTodayAPIView.as_view(), name="total-money-today"),
+    path(
+        "api/swipecardtransaction/<pk>/billpos/",
+        BillPOSListBySwipeCardTransactionIdAPIView.as_view(),
+        name="get-bill-pos-by-swipe-card-transaction-id",
+    ),
     path(
         "api/swipecardtransaction/<pk>/",
         SwipeCardTransactionDetailRetrieveUpdateDestroyAPIView.as_view(),
