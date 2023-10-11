@@ -161,4 +161,11 @@ export const dataItemSideBarForAdmin = [
     role: [ADMIN],
     private: true,
   },
+  {
+    id: 16,
+    name: "D.sach thẻ lưu",
+    icon: "list",
+    path: "/dashboard/savedcreditcardlist",
+    role: [ADMIN, EMPLOYEE],
+  },
 ];

@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import BillPOSMachineMangement from "./components/Dashboard/BillPos/billPOSMachineManagement";
 import CardManagement from "./components/Dashboard/CardManagement/cardManagement";
 import CreditCardDetail from "./components/Dashboard/CardManagement/creditcardDetail";
+import SavedCreditCardList from "./components/Dashboard/CardManagement/savedCreditCardList";
 import CustomerDetail from "./components/Dashboard/Customer/customerDetail";
 import CustomerList from "./components/Dashboard/Customer/customerList";
 import NewEmployee from "./components/Dashboard/Employees/addNewEmployee";
@@ -75,6 +76,7 @@ function RoutesApp() {
       />
       <Route path="/customermanagement" element={<CustomerList />} />
       <Route path="/customermanagement/:id" element={<CustomerDetail />} />
+      <Route path="/savedcreditcardlist/" element={<SavedCreditCardList />} />
     </Routes>
   );
 }

@@ -19,7 +19,6 @@ import {
   STATUSOFCARD,
 } from "../../ConstantUtils/constants";
 import { AuthContext } from "../../Dashboard/dashboard";
-import Pagination from "../../Pagination/pagination";
 
 function StoreCard() {
   const { register, handleSubmit, reset, formState, setValue } = useForm();
@@ -29,16 +28,13 @@ function StoreCard() {
   const [params, setParams] = useState({ page: 1 });
   const [dataListCardNumber, setDataListCardNumber] = useState([]);
   const [rowNotebooks, setRowNotebooks] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
 
   const [hrefCreditCardBackImage, setHrefCreditCardBackImage] = useState("");
   const [hrefCreditCardFrontImage, setHrefCreditCardFrontImage] = useState("");
   const [hrefIDBackImage, setHrefIDBackImage] = useState("");
   const [hrefIDFrontImage, setHrefIDFrontImage] = useState("");
   const [searchCreditCard, setSearchCreditCard] = useState("");
-  // const [currentPage, setCurrentPage] = useState(1);
   const [maxLengthOrderInNotebook, setMaxLengthOrderInNotebook] = useState(0);
-  // const [params, setParams] = useState({ page: 1 });
   const navigate = useNavigate();
   const { role = "" } = useContext(AuthContext);
 
@@ -72,11 +68,6 @@ function StoreCard() {
 
     callAPIInit();
   }, [role]); // eslint-disable-line
-
-  const handleChangePage = (direction) => {
-    setParams({ page: currentPage + direction });
-    setCurrentPage(currentPage + direction);
-  };
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(async () => {
@@ -154,9 +145,6 @@ function StoreCard() {
       }
     }
   };
-
-  const handleOnChangeManualInput = (e) => {};
-
   const handleOnChangeClosingBalance = (e) => {
     let val = e.target.value?.replaceAll(",", "");
     setValue("closing_balance", val);
@@ -361,20 +349,6 @@ function StoreCard() {
           />
         </div>
         <h5>Thông tin thẻ</h5>
-        <div className="form-check form-switch">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            id="flexSwitchCheckManualInput"
-            onChange={handleOnChangeManualInput}
-          />
-          <label
-            className="form-check-label"
-            htmlFor="flexSwitchCheckManualInput"
-          >
-            Nhập bằng tay
-          </label>
-        </div>
         <div className="row">
           <div className="col-md-4">
             <div className="mb-3">
@@ -533,12 +507,12 @@ function StoreCard() {
               ) : (
                 <span>Không có hình</span>
               )}
-                <input
-                  {...register("creditcard.id_card_front_image")}
-                  type="file"
-                  className="form-control"
-                  accept={INPUTIMAGETYPEACCEPT}
-                />
+              <input
+                {...register("creditcard.id_card_front_image")}
+                type="file"
+                className="form-control"
+                accept={INPUTIMAGETYPEACCEPT}
+              />
             </div>
           </div>
           <div className="col-md-4">
@@ -553,12 +527,12 @@ function StoreCard() {
               ) : (
                 <span>Không có hình</span>
               )}
-                <input
-                  {...register("creditcard.id_card_back_image")}
-                  type="file"
-                  className="form-control"
-                  accept={INPUTIMAGETYPEACCEPT}
-                />
+              <input
+                {...register("creditcard.id_card_back_image")}
+                type="file"
+                className="form-control"
+                accept={INPUTIMAGETYPEACCEPT}
+              />
             </div>
           </div>
           <div className="col-md-1">
@@ -677,43 +651,6 @@ function StoreCard() {
             Lưu
           </button>
         </div>
-        <h2 className="text-center">Danh sách thẻ</h2>
-        <div className="table-responsive">
-          <table className="table">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Trạng thái</th>
-                <th scope="col">Ngày giờ lưu</th>
-                <th scope="col">Số dư cuối kì</th>
-                <th scope="col">Đã đáo</th>
-                <th scope="col">Ngày cuối</th>
-                <th scope="col">Tiền về</th>
-                <th scope="col">Ghi chú</th>
-              </tr>
-            </thead>
-            <tbody className="table-group-divider">
-              {rowNotebooks?.map((rowNotebook, index) => (
-                <tr key={rowNotebook.id}>
-                  <th scope="row">{index + 1}</th>
-                  <td>{rowNotebook.status}</td>
-                  <td>{rowNotebook.storage_datetime}</td>
-                  <td>{rowNotebook.closing_balance}</td>
-                  <td>{rowNotebook.closing_balance}</td>
-                  <td>{rowNotebook.last_date}</td>
-                  <td>{rowNotebook.is_payment_received}</td>
-                  <td>{rowNotebook.note}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <Pagination
-          canBedisabled={rowNotebooks?.results?.length ? false : true}
-          currentPage={currentPage}
-          totalPages={rowNotebooks.total_pages}
-          handleChangePage={handleChangePage}
-        />
       </form>
     </div>
   );
