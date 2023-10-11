@@ -2,6 +2,7 @@ import {
   CDBBadge,
   CDBSidebar,
   CDBSidebarContent,
+  CDBSidebarFooter,
   CDBSidebarHeader,
   CDBSidebarMenu,
   CDBSidebarMenuItem,
@@ -9,12 +10,12 @@ import {
 import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { ROLES } from "../../components/ConstantUtils/constants";
+import { useBreakpoints } from "../../hooks/useBreakpoint";
 import {
   dataItemSideBarForAdmin,
   dataItemSideBarForEmployee,
 } from "../ConstantUtils/sideBarConstants";
-import { useBreakpoints } from "../../hooks/useBreakpoint";
-import {AuthContext} from "../Dashboard/dashboard";
+import { AuthContext } from "../Dashboard/dashboard";
 
 function SideBarNew() {
   const { role, username } = React.useContext(AuthContext);
@@ -34,14 +35,8 @@ function SideBarNew() {
 
   if (screenSize === "xs" && hideSideBar) {
     return (
-      <div
-        style={{ zIndex: 5 }}
-        className="py-4 min-vh-100 position-fixed"
-      >
-        <div
-          onClick={handleClick}
-          className="sticky-top btn bg-info z-index-5"
-        >
+      <div style={{ zIndex: 5 }} className="py-4 min-vh-100 position-fixed">
+        <div onClick={handleClick} className="sticky-top btn bg-info z-index-5">
           <i className="fa fa-bars" />
         </div>
       </div>
@@ -93,11 +88,11 @@ function SideBarNew() {
         </CDBSidebarMenu>
       </CDBSidebarContent>
 
-      {/* <CDBSidebarFooter style={{ textAlign: "center" }}>
+      <CDBSidebarFooter style={{ textAlign: "center" }}>
         <div className="sidebar-btn-wrapper" style={{ padding: "20px 5px" }}>
-          Quản lý tín dụng
+          @QuanLyTinDung
         </div>
-      </CDBSidebarFooter> */}
+      </CDBSidebarFooter>
     </CDBSidebar>
   );
 }
