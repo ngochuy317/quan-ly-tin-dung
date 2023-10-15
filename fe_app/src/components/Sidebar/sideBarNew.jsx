@@ -89,6 +89,8 @@ function SideBarNew() {
       </CDBSidebarContent>
 
       <CDBSidebarFooter style={{ textAlign: "center" }}>
+        <br></br>
+        <br></br>
         <div className="sidebar-btn-wrapper" style={{ padding: "20px 5px" }}>
           @QuanLyTinDung
         </div>

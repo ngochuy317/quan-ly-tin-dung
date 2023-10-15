@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import creditCardApi from "../../../api/creditCardAPI";
 import storeApi from "../../../api/storeAPI";
 import RequiredSymbol from "../../Common/requiredSymbol";
 import Pagination from "../../Pagination/pagination";
@@ -19,9 +20,10 @@ function SavedCreditCardList() {
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [viewBtnEnable, setViewBtnEnable] = useState(false);
-  const [rowNotebooks, setRowNotebooks] = useState([]);
+  const [rowNotebooks, setRowNotebooks] = useState();
   const [stores, setStores] = useState([]);
   const [params, setParams] = useState({ page: 1 });
+  const [datasFilter, setDatasFilter] = useState({});
 
   useEffect(() => {
     async function fetchListStore() {
@@ -69,12 +71,43 @@ function SavedCreditCardList() {
     }
   };
 
-  const handleChangePage = (direction) => {
+  const handleChangePage = async (direction) => {
     setParams({ page: currentPage + direction });
     setCurrentPage(currentPage + direction);
+    try {
+      const response = await creditCardApi.rowNotebookManagement({
+        ...datasFilter,
+        page: currentPage + direction,
+      });
+      console.log(
+        "🚀 ~ file: savedCreditCardList.jsx:87 ~ onSubmit ~ response:",
+        response
+      );
+      setRowNotebooks(response);
+    } catch (error) {
+      console.log("Failed to List Saved Creditcard", error);
+    }
   };
 
-  const onSubmit = async (data) => {};
+  const onSubmit = async (data) => {
+    try {
+      if (data.store_id === "all") {
+        data.store_id = 0;
+      }
+      setDatasFilter({ ...data });
+      const response = await creditCardApi.rowNotebookManagement({
+        ...data,
+        ...params,
+      });
+      console.log(
+        "🚀 ~ file: savedCreditCardList.jsx:87 ~ onSubmit ~ response:",
+        response
+      );
+      setRowNotebooks(response);
+    } catch (error) {
+      console.log("Failed to List Saved Creditcard", error);
+    }
+  };
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -89,7 +122,7 @@ function SavedCreditCardList() {
                   onChange={handleOnChangeStore}
                   required
                 >
-                  <option value="">Chọn cửa hàng</option>
+                  <option>Chọn cửa hàng</option>
                   <option value="all">Tất cả</option>
 
                   {stores?.map((store) => (
@@ -167,40 +200,44 @@ function SavedCreditCardList() {
         </div>
       </form>
       <h2 className="text-center">Dach sách thẻ đã lưu</h2>
-      <div className="table-responsive">
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Trạng thái</th>
-              <th scope="col">Ngày giờ lưu</th>
-              <th scope="col">Số dư cuối kì</th>
-              <th scope="col">Đã đáo</th>
-              <th scope="col">Ngày cuối</th>
-              <th scope="col">Tiền về</th>
-              <th scope="col">Ghi chú</th>
-            </tr>
-          </thead>
-          <tbody className="table-group-divider">
-            {rowNotebooks?.map((rowNotebook, index) => (
-              <tr key={rowNotebook.id}>
-                <th scope="row">{index + 1}</th>
-                <td>{rowNotebook.status}</td>
-                <td>{rowNotebook.storage_datetime}</td>
-                <td>{rowNotebook.closing_balance}</td>
-                <td>{rowNotebook.closing_balance}</td>
-                <td>{rowNotebook.last_date}</td>
-                <td>{rowNotebook.is_payment_received}</td>
-                <td>{rowNotebook.note}</td>
+      {rowNotebooks && rowNotebooks.results ? (
+        <div className="table-responsive">
+          <table className="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Trạng thái</th>
+                <th scope="col">Ngày giờ lưu</th>
+                <th scope="col">Số dư cuối kì</th>
+                <th scope="col">Đã đáo</th>
+                <th scope="col">Ngày cuối</th>
+                <th scope="col">Tiền về</th>
+                <th scope="col">Ghi chú</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody className="table-group-divider">
+              {rowNotebooks.results.map((rowNotebook, index) => (
+                <tr key={rowNotebook.id}>
+                  <th scope="row">{index + 1}</th>
+                  <td>{rowNotebook.status}</td>
+                  <td>{rowNotebook.storage_datetime}</td>
+                  <td>{rowNotebook.closing_balance}</td>
+                  <td>{rowNotebook.closing_balance}</td>
+                  <td>{rowNotebook.last_date}</td>
+                  <td>{rowNotebook.is_payment_received}</td>
+                  <td>{rowNotebook.note}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <h6 className="text-center">Không có dữ liệu</h6>
+      )}
       <Pagination
         canBedisabled={rowNotebooks?.results?.length ? false : true}
         currentPage={currentPage}
-        totalPages={rowNotebooks.total_pages}
+        totalPages={rowNotebooks?.total_pages}
         handleChangePage={handleChangePage}
       />
     </div>

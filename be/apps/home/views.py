@@ -19,7 +19,7 @@ from rest_framework.generics import ListAPIView, ListCreateAPIView, RetrieveAPIV
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .filters import CreditCardManagementFilter, NotebookFilter, SwipeCardTransactionFilter
+from .filters import CreditCardManagementFilter, NotebookFilter, RowNotebookManagementFilter, SwipeCardTransactionFilter
 from .pagination import SwipeCardTransactionPageNumberPagination
 from .serializers import (
     AllTransaction4CreditCardSerializer,
@@ -33,6 +33,7 @@ from .serializers import (
     POSSerializer,
     POSSerializerDetail,
     ProductSerializer,
+    RowNotebookManagementModelSerializer,
     StoreCostSerializer,
     StoreInformationDetailSerializer,
     StorePOSOnlySerializer,
@@ -461,6 +462,14 @@ class RowNotebookAPIView(APIView):
             serializer.save()
             return Response(status=status.HTTP_201_CREATED)
         return Response(PARSE_ERROR_MSG, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RowNotebookManagementListAPIView(ListAPIView):
+
+    queryset = RowNotebook.objects.all()
+    serializer_class = RowNotebookManagementModelSerializer
+    pagination_class = CustomPageNumberPagination
+    filterset_class = RowNotebookManagementFilter
 
 
 class RowNotebookListAPIView(APIView):

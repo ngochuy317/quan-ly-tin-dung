@@ -23,3 +23,13 @@ class NotebookFilter(filters.FilterSet):
 
 class CreditCardManagementFilter(filters.FilterSet):
     card_number = filters.CharFilter(field_name="creditcard__card_number", lookup_expr="icontains")
+
+
+class RowNotebookManagementFilter(filters.FilterSet):
+    store_id = filters.NumberFilter(method="store_filter")
+
+    def store_filter(self, queryset, name, value):
+        print("value", value)
+        if value:
+            return queryset.filter(notebook__store__id=value)
+        return queryset

@@ -171,6 +171,12 @@ class GetRowNotebookSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class RowNotebookManagementModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RowNotebook
+        fields = "__all__"
+
+
 class CreateRowNotebookSerializer(serializers.ModelSerializer):
     """
     For Post method

@@ -19,6 +19,7 @@ from .views import (
     ProductRetrieveUpdateDestroyAPIView,
     RowNotebookAPIView,
     RowNotebookListAPIView,
+    RowNotebookManagementListAPIView,
     StoreCostCreateAPIView,
     StoreCostListAPIViewNoPagination,
     StoreDetailRetrieveUpdateDestroyAPIView,
@@ -51,6 +52,9 @@ urlpatterns = [
     path("api/products/<pk>/", ProductRetrieveUpdateDestroyAPIView.as_view(), name="product-detail"),
     # path('api/creditcard/upload/', CreditCardAPIView.as_view(), name="upload-creditcard"),
     path("api/rownotebook/<pk>/", RowNotebookListAPIView.as_view(), name="list-row-notebook"),
+    path(
+        "api/rownotebook-management/", RowNotebookManagementListAPIView.as_view(), name="list-row-notebook-management"
+    ),
     path("api/savecardtonotebook/", RowNotebookAPIView.as_view(), name="save-card-to-notebook"),
     path("api/swipecardtransaction/", SwipeCardTransactionAPIView.as_view(), name="swipe-card-transaction"),
     path("api/creditcard/management/", CreditCardManagementAPIView.as_view(), name="swipe-card-transaction-creditcard"),

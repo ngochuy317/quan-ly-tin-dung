@@ -31,6 +31,11 @@ class CreditCardApi {
     });
   };
 
+  rowNotebookManagement = (params) => {
+    const url = "rownotebook-management/";
+    return axiosClient.get(url, { params });
+  };
+
   saveCreditCard2Notebook = (data) => {
     const url = "savecardtonotebook/";
     return axiosClient.post(url, data, {
