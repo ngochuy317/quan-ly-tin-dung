@@ -1,0 +1,54 @@
+version: '3.4'
+
+x-common-variables: &common-variables
+  DJANGO_SETTINGS_MODULE: core.settings
+  POSTGRES_USER: ${POSTGRES_USER}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  POSTGRES_DB: ${POSTGRES_DB}
+  POSTGRES_HOST: ${POSTGRES_HOST}
+  USE_SPACES: ${USE_SPACES}
+  AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+  AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+  AWS_STORAGE_BUCKET_NAME: ${AWS_STORAGE_BUCKET_NAME}
+  AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL}
+  SECRET_KEY: ${SECRET_KEY}
+  DEBUG: ${DEBUG}
+
+services:
+  django-qltd:
+    container_name: django-qltd
+    build:
+      context: be
+      dockerfile: ./be.Dockerfile
+    environment: *common-variables
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./be:/code
+      - django-qltd_media:/code/media
+      - django-qltd_volume:/code/staticfiles
+    depends_on:
+      - postgres
+    networks:
+      - django-qltd
+
+  postgres:
+    container_name: db-postgres-qltd
+    restart: always
+    image: postgres:13.3-alpine
+    environment: *common-variables
+    ports:
+      - '5437:5432'
+    volumes:
+     - postgres_data_qltd:/var/lib/postgresql/data/
+    networks:
+      - django-qltd
+
+volumes:
+  django-qltd_media:
+  django-qltd_volume:
+  postgres_data_qltd:
+
+networks:
+  django-qltd:
+    external: true
